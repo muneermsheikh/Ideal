@@ -1,0 +1,23 @@
+[
+    {
+        "CustomerId": 1,
+        "Name": "Shahid Khan",
+        "Designation": "HR Manager",
+        "Mobile": "00966-12-12309348",
+        "email": "shahidkhn@gynasts.com"
+    },
+    {
+        "CustomerId": 1,
+        "Name": "Jehangir Shaikh",
+        "Designation": "Accountant",
+        "Mobile": "00966-12-12212348",
+        "email": "jehangir@gynasts.com"
+     },
+     {
+        "CustomerId": 2,
+        "Name": "Abdul Wadood Basman",
+        "Designation": "CEO",
+        "Mobile": "00966-12-52313428",
+        "email": "ceo@gynasts.com"
+     }
+]

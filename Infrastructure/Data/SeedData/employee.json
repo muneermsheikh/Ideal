@@ -1,0 +1,59 @@
+[
+    {
+        "Person_FirstName": "Abdul Rashid Shaikh",
+        "Person_FamilyName": "Khan",
+        "Person_DOB": "1985-12-25T00:00:00",
+        "Person_KnownAs": "Abdul Rashid",
+        "Person_Gender": "M",
+        "Designation": "Purchase Officer",
+        "DOJ": "2015-10-25T00:00:00", 
+        "EmployeeAddress_Address1": "25 bahubali apartment",
+        "EmployeeAddress_City": "Bhayandar",
+        "EmployeeAddress_PIN": "401107",
+        "EmployeeAddress_State": "Maharashtra",
+        "Roles": [
+            {"RoleId": 1},
+            {"RoleId": 3},
+            {"RoleId": 5}
+        ]
+    },
+    {
+        "Person_FirstName": "Sanjay Raghuram",
+        "Person_FamilyName": "Patil",
+        "Person_DOB": "1991-11-25T00:00:00",
+        "Person_KnownAs": "Sanjay",
+        "Person_Gender": "M",
+        "Designation": "Docuent Controller-Administrative",
+        "DOJ": "2012-11-30T00:00:00", 
+        "EmployeeAddress_Address1": "A2, B6, BAHUBALI PACKAGES",
+        "EmployeeAddress_City": "Mira Road",
+        "EmployeeAddress_PIN": "401107",
+        "EmployeeAddress_State": "Maharashtra",
+        "Roles": [
+            {"RoleId": 2},
+            {"RoleId": 4},
+            {"RoleId": 5}
+        ]
+    },
+    {
+        "Person_FirstName": "Shahid Abdullah",
+        "Person_FamilyName": "Merchant",
+        "Person_DOB": "1988-12-25T00:00:00",
+        "Person_KnownAs": "Merchant",
+        "Person_Gender": "M",
+        "Designation": "Airport LogisticsPurchase Officer",
+        "DOJ": "2018-09-25T00:00:00", 
+        "EmployeeAddress_Address1": "B6, Everest Building",
+        "EmployeeAddress_Address2": "Tardeo Road",
+        "EmployeeAddress_City": "Mumbai",
+        "EmployeeAddress_PIN": "401137",
+        "EmployeeAddress_State": "Maharashtra",
+        "EmployeeAddress_Country": "India",
+        "Roles": [
+            {"RoleId": 5}, 
+            {"RoleId": 2}, 
+            {"RoleId": 3}
+        ]
+    }
+
+]

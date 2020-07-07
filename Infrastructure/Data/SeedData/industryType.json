@@ -1,0 +1,12 @@
+[
+    {"Id": 1, "Name": "Real Estate Construction - Buildings"},
+    {"Id": 2, "Name": "Real Estate Construction - Infrastructure"},
+    {"Id": 3, "Name": "Power Generation"},
+    {"Id": 4, "Name": "Power Distribution"},
+    {"Id": 5, "Name": "Sewage Water Treatment"},
+    {"Id": 6, "Name": "Hospitality - 5 star"},
+    {"Id": 7, "Name": "Hospitality - 4 star"},
+    {"Id": 8, "Name": "Food & Beverages"},
+    {"Id": 9, "Name": "Hospitality - Services"},
+    {"Id": 10, "Name": "Hospitality - Food preparation"}
+]

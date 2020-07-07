@@ -1,0 +1,58 @@
+[
+    {
+        "EnquiryNo": "1050",
+        "ProjectManagerId": 1, 
+        "AccountExecutiveId": 1,
+        "HRExecutiveId": 2,
+        "LogisticsExecutiveId": 1, 
+        "EnquiryRef": "Telephonic message",
+        "CompleteBy": "2020-11-10T00:00:00",
+        "BuyerEmail": "supplier@gmail.com",
+        "DeliveryMethodId": 1,
+        "EnquiryItems": [
+            {"Id": 1},{"Id": 2}
+        ]
+    },
+    {
+        "EnquiryNo": "1051",
+        "ProjectManagerId": 1, 
+        "AccountExecutiveId": 1,
+        "HRExecutiveId": 2,
+        "LogisticsExecutiveId": 1, 
+        "EnquiryRef": "Telephonic message",
+        "CompleteBy": "2020-11-15T00:00:00",
+        "BuyerEmail": "supplier2@gmail.com",
+        "DeliveryMethodId": 1,
+        "EnquiryItems": [
+            {"Id": 3},{"Id": 4}, {"Id":2}
+        ]
+    },
+    {
+        "EnquiryNo": "1052",
+        "ProjectManagerId": 2, 
+        "AccountExecutiveId": 1,
+        "HRExecutiveId": 2,
+        "LogisticsExecutiveId": 1, 
+        "EnquiryRef": "Telephonic message",
+        "CompleteBy": "2020-01-10T00:00:00",
+        "BuyerEmail": "suppli@gmail.com",
+        "DeliveryMethodId": 2,
+        "EnquiryItems": [
+            {"Id": 2},{"Id": 4}
+        ]
+    },
+    {
+        "EnquiryNo": "1053",
+        "ProjectManagerId": 1, 
+        "AccountExecutiveId": 1,
+        "HRExecutiveId": 2,
+        "LogisticsExecutiveId": 1, 
+        "EnquiryRef": "email message",
+        "CompleteBy": "2020-05-10T00:00:00",
+        "BuyerEmail": "saudisales@gmail.com",
+        "DeliveryMethodId": 3,
+        "EnquiryItems": [
+            {"Id": 3},{"Id": 4}
+        ]
+    }
+]

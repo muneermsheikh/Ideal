@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "N8+7vrp1p3hhlFf5EXmxmVzzJ8u9pk2EydiozdJfyYDwteE3sOZcT7Na3nr5c0Mcl+6uPD7UK7i5dyRtVL7Q9Q==",
+  "success": true,
+  "projectFilePath": "D:\\atsOne\\Core\\Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\munir\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\munir\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

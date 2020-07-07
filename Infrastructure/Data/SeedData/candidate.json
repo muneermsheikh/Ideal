@@ -1,0 +1,36 @@
+[
+    {
+        "ApplicationNo": 1000,
+        "ApplicationDated": "2020-01-01T00:00:00", 
+        "Person_FirstName": "Ramesh Pandurang",
+        "Person_FamilyName": "Patil", 
+        "Person_KnownAs": "Ramesh", 
+        "Person_Gender": "M",
+        "Person_PPNo": "A12345", 
+        "Person_AadharNo": "123456789012", 
+        "Person_DOB": "1955-05-08T00:00:00",
+        "CandidateCategories": 
+            [
+                {"CategoryId": 1},
+                {"CategoryId": 2}
+            ],
+        "LastStatusUpdatedBy": 1
+    },
+    {
+        "ApplicationNo": 1001,
+        "ApplicationDated": "2020-01-02T00:00:00", 
+        "Person_FirstName": "Subhash Rajaram",
+        "Person_FamilyName": "Kulkarni", 
+        "Person_KnownAs": "Subhash", 
+        "Person_Gender": "M",
+        "Person_PPNo": "A12346", 
+        "Person_AadharNo": "123456789013", 
+        "Person_DOB": "1955-05-06T00:00:00",
+        "CandidateCategories": 
+            [
+                {"CategoryId": 2},
+                {"CategoryId": 3}
+            ],
+        "LastStatusUpdatedBy": 2
+    }
+]

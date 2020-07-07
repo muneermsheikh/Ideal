@@ -1,0 +1,19 @@
+[
+    {
+        "CustomerType": "C",
+        "CustomerName": "Saudi Logisitcs Services Company",
+        "KnownAs": "SLSC",
+        "CityName": "Jeddah",
+        "IndustryTypes": [
+            {"IndustryTypeId": 1},
+            {"IndustryTypeId": 2}
+        ],
+        "IntroducedBy": "Sheikh Ziyauddin Kamrani",
+        "Phone1": "00966-12-12345678", 
+        "Phone2": "00966-12-12345789",
+        "CustomerAddresses": [
+            {"Id": 1},
+            {"Id": 2}
+        ]
+    }
+]

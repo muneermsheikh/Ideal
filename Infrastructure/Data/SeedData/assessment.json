@@ -1,0 +1,17 @@
+[
+    {
+      "EnquiryItemId": 1,
+      "CandidateId": 1,
+      "Result": 1,
+      "AssessmentResultId": 0,
+      "AssessedBy": "Person A"
+    },
+    
+    {
+        "EnquiryItemId": 1,
+        "CandidateId": 1,
+        "Result": 1,
+        "AssessmentResultId": 0,
+        "AssessedBy": "Person A"
+      }
+]

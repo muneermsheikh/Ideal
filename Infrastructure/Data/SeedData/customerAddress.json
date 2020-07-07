@@ -1,0 +1,29 @@
+[
+    {
+        "CustomerId": 1,
+        "AddressType": "R",
+        "Address1": "PO Box 2345",
+        "Address2": "Kilo 8, Tareeq Madinah",
+        "City": "Riyadh",
+        "PIN": "12321",
+        "Country": "Kingdom of Saudi Arabia"
+    },
+    {
+        "CustomerId": 1,
+        "AddressType": "O",
+        "Address1": "PO Box 11323",
+        "Address2": "Kilo 8, Tareeq Madinah",
+        "City": "Jeddah",
+        "PIN": "11113",
+        "Country": "Kingdom of Saudi Arabia"
+    },
+    {
+        "CustomerId": 2,
+        "AddressType": "O",
+        "Address1": "PO Box 21125",
+        "Address2": "Kilo 18, Tareeq Madinah",
+        "City": "Riyadh",
+        "PIN": "13341",
+        "Country": "Kingdom of Saudi Arabia"
+    }
+]

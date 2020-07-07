@@ -1,0 +1,41 @@
+[
+    {
+        "EnquiryItemId": 1, 
+        "TechnicallyFeasible": true, 
+        "CommerciallyFeasible": true, 
+        "LogisticallyFeasible": true, 
+        "VisaAvailable": false, 
+        "DocumentationWillBeAvailable": true,
+        "HistoricalStatusAvailable": true,
+        "SalaryOfferedFeasible": true, 
+        "ServiceChargesInINR": true,
+        "FeeFromClientCurrency": "USD", 
+        "FeeFromClient": 100
+    },
+    {
+        "EnquiryItemId": 2, 
+        "TechnicallyFeasible": true, 
+        "CommerciallyFeasible": true, 
+        "LogisticallyFeasible": true, 
+        "VisaAvailable": false, 
+        "DocumentationWillBeAvailable": true,
+        "HistoricalStatusAvailable": true,
+        "SalaryOfferedFeasible": true, 
+        "ServiceChargesInINR": true,
+        "FeeFromClientCurrency": "USD", 
+        "FeeFromClient": 110
+    },
+    {
+        "EnquiryItemId": 3, 
+        "TechnicallyFeasible": true, 
+        "CommerciallyFeasible": true, 
+        "LogisticallyFeasible": true, 
+        "VisaAvailable": false, 
+        "DocumentationWillBeAvailable": true,
+        "HistoricalStatusAvailable": true,
+        "SalaryOfferedFeasible": true, 
+        "ServiceChargesInINR": true,
+        "FeeFromClientCurrency": "USD", 
+        "FeeFromClient": 120
+    }
+]

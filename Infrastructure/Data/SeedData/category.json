@@ -1,0 +1,20 @@
+[
+    {
+        "Id": 1, 
+        "Name": "Production Manager",
+        "IndustryTypeId": 1, 
+        "SkillLevelId": 1
+    },
+    {
+        "Id": 2, 
+        "Name": "Production Supervisor",
+        "IndustryTypeId": 2, 
+        "SkillLevelId": 2
+    },
+    {
+        "Id": 3, 
+        "Name": "Production Engineer",
+        "IndustryTypeId": 1, 
+        "SkillLevelId": 2
+    }
+]

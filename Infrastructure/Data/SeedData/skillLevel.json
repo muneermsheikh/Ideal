@@ -1,0 +1,10 @@
+[
+    {"Id": 1, "Name": "Top Management"},
+    {"Id": 2, "Name": "Senior Management"},
+    {"Id": 3, "Name": "Middle Management"},
+    {"Id": 4, "Name": "Lower Management"},
+    {"Id": 5, "Name": "Supervisory Management"},
+    {"Id": 6, "Name": "Unskilled"},
+    {"Id": 7, "Name": "Semi-skilled"},
+    {"Id": 8, "Name": "Highly skilled"}
+]

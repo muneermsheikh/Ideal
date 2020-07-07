@@ -1,0 +1,20 @@
+[
+    {
+        "ShortName": "Standard", 
+        "DeliveryTime": "Within a week",
+        "Description": "Compliant CVs will be submitted online, through our portal",
+        "Price": 1000
+    },
+    {
+        "ShortName": "urgent", 
+        "DeliveryTime": "Within 2 working days",
+        "Description": "Compliant CVs will be submitted online, through our portal",
+        "Price": 5000
+    },
+    {
+        "ShortName": "Immediate", 
+        "DeliveryTime": "Within 8 working hours",
+        "Description": "Compliant CVs will be submitted online, through our portal",
+        "Price": 10000
+    }
+]
