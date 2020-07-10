@@ -1,4 +1,6 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using Core.Enumerations;
 
 namespace API.Dtos
 {
@@ -6,25 +8,22 @@ namespace API.Dtos
     {
         [Required]
         public int Id { get; set; }
-
-        [Required]
-        public string CategoryName { get; set; }
-
-        [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Price must be greater than zero")]
-        public int Price { get; set; }
-
+        public int CategoryId { get; set; }
+        public string CategorytName { get; set; }
+        public bool ECNR { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
         public int Quantity { get; set; }
-
-        [Required]
-        public string ImageUrl { get; set; }
-
-        [Required]
-        public string IndustryType { get; set; }
-
-        [Required]
-        public string SkillLevel { get; set; }
+        public int ExpDesiredInYrsMin { get; set; }
+        public int ExpDesiredInYrsMax { get; set; }
+        public string JobDescInBrief { get; set; }
+        public string JobDescAttachment { get; set; }
+        public int SalaryRangeMin { get; set; }
+        public int SalaryRangeMax { get; set; }
+        public int ContractPeriodInMonths { get; set; }
+        public enumProvision Food { get; set; }
+        public enumProvision Housing { get; set; }
+        public enumProvision Transport { get; set; }
+        public DateTime DateRequiredBy { get; set; }
     }
 }

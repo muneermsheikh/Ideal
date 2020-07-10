@@ -1,48 +1,53 @@
 using System;
-using Core.Entities.Admin;
 using Core.Entities.Masters;
 using Core.Enumerations;
+using Core.Interfaces;
 
 namespace Core.Entities.EnquiryAggregate
 {
     public class EnquiryItem : BaseEntity
     {
+
         public EnquiryItem()
         {
         }
 
-        
-        public EnquiryItem(int quantity)
+        public EnquiryItem(CategoryItemOrdered itemOrdered, int quantity, bool eCNR, 
+            int expDesiredInYrsMin, int expDesiredInYrsMax, string jobDescInBrief,
+            string jobDescAttachment, int salaryRangeMin, int salaryRangeMax, int contractPeriodInMonths,
+            enumProvision food, enumProvision housing, enumProvision transport, DateTime dateRequiredBy)
         {
-            // ItemOrdered = itemOrdered;
+            ItemOrdered = itemOrdered;
+            ECNR = eCNR;
             Quantity = quantity;
-            Status = enumItemReviewStatus.NotReviewed;
+            ExpDesiredInYrsMin = expDesiredInYrsMin;
+            ExpDesiredInYrsMax = expDesiredInYrsMax;
+            JobDescInBrief = jobDescInBrief;
+            JobDescAttachment = jobDescAttachment;
+            SalaryRangeMin = salaryRangeMin;
+            SalaryRangeMax = salaryRangeMax;
+            ContractPeriodInMonths = contractPeriodInMonths;
+            Food = food;
+            Housing = housing;
+            Transport = transport;
         }
-        
 
-        // public CategoryItemOrdered ItemOrdered { get; set; }
-        public int Price { get; set; }
-
-        public int EnquiryId { get; set; }
-        public int CategoryId { get; set; }
+        public CategoryItemOrdered ItemOrdered {get; set; }
         public int Quantity { get; set; }
-        public int MinCVs { get; set; }
-        public int MaxCVs { get; set; }
         public bool ECNR { get; set; }
-        public bool RequireAssessment { get; set; }
-        public virtual Employee HRExecutive { get; set; }
-        public virtual Employee HRSupervisor { get; set; }
-        public virtual Employee HRManager { get; set; }
-        public Category Category {get; set; }
-        public virtual ContractReviewItem ContractReviewItem { get; set; }
-        public string SCFromCandidate { get; set; }
-        public string FeeFromClientCurrency { get; set; }
-        public int FeeFromClient { get; set; }
-        public enumItemReviewStatus Status { get; set; } = enumItemReviewStatus.NotReviewed;
-        public DateTime CompleteBy { get; set; }
-        public virtual JobDesc JobDesc { get; set; }
-        public int JobDescId { get; set; }
-        public virtual Remuneration Remuneration { get; set; }
-        public int RemunerationId { get; set; }
+        public int ExpDesiredInYrsMin { get; set; }
+        public int ExpDesiredInYrsMax { get; set; }
+        public string JobDescInBrief { get; set; }
+        public string JobDescAttachment { get; set; }
+        public int SalaryRangeMin { get; set; }
+        public int SalaryRangeMax { get; set; }
+        public int ContractPeriodInMonths { get; set; }
+        public enumProvision Food { get; set; }
+        public enumProvision Housing { get; set; }
+        public enumProvision Transport { get; set; }
+        public DateTime DateRequiredBy { get; set; }
+
     }
+
+
 }

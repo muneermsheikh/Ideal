@@ -16,8 +16,6 @@ namespace Infrastructure.Data.Config
             // builder.HasOne(x => x.IndustryType).WithMany().HasForeignKey(x => x.IndustryTypeId);
             // builder.HasOne(x => x.SkillLevel).WithMany().HasForeignKey(x => x.SkillLevelId);
             builder.HasIndex("Name", "SkillLevelId", "IndustryTypeId").IsUnique();
-
-        
         }
     }
 }

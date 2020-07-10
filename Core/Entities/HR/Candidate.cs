@@ -10,7 +10,11 @@ namespace Core.Entities.HR
     {
         public int ApplicationNo { get; set; }
         public DateTime ApplicationDated { get; set; }
-        public Person Person { get; set; }
+        public string FirstName { get; set; }
+        public string FamilyName { get; set; }
+        public string Gender { get; set; }
+        public string PPNo { get; set; }
+        
         public CandidateAddress CandidateAddress { get; set; }
         public List<Category> CandidateCategories { get; set; }
         public virtual List<EnquiryItem> ReferredToEnquiryItems { get; set; }

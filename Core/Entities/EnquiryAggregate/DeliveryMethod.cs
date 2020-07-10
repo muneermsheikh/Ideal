@@ -1,6 +1,6 @@
-namespace Core.Entities.EnquiriesAggregate
+namespace Core.Entities.EnquiryAggregate
 {
-    public class DeliveryMethod
+    public class DeliveryMethod: BaseEntity
     {
         public string ShortName { get; set; }
         public string DeliveryTime { get; set; }

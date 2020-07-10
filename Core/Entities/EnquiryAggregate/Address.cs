@@ -1,8 +1,8 @@
-namespace Core.Entities.Admin.EnquiriesAggregate
+namespace Core.Entities.EnquiryAggregate
 {
     public class Address
     {
-    public Address()
+        public Address()
         {
         }
 
@@ -13,7 +13,7 @@ namespace Core.Entities.Admin.EnquiriesAggregate
             Street = street;
             City = city;
             State = state;
-            PIN = zipcode;
+            Zipcode = zipcode;
         }
 
         public string FirstName { get; set; }
@@ -21,6 +21,7 @@ namespace Core.Entities.Admin.EnquiriesAggregate
         public string Street { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public string PIN { get; set; }    
+        public string Zipcode { get; set; }
+          
     }
 }

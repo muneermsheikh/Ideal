@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Core.Entities.Admin;
-using Core.Entities.EnquiriesAggregate;
-using Core.Entities.Identity;
 using Core.Entities.Masters;
 using Core.Enumerations;
+
 
 namespace Core.Entities.EnquiryAggregate
 {
@@ -14,19 +13,17 @@ namespace Core.Entities.EnquiryAggregate
         {
         }
 
-        public Enquiry(IReadOnlyList<Entities.EnquiryAggregate.EnquiryItem> enquiryItems, string buyerEmail, 
-            Address shipToAddress, DeliveryMethod deliveryMethod, int subtotal, string paymentIntentId)
+        public Enquiry(IReadOnlyList<Entities.EnquiryAggregate.EnquiryItem> enquiryItems, string buyerEmail)
         {
-            BuyerEmail = buyerEmail;
-            ShipToAddress = shipToAddress;
-            DeliveryMethod = deliveryMethod;
             EnquiryItems = enquiryItems;
-            Subtotal = subtotal;
-            PaymentIntentId = paymentIntentId;
+            BuyerEmail = buyerEmail;
         }
 
         public int EnquiryNo { get; set; }
-        public DateTime EnquiryDate { get; set; } = DateTime.Now;
+        public DateTimeOffset EnquiryDate { get; set; } = DateTimeOffset.Now;
+        public Address ShipToAddress { get; set; }
+        public IReadOnlyList<EnquiryItem> EnquiryItems { get; set; }
+        public enumEnquiryStatus EnquiryStatus { get; set; } = enumEnquiryStatus.Pending;
         public Employee ProjectManager { get; set; }
         public CustomerOfficial AccountExecutive { get; set; }
         public CustomerOfficial HRExecutive { get; set; }
@@ -37,16 +34,6 @@ namespace Core.Entities.EnquiryAggregate
         public DateTime ReviewedOn { get; set; }
         public string Remarks { get; set; }
         public string BuyerEmail { get; set; }
-        public Address ShipToAddress { get; set; }
-        public DeliveryMethod DeliveryMethod { get; set; }
-        public IReadOnlyList<EnquiryItem> EnquiryItems { get; set; }
-        public int Subtotal { get; set; }
-        public enumEnquiryStatus Status { get; set; } = enumEnquiryStatus.Pending;
-        public string PaymentIntentId { get; set; }
-
-        public decimal GetTotal()
-        {
-            return Subtotal + DeliveryMethod.Price;
-        }
+        
     }
 }
