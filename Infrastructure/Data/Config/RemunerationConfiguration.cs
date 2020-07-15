@@ -14,7 +14,7 @@ namespace Infrastructure.Data.Config
             builder.Property(x => x.Food).IsRequired();
             builder.Property(x => x.Transport).IsRequired();
             builder.Property(x => x.SalaryMin).IsRequired();
-            builder.Property(x => x.SalaryCurrency).IsRequired();
+            // builder.Property(x => x.SalaryCurrency).IsRequired();
             builder.Property(x => x.LeaveAvailableAfterHowmanyMonths).IsRequired();
             builder.Property( x => x.LeaveEntitlementPerYear).IsRequired();
             builder.HasIndex(x => x.EnquiryItemId).IsUnique();

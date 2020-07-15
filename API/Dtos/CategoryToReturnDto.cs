@@ -6,6 +6,6 @@ namespace API.Dtos
         public string Name { get; set; }
         public string IndustryType {get; set; }
         public string SkillLevel {get; set;}
-        public string imageUrl {get; set; }
+        // public string imageUrl {get; set; }
     }
 }

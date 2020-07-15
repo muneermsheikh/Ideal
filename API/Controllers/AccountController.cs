@@ -5,6 +5,7 @@ using API.Dtos;
 using API.Errors;
 using API.Extensions;
 using AutoMapper;
+using Core.Entities.Admin;
 using Core.Entities.Identity;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -19,10 +20,13 @@ namespace API.Controllers
         private readonly SignInManager<AppUser> _signinManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AccountController(UserManager<AppUser> userManager,
-                SignInManager<AppUser> signinManager, ITokenService tokenService, IMapper mapper)
+                SignInManager<AppUser> signinManager, ITokenService tokenService,
+                IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _tokenService = tokenService;
             _signinManager = signinManager;
@@ -52,23 +56,30 @@ namespace API.Controllers
             };
         }
 
+
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            
+
             if (CheckEmailExists(registerDto.Email).Result.Value)
             {
-                return new BadRequestObjectResult(new 
-                    ApiValidationErrorResponse{Errors = new [] {"That email is in use"}});
+                return new BadRequestObjectResult(new
+                    ApiValidationErrorResponse
+                { Errors = new[] { "That email is in use" } });
             }
 
+            var cust = new Customer (registerDto.CustomerType, registerDto.CompanyName, 
+                registerDto.DisplayName, registerDto.City, registerDto.Email);
+            var custm = await _unitOfWork.Repository<Customer>().UpdateAsync(cust);
+            
             var user = new AppUser
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                UserName = registerDto.Email
+                UserName = registerDto.Email,
+                City = registerDto.City,
+                Country = registerDto.Country
             };
-
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (!result.Succeeded) return BadRequest(new ApiResponse(400));
@@ -121,7 +132,7 @@ namespace API.Controllers
             if (result.Succeeded) return Ok(_mapper.Map<Address, AddressDto>(user.Address));
 
             return BadRequest("problem updating user address");
-            
+
         }
     }
 }

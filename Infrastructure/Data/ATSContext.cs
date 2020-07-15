@@ -1,7 +1,11 @@
+using System;
+using System.Linq;
 using System.Reflection;
+using Core.Entities.Admin;
 using Core.Entities.EnquiryAggregate;
 using Core.Entities.Masters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data
 {
@@ -18,11 +22,39 @@ namespace Infrastructure.Data
         public DbSet<Enquiry> Enquiries {get; set; }
         public DbSet<EnquiryItem> EnquiryItems {get; set; }
         public DbSet<DeliveryMethod> DeliveryMethods {get; set; }
+        public DbSet<JobDesc> JobDescriptions {get; set; }
+        public DbSet<Remuneration> Remunerations{get; set; }
+        public DbSet<ContractReviewItem> ContractReviewItems {get; set; }
+        public DbSet<Customer> Customers {get; set; }
+        public DbSet<CustomerOfficial> CustomerOfficials {get; set; }
 
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            if (Database.ProviderName == "Microsoft.EntityframeworkCore.Sqlite")
+            {
+                foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+                {
+                    var dateProperties = entityType.ClrType.GetProperties()
+                        .Where(x => x.PropertyType == typeof(DateTimeOffset));
+                    foreach(var property in dateProperties)
+                    {
+                        modelBuilder.Entity(entityType.Name).Property(property.Name)
+                            .HasConversion(new DateTimeOffsetToBinaryConverter());
+                    }
+                }
+            }
+
+            // Sqlite does not support Sequence, therefore when using MySql or SQLServer, use following
+            // to initiate Enquiry No. field
+        /*
+            modelBuilder.ForSqlServerHasSequence<int>("DBSequence")
+                .StartsAt(1000).IncrementsBy(1);
+            modelBuilder.Entity<Enquiry>.Property(x => x.EnquiryNo)
+                .HasDefaultValueSql("NEXT VALUE FOR DBSequence");
+        */
         }
     }
 }

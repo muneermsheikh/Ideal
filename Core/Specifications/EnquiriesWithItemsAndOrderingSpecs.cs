@@ -17,5 +17,11 @@ namespace Core.Specifications
         {
             AddInclude(o => o.EnquiryItems);
         }
+
+        public EnquiriesWithItemsAndOrderingSpecs(int enquiryId): 
+            base (o => o.Id == enquiryId)
+        {
+        }
+
     }
 }

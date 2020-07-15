@@ -18,7 +18,7 @@ namespace Infrastructure.Data.Config
             builder.Property(x => x.DocumentationWillBeAvailable).IsRequired();
             builder.Property(x => x.HistoricalStatusAvailable).IsRequired();
             builder.Property(x => x.SalaryOfferedFeasible).IsRequired();
-            builder.Property(x => x.ServiceChargesInINR).IsRequired();
+            // builder.Property(x => x.ServiceChargesInINR).IsRequired();
             builder.Property(x => x.Status).IsRequired();
 
             builder.HasIndex(x => x.EnquiryItemId).IsUnique();

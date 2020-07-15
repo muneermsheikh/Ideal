@@ -5,6 +5,10 @@ namespace Core.Entities.Admin
 {
    public class CustomerOfficial : BaseEntity
     {
+        public CustomerOfficial()
+        {
+        }
+
         public CustomerOfficial(int customerId, string name, string designation, string gender, string phone, string mobile, string mobile2, string email, string personalEmail, bool isValid, DateTime addedOn)
         {
             this.CustomerId = customerId;
@@ -32,7 +36,7 @@ namespace Core.Entities.Admin
         public string email { get; set; }
         public string PersonalEmail { get; set; }
         public bool IsValid { get; set; } = true;
-        public DateTime AddedOn { get; set; } = DateTime.Now;
+        public DateTimeOffset AddedOn { get; set; } = DateTimeOffset.Now;
 
     }
 }

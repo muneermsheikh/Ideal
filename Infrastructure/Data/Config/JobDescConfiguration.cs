@@ -9,7 +9,7 @@ namespace Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<JobDesc> builder)
         {
             builder.Property(x => x.JobDescription).IsRequired();
-            builder.HasIndex(x => x.EnquiryItemId).IsUnique();
+            // builder.HasIndex(x => x.EnquiryItemId).IsUnique();
         }
     }
 }

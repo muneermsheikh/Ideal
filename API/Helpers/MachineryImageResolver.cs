@@ -13,13 +13,18 @@ namespace API.Helpers
             _config = config;
         }
 
+    
         public string Resolve(Category source, CategoryToReturnDto destination, string destMember, ResolutionContext context)
         {
+            /* 
             if (!string.IsNullOrEmpty(source.imageUrl))
             {
                 return _config["ApiUrl"] + source.imageUrl;
             }
+            */
             return null;
+            
         }
+    
     }
 }

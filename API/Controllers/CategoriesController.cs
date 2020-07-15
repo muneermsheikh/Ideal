@@ -38,9 +38,9 @@ namespace API.Controllers
         {
             var spec = new CategoryWithIndTypeAndSkillLevelSpec(catParams);
             var countSpec = new CategoriesWithFiltersForCountSpec(catParams);
-            var totalItems = await _catRepo.CountAsync(countSpec);
+            var totalItems = await  _catRepo.CountWithSpecAsync(countSpec);
 
-            var cats = await _catRepo.ListAsync(spec);
+            var cats = await _catRepo.ListWithSpecAsync(spec);
 
             var data = _mapper
                 .Map<IReadOnlyList<Category>, IReadOnlyList<CategoryToReturnDto>>(cats);
@@ -76,5 +76,7 @@ namespace API.Controllers
             var levels = await _skillRepo.ListAllAsync();
             return Ok(levels);
         }
+
+        
     }
 }

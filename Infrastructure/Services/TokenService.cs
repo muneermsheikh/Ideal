@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using Core.Entities.Identity;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,8 +15,11 @@ namespace Infrastructure.Services
     {
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _key;
-        public TokenService(IConfiguration config)
+        private readonly UserManager<AppUser> __userManager;
+
+        public TokenService(IConfiguration config, UserManager<AppUser> _userManager)
         {
+            __userManager = _userManager;
             _config = config;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
         }
@@ -42,7 +46,20 @@ namespace Infrastructure.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-            
+
         }
+
+        /*
+        public bool RemoveToken(AppUser user)
+        {
+            var email = _userManager.FindByEmailFromClaimsPrincipal();
+            var identity = user.Identity as ClaimsIdentity;
+            var claim = (from c in user.Claims
+                         where c.Email == email
+                         select c).Single();
+            identity.RemoveClaim(claim);
+            return true;
+        }
+        */ 
     }
 }

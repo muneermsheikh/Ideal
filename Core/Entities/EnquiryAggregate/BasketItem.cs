@@ -13,7 +13,7 @@ namespace Core.Entities.EnquiryAggregate
             int expDesiredInYrsMin, int expDesiredInYrsMax, string jobDescInBrief, 
             string jobDescAttachment, int salaryRangeMin, int salaryRangeMax, 
             int contractPeriodInMonths, enumProvision food, enumProvision housing, 
-            enumProvision transport, DateTime dateRequiredBy)
+            enumProvision transport, DateTimeOffset completeBy)
         {
             // Id = id;
             CategoryId = categoryId;
@@ -30,7 +30,7 @@ namespace Core.Entities.EnquiryAggregate
             Food = food;
             Housing = housing;
             Transport = transport;
-            DateRequiredBy = dateRequiredBy;
+            CompleteBy = completeBy;
         }
 
         public int Id { get; set; }
@@ -48,6 +48,6 @@ namespace Core.Entities.EnquiryAggregate
         public enumProvision Food { get; set; }
         public enumProvision Housing { get; set; }
         public enumProvision Transport { get; set; }
-        public DateTime DateRequiredBy { get; set; }
+        public DateTimeOffset CompleteBy { get; set; }
     }
 }

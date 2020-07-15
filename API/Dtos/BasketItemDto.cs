@@ -24,6 +24,6 @@ namespace API.Dtos
         public enumProvision Food { get; set; }
         public enumProvision Housing { get; set; }
         public enumProvision Transport { get; set; }
-        public DateTime DateRequiredBy { get; set; }
+        public DateTimeOffset CompleteBy { get; set; }
     }
 }

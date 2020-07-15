@@ -1,17 +1,19 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Entities.EnquiryAggregate;
 using Core.Entities.Masters;
 
 namespace Core.Interfaces
 {
     public interface ICategoryService
     {
-        Task<Category> CreateCategoryAsync (string categoryName, int industryTypeId, int skillLevelId);
+        Task<Category> CreateCategoryAsync (string name, int indTypeId, int skillLevelId);
         
-        Task<IReadOnlyList<Category>> GetCategoriesAsync ();
+        Task<IReadOnlyList<Category>> CategoryListAsync ();
 
-        Task<Category> GetCategoryById(int Id);
+        Task<Category> CategoryByIdAsync(int Id);
+        Task<Category> DeleteCategoryByIdAsync(int Id);
+        Task<Category> UpdateCategoryByIdAsync(int Id);
 
-        Task<bool> DeleteCategoryById(int Id);
     }
 }

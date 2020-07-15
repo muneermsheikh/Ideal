@@ -7,11 +7,11 @@ namespace Core.Enumerations
         [EnumMember(Value = "Active")]
         Active,
 
-        [EnumMember(Value = "In business, but not active with us")]
+        [EnumMember(Value = "In business but not active with us")]
         InBusinessButNotActiveWithUs,
 
         [EnumMember(Value = "Closed down")]
-        Closed
+        ClosedDown
 
     }
 }

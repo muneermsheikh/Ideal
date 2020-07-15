@@ -17,7 +17,8 @@ namespace Infrastructure.Data.Config
                 o => (enumEnquiryStatus) Enum.Parse(typeof(enumEnquiryStatus), o)
             );
 
-            builder.Property(x => x.EnquiryNo).ValueGeneratedOnAdd();
+            // use seqence object in database
+            // builder.Property(x => x.EnquiryNo).ValueGeneratedOnAdd();
             builder.HasMany(x => x.EnquiryItems).WithOne().OnDelete(DeleteBehavior.Cascade);
         }
     }

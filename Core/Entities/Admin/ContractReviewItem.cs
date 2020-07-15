@@ -5,25 +5,26 @@ namespace Core.Entities.Admin
 {
     public class ContractReviewItem: BaseEntity
     {
-        public ContractReviewItem()
+        public ContractReviewItem(int enquiryItemId, int enquiryId)
         {
-            ReviewedOn = DateTime.Now;
-            Status = enumItemReviewStatus.NotReviewed;
+            EnquiryItemId = enquiryItemId;
+            EnquiryId = enquiryId;
         }
 
+        public int EnquiryId { get; set; }
         public int EnquiryItemId { get; set; }
-        public bool TechnicallyFeasible { get; set; }
-        public bool CommerciallyFeasible { get; set; }
-        public bool LogisticallyFeasible { get; set; }
-        public bool VisaAvailable { get; set; }
-        public bool DocumentationWillBeAvailable { get; set; }
-        public bool HistoricalStatusAvailable { get; set; }
-        public bool SalaryOfferedFeasible { get; set; }
+        public bool TechnicallyFeasible { get; set; }=false;
+        public bool CommerciallyFeasible { get; set; }=false;
+        public bool LogisticallyFeasible { get; set; }=false;
+        public bool VisaAvailable { get; set; }=false;
+        public bool DocumentationWillBeAvailable { get; set; }=false;
+        public bool HistoricalStatusAvailable { get; set; }=false;
+        public bool SalaryOfferedFeasible { get; set; }=false;
         public string ServiceChargesInINR { get; set; }
         public string FeeFromClientCurrency { get; set; }
-        public int FeeFromClient { get; set; }
-        public enumItemReviewStatus Status { get; set; }
-        public DateTime ReviewedOn { get; set; }
+        public int FeeFromClient { get; set; } 
+        public enumItemReviewStatus Status { get; set; } = enumItemReviewStatus.NotReviewed ;
+        public DateTimeOffset ReviewedOn { get; set; } = DateTimeOffset.Now;
         public int? ReviewedBy { get; set; }
 
     }

@@ -3,42 +3,53 @@ using System.Threading.Tasks;
 using Core.Entities.Masters;
 using Core.Interfaces;
 
+// this controller is for Users with Authority = AddMasterValues;
+// another contorller CategoriesController is used by loggedin users, who are clients or candidates, and
+// who have no authority to edit master values
 namespace Infrastructure.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IGenericRepository<Category> _repo;
-        public CategoryService(IGenericRepository<Category> repo)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryService(IUnitOfWork unitOfWork)
         {
-            _repo = repo;
+            _unitOfWork = unitOfWork;
         }
 
-        public Task<Category> CreateCategoryAsync(string categoryName, int industryTypeId, int skillLevelId)
+        public async Task<Category> CategoryByIdAsync(int Id)
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<Category>().GetByIdAsync(Id);
         }
 
-        public Task<bool> DeleteCategoryById(int Id)
+        public async Task<IReadOnlyList<Category>> CategoryListAsync()
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<Category>().ListAllAsync();
         }
 
-        public async Task<IReadOnlyList<Category>> GetCategoriesAsync()
+        public async Task<Category> CreateCategoryAsync(string name, int indTypeId, int skillLevelId)
         {
-            return await _repo.ListAllAsync();
+            var cat = new Category(name, indTypeId, skillLevelId);
+            _unitOfWork.Repository<Category>().Add(cat);
+            var result = await _unitOfWork.Complete();
+            return (result > 0)  ? cat : null;
         }
 
-        public async Task<Category> GetCategoryById(int Id)
+        public async Task<Category> DeleteCategoryByIdAsync(int Id)
         {
-            return await _repo.GetByIdAsync(Id);
+            var cat = await _unitOfWork.Repository<Category>().GetByIdAsync(Id);
+            _unitOfWork.Repository<Category>().Delete(cat);
+            var result = await _unitOfWork.Complete();
+            if (result == 0) return null;
+            return cat;
+        }
 
-            // var spec = new CategoryWithIndTypeAndSkillLevelSpec(id);
-            
-            // var cat = await _catRepo.GetEntityWithSpec(spec);
-            // if (cat == null) return NotFound(new ApiResponse(404));
-
-            // return _mapper.Map<Category, CategoryToReturnDto>(cat);
-
+        public async Task<Category> UpdateCategoryByIdAsync(int Id)
+        {
+            var cat = await _unitOfWork.Repository<Category>().GetByIdAsync(Id);
+            _unitOfWork.Repository<Category>().Update(cat);
+            var result = await _unitOfWork.Complete();
+            if (result == 0) return null;
+            return cat;
         }
     }
 }

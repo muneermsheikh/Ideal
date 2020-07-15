@@ -37,7 +37,6 @@ namespace Infrastructure.Data
             if (!createdBasket) return null;
 
             return await GetBasketAsync(basket.Id);
-
         }
     }
 }

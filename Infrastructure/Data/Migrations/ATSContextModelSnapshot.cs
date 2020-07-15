@@ -401,11 +401,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("BuyerEmail")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CompleteBy")
+                    b.Property<DateTimeOffset>("CompleteBy")
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("DeliveryMethodId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset>("EnquiryDate")
                         .HasColumnType("TEXT");
@@ -426,9 +423,6 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("LogisticsExecutiveId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("PaymentIntentId")
-                        .HasColumnType("TEXT");
-
                     b.Property<int?>("ProjectManagerId")
                         .HasColumnType("INTEGER");
 
@@ -438,17 +432,12 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("ReviewedById")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("ReviewedOn")
+                    b.Property<DateTimeOffset>("ReviewedOn")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Subtotal")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountExecutiveId");
-
-                    b.HasIndex("DeliveryMethodId");
 
                     b.HasIndex("HRExecutiveId");
 
@@ -473,65 +462,60 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("CandidateId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("CategoryItemId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CompleteBy")
+                    b.Property<string>("CategoryName")
                         .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CompleteBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ContractPeriodInMonths")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ECNR")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EnquiryId")
+                    b.Property<int?>("EnquiryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FeeFromClient")
+                    b.Property<int>("ExpDesiredInYrsMax")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FeeFromClientCurrency")
+                    b.Property<int>("ExpDesiredInYrsMin")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Food")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("HRExecutiveId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Housing")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("HRManagerId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("JobDescAttachment")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("HRSupervisorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("JobDescId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("JobDescId1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxCVs")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MinCVs")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("JobDescInBrief")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("RemunerationId")
+                    b.Property<int>("SalaryRangeMax")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("RemunerationId1")
+                    b.Property<int>("SalaryRangeMin")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("RequireAssessment")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SCFromCandidate")
+                    b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Transport")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -539,19 +523,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CandidateId");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("EnquiryId");
-
-                    b.HasIndex("HRExecutiveId");
-
-                    b.HasIndex("HRManagerId");
-
-                    b.HasIndex("HRSupervisorId");
-
-                    b.HasIndex("JobDescId1");
-
-                    b.HasIndex("RemunerationId1");
 
                     b.ToTable("EnquiryItems");
                 });
@@ -1159,15 +1131,6 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("SourceId");
                 });
 
-            modelBuilder.Entity("Core.Entities.Admin.ContractReviewItem", b =>
-                {
-                    b.HasOne("Core.Entities.EnquiryAggregate.EnquiryItem", null)
-                        .WithOne("ContractReviewItem")
-                        .HasForeignKey("Core.Entities.Admin.ContractReviewItem", "EnquiryItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Core.Entities.Admin.CustomerAddress", b =>
                 {
                     b.HasOne("Core.Entities.Admin.Customer", null)
@@ -1214,10 +1177,6 @@ namespace Infrastructure.Data.Migrations
                         .WithMany()
                         .HasForeignKey("AccountExecutiveId");
 
-                    b.HasOne("Core.Entities.EnquiryAggregate.DeliveryMethod", "DeliveryMethod")
-                        .WithMany()
-                        .HasForeignKey("DeliveryMethodId");
-
                     b.HasOne("Core.Entities.Admin.CustomerOfficial", "HRExecutive")
                         .WithMany()
                         .HasForeignKey("HRExecutiveId");
@@ -1234,7 +1193,7 @@ namespace Infrastructure.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ReviewedById");
 
-                    b.OwnsOne("Core.Entities.EnquiriesAggregate.Address", "ShipToAddress", b1 =>
+                    b.OwnsOne("Core.Entities.EnquiryAggregate.Address", "ShipToAddress", b1 =>
                         {
                             b1.Property<int>("EnquiryId")
                                 .HasColumnType("INTEGER");
@@ -1277,37 +1236,10 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Core.Entities.Masters.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.EnquiryAggregate.Enquiry", null)
                         .WithMany("EnquiryItems")
                         .HasForeignKey("EnquiryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Entities.Masters.Employee", "HRExecutive")
-                        .WithMany()
-                        .HasForeignKey("HRExecutiveId");
-
-                    b.HasOne("Core.Entities.Masters.Employee", "HRManager")
-                        .WithMany()
-                        .HasForeignKey("HRManagerId");
-
-                    b.HasOne("Core.Entities.Masters.Employee", "HRSupervisor")
-                        .WithMany()
-                        .HasForeignKey("HRSupervisorId");
-
-                    b.HasOne("Core.Entities.EnquiryAggregate.JobDesc", "JobDesc")
-                        .WithMany()
-                        .HasForeignKey("JobDescId1");
-
-                    b.HasOne("Core.Entities.EnquiryAggregate.Remuneration", "Remuneration")
-                        .WithMany()
-                        .HasForeignKey("RemunerationId1");
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.OwnsOne("Core.Entities.EnquiryAggregate.CategoryItemOrdered", "ItemOrdered", b1 =>
                         {
@@ -1319,12 +1251,6 @@ namespace Infrastructure.Data.Migrations
 
                             b1.Property<string>("CategoryName")
                                 .HasColumnType("TEXT");
-
-                            b1.Property<string>("ImageUrl")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<int>("Price")
-                                .HasColumnType("INTEGER");
 
                             b1.HasKey("EnquiryItemId");
 

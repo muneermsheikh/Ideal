@@ -5,5 +5,6 @@ namespace Core.Interfaces
     public interface ITokenService
     {
          string CreateToken(AppUser user);
+         // bool RemoveToken(AppUser user);
     }
 }
