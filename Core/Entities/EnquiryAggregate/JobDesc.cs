@@ -4,11 +4,17 @@ namespace Core.Entities.EnquiryAggregate
 {
    public class JobDesc: BaseEntity
     {
-        public JobDesc(int enquiryItemId)
+        public JobDesc()
         {
+        }
+
+        public JobDesc(int enquiryItemId, int enquiryId)
+        {
+            EnquiryId = enquiryId;
             EnquiryItemId = enquiryItemId;
         }
 
+        public int EnquiryId {get; set; }
         public int EnquiryItemId { get; set; }
         public string JobDescription { get; set; } = "not defined";
         public string QualificationDesired { get; set; } = "not defined";

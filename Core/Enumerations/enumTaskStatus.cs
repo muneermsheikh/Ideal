@@ -4,6 +4,8 @@ namespace Core.Enumerations
 {
     public enum enumTaskStatus
     {
+        [EnumMember(Value = "Pending")]
+        Pending,
         [EnumMember(Value = "Not Started")]
         NotStarted,
 

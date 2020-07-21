@@ -10,12 +10,7 @@
         "EmployeeAddress_Address1": "25 bahubali apartment",
         "EmployeeAddress_City": "Bhayandar",
         "EmployeeAddress_PIN": "401107",
-        "EmployeeAddress_State": "Maharashtra",
-        "Roles": [
-            {"RoleId": 1},
-            {"RoleId": 3},
-            {"RoleId": 5}
-        ]
+        "EmployeeAddress_State": "Maharashtra"
     },
     {
         "Person_FirstName": "Sanjay Raghuram",
@@ -28,12 +23,7 @@
         "EmployeeAddress_Address1": "A2, B6, BAHUBALI PACKAGES",
         "EmployeeAddress_City": "Mira Road",
         "EmployeeAddress_PIN": "401107",
-        "EmployeeAddress_State": "Maharashtra",
-        "Roles": [
-            {"RoleId": 2},
-            {"RoleId": 4},
-            {"RoleId": 5}
-        ]
+        "EmployeeAddress_State": "Maharashtra"
     },
     {
         "Person_FirstName": "Shahid Abdullah",
@@ -48,12 +38,6 @@
         "EmployeeAddress_City": "Mumbai",
         "EmployeeAddress_PIN": "401137",
         "EmployeeAddress_State": "Maharashtra",
-        "EmployeeAddress_Country": "India",
-        "Roles": [
-            {"RoleId": 5}, 
-            {"RoleId": 2}, 
-            {"RoleId": 3}
-        ]
+        "EmployeeAddress_Country": "India"
     }
-
 ]

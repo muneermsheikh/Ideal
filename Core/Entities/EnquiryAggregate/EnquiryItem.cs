@@ -34,14 +34,19 @@ namespace Core.Entities.EnquiryAggregate
             Housing = housing;
             Transport = transport;
             CompleteBy = completeBy;
-        }
+           }
 
         public int EnquiryId { get; set; }
         public CategoryItemOrdered ItemOrdered {get; set; }
+        public int SrNo {get; set; }
         public int CategoryItemId { get; set; }
         public string CategoryName { get; set; }
         public int Quantity { get; set; }
         public bool ECNR { get; set; } = false;
+
+        public int? HRExecutiveId {get; set; }
+        public int? AssessingSupId { get; set; }
+        public int? AssessingHRMId { get; set; }
         public int ExpDesiredInYrsMin { get; set; }
         public int ExpDesiredInYrsMax { get; set; }
         public string JobDescInBrief { get; set; }
@@ -49,11 +54,13 @@ namespace Core.Entities.EnquiryAggregate
         public int SalaryRangeMin { get; set; }
         public int SalaryRangeMax { get; set; }
         public int ContractPeriodInMonths { get; set; } = 24;
+        
         public enumProvision Food { get; set; } = enumProvision.NotProvided;
         public enumProvision Housing { get; set; } = enumProvision.NotProvided;
         public enumProvision Transport { get; set; } = enumProvision.NotProvided;
         public DateTimeOffset CompleteBy { get; set; } = DateTimeOffset.Now.AddDays(7);
         public enumItemReviewStatus Status { get; set; } = enumItemReviewStatus.NotReviewed;
+
         public JobDesc JobDesc {get; set; }
         public int JobDescId { get; set; }
         public Remuneration Remuneration {get; set;}

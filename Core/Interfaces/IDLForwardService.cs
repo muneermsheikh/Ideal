@@ -13,6 +13,7 @@ namespace Core.Interfaces
         Task<IReadOnlyList<EnquiryForwarded>> CreateEnquiryForwardForEnquiryIdAsync (
             IReadOnlyList<CustOfficialToForwardDto> officialsDto, 
             int enquiryId, string mode, DateTimeOffset dtForwarded);
+            
         Task<IReadOnlyList<EnquiryForwarded>> CreateEnquiryForwardForSelectedEnquiryItemsAsync (
             IReadOnlyList<CustOfficialToForwardDto> officialsDto, 
             IReadOnlyList<EnquiryItem> enquiryItems, string mode, DateTimeOffset dtForwarded);

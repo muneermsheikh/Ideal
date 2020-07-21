@@ -12,8 +12,17 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationService( this IServiceCollection services)
         {
+            services.AddSingleton<IResponseCacheService, ResponseCacheService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICVEvaluationService, CVEvaluationService>();
+            services.AddScoped<IDLService, DLService>();
+            services.AddScoped<IDLForwardService, DLForwardService>();
+            services.AddScoped<IEmployeeService, EmployeeServices>();
+            services.AddScoped<IHRService, HRService>();
+            services.AddScoped<IInternalHRService, InternalHRService>();
+            services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IEnquiryService, EnquiryService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -35,7 +44,7 @@ namespace API.Extensions
                     return new BadRequestObjectResult(errorResponse);
                 };
             });
-
+            
             return services;
         }
     }

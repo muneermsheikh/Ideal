@@ -19,6 +19,7 @@ namespace Infrastructure.Data
             _context = context;
         }
 
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
@@ -34,13 +35,25 @@ namespace Infrastructure.Data
             return await ApplySpecification(spec).ToListAsync();
         }
         
-        public async Task<int> AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
             _context.Set<T>().Attach(entity);
             _context.Entry(entity).State = EntityState.Added;
             var result = await _context.SaveChangesAsync();
-            if (result != 0) return entity.Id;
-            return 0;
+            if (result != 0) return entity;
+            return null;
+        }
+
+        public async Task<IReadOnlyList<T>> AddListAsync(IReadOnlyList<T> entities)
+        {
+            foreach(var t in entities)
+            {
+                _context.Set<T>().Attach(t);
+                _context.Entry(t).State = EntityState.Added;
+            }
+            var result = await _context.SaveChangesAsync();
+            if (result != 0) return entities;
+            return null;
         }
 
         public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
@@ -48,14 +61,26 @@ namespace Infrastructure.Data
             return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
 
-
-        public async Task<int> UpdateAsync(T entity)
+        public async Task<IReadOnlyList<T>> GetEntityListWithSpec(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).ToListAsync();
+        }
+        public async Task<T> UpdateAsync(T entity)
         {
             _context.Set<T>().Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<int> DeleteAsync(T entity)
+        {
+            _context.Set<T>().Attach(entity);
+            _context.Entry(entity).State = EntityState.Deleted;
             return await _context.SaveChangesAsync();
         }
 
+        
         public async Task<int> UpdateListAsync(List<T> entities)
         {
             foreach(var item in entities)
@@ -81,7 +106,7 @@ namespace Infrastructure.Data
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
 
-    
+  
         public void Add(T entity)
         {
             _context.Set<T>().Add(entity);
@@ -104,5 +129,9 @@ namespace Infrastructure.Data
 
         }
 
+        public async Task<bool> RecordExists(ISpecification<T> entity)
+        {
+            return await _context.Set<T>().AnyAsync();
+        }
     }
 }

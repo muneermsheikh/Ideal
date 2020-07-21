@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using API.Dtos;
 using API.Errors;
 using API.Extensions;
+using API.Helpers;
 using AutoMapper;
 using Core.Entities.Admin;
 using Core.Entities.Identity;
+using Core.Entities.Masters;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -36,6 +38,7 @@ namespace API.Controllers
 
         // Usermanager is derived from Microsoft.Identity. Usermanager has
         // built in function FindByEmailAsync.
+        
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -47,13 +50,14 @@ namespace API.Controllers
                 .CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded) return Unauthorized(new ApiResponse((401)));
-
+            
             return new UserDto
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user)
             };
+            
         }
 
 
@@ -97,12 +101,13 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(HttpContext.User);
-
+            
             return new UserDto
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                EmployeeId=user.EmployeeId
             };
         }
 

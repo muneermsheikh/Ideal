@@ -13,30 +13,31 @@ namespace API.Controllers
     public class CustomersController : BaseApiController
     {
         private readonly IGenericRepository<Customer> _custRepo;
+
         private readonly IMapper _mapper;
 
-        public CustomersController(IGenericRepository<Customer> custRepo,
-        IMapper mapper)
+        public CustomersController(
+            IGenericRepository<Customer> custRepo,
+            IMapper mapper
+        )
         {
             _mapper = mapper;
             _custRepo = custRepo;
         }
 
-    [HttpGet]
-    public async Task<ActionResult<Pagination<CustomerDto>>> GetCategories(
-        [FromQuery] CustomerSpecParams custParams)
-    {
-        var spec = new CustomerSpecs(custParams);
-        var countSpec = new CustomerWithFiltersForCountSpec(custParams);
-        var totalItems = await _custRepo.CountWithSpecAsync(countSpec);
+        [HttpGet]
+        public async Task<ActionResult<Pagination<CustomerDto>>> GetCustomers(
+            [FromQuery] CustomerSpecParams custParams)
+        {
+            var spec = new CustomerSpecs(custParams);
+            var countSpec = new CustomerWithFiltersForCountSpec(custParams);
+            var totalItems = await _custRepo.CountWithSpecAsync(countSpec);
 
-        var custs = await _custRepo.ListWithSpecAsync(spec);
+            var custs = await _custRepo.ListWithSpecAsync(spec);
 
-        var data = _mapper
-            .Map<IReadOnlyList<Customer>, IReadOnlyList<CustomerDto>>(custs);
-        return Ok(new Pagination<CustomerDto>
-            (custParams.PageIndex, custParams.PageSize, totalItems, data));
-
+            var data = _mapper.Map<IReadOnlyList<Customer>, IReadOnlyList<CustomerDto>>(custs);
+            return Ok(new Pagination<CustomerDto>(custParams.PageIndex,
+                custParams.PageSize, totalItems, data));
+        }
     }
-}
 }

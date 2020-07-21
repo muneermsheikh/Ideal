@@ -18,8 +18,8 @@ namespace Core.Interfaces
         Task<int> UpdateDLItemAsync(EnquiryItem enquiryItem);
     // JD
         Task<JobDesc> GetJobDescOfAnItemAsync(int EnquiryItemId);
-        Task<JobDesc> UpdateJobDescAsync(ContractReviewItem contractReviewItem);
-        Task<int> DeleteJobDescAsync(ContractReviewItem contractReviewItem);
+        Task<JobDesc> UpdateJobDescAsync(JobDesc jobDesc);
+        Task<int> DeleteJobDescAsync(JobDesc jobDescription);
         Task<IReadOnlyList<JobDesc>> GetJobDescOfEnquiryIdAsync(int enquiryId);
 
     //contract review item

@@ -1,13 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities.Admin;
 using Core.Enumerations;
 using Core.Interfaces;
+using Core.Specifications;
 
 namespace Infrastructure.Services
 {
-    public class TaskService : IToDo
+    public class TaskService : ITaskService
     {
         private readonly IUnitOfWork _unitOfWork;
         public TaskService(IUnitOfWork unitOfWork)
@@ -15,56 +15,95 @@ namespace Infrastructure.Services
             _unitOfWork = unitOfWork;
         }
 
-        public Task<TaskItem> AppendTaskItemAsync(int taskId, DateTimeOffset transDate, string transationDetail, DateTimeOffset? remindOn, int? qntyConcluded, bool? createEmailMessage, enumTaskItemStatus? itemStatus)
+        public async Task<TaskItem> AppendTaskItemAsync(int taskId, TaskItem taskItem)
         {
-            throw new NotImplementedException();
+            taskItem.TaskId = taskId;
+            return  await _unitOfWork.Repository<TaskItem>().AddAsync(taskItem);
         }
 
-        public Task<ToDo> CreateATaskAsync(int ownerId, int assignedToId, DateTimeOffset taskDate, DateTimeOffset completeBy, DateTimeOffset remindOn, string taskDescription, string senderEmail, string addresseeEmail, int? enquiryId, int? enquiryItemId, enumTaskType? taskType, bool? sendMail, enumTaskStatus? taskStatus)
+        public async Task<ToDo> CreateTaskAsync(ToDo todo)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.Repository<ToDo>().AddAsync(todo);
         }
 
-        public Task<ToDo> DeleteTaskByIdAsync(ToDo toDo1)
+        public async Task<bool> DeleteTaskAsync(ToDo toDo)
         {
-            throw new NotImplementedException();
+            var result = await _unitOfWork.Repository<ToDo>().DeleteAsync(toDo);
+            return result != 0 ? true : false;
         }
 
-        public Task<int> DeleteTaskItemAsync(TaskItem taskItem)
+        public async Task<bool> DeleteTaskItemAsync(TaskItem taskItem)
         {
-            throw new NotImplementedException();
+            var result = await _unitOfWork.Repository<TaskItem>().DeleteAsync(taskItem);
+            return result != 0 ? true : false;
+        }
+        
+        public async Task<bool> DeleteTaskByIdAsync(int taskId)
+        {
+            var t = await _unitOfWork.Repository<ToDo>().GetByIdAsync(taskId);
+            var x = await _unitOfWork.Repository<ToDo>().DeleteAsync(t);
+            return x == 0 ? false : true;
         }
 
-        public Task<IReadOnlyList<ToDo>> GetPendingTaskListOfAnOwnerAsync(int taskOwnerId)
+        public async Task<IReadOnlyList<ToDo>> GetTaskListAsync(int enquiryItemId, 
+            enumTaskType taskType, enumTaskStatus taskStatus, int userId, bool includeItems)
         {
-            throw new NotImplementedException();
+            var spec = new TaskSpecs(enquiryItemId, taskType, enumTaskStatus.NotStarted, 
+                includeItems, userId);
+            return await _unitOfWork.Repository<ToDo>().GetEntityListWithSpec(spec);
         }
 
-        public Task<ToDo> GetTaskByIdAsync(int taskId)
+        public async Task<ToDo> UpdateTaskAsync(ToDo toDo)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.Repository<ToDo>().UpdateAsync(toDo);
         }
 
-        public Task<IReadOnlyList<TaskItem>> GetTaskItemsByTaskIdAsync(int taskId)
+        public async Task<TaskItem> UpdateTaskItemAsync(TaskItem taskItem)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.Repository<TaskItem>().UpdateAsync(taskItem);
         }
 
-        public Task<IReadOnlyList<ToDo>> GetTaskListWithItemsOfAnOwnerAsync(int taskOwnerId)
+        public async Task<IReadOnlyList<ToDo>> GetTasksAsync(TaskSpecParams taskSpecParams)
         {
-            throw new NotImplementedException();
+            var sec = new TaskSpecs(taskSpecParams);
+            return await _unitOfWork.Repository<ToDo>().GetEntityListWithSpec(sec);
         }
 
-        public Task<ToDo> UpdateTaskAsync(ToDo toDo)
+        public async Task<IReadOnlyList<ToDo>> GetTaskAsync(
+            enumTaskType taskType, bool onlyHeaders, int userId)
         {
-            throw new NotImplementedException();
+            var spec = new TaskSpecs(taskType, userId, onlyHeaders);
+            return await _unitOfWork.Repository<ToDo>().GetEntityListWithSpec(spec);
         }
 
-        public async Task<int> UpdateTaskItemAsync(TaskItem taskItem)
+        public async Task<IReadOnlyList<ToDo>> GetTaskListAsync(
+            enumTaskType taskType, bool onlyHeaders, int userId)
         {
-            var t = await _unitOfWork.Repository<TaskItem>().UpdateAsync(taskItem);
-            await _unitOfWork.Complete();
-            return t;
+            var spec = new TaskSpecs(taskType, userId, onlyHeaders);
+            return await _unitOfWork.Repository<ToDo>().GetEntityListWithSpec(spec);
+        }
+
+        public async Task<IReadOnlyList<ToDo>> GetTaskListAsync(int enquiryItemId, 
+            enumTaskType taskType, enumTaskStatus taskStatus, bool onlyHeaders, int ownerId)
+        {
+            var spec = new TaskSpecs(enquiryItemId, taskType,taskStatus,onlyHeaders,ownerId);
+            return await _unitOfWork.Repository<ToDo>().GetEntityListWithSpec(spec);
+        }
+
+        public async Task<ToDo> GetTaskEnquiryitemIdAssignedToIdTaskTypeAsync(int enquiryItemId, int assignedToId, enumTaskType taskType)
+        {
+            var spec = new TaskSpecs(enquiryItemId,assignedToId, taskType);
+            return await _unitOfWork.Repository<ToDo>().GetEntityWithSpec(spec);
+        }
+
+        public Task<IReadOnlyList<ToDo>> GetTaskListOwnersAsyncUser(int ownerId, enumTaskStatus taskStatus)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IReadOnlyList<ToDo>> GetTaskListAssignedTosAsyncUser(int assignedToId, enumTaskStatus taskStatus)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

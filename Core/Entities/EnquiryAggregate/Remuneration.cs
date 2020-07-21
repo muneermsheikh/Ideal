@@ -6,11 +6,17 @@ namespace Core.Entities.EnquiryAggregate
 {
     public class Remuneration: BaseEntity
     {
-        public Remuneration(int enquiryItemId)
+        public Remuneration()
         {
+        }
+
+        public Remuneration(int enquiryItemId, int enquiryId)
+        {
+            EnquiryId = enquiryId;
             EnquiryItemId = enquiryItemId;
         }
 
+        public int EnquiryId {get; set; }
         public int EnquiryItemId { get; set; }
         public int ContractPeriodInMonths { get; set; }
         [MaxLength(3)]

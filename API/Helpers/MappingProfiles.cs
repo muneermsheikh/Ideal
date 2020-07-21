@@ -3,6 +3,7 @@ using AutoMapper;
 using Core.Entities.EnquiryAggregate;
 using Core.Entities.Admin;
 using Core.Entities.Masters;
+using Core.Entities.HR;
 
 namespace API.Helpers
 {
@@ -29,6 +30,13 @@ namespace API.Helpers
                 */ 
             CreateMap<EnquiryItem, EnquiryItemDto>();
             CreateMap<Customer, CustomerDto>();
+            CreateMap<ToDo, TaskToReturnDto>();
+            CreateMap<TaskItem, TaskItemDto>();
+            CreateMap<HRSkillClaim, HRSkillClaimsDto>();
+            CreateMap<AssessmentQ, AssessmentItem>();
+            CreateMap<Employee, EmployeeDto>()
+                .ForMember(x => x.EmployeeName, o => o.MapFrom(s => s.Person.FullName))
+                .ForMember(x => x.KnownAs, o => o.MapFrom(s => s.Person.KnownAs));
         }
     }
 }

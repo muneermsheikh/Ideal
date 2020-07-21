@@ -1,0 +1,14 @@
+[
+    {"Id": 1, "DomainSubName": "Finance"},
+    {"Id": 2, "DomainSubName": "Accounts-Accountant"},
+    {"Id": 3, "DomainSubName": "Accounts-Manager"},
+    {"Id": 4, "DomainSubName": "Administration-Secretarial"},
+    {"Id": 5, "DomainSubName": "Administration-Supervisor"},
+    {"Id": 6, "DomainSubName": "Administration-Manager"},
+    {"Id": 7, "DomainSubName": "Design-Civil-Draftsman"},
+    {"Id": 8, "DomainSubName": "Design-Civil-Supervisor"},
+    {"Id": 9, "DomainSubName": "Design-Mechanical-Draftsman"},
+    {"Id": 10, "DomainSubName": "Design-Mechanical-Supervisor"},
+    {"Id": 11, "DomainSubName": "Design-Mechanical-Architect"},
+    {"Id": 12, "DomainSubName": "Procurement Officer"}
+]

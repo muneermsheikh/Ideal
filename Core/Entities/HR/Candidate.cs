@@ -8,6 +8,10 @@ namespace Core.Entities.HR
 {
     public class Candidate: BaseEntity
     {
+        public Candidate()
+        {
+        }
+
         public int ApplicationNo { get; set; }
         public DateTime ApplicationDated { get; set; }
         public string FirstName { get; set; }
@@ -22,5 +26,7 @@ namespace Core.Entities.HR
         public virtual Employee LastStatusUpdatedBy { get; set; }
         public DateTime LastStatusUpdatedOn { get; set; } = DateTime.Now;
         public virtual List<Attachment> Attachments {get; set; }
+
+        public string FullName {get {return FirstName + ", " + FamilyName;} }
     }
 }

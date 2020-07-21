@@ -16,29 +16,30 @@ namespace Infrastructure.Services
             _unitOfWork = unitOfWork;
         }
 
-        public Task<int> DeleteContractReviewItem(ContractReviewItem contractReviewItem)
+        public async Task<int> DeleteContractReviewItem(ContractReviewItem contractReviewItem)
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<ContractReviewItem>().DeleteAsync(contractReviewItem);
         }
 
-        public Task<int> DeleteJobDescAsync(ContractReviewItem contractReviewItem)
+        public async Task<int> DeleteJobDescAsync(JobDesc jobDescription)
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<JobDesc>().DeleteAsync(jobDescription);
         }
 
-        public Task<int> DeleteRemunerationAsync(Remuneration remuneration)
+        public async Task<int> DeleteRemunerationAsync(Remuneration remuneration)
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<Remuneration>().DeleteAsync(remuneration);
         }
 
-        public Task<ContractReviewItem> GetContractReviewItemAsync(int EnquiryItemId)
+        public async Task<ContractReviewItem> GetContractReviewItemAsync(int EnquiryItemId)
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<ContractReviewItem>().GetByIdAsync(EnquiryItemId);
         }
 
-        public Task<IReadOnlyList<ContractReviewItem>> GetContractReviewItemsOfEnquiryAsync(int enquiryId)
+        public async Task<IReadOnlyList<ContractReviewItem>> GetContractReviewItemsOfEnquiryAsync(int enquiryId)
         {
-            throw new System.NotImplementedException();
+            var spec = new ContractReviewItemSpec("", enquiryId);
+            return await _unitOfWork.Repository<ContractReviewItem>().GetEntityListWithSpec(spec);
         }
 
         public async Task<Enquiry> GetDLByIdAsync(int enquiryId)
@@ -64,14 +65,16 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<EnquiryItem>().ListWithSpecAsync(spec);
         }
 
-        public Task<JobDesc> GetJobDescOfAnItemAsync(int EnquiryItemId)
+        public async Task<JobDesc> GetJobDescOfAnItemAsync(int enquiryItemId)
         {
-            throw new System.NotImplementedException();
+            var spec = new JobDescSpec(enquiryItemId);
+            return await _unitOfWork.Repository<JobDesc>().GetEntityWithSpec(spec);
         }
 
-        public Task<IReadOnlyList<JobDesc>> GetJobDescOfEnquiryIdAsync(int enquiryId)
+        public async Task<IReadOnlyList<JobDesc>> GetJobDescOfEnquiryIdAsync(int enquiryId)
         {
-            throw new System.NotImplementedException();
+            var spec = new JobDescSpec("",enquiryId);
+            return await _unitOfWork.Repository<JobDesc>().GetEntityListWithSpec(spec);
         }
 
         public async Task<Remuneration> GetRemunerationAsync(int enquiryItemId)
@@ -80,14 +83,15 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Remuneration>().GetEntityWithSpec(spec);
         }
 
-        public Task<IReadOnlyList<Remuneration>> GetRemunerationOfEnquiry(int enquiryId)
+        public async Task<IReadOnlyList<Remuneration>> GetRemunerationOfEnquiry(int enquiryId)
         {
-            throw new System.NotImplementedException();
+            var spec = new RemunerationSpecs("",enquiryId);
+            return await _unitOfWork.Repository<Remuneration>().GetEntityListWithSpec(spec);
         }
 
-        public Task<ContractReviewItem> UpdateContractReviewItemAsync(ContractReviewItem contractReviewItem)
+        public async Task<ContractReviewItem> UpdateContractReviewItemAsync(ContractReviewItem contractReviewItem)
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<ContractReviewItem>().UpdateAsync(contractReviewItem);
         }
 
         public async Task<int> UpdateDLAsync(Enquiry enquiry)
@@ -102,14 +106,14 @@ namespace Infrastructure.Services
             return await _unitOfWork.Complete();
         }
 
-        public Task<JobDesc> UpdateJobDescAsync(ContractReviewItem contractReviewItem)
+        public async Task<JobDesc> UpdateJobDescAsync(JobDesc jobDesc)
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<JobDesc>().UpdateAsync(jobDesc);
         }
 
-        public Task<Remuneration> UpdateRemunerationAsync(Remuneration remuneration)
+        public async Task<Remuneration> UpdateRemunerationAsync(Remuneration remuneration)
         {
-            throw new System.NotImplementedException();
+            return await _unitOfWork.Repository<Remuneration>().UpdateAsync(remuneration);
         }
     }
 }

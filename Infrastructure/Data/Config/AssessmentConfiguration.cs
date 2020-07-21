@@ -14,10 +14,8 @@ namespace Infrastructure.Data.Config
             builder.Property(x => x.CandidateId).IsRequired();
             builder.HasOne(x => x.Candidate).WithMany().HasForeignKey(x => x.CandidateId);
             builder.HasIndex(x => x.CandidateId);
-            builder.HasOne(x => x.Enquiryitem).WithMany().HasForeignKey(x => x.EnquiryItemId);
-            // builder.HasOne(x => x.Result).WithMany().HasForeignKey(x => x.AssessmentResultId);
-            // above needs to be validated in client
-            
+            builder.HasMany(x => x.AssessmentItems).WithOne().OnDelete(DeleteBehavior.Cascade);
+
             builder.HasIndex("EnquiryItemId", "CandidateId").IsUnique();
 
             builder.Property(s => s.Result)

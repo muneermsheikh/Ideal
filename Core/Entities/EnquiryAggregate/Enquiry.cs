@@ -35,6 +35,7 @@ namespace Core.Entities.EnquiryAggregate
         public bool ReadyToReview {get; set; } = false;         // this is set to true when all enquiryitems are reviewed
         public enumEnquiryStatus EnquiryStatus { get; set; } = enumEnquiryStatus.Pending;
         public Employee ProjectManager { get; set; }
+        public Customer Customer {get; set; }
         public CustomerOfficial AccountExecutive { get; set; }
         public CustomerOfficial HRExecutive { get; set; }
         public CustomerOfficial LogisticsExecutive { get; set; }

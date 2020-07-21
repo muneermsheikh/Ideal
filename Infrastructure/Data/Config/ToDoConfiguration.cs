@@ -15,9 +15,14 @@ namespace Infrastructure.Data.Config
             builder.HasOne(x => x.AssignedTo).WithMany().HasForeignKey(x => x.AssignedToId);
             builder.Property(x => x.TaskDate).IsRequired();
             builder.Property(x => x.CompleteBy).IsRequired();
-            builder.Property(x => x.TaskType).IsRequired();
-            builder.Property(x => x.TaskDescription).IsRequired();
+            builder.Property(x => x.TaskType).IsRequired().HasDefaultValue(enumTaskType.Administrative);
+            builder.Property(x => x.TaskDescription).IsRequired().HasMaxLength(250);
             builder.Property(x => x.TaskStatus).IsRequired();
+            builder.HasMany(x => x.TaskItems).WithOne().OnDelete(DeleteBehavior.Cascade);
+            builder.HasIndex("AssignedToId");
+            builder.HasIndex("OwnerId");
+            builder.HasIndex("TaskType");
+            
             // ** require index for assigned to and owner???
             builder.Property(s => s.TaskType)
                 .HasConversion(

@@ -4,6 +4,10 @@ namespace Core.Entities.Emails
 {
     public class Email
     {
+        public Email()
+        {
+        }
+
         [Required, Display(Name = "Sender's name")]  
         public string ToName { get; set; }  
         [Required, Display(Name = "Sender's email"), EmailAddress]  

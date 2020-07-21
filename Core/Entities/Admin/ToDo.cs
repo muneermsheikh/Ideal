@@ -13,7 +13,7 @@ namespace Core.Entities.Admin
         }
 
         public ToDo(int ownerId, int assignedToId, DateTimeOffset taskDate, DateTimeOffset completeBy, 
-            string taskDescription,  enumTaskType taskType, int enquiryId)
+            string taskDescription,  enumTaskType? taskType, int? enquiryId, int? enquiryItemId)
         {
             EnquiryId = enquiryId;
             OwnerId = ownerId;
@@ -22,6 +22,7 @@ namespace Core.Entities.Admin
             CompleteBy = completeBy;
             TaskType = taskType;
             TaskDescription = taskDescription;
+            EnquiryItemId = enquiryItemId;
         }
 
         public int? EnquiryId {get; set; }

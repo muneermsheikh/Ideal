@@ -2,6 +2,10 @@ namespace Core.Entities.Masters
 {
     public class Category: BaseEntity
     {
+        public Category()
+        {
+        }
+
         public Category(string name, int industryTypeId, int skillLevelId)
         {
             Name = name;

@@ -34,7 +34,8 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Pagination<CategoryToReturnDto>>> GetCategories([FromQuery]CategorySpecParams catParams)
+        public async Task<ActionResult<Pagination<CategoryToReturnDto>>> GetCategories(
+            [FromQuery]CategorySpecParams catParams)
         {
             var spec = new CategoryWithIndTypeAndSkillLevelSpec(catParams);
             var countSpec = new CategoriesWithFiltersForCountSpec(catParams);

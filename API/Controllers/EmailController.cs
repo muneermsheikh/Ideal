@@ -25,7 +25,7 @@ namespace API.Controllers
             }  
         }  
   
-        
+       [ApiExplorerSettings(IgnoreApi = true)]
         private string createEmailBody(string userName, string message)  
         {  
             string body = string.Empty;  

@@ -10,7 +10,8 @@ namespace Infrastructure.Data.Config
         {
             builder.Property(x => x.TaskId).IsRequired();
             builder.Property(x => x.TransDate).IsRequired();
-            builder.Property(x => x.TransactionDetail).IsRequired();
+            builder.Property(x => x.TransactionDetail).IsRequired().HasMaxLength(250);
+            builder.HasIndex("TaskId");
         }
     }
 }

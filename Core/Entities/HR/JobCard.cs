@@ -4,6 +4,10 @@ namespace Core.Entities.HR
 {
     public class JobCard: BaseEntity
     {
+        public JobCard()
+        {
+        }
+
         public DateTime JobCardDate { get; set; }
 
         public int CandidateId { get; set; }

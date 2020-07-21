@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities.Admin;
-using Core.Entities.Dtos;
 using Core.Specifications;
 
 namespace Core.Interfaces

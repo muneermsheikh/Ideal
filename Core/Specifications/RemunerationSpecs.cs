@@ -13,5 +13,9 @@ namespace Core.Specifications
         public RemunerationSpecs(int enquiryItemId) : base(x => x.EnquiryItemId == enquiryItemId)
         {
         }
+
+        public RemunerationSpecs(string dummy, int enquiryId) : base(x => x.EnquiryId == enquiryId)
+        {
+        }
     }
 }

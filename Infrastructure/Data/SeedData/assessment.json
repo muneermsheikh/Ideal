@@ -2,6 +2,8 @@
     {
       "EnquiryItemId": 1,
       "CandidateId": 1,
+      "CustomerNameAndCity": "Jawahar Group, Mumbai",
+      "CategoryNameAndRef": "Maintenance Engineer-Civil, 1101-2",
       "Result": 1,
       "AssessmentResultId": 0,
       "AssessedBy": "Person A"
@@ -10,6 +12,8 @@
     {
         "EnquiryItemId": 1,
         "CandidateId": 1,
+        "CustomerNameAndCity": "Reliance Entertainment, Delhi",
+        "CategoryNameAndRef": "Production Engineer-Civil, 1001-1",
         "Result": 1,
         "AssessmentResultId": 0,
         "AssessedBy": "Person A"

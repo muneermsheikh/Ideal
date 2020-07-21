@@ -4,6 +4,7 @@ namespace Core.Entities.Identity
 {
     public class AppUser : IdentityUser
     {
+        public int EmployeeId {get; set; }
         public string DisplayName {get; set; }
         public string CompanyName {get; set; }
         public string OfficialGender {get; set; }

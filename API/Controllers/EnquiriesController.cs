@@ -45,6 +45,7 @@ namespace API.Controllers
             return Ok(enquiry);
         }
 
+        [Cached(1000)]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<EnquiryToReturnDto>>> GetEnquiriesOfUser()
         {
@@ -68,11 +69,11 @@ namespace API.Controllers
         [HttpGet("jobdesc")]
         public async Task<ActionResult<JobDesc>> GetJobDescription(int enquiryItemId)
         {
-            return await _enqService.GetJobDescriptionAsync(enquiryItemId);
+            return await _enqService.GetJobDescriptionBySpecAsync(enquiryItemId);
         }
 
         [HttpPut("jobdesc")]
-        public async Task<ActionResult<int>> UpdateJobDescription(JobDesc jobDesc)
+        public async Task<ActionResult<JobDesc>> UpdateJobDescription(JobDesc jobDesc)
         {
             return await _enqService.UpdateJDAsync(jobDesc);
         }
@@ -81,11 +82,11 @@ namespace API.Controllers
         [HttpGet("remuneration/{enquiryItemId}")]
         public async Task<ActionResult<Remuneration>> GetRemuneration(int enquiryItemId)
         {
-            return await _enqService.GetRemunerationAsync(enquiryItemId);
+            return await _enqService.GetRemunerationBySpecEnquiryItemIdAsync(enquiryItemId);
         }
 
         [HttpPut("remuneration")]
-        public async Task<ActionResult<int>> UpdateRemuneration(Remuneration remuneration)
+        public async Task<ActionResult<Remuneration>> UpdateRemuneration(Remuneration remuneration)
         {
             return await _enqService.UpdateRemunerationAsync(remuneration);
         }
@@ -95,12 +96,12 @@ namespace API.Controllers
         [HttpPut("remuneration")]
         public async Task<ActionResult<int>> UpdateReviewItem(ContractReviewItem reviewItem)
         {
-            var result = await _enqService.UpdateContractReviewItemAsync(reviewItem);
-            if (result == 0) return BadRequest(new ApiResponse(404, "Failed to update review item"));
+            var remun = await _enqService.UpdateContractReviewItemAsync(reviewItem);
+            if (remun == null) return BadRequest(new ApiResponse(404, "Failed to update review item"));
 
             // POST UPDATE - Update Enquiry.ReadyToReview to true if all enquiry items reviewed 
             int notReviewed = await _enqService.GetEnquiryItemsCountNotReviewed(reviewItem.EnquiryId);
-            if (notReviewed > 0) return result;
+            if (notReviewed > 0) return 0;        // do nothing, as not all items are reviewed
 
             // all enquiry items reviewed. update Enquiry.ReadyForReview flag
             var enq = await _enqService.GetEnquiryByIdAsync(reviewItem.EnquiryId);

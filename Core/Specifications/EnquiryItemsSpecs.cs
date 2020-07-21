@@ -16,5 +16,18 @@ namespace Core.Specifications
         {
         }
 
+        public EnquiryItemsSpecs(int enquiryItemId, enumItemReviewStatus itemStatus, 
+            bool HRSupAssigned) 
+            : base(x => (x.Id == enquiryItemId && x.Status == itemStatus) &&
+                (x.AssessingSupId.HasValue) )
+        {
+        }
+        
+        public EnquiryItemsSpecs(int enquiryItemId) 
+            : base(x => x.Id == enquiryItemId)
+        {
+        }
+
+
     }
 }

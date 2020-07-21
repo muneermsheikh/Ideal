@@ -2,6 +2,21 @@ namespace Core.Entities.Masters
 {
    public class EmployeeAddress
     {
+        public EmployeeAddress()
+        {
+        }
+
+        public EmployeeAddress(string addressType, string address1, string address2, string city, string pIN, string district, string state)
+        {
+            AddressType = addressType;
+            Address1 = address1;
+            Address2 = address2;
+            City = city;
+            PIN = pIN;
+            State = state;
+            District = district;
+        }
+
         public string AddressType { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }

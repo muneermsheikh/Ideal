@@ -14,10 +14,8 @@ namespace Infrastructure.Services
     {
         private readonly IDLService _dlService;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IDLForwardService _dlForwardService;
-        public DLForwardService(IDLService dlService, IUnitOfWork unitOfWork, IDLForwardService dlForwardService)
+        public DLForwardService(IDLService dlService, IUnitOfWork unitOfWork)
         {
-            _dlForwardService = dlForwardService;
             _unitOfWork = unitOfWork;
             _dlService = dlService;
         }
