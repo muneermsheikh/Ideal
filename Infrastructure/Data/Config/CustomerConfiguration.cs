@@ -10,6 +10,7 @@ namespace Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
+            
             builder.Property(x => x.CustomerName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.CityName).IsRequired().HasMaxLength(50);
             builder.Property(x => x.KnownAs).IsRequired().HasMaxLength(15);
@@ -26,8 +27,8 @@ namespace Infrastructure.Data.Config
                     o => (enumCustomerStatus) Enum.Parse(typeof(enumCustomerStatus), o)
                 );
             
-            builder.HasMany(x => x.CustomerAddresses).WithOne()
-                .HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.Cascade);
+            //builder.HasOne(x => x.CustomerAddress).WithOne()
+              //  .HasForeignKey(x => x.CustomerAddressId).OnDelete(DeleteBehavior.Cascade);
             
             builder.HasMany(o => o.CustomerOfficials).WithOne()
                 .HasForeignKey(o => o.CustomerId).OnDelete(DeleteBehavior.Cascade);

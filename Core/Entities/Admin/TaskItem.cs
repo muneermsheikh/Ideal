@@ -11,7 +11,7 @@ namespace Core.Entities.Admin
             CreateEmailMessage = false;
         }
 
-        public TaskItem(int taskId, DateTimeOffset transDate, int? qntyConcluded, string transactionDetail, bool createEmailMessage, DateTimeOffset? remindOn)
+        public TaskItem(int taskId, DateTime transDate, int? qntyConcluded, string transactionDetail, bool createEmailMessage, DateTime? remindOn)
         {
             TaskId = taskId;
             TransDate = transDate;
@@ -22,11 +22,11 @@ namespace Core.Entities.Admin
         }
 
         public int TaskId { get; set; }
-        public DateTimeOffset TransDate { get; set; } = DateTimeOffset.Now;
+        public DateTime TransDate { get; set; } = DateTime.Now;
         public int? QntyConcluded { get; set; }
         public string TransactionDetail { get; set; }
         public bool CreateEmailMessage { get; set; }
-        public DateTimeOffset? RemindOn { get; set; }
+        public DateTime? RemindOn { get; set; }
         public enumTaskItemStatus? ItemStatus {get; set;}
     }
 }

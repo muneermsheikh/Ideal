@@ -8,6 +8,7 @@ using Core.Entities.Admin;
 using Core.Enumerations;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -25,14 +26,16 @@ namespace API.Controllers
         }
 
         [HttpPost("createSingleTask")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TaskToReturnDto>> CreateTask(ToDo todo)
         {
             var t = await _taskService.CreateTaskAsync(todo);
-            if (t == null) return BadRequest(new ApiResponse(400, "Failed to create the task"));
+            if (t == null) return BadRequest(new ApiResponse(400 ,"Failed to create the task"));
             return Ok(t);
         }
 
         [HttpPost("createGroupTask")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IReadOnlyList<TaskToReturnDto>>> CreateGroupTask(IReadOnlyList<ToDo> listTodo)
         {
             var tasksAdded = await _taskRepo.AddListAsync(listTodo);
@@ -45,6 +48,7 @@ namespace API.Controllers
 
 
         [HttpPut("updateSingleTask")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TaskToReturnDto>> UpdateTask(ToDo todo)
         {
             var t = await _taskService.UpdateTaskAsync(todo);
@@ -54,6 +58,7 @@ namespace API.Controllers
         }
 
         [HttpPut("updateTaskStatus")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TaskToReturnDto>> UpdateTask(ToDo todo, enumTaskStatus taskStatus)
         {
             todo.TaskStatus = taskStatus;
@@ -65,6 +70,7 @@ namespace API.Controllers
 
         // refer TaskSpecParams for retrieval criteria
         [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Pagination<TaskToReturnDto>>> GetTasks(
             [FromQuery] TaskSpecParams tParams)
         {
@@ -73,6 +79,7 @@ namespace API.Controllers
             var totalItems = await _taskRepo.CountWithSpecAsync(countSpec);
 
             var tasks = await _taskRepo.ListWithSpecAsync(spec);
+            if (tasks==null) return NotFound(new ApiResponse(404));
 
             var data = _mapper
                 .Map<IReadOnlyList<ToDo>, IReadOnlyList<TaskToReturnDto>>(tasks);
@@ -89,9 +96,12 @@ namespace API.Controllers
         }
 
         [HttpPost("taskItem")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TaskItem>> AppendTaskItem(int taskId, TaskItem taskItem)
         {
-            return await _taskService.AppendTaskItemAsync(taskId, taskItem);
+            var t = await _taskService.AppendTaskItemAsync(taskId, taskItem);
+            if (t==null) return BadRequest(new ApiResponse(400));
+            return t;
         }
 
         [HttpPut("taskItem")]

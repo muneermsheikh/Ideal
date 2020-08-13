@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities.Admin;
-using Core.Entities.Dtos;
 using Core.Entities.EnquiryAggregate;
+using Core.Entities.Masters;
 using Core.Enumerations;
 using Core.Interfaces;
 using Core.Specifications;
+using Core.Entities.Emails;
+using System.Linq;
 
 namespace Infrastructure.Services
 {
@@ -14,32 +16,68 @@ namespace Infrastructure.Services
     {
         private readonly IDLService _dlService;
         private readonly IUnitOfWork _unitOfWork;
-        public DLForwardService(IDLService dlService, IUnitOfWork unitOfWork)
+        private readonly IEmailService _emailService;
+
+        public DLForwardService(IDLService dlService, IUnitOfWork unitOfWork, IEmailService emailService)
         {
+            _emailService = emailService;
             _unitOfWork = unitOfWork;
             _dlService = dlService;
         }
 
-        public Task<IReadOnlyList<EnquiryForwarded>> CreateEnquiryForwardForSelectedEnquiryItemsAsync(
-            IReadOnlyList<CustOfficialToForwardDto> officialsDto, IReadOnlyList<EnquiryItem> enquiryItems, 
-            string mode, DateTimeOffset dtForwarded)
+        public async Task<DLForwarded> DLForwardToHRAsync(DateTime dtForwarded, 
+            IReadOnlyList<IdInt> enquiryIds, int iHRManagerId)
         {
-            var forwardedList = EnquiryForwards(dtForwarded, enquiryItems, officialsDto, mode);
-            return forwardedList;
-        }
+            var dlForwarded = new DLForwarded();
+            var _empRepo = _unitOfWork.Repository<Employee>();
+            var enqs = new List<Enquiry>();
+            var _repoCust = _unitOfWork.Repository<Customer>();
 
-        public Task<IReadOnlyList<EnquiryForwarded>> CreateEnquiryForwardForEnquiryIdAsync(
-            IReadOnlyList<CustOfficialToForwardDto> officialsDto, int enquiryId, string mode, DateTimeOffset dtForwarded)
-        {
-            IReadOnlyList<EnquiryItem> items = (IReadOnlyList<EnquiryItem>)_dlService
-                .GetDLItemsAsync(enquiryId, enumItemReviewStatus.Accepted);
+            foreach(var enqId in enquiryIds)
+            {
+                var enq = await _unitOfWork.Repository<Enquiry>()
+                    .GetEntityWithSpec(new EnquirySpecs(enqId.Id, false, false));
+                if (enq == null) continue;
+                
+                //var enqItems = await _unitOfWork.Repository<EnquiryItem>().GetEntityListWithSpec(
+                  //  new EnquiryItemsSpecs(enqId, enumItemReviewStatus.Accepted));
+                if (enq.EnquiryItems.Count == 0) continue;
+                enq.Customer = await _repoCust.GetByIdAsync(enq.CustomerId);
+
+                int projectManagerId = enq.ProjectManager == null ? 1: enq.ProjectManager.Id;
+
+                var mgr = await _empRepo.GetByIdAsync(projectManagerId);
+                var emp = await _empRepo.GetByIdAsync(iHRManagerId);
+
+                var sTaskDescription = ComposeAndSendDLForwardMessageToHR(enq, emp, mgr);
+
+                var fwd = new DLForwardToHR(iHRManagerId, dtForwarded, enqId.Id);
+                var dlFwd = await _unitOfWork.Repository<DLForwardToHR>().AddAsync(fwd);
+
+                if (dlFwd == null) continue;
+
+                enqs.Add(enq);
+                    
+                var toDo = new ToDo(projectManagerId, iHRManagerId, dtForwarded, dtForwarded.AddDays(7),
+                    sTaskDescription, enumTaskType.HRDeptHeadAssignment, enqId.Id);
+                    
+                await _unitOfWork.Repository<ToDo>().AddAsync(toDo);
+
+            }
+            dlForwarded.Enquiries=enqs;
             
-            var forwardedList = EnquiryForwards(dtForwarded, items, officialsDto, mode);
-            return forwardedList;
+            return dlForwarded;
         }
 
+        public async Task<IReadOnlyList<EnquiryForwarded>> DLForwardToAssociatesAsync(
+            IReadOnlyList<IdInt> customerOfficialIds, int enquiryId, 
+            IReadOnlyList<IdInt> enqItemIds, string mode, DateTime dtForwarded)
+        {
+            var enqFwdd = await ForwardTheEnquiry(dtForwarded, enquiryId, enqItemIds, customerOfficialIds, mode);         
+            return enqFwdd;
+        }
 
-        public async Task<int> DeleteEnquiryItemForwardedByIdAsync(EnquiryForwarded enquiryForwarded)
+        public async Task<int> eleteEnquiryItemForwardedByIdAsync(EnquiryForwarded enquiryForwarded)
         {
             _unitOfWork.Repository<EnquiryForwarded>().Delete(enquiryForwarded);
             return await _unitOfWork.Complete();
@@ -58,40 +96,213 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<EnquiryForwarded>().ListWithSpecAsync(spec);
         }
 
-        public async Task<int> DeleteEnquiryItemsForwardedById(EnquiryForwarded enquiryForwarded)
+        public async Task<int> DeleteEnquiryItemForwardedByIdAsync(EnquiryForwarded enquiryForwarded)
         {
             _unitOfWork.Repository<EnquiryForwarded>().Delete(enquiryForwarded);
             var result = await _unitOfWork.Complete();
             return result;
+
         }
 
 
-        private async Task<IReadOnlyList<EnquiryForwarded>> EnquiryForwards(
-            DateTimeOffset dtForwarded, IReadOnlyList<EnquiryItem> items,
-            IReadOnlyList<CustOfficialToForwardDto> customerOfficials,
-            string forwardedByMode)
+/// privates
+        private async Task<IReadOnlyList<EnquiryForwarded>> ForwardTheEnquiry(
+            DateTime dtForwarded, int enqId, IReadOnlyList<IdInt> enqItemIds, 
+            IReadOnlyList<IdInt> officialIds, string forwardedByMode)
         {
+            if (officialIds == null) return null;
 
-            var fwdList = new List<EnquiryForwarded>();
+            var officials = await _unitOfWork.Repository<CustomerOfficial>().
+                GetEntityListWithSpec(new CustomerOfficialsSpecs(officialIds, true));
+            
+            var forwardedList = new List<EnquiryForwarded>();
 
-            foreach (var off in customerOfficials)
+            Enquiry enq = await _unitOfWork.Repository<Enquiry>()
+                .GetEntityWithSpec(new EnquirySpecs(enqId, false, false)); 
+
+            var enqForwardedItemsList = new List<EnquiryItemForwarded>();   //to write to child table
+                        //EnquiryItemForwarded, for each parent Id of EnquiryForwarded (EnquiryForwrds in db)
+            var enqFwdItemToAdd = new EnquiryItemForwarded();
+
+            var enqItems = await _unitOfWork.Repository<EnquiryItem>().GetEntityListWithSpec(
+                    new EnquiryItemsSpecs(0, false));
+                
+            if (enqItemIds == null || enqItemIds.Count == 0)   // get items from db
             {
-                foreach (var item in items)
+                enqItems = await _unitOfWork.Repository<EnquiryItem>()
+                    .GetEntityListWithSpec(new EnquiryItemsSpecs(
+                        enqId, enumItemReviewStatus.Accepted));
+                if (enqItems == null || enqItems.Count == 0) return null;
+
+                foreach(var item in enqItems)
                 {
-                    var add = forwardedByMode == "mail" ? off.email : forwardedByMode == "sms" ? off.Mobile : off.Mobile2;
-
-                    var fwd = new EnquiryForwarded(dtForwarded, off.CustomerId, off.CustomerOfficialId, item.Id,
-                        item.EnquiryId, forwardedByMode, add);
-
-                    fwdList.Add(fwd);
+//                    enqFwdItemToAdd.EnquiryItemId=item.Id;
+                    enqForwardedItemsList.Add(
+                        new EnquiryItemForwarded{EnquiryItemId = item.Id});
                 }
             }
+            else
+            {
+                // get an entity based upon enqId and selected enquiry item Ids.  Any Ids that
+                // do not match the EnquiryId or are not contract reviewed.Accepted
+                // will be excluded
+                enqItems = await _unitOfWork.Repository<EnquiryItem>()
+                .GetEntityListWithSpec(new EnquiryItemsSpecs(enqItemIds, 
+                    enqId, enumItemReviewStatus.Accepted, false));
+                if (enqItems == null || enqItems.Count == 0) return null;
 
-            await _unitOfWork.Repository<EnquiryForwarded>().UpdateListAsync(fwdList);
-            var result = await _unitOfWork.Complete();      // database trigger will compose  and optionally send messages
-            if (result == 0) return null;
+                foreach(var i in enqItemIds)
+                {
+                    enqFwdItemToAdd.EnquiryItemId=i.Id;
+                    enqForwardedItemsList.Add(enqFwdItemToAdd);
+                }
+            }
+                
+            foreach (var off in officials)
+            {
+                var add = forwardedByMode == "mail" ? off.email : forwardedByMode == "sms" ? off.Mobile : off.Mobile2;
 
-            return fwdList;
+                var fwd = new EnquiryForwarded(dtForwarded, off.CustomerId, off.Id,
+                    enqId, forwardedByMode, add, enqForwardedItemsList);
+
+                //var forwarded = await _unitOfWork.Repository<EnquiryForwarded>().UpdateAsync(fwd);
+                var forwarded = await _unitOfWork.Repository<EnquiryForwarded>().AddAsync(fwd);
+                
+                if (forwarded == null) continue;
+                forwardedList.Add(forwarded);
+            }
+                
+            // ComposeDLForwardMessage needs List<EnquiryItem> entity to retrieve field values
+            var cust = await _unitOfWork.Repository<Customer>().GetByIdAsync(enq.CustomerId);
+            if (cust == null) return null;
+            var emp = await _unitOfWork.Repository<Employee>().GetByIdAsync(enq.ProjectManagerId);
+            if (emp == null) return null;
+
+            ComposeAndSendDLForwardMessageToAssociates(enq, enqItems, cust, emp, officials);
+
+            return forwardedList;
         }
+
+
+        private string ComposeAndSendDLForwardMessageToHR(Enquiry enq, 
+            Employee emp, Employee mgr)
+        {
+            var enqNumber = enq.EnquiryNo;
+            var enqDate = enq.EnquiryDate.Date;
+            var CustomerName = enq.Customer.CustomerName;
+            var CustomerCity = enq.Customer.CityName;
+
+            var assignedToId = emp.Id;
+            var assignedToNameAndDesignation =
+                emp.Gender == "M" ? "Mr." : "Ms." + emp.FullName + ", " + 
+                Environment.NewLine + emp.Designation;
+            var assignedToemailId = emp.Email;
+            var assignedToMobile = emp.Mobile;
+
+            var ownerId = mgr.Id;
+            var ownerNameAndDesignation =
+                mgr.Gender == "M" ? "Mr." : "Ms." + mgr.FullName + ", " + Environment.NewLine + mgr.Designation;
+            var ownerEmailId = mgr.Email;
+            var ownerMobile = mgr.Mobile;
+
+            var requirementTable =  GetEnquiryItemTable(enq.EnquiryItems);
+
+            var sTaskDescription = "To:" + Environment.NewLine + assignedToNameAndDesignation +
+                Environment.NewLine + "email: " + assignedToemailId + ", Mobile:" + assignedToMobile +
+                Environment.NewLine + Environment.NewLine +
+                "Following task has been assigned to you.  Please organize submission of " +
+                "compliant CVs within the time allowed.  Job Description and remuneration terms are available " +
+                "online" + Environment.NewLine + Environment.NewLine +
+                "Order No.:" + enqNumber + " dated " + enqDate + Environment.NewLine +
+                "Customer: " + CustomerName + " Employment City: " + CustomerCity +
+                Environment.NewLine + "Regards/" + Environment.NewLine + Environment.NewLine +
+                ownerNameAndDesignation + Environment.NewLine + "Mobile: " + ownerMobile +
+                "The demand letter items are as follows:" + Environment.NewLine + Environment.NewLine +
+                requirementTable;
+
+            return sTaskDescription;
+        }
+
+        private int ComposeAndSendDLForwardMessageToAssociates(Enquiry enq, 
+            IReadOnlyList<EnquiryItem> enqItems, Customer cust, Employee ProjectManager,
+            IReadOnlyList<CustomerOfficial> custOfficials)
+        {
+            var ListMessages = new List<string>();      // to store messages for each associate
+
+            var enqNumber = enq.EnquiryNo;
+            var enqDate = enq.EnquiryDate.Date;
+            var CustomerName = cust.CustomerName;
+            var CustomerCity = cust.CityName;
+            var ownerId = ProjectManager.Id;
+            var ownerNameAndDesignation = ProjectManager.Gender == "M" ? "Mr." : "Ms." +
+                ProjectManager.FullName + ", " + Environment.NewLine + ProjectManager.Designation;
+            var ownerEmailId = ProjectManager.Email;
+            var ownerMobile = ProjectManager.Mobile;
+
+            var requirementTable =  GetEnquiryItemTable(enqItems);
+            
+            foreach (var off in custOfficials)
+            {
+                var assignedToEmailId = new List<string>();
+                var assignedToId = off.Id;
+                var assignedToNameAndDesignation =
+                    off.Gender == "M" ? "Mr." : "Ms." + off.Name + ", " +
+                    Environment.NewLine + off.Designation;
+                assignedToEmailId.Add(off.email);
+                var assignedToMobile = off.Mobile;
+
+                var sTaskDescription = "To:" + Environment.NewLine + assignedToNameAndDesignation +
+                    Environment.NewLine + "email: " + assignedToEmailId + ", Mobile:" + assignedToMobile +
+                    Environment.NewLine + Environment.NewLine +
+                    "If you know of candidates that are interested in overseas employment and match the following " +
+                    "criteria, please forward their CVs to us.  For interested candidate's reference, their job  " +
+                    "Job Description is available <b>here</b> and remuneration terms are available <b>here</b>a" +
+                    "online" + Environment.NewLine + Environment.NewLine +
+                    "While applying, please ask candidates to refer to Order No.:" + enqNumber + " dated " + enqDate + Environment.NewLine +
+                    "Customer: " + CustomerName + " Employment City: " + CustomerCity +
+                     Environment.NewLine +
+                    Environment.NewLine + "Regards/" + Environment.NewLine + Environment.NewLine +
+                    ownerNameAndDesignation + Environment.NewLine + "Mobile: " + ownerMobile +
+                    "The demand letter items are as follows:" + Environment.NewLine + Environment.NewLine +
+                    Environment.NewLine + "category description" + Environment.NewLine +
+                    requirementTable;
+
+                ListMessages.Add(sTaskDescription);
+                var emailCC = new List<string>();
+                var emailBCC = new List<string>();
+                var email = new EmailModel(assignedToNameAndDesignation, assignedToEmailId, 
+                    emailCC, emailBCC, "Invitation for your friends to take part for overseas employment opportunity" +
+                    " in " + CustomerCity, sTaskDescription);
+                //_emailService.SendEmail(email);
+            }
+
+            return ListMessages.Count;
+        }
+
+        private string GetEnquiryItemTable(IReadOnlyList<EnquiryItem> enqItems)
+        {
+            
+            var st = "<table>" +
+                        "<tr>" +
+                            "<th>Sr.No.</th>" +
+                            "<th>Category</th>" +
+                            "<th>Quantity</th>" +
+                            "<th>Job Description</th>" +
+                            "<th>Remuneration</th>" +
+                        "</tr>";
+            foreach(var item in enqItems)
+            {
+                st = st + "<tr>" + 
+                    "<td>" + item.SrNo + "</td>" +
+                    "<td>" + item.CategoryName + "</td>" +
+                    "<td>" + item.Quantity + "</td>" +
+                    "<td> click for job desc</td>" +
+                    "<td> click for remuneration</td>"  +
+                    "</tr>";
+            }
+            st = st + "</table>";
+            return st;
+        }
+
     }
 }

@@ -17,8 +17,8 @@ namespace API.Dtos
         public Employee AssignedTo { get; set; }       // FK - Employee.Id
         [Required (ErrorMessage="Task not assigned")]
         public int AssignedToId { get; set; }   
-        public DateTimeOffset TaskDate { get; set; } = DateTimeOffset.Now;
-        public DateTimeOffset CompleteBy { get; set; }
+        public DateTime TaskDate { get; set; } = DateTime.Now;
+        public DateTime CompleteBy { get; set; }
         public enumTaskType TaskType { get; set; } = enumTaskType.Administrative;
         [Required (ErrorMessage="Description cannot be blank"), MaxLength(250)]
         public string TaskDescription { get; set; }

@@ -8,6 +8,7 @@ namespace Infrastructure.Identity
     {
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options)
         {
+             // UserValidator = new UserValidator<ApplicationUser>(this) { AllowOnlyAlphanumericUserNames = false };
         }
 
         protected override void OnModelCreating(ModelBuilder builder){

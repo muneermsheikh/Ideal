@@ -25,8 +25,8 @@ namespace Core.Specifications
                 (!cParam.HistoricalStatusAvailable.HasValue || 
                     x.HistoricalStatusAvailable == cParam.HistoricalStatusAvailable) &&
                 (!cParam.Status.HasValue || x.Status == cParam.Status) &&
-                (!cParam.ReviewedOn.HasValue || DateTimeOffset.Compare(
-                    x.ReviewedOn.Date, (DateTimeOffset)cParam.ReviewedOn) == 0) &&
+                (!cParam.ReviewedOn.HasValue || DateTime.Compare(
+                    x.ReviewedOn.Date, (DateTime)cParam.ReviewedOn) == 0) &&
                 (!cParam.ReviewedBy.HasValue || x.ReviewedBy == cParam.ReviewedBy) 
             ))
         {

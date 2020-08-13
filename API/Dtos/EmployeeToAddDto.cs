@@ -21,7 +21,7 @@ namespace API.Dtos
         public string PassportNo {get; set; }
 
         public string Designation {get; set; }
-        public DateTimeOffset DateOfBirth {get; set;}
-        public DateTimeOffset DateOfJoining {get; set; }
+        public DateTime DateOfBirth {get; set;}
+        public DateTime DateOfJoining {get; set; }
     }
 }

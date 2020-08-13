@@ -7,6 +7,8 @@ namespace API.Dtos
     {
         [Required]
         public string Id { get; set; }
+        public int CustomerId {get; set; }
+        public int OfficialId {get; set; }
         public List<BasketItemDto> Items { get; set; }
         
     }

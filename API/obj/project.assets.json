@@ -6569,11 +6569,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\atsOne\\API\\API.csproj",
+      "projectUniqueName": "D:\\atsOne\\api\\API.csproj",
       "projectName": "API",
-      "projectPath": "D:\\atsOne\\API\\API.csproj",
+      "projectPath": "D:\\atsOne\\api\\API.csproj",
       "packagesPath": "C:\\Users\\munir\\.nuget\\packages\\",
-      "outputPath": "D:\\atsOne\\API\\obj\\",
+      "outputPath": "D:\\atsOne\\api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\munir\\AppData\\Roaming\\NuGet\\NuGet.Config"

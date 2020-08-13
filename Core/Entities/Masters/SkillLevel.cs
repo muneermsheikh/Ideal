@@ -6,6 +6,11 @@ namespace Core.Entities.Masters
         {
         }
 
+        public SkillLevel(string name)
+        {
+            Name = name;
+        }
+
         public string Name { get; set; }
     }
 }

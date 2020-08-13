@@ -5,14 +5,6 @@ namespace Core.Specifications
     public class EmployeeParam
     {
         public int? Id {get; set; }
-        public string FirstName { get; set; }
-        public string SecondName { get; set; }
-        public string FamilyName { get; set; }
-        public string Gender { get; set; }
-        public string Designation { get; set; }
-        public DateTimeOffset? DOJ { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
         public bool? IsInEmployment { get; set; }
 
         private const int MaxmPageSize = 50;
@@ -28,13 +20,41 @@ namespace Core.Specifications
         }
         public string Sort { get; set; }
 
-        private string _search;
-
-        public string Search 
-        { 
-            get => _search; 
-            set => value.ToLower(); 
+        public string FirstName 
+        {   
+            get => _firstName; 
+            set => _firstName = value.ToLower(); 
         }
+        public string FamilyName 
+        { 
+            get => _familyName; 
+            set => _familyName = value.ToLower(); 
+        }
+        public string Gender 
+        { 
+            get => _gender; 
+            set => _gender = value.ToLower(); 
+        }
+        public DateTime? DOJ {get; set; }
+
+        //04066864700 - aig 
+        public string Designation
+        { 
+            get => _designation; 
+            set => _designation = value.ToLower(); 
+        }
+        public string Email
+        { 
+            get => _email; 
+            set => _email = value.ToLower(); 
+        }
+        private string _firstName;
+        private string _familyName;
+        private string _designation;
+        private string _gender;
+        private string _email;
+        private DateTime _doj;
+        
 
     }
 }

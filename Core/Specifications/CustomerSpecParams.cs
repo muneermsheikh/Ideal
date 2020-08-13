@@ -21,7 +21,8 @@ namespace Core.Specifications
         public enumCustomerStatus? CustomerStatus {get; set; }
         public string City {get; set; }
         public string Email {get; set; }
-        
+        public bool IncludeOfficial {get; set;}=false;
+        public bool IncludeAddress {get; set; }=false;
         public string Sort { get; set; }
 
         private string _search;
@@ -29,7 +30,7 @@ namespace Core.Specifications
         public string Search 
         { 
             get => _search; 
-            set => value.ToLower(); 
+            set => _search = value.ToLower(); 
         }
     }
 }

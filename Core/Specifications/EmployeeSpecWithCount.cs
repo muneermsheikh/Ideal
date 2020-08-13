@@ -9,13 +9,17 @@ namespace Core.Specifications
         public EmployeeSpecWithCount(EmployeeParam eParam) 
         : base(x => 
                 (
-                    (string.IsNullOrEmpty(eParam.Search) || 
-                        x.Person.FullName.ToLower().Contains(eParam.Search)) &&
+                    (string.IsNullOrEmpty(eParam.FirstName) || 
+                        x.FirstName.ToLower().Contains(eParam.FirstName)) &&
+                    (string.IsNullOrEmpty(eParam.FamilyName) ||
+                        x.FamilyName.ToLower().Contains(eParam.FamilyName)) &&
+                    (string.IsNullOrEmpty(eParam.Designation) ||
+                        x.Designation.ToLower().Contains(eParam.Designation)) &&
+                    ((string.IsNullOrEmpty(eParam.Email)) || 
+                        x.Email.ToLower().Contains(eParam.Email)) &&
                     (string.IsNullOrEmpty(eParam.Gender) || 
-                        x.Person.Gender == eParam.Gender ) &&
-                    (string.IsNullOrEmpty(eParam.Designation) || 
-                        x.Person.Gender == eParam.Designation ) &&
-                    (!eParam.DOJ.HasValue || DateTimeOffset.Compare(
+                        x.Gender == eParam.Gender ) &&
+                    (!eParam.DOJ.HasValue || DateTime.Compare(
                         x.DOJ.Date, eParam.DOJ.Value.Date)==0) &&
                     (!eParam.IsInEmployment.HasValue || 
                         x.IsInEmployment==eParam.IsInEmployment) &&

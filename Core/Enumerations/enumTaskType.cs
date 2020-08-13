@@ -29,7 +29,10 @@ namespace Core.Enumerations
         VisaDocumentationAssignment,
 
         [EnumMember(Value = "Ticketing Assignment")]
-        TicketingAssignment
+        TicketingAssignment,
+        [EnumMember(Value = "CV Acknowledgement to candidate")]
+        CVAcknowledgementToCandidate
+
 
     }
 }

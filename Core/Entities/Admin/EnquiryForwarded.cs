@@ -9,27 +9,29 @@ namespace Core.Entities.Admin
         {
         }
 
-        public EnquiryForwarded(DateTimeOffset forwardedOn, int customerId, int customerOfficialId, 
-            int enquiryItemId, int enquiryId, string forwardedByMode, string addressee)
+        public EnquiryForwarded(DateTime forwardedOn, int customerId, int customerOfficialId, 
+            int enquiryId, string forwardedByMode, string addressee, 
+            List<EnquiryItemForwarded> enqItemsForwarded) 
         {
             ForwardedOn = ForwardedOn;
             EnquiryId = enquiryId;
             CustomerId = customerId;
             CustomerOfficialId = customerOfficialId;
-            EnquiryItemId = enquiryItemId;
             ForwardedByMode = forwardedByMode;
             Addressee = addressee;
+            EnquiryItemsForwarded = enqItemsForwarded;
         }
 
         public int EnquiryId { get; set; }
         public int CustomerId { get; set; }
         public int CustomerOfficialId { get; set; }
-        public int EnquiryItemId { get; set; }
-        public DateTimeOffset ForwardedOn { get; set; } = DateTimeOffset.Now;
+        //public int EnquiryItemId { get; set; }
+        public DateTime ForwardedOn { get; set; } = DateTime.Now;
         public string ForwardedByMode {get; set; }
         public string Addressee {get; set; }
         public string SentReference {get; set; }
         public Customer Customer { get; set; }
+        public virtual List<EnquiryItemForwarded> EnquiryItemsForwarded {get; set; }
         public virtual List<CVSource> CVSources { get; set; }       // to update later.
     }
 }

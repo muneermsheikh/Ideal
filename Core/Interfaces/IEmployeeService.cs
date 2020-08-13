@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Core.Entities.Dtos;
 using Core.Entities.Masters;
 using Core.Specifications;
 
@@ -13,7 +12,7 @@ namespace Core.Interfaces
             string secondNm, string familyNm, string knownAs, string add1, string add2,
             string city, string pin, string district, string state, string country, string mobile,
             string email, string aadharNumber, string passportNo, string Designation,
-            DateTimeOffset DateOfBirth, DateTimeOffset DateOfJoining);
+            DateTime DateOfBirth, DateTime DateOfJoining);
          Task<Employee> UpdateEmployeeAsync(Employee employee);
          Task<bool> DeleteEmployeeAsync(Employee employee);
          Task<IReadOnlyList<Employee>> GetEmployeeListBySpecAsync(EmployeeParam empParam);

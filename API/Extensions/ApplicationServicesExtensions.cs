@@ -28,6 +28,7 @@ namespace API.Extensions
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.AddScoped<IEmailService, EmailService>();
 
             services.Configure<ApiBehaviorOptions>(options => 
             {

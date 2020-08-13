@@ -10,13 +10,13 @@ namespace Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Remuneration> builder)
         {
-            builder.Property(x => x.Housing).IsRequired();
+           /* builder.Property(x => x.Housing).IsRequired();
             builder.Property(x => x.Food).IsRequired();
             builder.Property(x => x.Transport).IsRequired();
             builder.Property(x => x.SalaryMin).IsRequired();
-            // builder.Property(x => x.SalaryCurrency).IsRequired();
+            builder.Property(x => x.SalaryCurrency).IsRequired();.
             builder.Property(x => x.LeaveAvailableAfterHowmanyMonths).IsRequired();
-            builder.Property( x => x.LeaveEntitlementPerYear).IsRequired();
+           */ builder.Property( x => x.LeaveEntitlementPerYear).IsRequired();
             builder.HasIndex(x => x.EnquiryItemId).IsUnique();
 
             builder.Property(s => s.Housing)
@@ -35,6 +35,7 @@ namespace Infrastructure.Data.Config
                     o => o.ToString(),
                     o => (enumProvision) Enum.Parse(typeof(enumProvision), o)
                 );
+            
         }
     }
 }

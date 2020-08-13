@@ -16,6 +16,31 @@ namespace Core.Entities.EnquiryAggregate
             EnquiryItemId = enquiryItemId;
         }
 
+        public Remuneration(int enquiryId, int enquiryItemId, int contractPeriodInMonths, 
+            string salaryCurrency, int salaryMin, int salaryMax, bool salaryNegotiable, 
+            enumProvision housing, int? housingAllowance, enumProvision food, int? foodAllowance, 
+            enumProvision transport, int? transportAllowance, int? otherAllowance, 
+            int leaveAvailableAfterHowmanyMonths, int leaveEntitlementPerYear, DateTime updatedOn)
+        {
+            EnquiryId = enquiryId;
+            EnquiryItemId = enquiryItemId;
+            ContractPeriodInMonths = contractPeriodInMonths;
+            SalaryCurrency = salaryCurrency;
+            SalaryMin = salaryMin;
+            SalaryMax = salaryMax;
+            SalaryNegotiable = salaryNegotiable;
+            Housing = housing;
+            HousingAllowance = housingAllowance;
+            Food = food;
+            FoodAllowance = foodAllowance;
+            Transport = transport;
+            TransportAllowance = transportAllowance;
+            OtherAllowance = otherAllowance;
+            LeaveAvailableAfterHowmanyMonths = leaveAvailableAfterHowmanyMonths;
+            LeaveEntitlementPerYear = leaveEntitlementPerYear;
+            UpdatedOn = updatedOn;
+        }
+
         public int EnquiryId {get; set; }
         public int EnquiryItemId { get; set; }
         public int ContractPeriodInMonths { get; set; }
@@ -35,6 +60,6 @@ namespace Core.Entities.EnquiryAggregate
         public int LeaveAvailableAfterHowmanyMonths { get; set; } = 24;
         [Range(0,90)]
         public int LeaveEntitlementPerYear { get; set; } = 21;
-        public DateTimeOffset UpdatedOn { get; set; } = DateTimeOffset.Now;
+        public DateTime UpdatedOn { get; set; } = DateTime.Now;
     }
 }

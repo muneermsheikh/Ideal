@@ -1,19 +1,77 @@
 [
     {
-        "CustomerType": "C",
-        "CustomerName": "Saudi Logisitcs Services Company",
-        "KnownAs": "SLSC",
-        "CityName": "Jeddah",
-        "IndustryTypes": [
-            {"IndustryTypeId": 1},
-            {"IndustryTypeId": 2}
-        ],
+        "CustomerType": 0,
+        "CustomerName": "Saudi Bilfal Heavy Indutries",
+        "KnownAs": "Bilfal",
+        "CityName": "Dammam",
+        
         "IntroducedBy": "Sheikh Ziyauddin Kamrani",
         "Phone1": "00966-12-12345678", 
-        "Phone2": "00966-12-12345789",
-        "CustomerAddresses": [
-            {"Id": 1},
-            {"Id": 2}
-        ]
+        "Phone2": "00966-12-12345789"
+    },
+    {
+        "CustomerType": 0,
+        "CustomerName": "Zamil Heavy INdustries",
+        "KnownAs": "Zamil Heavy INdustries",
+        "CityName": "Dammam",
+        "IntroducedBy": "Sheikh Qamruddin Jehadi",
+        "Phone1": "00966-12-12345678", 
+        "Phone2": "00966-12-12345789"
+    },
+    {
+        "CustomerType": 1,
+        "CustomerName": "Aluminium Products Factory",
+        "KnownAs": "Alumaco",
+        "CityName": "Jeddah",
+        "IntroducedBy": "Mohammed Shahid Ansari",
+        "Phone1": "00966-12-122228", 
+        "Phone2": "00966-12-1334789"
+    },
+    {
+        "CustomerType": 1,
+        "CustomerName": "Saudi Steel Reinforcement Bars",
+        "KnownAs": "Saudi Steel",
+        "CityName": "Bangalore",
+        "IntroducedBy": "Mohammed Waheed Ansari",
+        "Phone1": "00966-12-1222283", 
+        "Phone2": "00966-12-1311789"
+    },
+    {
+        "CustomerType": 1,
+        "CustomerName": "Saudi Binladen Group",
+        "KnownAs": "Saudi Binladen",
+        "CityName": "Jeddah",
+        
+        "IntroducedBy": "Sheikh Rahamatulah Ansari",
+        "Phone1": "00966-12-1232278", 
+        "Phone2": "00966-12-123343789"
+    },
+    {
+        "CustomerType": 1,
+        "CustomerName": "Al-Issai Kitchen Equipments",
+        "KnownAs": "Al-Issai Kitchen",
+        "CityName": "Dammam",
+        "IntroducedBy": "Saiyyad Zeeshan Ali",
+        "Phone1": "00966-12-134444678", 
+        "Phone2": "00966-12-12322289"
+    },
+    {
+        "CustomerType": 0,
+        "CustomerName": "Reliance Manpower Services",
+        "KnownAs": "Reliance",
+        "CityName": "Chennai",
+        "IntroducedBy": "Abdul Rahim Ansari",
+        "Phone1": "122345328", 
+        "Phone2": "0234444789"
+    },
+    {
+        "CustomerType": 1,
+        "CustomerName": "Prince Mohammed Binladen University",
+        "KnownAs": "PMU Dammam",
+        "CityName": "Dammam",
+        "IntroducedBy": "Direct source",
+        "Phone1": "00966-12-1333444", 
+        "Phone2": "00966-12-1344490"
     }
+
 ]

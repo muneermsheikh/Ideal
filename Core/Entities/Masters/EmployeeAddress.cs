@@ -1,6 +1,6 @@
 namespace Core.Entities.Masters
 {
-   public class EmployeeAddress
+   public class EmployeeAddress: BaseEntity
     {
         public EmployeeAddress()
         {

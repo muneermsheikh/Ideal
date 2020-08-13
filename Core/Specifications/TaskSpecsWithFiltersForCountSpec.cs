@@ -11,7 +11,7 @@ namespace Core.Specifications
         public TaskSpecsWithFiltersForCountSpec(TaskSpecParams tParams) 
             :  base( x => (
                 (string.IsNullOrEmpty(tParams.Search) || 
-                    x.Owner.Person.FullName.ToLower().Contains(tParams.Search)) &&
+                    x.Owner.FullName.ToLower().Contains(tParams.Search)) &&
                 (!tParams.OwnerId.HasValue || x.OwnerId == tParams.OwnerId) &&
                 (!tParams.AssignedToId.HasValue || x.AssignedToId == tParams.AssignedToId) &&
                 (!tParams.TaskType.HasValue || x.TaskType == tParams.TaskType) &&

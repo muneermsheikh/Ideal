@@ -153,28 +153,17 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
 
-                if (!context.Enquiries.Any())
+                 if (!context.DLForwardToHR.Any())
                 {
-                    var enqData = File.ReadAllText("../Infrastructure/Data/SeedData/enquiry.json");
-                    var enqs = JsonSerializer.Deserialize<List<Enquiry>>(enqData);
-                    foreach (var item in enqs)
+                    var empData = File.ReadAllText("../Infrastructure/Data/SeedData/dlForwardToHR.json");
+                    var emps = JsonSerializer.Deserialize<List<DLForwardToHR>>(empData);
+                    foreach (var item in emps)
                     {
-                        context.Enquiries.Add(item);
+                        context.DLForwardToHR.Add(item);
                     }
                     await context.SaveChangesAsync();
                 }
 
-                if (!context.EnquiryItems.Any())
-                {
-                    var itemData = File.ReadAllText("../Infrastructure/Data/SeedData/enquiryItem.json");
-                    var items = JsonSerializer.Deserialize<List<EnquiryItem>>(itemData);
-                    foreach (var item in items)
-                    {
-                        context.EnquiryItems.Add(item);
-                    }
-                    await context.SaveChangesAsync();
-                }
-            
                 if (!context.ToDos.Any())
                 {
                     var todoData = File.ReadAllText("../Infrastructure/Data/SeedData/todo.json");
@@ -196,7 +185,7 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
-            
+         
                 if (!context.Enquiries.Any())
                 {
                     var enqData = File.ReadAllText("../Infrastructure/Data/SeedData/enquiry.json");

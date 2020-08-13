@@ -1,58 +1,170 @@
 [
     {
-        "EnquiryNo": "1050",
+        "CustomerId": 1,
+        "EnquiryNo": 1050,
         "ProjectManagerId": 1, 
-        "AccountExecutiveId": 1,
-        "HRExecutiveId": 2,
-        "LogisticsExecutiveId": 1, 
         "EnquiryRef": "Telephonic message",
         "CompleteBy": "2020-11-10T00:00:00",
-        "BuyerEmail": "supplier@gmail.com",
-        "DeliveryMethodId": 1,
-        "EnquiryItems": [
-            {"Id": 1},{"Id": 2}
+        "EnquiryItems": 
+        [
+            {"CategoryItemOrdered": 
+                [
+                    {"CategoryItemId": 2,
+                    "CategryName": "Project Manager",
+                    "Quantity": 2}
+                ], 
+                "Quantity": 20, "ECNR": true, "ExpDesiredInYrsMin": 5, 
+                "ExpDesiredInYrsMax": 7, "JobDescriptionInBrief": "", 
+                "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+                "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, 
+                "Housing": 1, "CompleteBy":"2020-01-10T00:00:00"
+            },
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 1,
+                "CategryName": "Production Manager",
+                "Quantity": 1}], 
+                "Quantity": 1, "ECNR": true, "ExpDesiredInYrsMin": 5, 
+                "ExpDesiredInYrsMax": 7, "JobDescriptionInBrief": "", 
+                "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+                "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, 
+                "Housing": 1,"CompleteBy":"2020-01-10T00:00:00"
+            }
         ]
     },
     {
-        "EnquiryNo": "1051",
+        "CustomerId": 2,
+        "EnquiryNo": 1051,
         "ProjectManagerId": 1, 
-        "AccountExecutiveId": 1,
-        "HRExecutiveId": 2,
-        "LogisticsExecutiveId": 1, 
         "EnquiryRef": "Telephonic message",
         "CompleteBy": "2020-11-15T00:00:00",
-        "BuyerEmail": "supplier2@gmail.com",
-        "DeliveryMethodId": 1,
         "EnquiryItems": [
-            {"Id": 3},{"Id": 4}, {"Id":2}
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 3,
+                "CategryName": "Project Manager",
+                "Quantity": 2}], 
+            "Quantity": 2, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"},
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 2,
+                "CategryName": "Production Manager",
+                "Quantity": 10}], 
+            "Quantity": 15, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"}
         ]
     },
     {
-        "EnquiryNo": "1052",
+        "CustomerId": 1,
+        "EnquiryNo": 1052,
         "ProjectManagerId": 2, 
-        "AccountExecutiveId": 1,
-        "HRExecutiveId": 2,
-        "LogisticsExecutiveId": 1, 
         "EnquiryRef": "Telephonic message",
         "CompleteBy": "2020-01-10T00:00:00",
-        "BuyerEmail": "suppli@gmail.com",
-        "DeliveryMethodId": 2,
         "EnquiryItems": [
-            {"Id": 2},{"Id": 4}
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 1,
+                "CategryName": "Project Manager",
+                "Quantity": 20}], 
+            "Quantity": 20, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"},
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 2,
+                "CategryName": "Production Manager",
+                "Quantity": 10}], 
+            "Quantity": 10, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"}
         ]
     },
     {
-        "EnquiryNo": "1053",
+        "CustomerId": 2,
+        "EnquiryNo": 1053,
         "ProjectManagerId": 1, 
-        "AccountExecutiveId": 1,
-        "HRExecutiveId": 2,
-        "LogisticsExecutiveId": 1, 
         "EnquiryRef": "email message",
-        "CompleteBy": "2020-05-10T00:00:00",
-        "BuyerEmail": "saudisales@gmail.com",
-        "DeliveryMethodId": 3,
         "EnquiryItems": [
-            {"Id": 3},{"Id": 4}
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 1,
+                "CategryName": "Project Engineer",
+                "Quantity": 10}], 
+            "Quantity": 10, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"},
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 1,
+                "CategryName": "Production Manager",
+                "Quantity": 5}], 
+            "Quantity": 5, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"}
+        ]
+    },
+    {
+        "CustomerId": 3,
+        "EnquiryNo": 1054,
+        "ProjectManagerId": 2, 
+        "EnquiryRef": "email message",
+        "EnquiryItems": [
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 1,
+                "CategryName": "Project Engineer",
+                "Quantity": 10}], 
+            "Quantity": 10, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"},
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 1,
+                "CategryName": "Production Manager",
+                "Quantity": 5}], 
+            "Quantity": 5, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"}
+        ]
+    },
+    {
+        "CustomerId": 4,
+        "EnquiryNo": 1055,
+        "ProjectManagerId": 1, 
+        "EnquiryRef": "email message",
+        "EnquiryItems": [
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 3,
+                "CategryName": "Project Engineer",
+                "Quantity": 10}], 
+            "Quantity": 10, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"},
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 2,
+                "CategryName": "Production Manager",
+                "Quantity": 5}], 
+            "Quantity": 5, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"}
+        ]
+    },
+    {
+        "CustomerId": 3,
+        "EnquiryNo": 1055,
+        "ProjectManagerId": 1, 
+        "HRExecutiveId": 2,
+        "EnquiryRef": "email message",
+        "EnquiryItems": [
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 1,
+                "CategryName": "Project Engineer",
+                "Quantity": 10}], 
+            "Quantity": 10, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"},
+            {"CategoryItemOrdered": [
+                {"CategoryItemId": 1,
+                "CategryName": "Production Manager",
+                "Quantity": 5}], 
+            "Quantity": 5, "ECNR": true, "ExpDesiredInYrsMin": 5, "ExpDesiredInYrsMax": 7,
+            "JobDescriptionInBrief": "", "SalaryRangeMin": 2500, "SalaryRangeMax": 3000,
+            "ContractPeriodInMonths": 24, "Food": 1, "Transport": 1, "CompleteBy":"2020-01-10T00:00:00"}
         ]
     }
+
 ]

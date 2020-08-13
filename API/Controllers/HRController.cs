@@ -6,6 +6,7 @@ using API.Extensions;
 using API.Helpers;
 using AutoMapper;
 using Core.Entities.Admin;
+using Core.Entities.EnquiryAggregate;
 using Core.Entities.HR;
 using Core.Entities.Identity;
 using Core.Interfaces;
@@ -146,20 +147,24 @@ namespace API.Controllers
         }
 
         [HttpGet("assessmentsheet")]
-        public async Task<Assessment> GetCandidateAssessmentSheet(
+        public async Task<ActionResult<Assessment>> GetCandidateAssessmentSheet(
             int CandidateId, int EnquiryItemId)
         {
-            var user =
-                await _userManager
+            var user = await _userManager
                     .FindByEmailFromClaimsPrincipal(HttpContext.User);
-            int employeeId = user.EmployeeId;
+
+            var enqItem = await _unitOfWork.Repository<EnquiryItem>().GetByIdAsync(EnquiryItemId);
+            if (enqItem == null) return BadRequest(new ApiResponse(400));
+
+            var assignments = _mapper.Map<EnquiryItem, EnquiryItemAssignmentDto>(enqItem);
+            if (assignments == null) return BadRequest(400);
+
+            int HRExecId = (int) assignments.HRExecId;
             string employeeDisplayName = user.DisplayName;
 
-            return await _hrService
-                .GetCandidateAssessmentSheet(CandidateId,
-                EnquiryItemId,
-                employeeId,
-                employeeDisplayName);
+            return await _hrService .GetCandidateAssessmentSheet(CandidateId,
+                EnquiryItemId, HRExecId, employeeDisplayName);
+            // CREATES A RECORD IF ONE DOESNT EXIST
         }
         
         [ApiExplorerSettings(IgnoreApi = true)]

@@ -10,7 +10,7 @@ namespace Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<ToDo> builder)
         {
-            builder.Property(x => x.EnquiryItemId).IsRequired();
+            // builder.Property(x => x.EnquiryItemId).IsRequired();
             builder.HasOne(x => x.Owner).WithMany().HasForeignKey(x => x.OwnerId);
             builder.HasOne(x => x.AssignedTo).WithMany().HasForeignKey(x => x.AssignedToId);
             builder.Property(x => x.TaskDate).IsRequired();

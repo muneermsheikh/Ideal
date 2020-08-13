@@ -8,7 +8,7 @@ namespace API.Dtos
         public int CustomerId { get; set; }
         public int CustomerOfficialId { get; set; }
         public int EnquiryItemId { get; set; }
-        public DateTimeOffset ForwardedOn { get; set; } = DateTimeOffset.Now;
+        public DateTime ForwardedOn { get; set; } = DateTime.Now;
         public string Customer { get; set; }
 
     }

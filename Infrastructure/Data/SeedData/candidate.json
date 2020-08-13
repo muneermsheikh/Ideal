@@ -1,36 +1,48 @@
 [
     {
         "ApplicationNo": 1000,
-        "ApplicationDated": "2020-01-01T00:00:00", 
-        "Person_FirstName": "Ramesh Pandurang",
-        "Person_FamilyName": "Patil", 
-        "Person_KnownAs": "Ramesh", 
-        "Person_Gender": "M",
-        "Person_PPNo": "A12345", 
-        "Person_AadharNo": "123456789012", 
-        "Person_DOB": "1955-05-08T00:00:00",
-        "CandidateCategories": 
-            [
-                {"CategoryId": 1},
-                {"CategoryId": 2}
-            ],
-        "LastStatusUpdatedBy": 1
+        "ApplicationDated": "2020-01-01", 
+        "FirstName": "Ramesh Pandurang",
+        "FamilyName": "Patil", 
+        "KnownAs": "Ramesh", 
+        "Gender": "M",
+        "PPNo": "A12345", 
+        "AadharNo": "123456789012", 
+        "DOB": "1991-12-10T12:32:10"
     },
     {
         "ApplicationNo": 1001,
-        "ApplicationDated": "2020-01-02T00:00:00", 
-        "Person_FirstName": "Subhash Rajaram",
-        "Person_FamilyName": "Kulkarni", 
-        "Person_KnownAs": "Subhash", 
-        "Person_Gender": "M",
-        "Person_PPNo": "A12346", 
-        "Person_AadharNo": "123456789013", 
-        "Person_DOB": "1955-05-06T00:00:00",
-        "CandidateCategories": 
-            [
-                {"CategoryId": 2},
-                {"CategoryId": 3}
-            ],
-        "LastStatusUpdatedBy": 2
+        "ApplicationDated": "2020-01-02", 
+        "FirstName": "Subhash Rajaram",
+        "FamilyName": "Kulkarni", 
+        "KnownAs": "Subhash", 
+        "Gender": "M",
+        "PPNo": "A12346", 
+        "AadharNo": "123456789013", 
+        "DOB": "1985-12-10T12:32:10"
+       
+    },
+    {
+        "ApplicationNo": 1002,
+        "ApplicationDated": "2010-01-01", 
+        "FirstName": "Rajesh Jamadar",
+        "FamilyName": "Kulkarni", 
+        "KnownAs": "Rajesh", 
+        "Gender": "M",
+        "PPNo": "A123455", 
+        "AadharNo": "1233434789012", 
+        "DOB": "1991-12-10T12:32:10"
+    },
+    {
+        "ApplicationNo": 1003,
+        "ApplicationDated": "2015-01-02", 
+        "FirstName": "Rajeesh Haalaram",
+        "FamilyName": "Haldankar", 
+        "KnownAs": "Rajesh", 
+        "Gender": "M",
+        "PPNo": "A133346", 
+        "AadharNo": "123789013", 
+        "DOB": "1980-12-10T12:32:10"
     }
+
 ]

@@ -10,7 +10,6 @@ namespace Infrastructure.Data.Config
         {
             builder.Property(x => x.CustomerOfficialId).IsRequired();
             builder.HasIndex("CustomerOfficialId");
-            builder.HasIndex("EnquiryItemId");
             builder.Property(x => x.ForwardedOn).IsRequired();
         }
     }

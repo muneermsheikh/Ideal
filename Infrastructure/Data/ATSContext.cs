@@ -29,6 +29,7 @@ namespace Infrastructure.Data
 
         public DbSet<DomainSub> DomainSubs {get; set; }
         public DbSet<DeliveryMethod> DeliveryMethods {get; set; }
+        public DbSet<DLForwardToHR> DLForwardToHR {get; set; }
         public DbSet<Employee> Employees {get; set; }
         public DbSet<EnquiryForwarded> EnquiryForwards {get; set; }
         public DbSet<Enquiry> Enquiries {get; set; }
@@ -61,7 +62,7 @@ namespace Infrastructure.Data
                 foreach(var entityType in modelBuilder.Model.GetEntityTypes())
                 {
                     var dateProperties = entityType.ClrType.GetProperties()
-                        .Where(x => x.PropertyType == typeof(DateTimeOffset));
+                        .Where(x => x.PropertyType == typeof(DateTime));
                     foreach(var property in dateProperties)
                     {
                         modelBuilder.Entity(entityType.Name).Property(property.Name)

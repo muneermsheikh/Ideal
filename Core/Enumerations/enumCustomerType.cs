@@ -9,6 +9,8 @@ namespace Core.Enumerations
         [EnumMember(Value = "Associate")]
         Associate,
         [EnumMember(Value = "Supplier")]
-        Supplier
+        Supplier,
+        [EnumMember(Value = "Candidate")]
+        Candidate
     }
 }

@@ -19,7 +19,7 @@ namespace API.Errors
             {
                 400 => "Bad Request",
                 401 => "Not Authorized",
-                404 => "Bad Request",
+                404 => "No Records Found",
                 500 => "Server Error",
                 _ => null
             };

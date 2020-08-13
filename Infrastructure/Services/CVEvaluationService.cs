@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Core.Entities.Admin;
-using Core.Entities.Dtos;
 using Core.Entities.EnquiryAggregate;
 using Core.Entities.HR;
 using Core.Entities.Masters;
@@ -96,8 +95,8 @@ namespace Infrastructure.Services
 
         // create task for HR Supervisor
             var taskForHRSupervisor = new ToDo((int)cvEval.HRSupervisorId, (int)cvEval.HRManagerId, 
-                DateTimeOffset.Now, DateTimeOffset.Now.AddDays(1), 
-                empHRExec.Person.KnownAs + " has forwarded Application " +
+                DateTime.Now, DateTime.Now.AddDays(1), 
+                empHRExec.KnownAs + " has forwarded Application " +
                 cvEval.Candidate.ApplicationNo + "-" + cvEval.Candidate.FullName + 
                 "for your review for requirement ref " + enq.EnquiryNo + "-" + 
                 cvEval.EnquiryItem.SrNo + "-" + cvEval.EnquiryItem.CategoryName, 
@@ -110,7 +109,7 @@ namespace Infrastructure.Services
             var taskHRExec = _taskService.GetTaskEnquiryitemIdAssignedToIdTaskTypeAsync(
                 cvEval.EnquiryItemId, cvEval.HRExecutiveId, enumTaskType.HRExecutiveAssignment);
             if (taskHRExec == null) return null;
-            var taskItem = new TaskItem(taskHRExec.Id, DateTimeOffset.Now, 1,
+            var taskItem = new TaskItem(taskHRExec.Id, DateTime.Now, 1,
                 "Application " + cvEval.Candidate.ApplicationNo + "submitted for HR Supervisor review",
                 true, null);
             await _taskService.AppendTaskItemAsync(taskHRExec.Id,taskItem);
@@ -132,8 +131,8 @@ namespace Infrastructure.Services
 
         // create task for Doc Controller - Admin
             var taskForDocControllerAdmin = new ToDo((int)cvEval.HRSupervisorId, (int)cvEval.HRManagerId, 
-                DateTimeOffset.Now, DateTimeOffset.Now.AddDays(1), 
-                empHRSup.Person.KnownAs + " has forwarded Application " +
+                DateTime.Now, DateTime.Now.AddDays(1), 
+                empHRSup.KnownAs + " has forwarded Application " +
                 cvEval.Candidate.ApplicationNo + "-" + cvEval.Candidate.FullName + 
                 "for your review for requirement ref " + enq.EnquiryNo + "-" + 
                 cvEval.EnquiryItem.SrNo + "-" + cvEval.EnquiryItem.CategoryName, 
@@ -146,7 +145,7 @@ namespace Infrastructure.Services
             var taskHRExec = _taskService.GetTaskEnquiryitemIdAssignedToIdTaskTypeAsync(
                 cvEval.EnquiryItemId, cvEval.HRExecutiveId, enumTaskType.HRExecutiveAssignment);
             if (taskHRExec == null) return null;
-            var taskItem = new TaskItem(taskHRExec.Id, DateTimeOffset.Now, 1,
+            var taskItem = new TaskItem(taskHRExec.Id, DateTime.Now, 1,
                 "Application " + cvEval.Candidate.ApplicationNo + "submitted for HR Supervisor review",
                 true, null);
             await _taskService.AppendTaskItemAsync(taskHRExec.Id,taskItem);

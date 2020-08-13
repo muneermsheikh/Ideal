@@ -54,8 +54,6 @@ namespace API
             
             services.AddDbContext<AppIdentityDbContext>(
                 x => x.UseSqlite(_config.GetConnectionString("IdentityConnection")));
-            
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

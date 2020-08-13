@@ -1,20 +1,62 @@
 [
     {
-        "Id": 1, 
         "Name": "Production Manager",
         "IndustryTypeId": 1, 
         "SkillLevelId": 1
     },
     {
-        "Id": 2, 
         "Name": "Production Supervisor",
         "IndustryTypeId": 2, 
         "SkillLevelId": 2
     },
     {
-        "Id": 3, 
         "Name": "Production Engineer",
         "IndustryTypeId": 1, 
+        "SkillLevelId": 2
+    },
+    {
+        "Name": "Mason-Bricks",
+        "IndustryTypeId": 1, 
+        "SkillLevelId": 3
+    },
+    {
+        "Name": "Shuttering Carpenter",
+        "IndustryTypeId": 2, 
+        "SkillLevelId": 3
+    },
+    {
+        "Name": "Heavy Driver-Trailer",
+        "IndustryTypeId": 2, 
+        "SkillLevelId": 2
+    },
+    {
+        "Name": "Chief Executive Officer",
+        "IndustryTypeId": 1, 
+        "SkillLevelId": 1
+    },
+    {
+        "Name": "Chief Marketing Officer",
+        "IndustryTypeId": 2, 
+        "SkillLevelId": 2
+    },
+    {
+        "Name": "Business Development Manager",
+        "IndustryTypeId": 1, 
+        "SkillLevelId": 2
+    },
+    {
+        "Name": "Production Supervisor",
+        "IndustryTypeId": 1, 
+        "SkillLevelId": 3
+    },
+    {
+        "Name": "Site Engioneer",
+        "IndustryTypeId": 2, 
+        "SkillLevelId": 3
+    },
+    {
+        "Name": "Architect-Senior",
+        "IndustryTypeId": 2, 
         "SkillLevelId": 2
     }
 ]

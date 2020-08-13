@@ -12,12 +12,14 @@ namespace Core.Interfaces
         Task<bool> RecordExists(ISpecification<T> entity);
         Task<T> GetByIdAsync(int id);
         Task<IReadOnlyList<T>> ListAllAsync();
+        Task<int> GetNextEnquiryNo();
 
         Task<T> GetEntityWithSpec(ISpecification<T> spec);
         Task<IReadOnlyList<T>> GetEntityListWithSpec(ISpecification<T> spec);
         
         Task<Customer> GetCustomerFromEmailAsync(string email);     //not really generic, but...
         Task<IReadOnlyList<T>> ListWithSpecAsync(ISpecification<T> spec);
+        Task<IReadOnlyList<T>> ListTop500WithSpecAsync(ISpecification<T> spec);
         Task<T> AddAsync(T entity);
         Task<IReadOnlyList<T>> AddListAsync(IReadOnlyList<T> entities);
         

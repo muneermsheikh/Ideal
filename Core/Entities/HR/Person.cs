@@ -2,10 +2,14 @@ using System;
 
 namespace Core.Entities.HR
 {
-    public class Person
+    public class PersonEnt
     {
-        public Person(string firstName, string secondName, string familyName, 
-            string knownAs, string gender, string pPNo, string aadharNo, DateTimeOffset dOB)
+        public PersonEnt()
+        {
+        }
+
+        public PersonEnt(string firstName, string secondName, string familyName, 
+            string knownAs, string gender, string pPNo, string aadharNo, DateTime dOB)
         {
             FirstName = firstName;
             SecondName = secondName;
@@ -24,7 +28,7 @@ namespace Core.Entities.HR
         public string Gender { get; set; }
         public string PPNo { get; set; }
         public string AadharNo { get; set; }
-        public DateTimeOffset DOB { get; set; }
+        public DateTime? DOB { get; set; }
 
         public string FullName {get {return FirstName + ", " + FamilyName;} }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Core.Entities.EnquiryAggregate;
@@ -19,6 +20,11 @@ namespace Infrastructure.Data
         {
             return await _database.KeyDeleteAsync(basketId);
             
+        }
+
+        public Task<ICollection<CustomerBasket>> GetAllRedisKeys()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<CustomerBasket> GetBasketAsync(string basketId)

@@ -16,47 +16,45 @@ namespace Core.Specifications
                 (string.IsNullOrEmpty(custParams.Email) || 
                     x.CustomerName.ToLower().Contains(custParams.Email)) &&
                 (!custParams.CustomerType.HasValue || x.CustomerType == custParams.CustomerType) &&
-                (!custParams.CustomerStatus.HasValue || x.CustomerStatus == custParams.CustomerStatus))
-            )
+                (!custParams.CustomerStatus.HasValue || x.CustomerStatus == custParams.CustomerStatus)) &&
+                (!custParams.CustomerId.HasValue || x.Id == custParams.CustomerId))
         {
-            AddInclude(x => x.CustomerOfficials);
+            if (custParams.IncludeOfficial) AddInclude(x => x.CustomerOfficials);
+            if (custParams.IncludeAddress) AddInclude(x => x.CustomerAddress);
 
-            if (custParams.PageSize != 0)
-            {
-                ApplyPaging(custParams.PageSize, custParams.PageSize * (custParams.PageIndex-1));
+            ApplyPaging(custParams.PageSize * (custParams.PageIndex-1), custParams.PageSize);
 
                 if (!string.IsNullOrEmpty(custParams.Sort))
                 {
-                    switch (custParams.Sort)
+                    switch (custParams.Sort.ToLower())
                     {
-                        case "CustomeryNameAsc":
+                        case "customername":
                             AddOrderBy(x => x.CustomerName);
                             break;
-                        case "CustoomerNameDesc":
+                        case "customernamedesc":
                             AddOrderByDescending(x => x.CustomerName);
                             break;
-                        case "CityAsc":
+                        case "city":
                             AddOrderBy(x => x.CityName);
                             break;
-                        case "CityDesc":
+                        case "citydesc":
                             AddOrderByDescending(x => x.CityName);
                             break;
-                        case "CustomerStatusAsc":
+                        case "customerstatus":
                             AddOrderBy(x => x.CustomerStatus);
                             break;
-                        case "CustomerStatusDesc":
+                        case "customerstatusdesc":
                             AddOrderBy(x => x.CustomerStatus);
                             break;
-                        case "CustomerTypeAsc":
+                        case "customertype":
                             AddOrderBy(x => x.CustomerType);
                             break;
-                        case "CustomerTypeDesc":
+                        case "customertypedesc":
                             AddOrderBy(x => x.CustomerType);
                             break;
                         default:
                             AddOrderBy(x => x.CustomerName);
                             break;
-                    }
                 }
             }
         }

@@ -15,13 +15,20 @@ namespace Core.Specifications
             Criteria = criteria;
         }
 
-        public Expression<Func<T, bool>> Criteria 
-        {
-            get; 
-        }
+        public Expression<Func<T, bool>> Criteria {get; }
 
         public List<Expression<Func<T, object>>> Includes {get; } = 
             new List<Expression<Func<T, object>>>();
+
+        public Expression<Func<T, object>> OrderBy {get; private set;}
+
+        public Expression<Func<T, object>> OrderByDescending {get; private set;}
+
+        public int Take {get; private set;}
+
+        public int Skip {get; private set;}
+
+        public bool IsPagingEnabled {get; private set;}
 
         protected void AddInclude(Expression<Func<T, object>> includeExpression)
         {
@@ -29,18 +36,7 @@ namespace Core.Specifications
         }
 
 
-        public Expression<Func<T, object>> OrderBy {get; private set;} 
-
-        public Expression<Func<T, object>> OrderByDescending {get; private set; }
-
-
-        public int Take {get; private set; }
-
-        public int Skip {get; private set; }
-
-        public bool IsPagingEnabled {get; private set; }
-
-        protected void AddOrderBy(Expression<Func<T, Object>> orderByExpression)
+        protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
         {
             OrderBy = orderByExpression;
         }
@@ -50,10 +46,10 @@ namespace Core.Specifications
             OrderByDescending = orderByDescExpression;
         }
 
-        protected void ApplyPaging (int take, int skip)
+        protected void ApplyPaging(int skip, int take)
         {
-            Take = take;
             Skip = skip;
+            Take = take;
             IsPagingEnabled = true;
         }
     }

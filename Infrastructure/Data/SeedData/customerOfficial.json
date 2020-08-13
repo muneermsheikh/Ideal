@@ -19,5 +19,89 @@
         "Designation": "CEO",
         "Mobile": "00966-12-52313428",
         "email": "ceo@gynasts.com"
+     },
+     {
+        "CustomerId": 2,
+        "Name": "Yusuf Khan",
+        "Designation": "HR Manager",
+        "Mobile": "00966-12-13444448",
+        "email": "yusufkhn@gynasts.com"
+    },
+    {
+        "CustomerId": 3,
+        "Name": "Kabir Khan",
+        "Designation": "HR Manager",
+        "Mobile": "00966-22-123348",
+        "email": "kabirkhan@gmail.com"
+     },
+     {
+        "CustomerId": 3,
+        "Name": "Syed Nasser Kutty",
+        "Designation": "HR Officer",
+        "Mobile": "00966-32-52333328",
+        "email": "nasser@abccost.com"
+     },
+     {
+        "CustomerId": 4,
+        "Name": "Pratibha Sakhalkar",
+        "Designation": "HR Officer",
+        "Mobile": "00966-12-3422341348",
+        "email": "pratibha@processing.com"
+    },
+    {
+        "CustomerId": 5,
+        "Name": "Jehangir Khan",
+        "Designation": "Accountant",
+        "Mobile": "00966-12-12212348",
+        "email": "jehangir@gynasts.com"
+     },
+     {
+        "CustomerId": 6,
+        "Name": "Mohammed Shahid Merchant",
+        "Designation": "Airport Executive",
+        "Mobile": "00966-12-523593948",
+        "email": "airport@agenterprises.com"
+     },
+     {
+        "CustomerId": 7,
+        "Name": "Jawed Pathan",
+        "Designation": "Emigration Officer",
+        "Mobile": "00966-12-1233338",
+        "email": "emigration@byplast.com"
+    },
+    {
+        "CustomerId": 8,
+        "Name": "Anwar Ali",
+        "Designation": "Accountant",
+        "Mobile": "00966-12-1234448",
+        "email": "anwar@priyaconsultants.com"
+     },
+     {
+        "CustomerId": 9,
+        "Name": "Sanjay Patil",
+        "Designation": "Document Controller",
+        "Mobile": "00966-12-55050508",
+        "email": "admin@doccontroller.com"
+     },
+     {
+        "CustomerId": 9,
+        "Name": "Abdul Rauf Shaikh",
+        "Designation": "Logistics Officer",
+        "Mobile": "00966-12-123434343",
+        "email": "rauflogisitcs@ssr.com"
+    },
+    {
+        "CustomerId": 10,
+        "Name": "Mohammed Khalid Shah",
+        "Designation": "Accouns Officer",
+        "Mobile": "00966-12-124343438",
+        "email": "accounts@agenterprises.com"
+     },
+     {
+        "CustomerId": 10,
+        "Name": "Shaikh Sufiyan",
+        "Designation": "Accountant",
+        "Mobile": "0091-22-523434348",
+        "email": "accounts@agenterprises.com"
      }
 ]

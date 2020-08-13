@@ -27,11 +27,11 @@ namespace Core.Entities.HR
         public int ApplicationNo {get; set; }
         public int EnquiryItemId { get; set; }
         public int HRExecutiveId { get; set; }
-        public DateTimeOffset SubmittedByHRExecOn { get; set; }=DateTimeOffset.Now;
+        public DateTime SubmittedByHRExecOn { get; set; }=DateTime.Now;
         public bool? ReviewedByHRSup {get; set; }
         public int? HRSupervisorId { get; set; }
         public enumItemReviewStatus? HRSupReviewResult { get; set; }
-        public DateTimeOffset? ReviewedByHRSupOn { get; set; }
+        public DateTime? ReviewedByHRSupOn { get; set; }
         public int? HRManagerId { get; set; }
         public bool? ReviewedByHRM {get; set; }
         public DateTime? ReviewedByHRMOn { get; set; }

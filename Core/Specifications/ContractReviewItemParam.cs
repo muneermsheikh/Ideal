@@ -18,7 +18,7 @@ namespace Core.Specifications
         public string FeeFromClientCurrency { get; set; }
         public int? FeeFromClient { get; set; } 
         public enumItemReviewStatus? Status { get; set; }
-        public DateTimeOffset? ReviewedOn { get; set; } 
+        public DateTime? ReviewedOn { get; set; } 
         public int? ReviewedBy { get; set; }
 
         private const int MaxmPageSize = 50;

@@ -5,6 +5,10 @@ namespace Core.Entities.Admin
 {
     public class ContractReviewItem: BaseEntity
     {
+        public ContractReviewItem()
+        {
+        }
+
         public ContractReviewItem(int enquiryItemId, int enquiryId)
         {
             EnquiryItemId = enquiryItemId;
@@ -24,8 +28,8 @@ namespace Core.Entities.Admin
         public string FeeFromClientCurrency { get; set; }
         public int FeeFromClient { get; set; } 
         public enumItemReviewStatus Status { get; set; } = enumItemReviewStatus.NotReviewed ;
-        public DateTimeOffset ReviewedOn { get; set; } = DateTimeOffset.Now;
-        public int? ReviewedBy { get; set; }
+        public DateTime ReviewedOn { get; set; } = DateTime.Now;
+        public int ReviewedBy { get; set; } = 0;
 
     }
 }

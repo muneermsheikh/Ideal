@@ -2,7 +2,7 @@ namespace API.Dtos
 {
     public class CustOfficialToForwardDto
     {
-        public int CustomerOfficialId { get; set; }
+        public int Id { get; set; }
         public int CustomerId { get; set; }
         public string Name {get; set; }
         public string Gender {get; set;}

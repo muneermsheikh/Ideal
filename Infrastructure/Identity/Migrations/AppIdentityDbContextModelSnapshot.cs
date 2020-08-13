@@ -76,7 +76,7 @@ namespace Infrastructure.Identity.Migrations
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
+                    b.Property<DateTime?>("LockoutEnd")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")

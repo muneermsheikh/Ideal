@@ -36,7 +36,7 @@ namespace Core.Entities.Admin
         public string email { get; set; }
         public string PersonalEmail { get; set; }
         public bool IsValid { get; set; } = true;
-        public DateTimeOffset AddedOn { get; set; } = DateTimeOffset.Now;
+        public DateTime AddedOn { get; set; } = DateTime.Now;
 
     }
 }

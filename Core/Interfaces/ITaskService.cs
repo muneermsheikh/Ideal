@@ -18,8 +18,8 @@ namespace Core.Interfaces
         Task<IReadOnlyList<ToDo>> GetTaskListAsync (int enquiryItemId, enumTaskType taskType, 
             enumTaskStatus taskStatus, bool onlyHeaders, int ownerId);
         
-        Task<IReadOnlyList<ToDo>> GetTaskListOwnersAsyncUser(int ownerId, enumTaskStatus taskStatus);
-        Task<IReadOnlyList<ToDo>> GetTaskListAssignedTosAsyncUser(int assignedToId, enumTaskStatus taskStatus);
+        Task<IReadOnlyList<ToDo>> GetOwnerTaskListAsync(int ownerId, enumTaskStatus taskStatus);
+        Task<IReadOnlyList<ToDo>> GetAssignedToTaskListAsync(int assignedToId, enumTaskStatus taskStatus);
         
         Task<ToDo> UpdateTaskAsync(ToDo toDo);
         Task<bool> DeleteTaskAsync(ToDo toDo);

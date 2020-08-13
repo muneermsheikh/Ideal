@@ -8,8 +8,8 @@ namespace Core.Interfaces
 {
     public interface IToDo
     {
-        Task<ToDo> CreateATaskAsync (int ownerId, int assignedToId, DateTimeOffset taskDate, 
-            DateTimeOffset completeBy, DateTimeOffset remindOn, string taskDescription, 
+        Task<ToDo> CreateATaskAsync (int ownerId, int assignedToId, DateTime taskDate, 
+            DateTime completeBy, DateTime remindOn, string taskDescription, 
             string senderEmail,string addresseeEmail, int? enquiryId, int? enquiryItemId, 
             enumTaskType? taskType, bool? sendMail, enumTaskStatus? taskStatus);
         
@@ -20,8 +20,8 @@ namespace Core.Interfaces
         Task<ToDo> DeleteTaskByIdAsync(ToDo toDo1);
 
 
-        Task<TaskItem> AppendTaskItemAsync(int taskId, DateTimeOffset transDate, 
-            string transationDetail, DateTimeOffset? remindOn, int? qntyConcluded, 
+        Task<TaskItem> AppendTaskItemAsync(int taskId, DateTime transDate, 
+            string transationDetail, DateTime? remindOn, int? qntyConcluded, 
             bool? createEmailMessage, enumTaskItemStatus? itemStatus);
         Task<IReadOnlyList<TaskItem>> GetTaskItemsByTaskIdAsync(int taskId);
         Task<int> UpdateTaskItemAsync(TaskItem taskItem);

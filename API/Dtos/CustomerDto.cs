@@ -5,6 +5,7 @@ namespace API.Dtos
 {
     public class CustomerDto
     {
+        public int Id { get; set; }
         public string CustomerType { get; set; }
         public string CustomerName { get; set; }
         public string KnownAs { get; set; }
@@ -18,7 +19,7 @@ namespace API.Dtos
         public string CustomerStatus { get; set; }
 
         public List<CustomerOfficialDto> CustomerOfficials { get; set; }
-        public int CustomerOfficialId { get; set; }
-        public DateTimeOffset AddedOn { get; set; } 
+        public List<CustomerAddressDto> CustomerAddresses{get; set; }
+        public DateTime AddedOn { get; set; } 
     }
 }

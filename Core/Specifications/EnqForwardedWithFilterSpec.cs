@@ -11,7 +11,6 @@ namespace Core.Specifications
                 (string.IsNullOrEmpty(enqParams.Search) || 
                     x.Customer.CustomerName.ToLower().Contains(enqParams.Search)) &&
                 (!enqParams.EnquiryId.HasValue || x.EnquiryId == enqParams.EnquiryId) &&
-                (!enqParams.EnquiryItemId.HasValue || x.EnquiryItemId == enqParams.EnquiryItemId) &&
                 (!enqParams.CustomerId.HasValue || x.CustomerId == enqParams.CustomerId) &&
                 (!enqParams.CustomerOfficialId.HasValue || x.CustomerOfficialId == enqParams.CustomerOfficialId) &&
                 (string.IsNullOrEmpty(enqParams.ModeOfSending) || x.ForwardedByMode == enqParams.ModeOfSending)))
@@ -42,12 +41,6 @@ namespace Core.Specifications
                         break;
                     case "EnquiryIdDesc":
                         AddOrderByDescending(x => x.EnquiryId);
-                        break;
-                     case "EnquiryItemIdAsc":
-                        AddOrderBy(x => x.EnquiryItemId);
-                        break;
-                    case "EnquiryItemIdDesc":
-                        AddOrderByDescending(x => x.EnquiryItemId);
                         break;
                     default:
                         AddOrderByDescending(x => x.ForwardedOn);

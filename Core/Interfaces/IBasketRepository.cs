@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities.EnquiryAggregate;
 
@@ -9,6 +10,8 @@ namespace Core.Interfaces
          Task<CustomerBasket> UpdatebasketAsync(CustomerBasket basket);
 
         Task<bool> DeleteBasketAsync(string basketId);
+
+        Task<ICollection<CustomerBasket>> GetAllRedisKeys();
 
     }
 }

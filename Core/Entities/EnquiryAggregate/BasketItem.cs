@@ -11,9 +11,11 @@ namespace Core.Entities.EnquiryAggregate
 
         public BasketItem(int categoryId, string categorytName, bool eCNR, int quantity, 
             int expDesiredInYrsMin, int expDesiredInYrsMax, string jobDescInBrief, 
-            string jobDescAttachment, int salaryRangeMin, int salaryRangeMax, 
-            int contractPeriodInMonths, enumProvision food, enumProvision housing, 
-            enumProvision transport, DateTimeOffset completeBy)
+            string jobDescAttachment, string salaryCurrency, bool salaryNegotiable, 
+            int salaryRangeMin, int salaryRangeMax, int contractPeriodInMonths, 
+            int leaveAfterMonths, int leavePerYear, enumProvision food, int foodAllowance,
+            enumProvision housing, int housingAllowance, enumProvision transport, 
+            int transportAllowance, int otherAllowance, DateTime completeBy)
         {
             // Id = id;
             CategoryId = categoryId;
@@ -24,13 +26,20 @@ namespace Core.Entities.EnquiryAggregate
             ExpDesiredInYrsMax = expDesiredInYrsMax;
             JobDescInBrief = jobDescInBrief;
             JobDescAttachment = jobDescAttachment;
+            SalaryCurrency = SalaryCurrency;
             SalaryRangeMin = salaryRangeMin;
             SalaryRangeMax = salaryRangeMax;
             ContractPeriodInMonths = contractPeriodInMonths;
             Food = food;
+            FoodAllowance = foodAllowance;
             Housing = housing;
+            HousingAllowance = housingAllowance;
             Transport = transport;
+            TransportAllowance = transportAllowance;
+            OtherAllowance = otherAllowance;
             CompleteBy = completeBy;
+            LeaveAfterMonths= leaveAfterMonths;
+            LeavePerYear = leavePerYear;
         }
 
         public int Id { get; set; }
@@ -42,12 +51,21 @@ namespace Core.Entities.EnquiryAggregate
         public int ExpDesiredInYrsMax { get; set; }
         public string JobDescInBrief { get; set; }
         public string JobDescAttachment { get; set; }
+        public string SalaryCurrency {get; set; }
+
+        public bool SalaryNegotiable {get; set; }
         public int SalaryRangeMin { get; set; }
         public int SalaryRangeMax { get; set; }
         public int ContractPeriodInMonths { get; set; }
         public enumProvision Food { get; set; }
+        public int FoodAllowance {get; set; }
         public enumProvision Housing { get; set; }
+        public int HousingAllowance {get; set; }
         public enumProvision Transport { get; set; }
-        public DateTimeOffset CompleteBy { get; set; }
+        public int TransportAllowance {get; set; }
+        public int OtherAllowance {get; set; }
+        public DateTime CompleteBy { get; set; }
+        public int LeaveAfterMonths {get; set; }
+        public int LeavePerYear {get; set; }
     }
 }

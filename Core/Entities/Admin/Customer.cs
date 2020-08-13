@@ -11,14 +11,31 @@ namespace Core.Entities.Admin
         {
         }
 
+        /*
         public Customer(enumCustomerType customerType, string customerName, string knownAs, 
-            string cityName, string email)
+            string cityName, string email, string mobile, string introducedBy, CustomerAddress  custAddress)
         {
             CustomerType = customerType;
             CustomerName = customerName;
             KnownAs = knownAs;
             CityName = cityName;
             Email = email;
+            IntroducedBy = introducedBy;
+            Mobile = mobile;
+            CustomerAddress = custAddress;
+        }
+        */ 
+        
+        public Customer(enumCustomerType customerType, string customerName, string knownAs, 
+            string cityName, string email, string mobile, string introducedBy)
+        {
+            CustomerType = customerType;
+            CustomerName = customerName;
+            KnownAs = knownAs;
+            CityName = cityName;
+            Email = email;
+            IntroducedBy = introducedBy;
+            Mobile = mobile;
         }
 
         public enumCustomerType CustomerType { get; set; }
@@ -28,17 +45,17 @@ namespace Core.Entities.Admin
         public virtual List<IndustryType> IndustryTypes { get; set; }
         public string IntroducedBy { get; set; }
         public string Email {get; set; }
-        public string Phone1 { get; set; }
+        public string Mobile { get; set; }
         public string Phone2 { get; set; }
         public string CompanyUrl { get; set; }
         public string Description { get; set; }
         public enumCustomerStatus CustomerStatus { get; set; } = enumCustomerStatus.Active;
 
-        public virtual List<CustomerAddress> CustomerAddresses {get; set; }
+        public virtual CustomerAddress CustomerAddress {get; set; }
         public int? CustomerAddressId { get; set; }
-        public List<CustomerOfficial> CustomerOfficials { get; set; }
-        public int CustomerOfficialId { get; set; }
-        public DateTimeOffset AddedOn { get; set; } 
+        public virtual List<CustomerOfficial> CustomerOfficials { get; set; }
+        public int? CustomerOfficialId { get; set; }
+        public DateTime AddedOn { get; set; } = DateTime.Now;
         public virtual Grade Grade { get; set; }
         
     }

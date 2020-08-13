@@ -12,24 +12,13 @@ namespace Infrastructure.Data.Config
         {
             builder.OwnsOne(i => i.ItemOrdered, io => {io.WithOwner();});
         
+            builder.HasIndex("EnquiryId", "CategoryItemId").IsUnique();
+            
             builder.Property(x => x.Status).HasConversion(
                 o => o.ToString(),
                 o => (enumItemReviewStatus) Enum.Parse(typeof(enumItemReviewStatus), o)
             );
         
-            builder.Property(x => x.Food).HasConversion(
-                o => o.ToString(),
-                o => (enumProvision) Enum.Parse(typeof(enumProvision), o)
-            );
-            builder.Property(x => x.Housing).HasConversion(
-                o => o.ToString(),
-                o => (enumProvision) Enum.Parse(typeof(enumProvision), o)
-            );
-            builder.Property(x => x.Transport).HasConversion(
-                o => o.ToString(),
-                o => (enumProvision) Enum.Parse(typeof(enumProvision), o)
-            );
-
         }
     }
 }

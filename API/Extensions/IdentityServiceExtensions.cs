@@ -34,6 +34,7 @@ namespace API.Extensions
                     ValidateIssuer = true,
                     ValidateAudience = false
                 };
+                
             });
             
             return services;

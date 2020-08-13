@@ -3,14 +3,14 @@
         "ReadyToFinalize": false, 
         "EnquiryId": 1,
         "ReviewedBy": 1,
-        "ReviewedOn": "2020-01-05T10:10:00+04:30",
+        "ReviewedOn": "2020-01-05T10:10:00",
         "ReviewStatus": 1
     },
     {
         "ReadyToFinalize": false, 
         "EnquiryId": 1,
         "ReviewedBy": 1,
-        "ReviewedOn": "2020-01-05T10:10:00+04:30",
+        "ReviewedOn": "2020-01-05T10:10:00",
         "ReviewStatus": 1
     }
 ]

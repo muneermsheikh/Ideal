@@ -63,7 +63,7 @@ namespace Core.Specifications
         public TaskSpecs(TaskSpecParams tParams) 
             :  base( x => (
                 (string.IsNullOrEmpty(tParams.Search) || 
-                    x.Owner.Person.FullName.ToLower().Contains(tParams.Search)) &&
+                    x.Owner.FullName.ToLower().Contains(tParams.Search)) &&
                 (!tParams.OwnerId.HasValue || x.OwnerId == tParams.OwnerId) &&
                 (!tParams.AssignedToId.HasValue || x.AssignedToId == tParams.AssignedToId) &&
                 (!tParams.TaskType.HasValue || x.TaskType == tParams.TaskType) &&
@@ -83,16 +83,16 @@ namespace Core.Specifications
                     switch (tParams.Sort)
                     {
                         case "OwnedByAsc":
-                            AddOrderBy(x => x.Owner.Person.FullName);
+                            AddOrderBy(x => x.Owner.FullName);
                             break;
                         case "OwnedByDesc":
-                            AddOrderByDescending(x => x.Owner.Person.FullName);
+                            AddOrderByDescending(x => x.Owner.FullName);
                             break;
                         case "AssignedToAsc":
-                            AddOrderBy(x => x.AssignedTo.Person.FullName);
+                            AddOrderBy(x => x.AssignedTo.FullName);
                             break;
                         case "AssignedToDesc":
-                            AddOrderByDescending(x => x.AssignedTo.Person.FullName);
+                            AddOrderByDescending(x => x.AssignedTo.FullName);
                             break;
                         case "TaskDateAsc":
                             AddOrderBy(x => x.TaskDate);

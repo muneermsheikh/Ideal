@@ -14,14 +14,14 @@ namespace Core.Entities.Admin
             ReadyToFinalize = readyToFinalize;
             EnquiryId = enquiryId;
             ReviewedBy = reviewedBy;
-            ReviewedOn = DateTimeOffset.Now;
+            ReviewedOn = DateTime.Now;
             ReviewStatus = reviewStatus;
         }
 
         public bool ReadyToFinalize { get; set; }       //set to true when all contract reviewitems are reviewed
         public int EnquiryId { get; set; }
         public int ReviewedBy { get; set; }
-        public DateTimeOffset ReviewedOn { get; set; } = DateTimeOffset.Now;
+        public DateTime ReviewedOn { get; set; } = DateTime.Now;
         public enumReviewStatus ReviewStatus { get; set; } = enumReviewStatus.NotReviewed;
     }
 }

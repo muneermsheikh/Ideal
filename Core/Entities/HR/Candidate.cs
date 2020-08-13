@@ -14,12 +14,19 @@ namespace Core.Entities.HR
 
         public int ApplicationNo { get; set; }
         public DateTime ApplicationDated { get; set; }
+        
         public string FirstName { get; set; }
+        public string SecondName { get; set; }
         public string FamilyName { get; set; }
+        public string KnownAs { get; set; }
         public string Gender { get; set; }
         public string PPNo { get; set; }
-        
-        public CandidateAddress CandidateAddress { get; set; }
+        public string AadharNo { get; set; }
+        public DateTime DOB { get; set; }
+
+        public string FullName {get {return FirstName + ", " + FamilyName;} }
+
+        public virtual CandidateAddress CandidateAddress { get; set; }
         public List<Category> CandidateCategories { get; set; }
         public virtual List<EnquiryItem> ReferredToEnquiryItems { get; set; }
         public enumCandidateStatus CandidateStatus { get; set; } = enumCandidateStatus.Available;
@@ -27,6 +34,6 @@ namespace Core.Entities.HR
         public DateTime LastStatusUpdatedOn { get; set; } = DateTime.Now;
         public virtual List<Attachment> Attachments {get; set; }
 
-        public string FullName {get {return FirstName + ", " + FamilyName;} }
+        // public string FullName {get {return Person_FirstName + ", " + Person_FamilyName;} }
     }
 }

@@ -7,6 +7,7 @@ using AutoMapper;
 using Core.Entities.Masters;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -25,43 +26,64 @@ namespace API.Controllers
             _empService = empService;
         }
 
-    [HttpGet]
-    public async Task<ActionResult<EmployeeDto>> GetEmployeeById(int EmployeeId)
+    [HttpGet("{EmployeeId}")]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<EmployeeToReturnDto>> GetEmployeeById(int EmployeeId)
     {
         var emp = await _empService.GetEmployeeByIdAsync(EmployeeId);
         if (emp == null) return NotFound(new ApiResponse(404));
-        var empDto = _mapper.Map<Employee, EmployeeDto>(emp);
+        var empDto = _mapper.Map<Employee, EmployeeToReturnDto>(emp);
         return empDto;
     }
 
     [HttpGet]
-    public async Task<ActionResult<Pagination<EmployeeDto>>> GetEmployeeList(EmployeeParam empParam)
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<Pagination<IReadOnlyList<EmployeeToReturnDto>>>> GetEmployeeList(
+        [FromQuery]EmployeeParam empParam)
     {
         var spec = new EmployeeSpecs(empParam);
         var specCount = new EmployeeSpecWithCount(empParam);
         var totalItems = await _repoEmp.CountWithSpecAsync(specCount);
 
-        var emps = await _repoEmp.GetEntityListWithSpec(spec);
-        if (emps == null) return NotFound(new ApiResponse(404, "No employees found matching the criteria"));
+        var emps = await _repoEmp.ListWithSpecAsync(spec);
+        if (emps == null) return NotFound(new ApiResponse(404, 
+            "No employees found matching the criteria"));
 
         var data = _mapper
-            .Map<IReadOnlyList<Employee>, IReadOnlyList<EmployeeDto>>(emps);
-        return Ok(new Pagination<EmployeeDto>
+            .Map<IReadOnlyList<Employee>, IReadOnlyList<EmployeeToReturnDto>>(emps);
+
+        return Ok(new Pagination<EmployeeToReturnDto>
                 (empParam.PageIndex, empParam.PageSize, totalItems, data));
     }
 
     [HttpPost]
-    public async Task<ActionResult<EmployeeDto>> CreateNewEmployeeAsync(EmployeeToAddDto emp)
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EmployeeToReturnDto>> CreateNewEmployeeAsync(EmployeeToAddDto emp)
     {
         var empToAdd = await _empService.CreateNewEmployeeAsync(emp.Gender, emp.FirstName,
             emp.SecondName, emp.FamilyName, emp.KnownAs, emp.Address1, emp.Address2,
             emp.City, emp.PIN, emp.District, emp.State, "India", emp.Mobile, emp.Email,
-            emp.AadharNo, emp.PassportNo, emp.Designation, emp.DateOfBirth, emp.DateOfBirth);
-        if (empToAdd == null) return BadRequest(402);
+            emp.AadharNo, emp.PassportNo, emp.Designation, emp.DateOfBirth, emp.DateOfJoining);
+        
+        if (empToAdd == null) return BadRequest(new ApiResponse(400));
 
-        var empAdded = _mapper.Map<Employee, EmployeeDto>(empToAdd);
+        var empAdded = _mapper.Map<Employee, EmployeeToReturnDto>(empToAdd);
         return empAdded;
     }
 
+    [HttpPut]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EmployeeToReturnDto>> UpdateEmployeeAsync(Employee employee)
+    {
+        var emp = await _empService.UpdateEmployeeAsync(employee);
+        return _mapper.Map<Employee, EmployeeToReturnDto>(emp);
+    }
+
+    [HttpDelete]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    public async Task<bool> DeleteEmployeeAsync(Employee employee)
+    {
+        return  await _empService.DeleteEmployeeAsync(employee);
+    }
 }
 }

@@ -29,7 +29,7 @@ namespace Core.Entities.HR
         public Candidate Candidate {get; set; }
         public int CandidateId { get; set; }
         public string AssessedBy { get; set; }
-        public DateTimeOffset AssessedOn { get; set; } = DateTimeOffset.Now;
+        public DateTime AssessedOn { get; set; } = DateTime.Now;
         public List<AssessmentItem> AssessmentItems {get; set; }
         public virtual enumAssessmentResult Result { get; set; }
         public string Remarks {get; set; }

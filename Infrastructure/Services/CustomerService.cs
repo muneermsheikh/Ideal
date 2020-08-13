@@ -58,5 +58,11 @@ namespace Infrastructure.Services
         {
             return await _unitOfWork.Repository<Customer>().GetCustomerFromEmailAsync(email);
         }
+
+        public async Task<IReadOnlyList<CustomerOfficial>> GetCustomerOfficialList(int CustomerId)
+        {
+            return await _unitOfWork.Repository<CustomerOfficial>().GetEntityListWithSpec(
+                new CustomerOfficialsSpecs(CustomerId));
+        }
     }
 }

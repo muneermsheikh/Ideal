@@ -1,43 +1,100 @@
 [
     {
-        "Person_FirstName": "Abdul Rashid Shaikh",
-        "Person_FamilyName": "Khan",
-        "Person_DOB": "1985-12-25T00:00:00",
-        "Person_KnownAs": "Abdul Rashid",
-        "Person_Gender": "M",
+        "FirstName": "Abdul Rashid Shaikh",
+        "FamilyName": "Khan",
+        "DOB": "1985-12-25T10:00:00",
+        "KnownAs": "Abdul Rashid",
+        "Gender": "M",
         "Designation": "Purchase Officer",
-        "DOJ": "2015-10-25T00:00:00", 
-        "EmployeeAddress_Address1": "25 bahubali apartment",
-        "EmployeeAddress_City": "Bhayandar",
-        "EmployeeAddress_PIN": "401107",
-        "EmployeeAddress_State": "Maharashtra"
+        "DOJ": "2015-10-25T10:00:00", 
+        "Addresses": [
+            {
+                "AddressType": "R",
+                "Address1": "25 bahubali1 apartment",
+                "Address2": "",
+                "City": "Bhayandar",
+                "PIN": "401107",
+                "State": "Maharashtra",
+                "District": "Maharashtra"
+            }
+        ] 
     },
     {
-        "Person_FirstName": "Sanjay Raghuram",
-        "Person_FamilyName": "Patil",
-        "Person_DOB": "1991-11-25T00:00:00",
-        "Person_KnownAs": "Sanjay",
-        "Person_Gender": "M",
+        "FirstName": "Sanjay Raghuram",
+        "FamilyName": "Patil",
+        "DOB": "1991-11-25T00:00:00",
+        "KnownAs": "Sanjay",
+        "Gender": "M",
         "Designation": "Docuent Controller-Administrative",
         "DOJ": "2012-11-30T00:00:00", 
-        "EmployeeAddress_Address1": "A2, B6, BAHUBALI PACKAGES",
-        "EmployeeAddress_City": "Mira Road",
-        "EmployeeAddress_PIN": "401107",
-        "EmployeeAddress_State": "Maharashtra"
+        "Addresses": [
+            {
+                "AddressType": "R",
+                "Address1": "A2, B6, BAHUBALI PACKAGES",
+                "City": "Mira Road",
+                "PIN": "401107",
+                "State": "Maharashtra"
+            }
+        ]
     },
     {
-        "Person_FirstName": "Shahid Abdullah",
-        "Person_FamilyName": "Merchant",
-        "Person_DOB": "1988-12-25T00:00:00",
-        "Person_KnownAs": "Merchant",
-        "Person_Gender": "M",
+        "FirstName": "Shahid Abdullah",
+        "FamilyName": "Merchant",
+        "DOB": "1988-12-25T00:00:00",
+        "KnownAs": "Merchant",
+        "Gender": "M",
         "Designation": "Airport LogisticsPurchase Officer",
         "DOJ": "2018-09-25T00:00:00", 
-        "EmployeeAddress_Address1": "B6, Everest Building",
-        "EmployeeAddress_Address2": "Tardeo Road",
-        "EmployeeAddress_City": "Mumbai",
-        "EmployeeAddress_PIN": "401137",
-        "EmployeeAddress_State": "Maharashtra",
-        "EmployeeAddress_Country": "India"
+        "Addresses": [
+            {
+                "AddressType": "R",
+                "Address1": "B6, Everest Building",
+                "Address2": "Tardeo Road",
+                "City": "Mumbai",
+                "PIN": "401137",
+                "State": "Maharashtra",
+                "Country": "India"
+            }
+        ]
+    },
+    {
+        "FirstName": "Duttaram",
+        "FamilyName": "Jadhav",
+        "DOB": "1998-12-25T00:00:00",
+        "KnownAs": "Dutta",
+        "Gender": "M",
+        "Designation": "Office Assistant",
+        "DOJ": "2010-09-25T00:00:00", 
+        "Addresses": [
+            {
+                "AddressType": "R",
+                "Address1": "B6, Everest Building",
+                "Address2": "Tardeo Road",
+                "City": "Mumbai",
+                "PIN": "401137",
+                "State": "Maharashtra",
+                "Country": "India"
+            }
+        ]
+    },
+    {
+        "FirstName": "Mohammed Kaif",
+        "FamilyName": "Khan",
+        "DOB": "1998-12-25T00:00:00",
+        "KnownAs": "Kaif",
+        "Gender": "M",
+        "Designation": "H.R. Officer",
+        "DOJ": "2019-09-25T00:00:00", 
+        "Addresses": [
+            {
+                "AddressType": "R",
+                "Address1": "B6, Everest Building",
+                "Address2": "Tardeo Road",
+                "City": "Mumbai",
+                "PIN": "401137",
+                "State": "Maharashtra",
+                "Country": "India"
+            }
+        ]
     }
 ]

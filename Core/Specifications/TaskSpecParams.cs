@@ -23,8 +23,8 @@ namespace Core.Specifications
         public int? AssignedToId {get; set; }
         public enumTaskStatus? TaskStatus {get; set; }
         public enumTaskType? TaskType {get; set; }
-        public DateTimeOffset? DateRangeFrom {get; set; }
-        public DateTimeOffset? DateRangeUpto {get; set; }
+        public DateTime? DateRangeFrom {get; set; }
+        public DateTime? DateRangeUpto {get; set; }
         public bool IncludeItems {get; set; } = false;
         public string Sort { get; set; }
 

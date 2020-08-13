@@ -30,9 +30,20 @@ namespace Infrastructure.Data
             return await _context.Set<T>().ToListAsync();
         }
 
+        public async Task<int> GetNextEnquiryNo()
+        {
+            bool hasRecords = await _context.Enquiries.AnyAsync();
+            if (!hasRecords) return 1050;
+            return await _context.Set<Enquiry>().MaxAsync(x=>x.EnquiryNo);
+        }
         public async Task<IReadOnlyList<T>> ListWithSpecAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<T>> ListTop500WithSpecAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).Take(500).ToListAsync();
         }
         
         public async Task<T> AddAsync(T entity)

@@ -10,8 +10,6 @@ namespace Core.Specifications
                     x.Customer.CustomerName.ToLower().Contains(enqParams.Search)) &&
                 (!enqParams.EnquiryId.HasValue || 
                     x.EnquiryId == enqParams.EnquiryId) &&
-                (!enqParams.EnquiryItemId.HasValue || 
-                    x.EnquiryItemId == enqParams.EnquiryItemId) &&
                 (!enqParams.CustomerId.HasValue || 
                     x.CustomerId == enqParams.CustomerId) &&
                 (!enqParams.CustomerOfficialId.HasValue || 

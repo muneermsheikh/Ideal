@@ -10,15 +10,7 @@ namespace Infrastructure.Data.Config
         {
             builder.Property(x => x.Designation).IsRequired();
             builder.Property("DOJ").IsRequired();
-            builder.OwnsOne(o => o.Person, a => 
-            {
-                a.WithOwner();
-            });
-            
-            builder.OwnsOne(o => o.EmployeeAddress, a => 
-            {
-                a.WithOwner();
-            });
+            // builder.OwnsOne(o => o.Person, a => {WIthOwner();});
         }
     }
 }
