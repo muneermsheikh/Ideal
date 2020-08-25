@@ -19,6 +19,6 @@ namespace Core.Interfaces
         Task<int> DeleteEnquiryItemForwardedByIdAsync (EnquiryForwarded enquiryForwarded);
         Task<int> UpdateEnquiryItemForwardedAsync (EnquiryForwarded enquiryForwarded);
         
-        Task<IReadOnlyList<EnquiryForwarded>> GetEnquiriesForwardedForAnEnquiry (EnqForwardSpecParams enqFwdParams);
+        Task<IReadOnlyList<EnquiryForwarded>> GetEnquiriesForwardedForAnEnquiry (EnquiryForwardedParams enqFwdParams);
     }
 }

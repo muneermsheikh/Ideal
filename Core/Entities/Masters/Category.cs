@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Core.Entities.HR;
+
 namespace Core.Entities.Masters
 {
     public class Category: BaseEntity
@@ -18,6 +21,9 @@ namespace Core.Entities.Masters
         public int IndustryTypeId {get; set; }
         public SkillLevel SkillLevel {get; set; }
         public int SkillLevelId {get; set; }
+
+        //public virtual List<CandidateCategory> CandidateCategories {get; set; }
+
 
     }
 }

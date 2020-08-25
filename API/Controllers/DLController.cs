@@ -48,14 +48,12 @@ namespace API.Controllers
         public async Task<ActionResult<Pagination<EnquiryToReturnDto>>> DLIndex(
             [FromQuery] EnquiryParams eParams)
         {
-            var specs = new EnquirySpecs(eParams);
-            var specsCt = new EnquirySpecsCount(eParams);
-            //var totalItems = await _enqRepo.CountWithSpecAsync(specsCt);
-            var totalItems = await _unitOfWork.Repository<Enquiry>().CountWithSpecAsync(specsCt);
-
-            //var enqs = await _enqRepo.ListTop500WithSpecAsync(specs);
-            var enqs = await _unitOfWork.Repository<Enquiry>().ListTop500WithSpecAsync(specs);
-            if (enqs == null) return NotFound(new ApiResponse(404, "your instructions did not find any matching records"));
+            var totalItems = await _unitOfWork.Repository<Enquiry>().CountWithSpecAsync(
+                new EnquirySpecsCount(eParams) );
+            if(totalItems==0) return NotFound(new ApiResponse(400, "No records returned"));
+            var enqs = await _unitOfWork.Repository<Enquiry>().ListTop500WithSpecAsync(
+                new EnquirySpecs(eParams));
+            if (enqs == null) return NotFound(new ApiResponse(400, "your instructions did not find any matching records"));
 
             var data = _mapper
                 .Map<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryToReturnDto>>(enqs);
@@ -67,8 +65,8 @@ namespace API.Controllers
         [HttpGet("demandLetter")]
         public async Task<ActionResult<EnquiryToReturnDto>> GetDL(int enquiryId)
         {
-            var enq = await _enqService.GetEnquiryWithSpecByIdAsync(enquiryId);
-            if (enq == null) return BadRequest(new ApiResponse(400));
+            var enq = await _enqService.GetEnquiryByIdAsync(enquiryId);
+            if (enq == null) return NotFound(new ApiResponse(400, "There is no record with that Id"));
 
             foreach (var item in enq.EnquiryItems)
             {
@@ -80,6 +78,26 @@ namespace API.Controllers
 
             var retDto = _mapper.Map<Enquiry, EnquiryToReturnDto>(enq);
             return retDto;
+        }
+
+        [HttpGet("demandLetterWithSpec")]
+        public async Task<ActionResult<IReadOnlyList<EnquiryToReturnDto>>> GetDLs([FromBody] EnquiryParams enqParam)
+        {
+            var enqs = await _unitOfWork.Repository<Enquiry>().GetEntityListWithSpec(new EnquirySpecs(enqParam));
+            if (enqs == null || enqs.Count==0) return NotFound(new ApiResponse(400, "your parameters did not return any record"));
+
+            foreach(var enq in enqs)
+            {
+                foreach (var item in enq.EnquiryItems)
+                {
+                    item.JobDesc = await _enqService.GetJobDescriptionBySpecAsync(item.Id);
+                    item.Remuneration = await _enqService.GetRemunerationBySpecEnquiryItemIdAsync(item.Id);
+                    //_mapper.Map<JobDesc, JobDescDto>(item.JobDesc);
+                    //_mapper.Map<Remuneration, RemunerationDto>(item.Remuneration);
+                }
+            }
+            var retDto = _mapper.Map<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryToReturnDto>>(enqs);
+            return Ok(retDto);
         }
 
         [HttpDelete]
@@ -131,6 +149,7 @@ namespace API.Controllers
             if (enqItem == null) return BadRequest(new ApiResponse(400));
             return Ok(_mapper.Map<EnquiryItem, EnquiryItemToReturnDto>(enqItem));
         }
+         
 
 // Job Description
         [HttpGet("jobdesc/{enquiryItemId}")]
@@ -159,6 +178,14 @@ namespace API.Controllers
         }
 
 //contract review item
+        [HttpPost("generatereviewsofdl")]
+        public async Task<ActionResult<IReadOnlyList<ReviewItemDto>>> GenerateReviewsOfADL(int enquiryId)
+        {
+            var rvws = await _dLService.GenerateReviewItemsOfAnEnquiryAsync(enquiryId);
+            if (rvws==null || rvws.Count==0) return BadRequest(new ApiResponse(404));
+            return Ok(_mapper.Map<IReadOnlyList<ContractReviewItem>, IReadOnlyList<ReviewItemDto>>(rvws));
+        }
+
         [HttpGet("reviewEnquiryItems/{enquiryId}")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IReadOnlyList<ReviewItemDto>>> GetReviewItemsOfEnquiry(int enquiryId)
@@ -166,8 +193,10 @@ namespace API.Controllers
             var rvws = await _dLService.GetOrAddReviewItemsOfEnquiryAsync(enquiryId);
             if (rvws == null) return BadRequest(new ApiResponse(400));
             if (rvws.Count == 0) return NotFound(new ApiResponse(404));
-            return Ok(_mapper.Map<IReadOnlyList<ContractReviewItem>, IReadOnlyList<ReviewItemDto>>(rvws));
-        }
+            //return Ok(rvws);
+            var dto = _mapper.Map<IReadOnlyList<ContractReviewItem>, IReadOnlyList<ReviewItemDto>>(rvws);
+            return Ok(dto);
+        }   
 
         [HttpGet("reviewItem/{enquiryItemId}")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -178,11 +207,24 @@ namespace API.Controllers
             return Ok(_mapper.Map<ContractReviewItem, ReviewItemDto>(rvw));
         }
 
+        [HttpPost("reviewItemList")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ReviewItemDto>> AddReviewItemAsync ([FromBody] ContractReviewItem reviewItem)
+        {
+            var added =  await _unitOfWork.Repository<ContractReviewItem>().AddAsync(reviewItem);
+            if (added == null) return BadRequest(new ApiResponse(404, "Bad request, or the review item does not exist"));
+            return Ok( _mapper.Map<ContractReviewItem, ReviewItemDto>(added));
+        }
+
         [HttpPut("reviewItemList")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<int> UpdateReviewItem(List<ContractReviewItem> reviewItems)
+        public async Task<ActionResult<IReadOnlyList<ReviewItemDto>>> UpdateReviewItems(
+            [FromBody] List<ContractReviewItem> reviewItems)
         {
-            return  await _dLService.UpdateReviewItemListAsync(reviewItems);
+            var rvwItems =  await _dLService.UpdateReviewItemListAsync(reviewItems);
+
+            if (rvwItems == 0 ) return BadRequest(new ApiResponse(404, "Bad request, or the review item does not exist"));
+            return Ok();
         /*
             var reviews = await _dLService.UpdateReviewItemsAsync(reviewItems);
             if (reviews == null) return BadRequest(new ApiResponse(400, "Failed to update review item"));
@@ -200,19 +242,28 @@ namespace API.Controllers
         */
         }
 
+        [HttpPost("reviewitems")]
+        public async Task<ActionResult<IReadOnlyList<ReviewItemDto>>> InsertReviewItems(IReadOnlyList<ContractReviewItem> reviewItems)
+        {
+            var rvwItems = await _unitOfWork.Repository<ContractReviewItem>().AddListAsync(reviewItems);
+            if (rvwItems == null || rvwItems.Count==0) return BadRequest(new ApiResponse(400));
+            return Ok( _mapper.Map<IReadOnlyList<ContractReviewItem>, 
+                IReadOnlyList<ReviewItemDto>>(rvwItems));
+        }
+
 
 // forward requirement to HR Department
 
         [HttpPost("enqforwardtoHR")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<DLForwarded>> SendEnquiryToHR(EnquiryToForwardToHRDto enqToFwd)
+        public async Task<ActionResult<DLForwardedToHRDto>> SendEnquiryToHR(EnquiryToForwardToHRDto enqToFwd)
         {
             var dlFwd = await _dlForwardService.DLForwardToHRAsync(
                 enqToFwd.dtForwarded, enqToFwd.enquiryIds, enqToFwd.EmployeeId);
 
             if (dlFwd == null) return BadRequest(new ApiResponse(400));
             
-            return dlFwd;
+            return _mapper.Map<DLForwarded, DLForwardedToHRDto>(dlFwd);
             /*
             dlFwd.AssignedTo = dlFwd.AssignedTo;
            // dlFwd.AssignedToName="new name";
@@ -227,6 +278,7 @@ namespace API.Controllers
 
 //forward to associates
         [HttpPost("enqForwardToAssociates")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IReadOnlyList<EnquiryForwarded>>> ForwardToAssociates(
             DLToForwardToAssociatesDto enqToFwd)
         {
@@ -234,29 +286,46 @@ namespace API.Controllers
                 enqToFwd.OfficialIds, enqToFwd.EnqId, enqToFwd.EnqItemIds,
                 enqToFwd.mode, enqToFwd.DateForwarded);
             if (dlFwd == null) return BadRequest(new ApiResponse(400, "failed to forward the Demand letters to Associates"));
+            
             return Ok(dlFwd);
+            //return Ok( _mapper.Map<IReadOnlyList<EnquiryForwarded>,
+                //IReadOnlyList<EnqForwardedToAssociatesDto>>(dlFwd));
         }
 
 
         [HttpGet("enqforwardlist")]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Pagination<EnquiryForwarded>>> GetEnquiriesForwardedList
-            ([FromQuery] EnqForwardSpecParams enqParams)
+        public async Task<ActionResult<Pagination<IReadOnlyList<EnquiryForwardedDto>>>> GetEnquiriesForwardedList(
+            [FromQuery]EnquiryForwardedParams enqParams)
         {
             var _enqFwdRepo = _unitOfWork.Repository<EnquiryForwarded>();
 
-            var spec = new EnqForwardedWithFilterSpec(enqParams);
-            var countSpec = new EnqForwardedWithFiltersForCountSpec(enqParams);
+            var spec = new EnquiryForwardedSpecs(enqParams);
+            var countSpec = new EnquiryForwardedForCountSpecs(enqParams);
             var totalItems = await _enqFwdRepo.CountWithSpecAsync(countSpec);
 
             var enqFwds = await _enqFwdRepo.ListWithSpecAsync(spec);
-            if (enqFwds == null) return NotFound(new ApiResponse(400));
+            if (enqFwds == null || enqFwds.Count == 0) return NotFound(new ApiResponse(404));
 
-            // var data = _mapper
-            // .Map<IReadOnlyList<EnquiryForwarded>, IReadOnlyList<API.Dtos.EnqForwardedDto>>(enqFwds);
-            return Ok(new Pagination<EnquiryForwarded>
-                (enqParams.PageIndex, enqParams.PageSize, totalItems, enqFwds));
+            var data = _mapper.Map<IReadOnlyList<EnquiryForwarded>, 
+                IReadOnlyList<EnquiryForwardedDto>>(enqFwds);
+
+            return Ok(new Pagination<EnquiryForwardedDto>
+                (enqParams.PageIndex, enqParams.PageSize, totalItems, data));
         }
+
+        [HttpGet("enqforward/{enquiryId}")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IReadOnlyList<EnquiryForwardedDto>>> GetEnquiryForwardedOfEnquiry(
+            int enquiryId)
+        {
+            var _enqFwdRepo = _unitOfWork.Repository<EnquiryForwarded>();
+            //var totalitems = await _enqFwdRepo.CountWithSpecAsync(new EnquiryForwardedForCountSpecs(enquiryId));
+            var enqFwd = await _enqFwdRepo.GetEntityListWithSpec(new EnquiryForwardedSpecs(enquiryId));
+            if (enqFwd == null) return NotFound(new ApiResponse(404));
+
+            return Ok( _mapper.Map<IReadOnlyList<EnquiryForwarded>, IReadOnlyList<EnquiryForwardedDto>>(enqFwd));
+        }
+
 
     }
 }

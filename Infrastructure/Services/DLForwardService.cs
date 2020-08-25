@@ -9,6 +9,7 @@ using Core.Interfaces;
 using Core.Specifications;
 using Core.Entities.Emails;
 using System.Linq;
+using Infrastructure.Data;
 
 namespace Infrastructure.Services
 {
@@ -17,63 +18,66 @@ namespace Infrastructure.Services
         private readonly IDLService _dlService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailService _emailService;
+        private readonly ATSContext _context;
 
-        public DLForwardService(IDLService dlService, IUnitOfWork unitOfWork, IEmailService emailService)
+        public DLForwardService(IDLService dlService, IUnitOfWork unitOfWork, IEmailService emailService, ATSContext context)
         {
+            _context = context;
             _emailService = emailService;
             _unitOfWork = unitOfWork;
             _dlService = dlService;
         }
 
-        public async Task<DLForwarded> DLForwardToHRAsync(DateTime dtForwarded, 
+        public async Task<DLForwarded> DLForwardToHRAsync(DateTime dtForwarded,
             IReadOnlyList<IdInt> enquiryIds, int iHRManagerId)
         {
             var dlForwarded = new DLForwarded();
             var _empRepo = _unitOfWork.Repository<Employee>();
             var enqs = new List<Enquiry>();
             var _repoCust = _unitOfWork.Repository<Customer>();
+            var _enqRepo = _unitOfWork.Repository<Enquiry>();
 
-            foreach(var enqId in enquiryIds)
+            foreach (var enqId in enquiryIds)
             {
                 var enq = await _unitOfWork.Repository<Enquiry>()
-                    .GetEntityWithSpec(new EnquirySpecs(enqId.Id, false, false));
+                    .GetEntityWithSpec(new EnquirySpecs(enqId.Id, enumEnquiryStatus.ReviewedAndAccepted, false, false));
                 if (enq == null) continue;
-                
-                //var enqItems = await _unitOfWork.Repository<EnquiryItem>().GetEntityListWithSpec(
-                  //  new EnquiryItemsSpecs(enqId, enumItemReviewStatus.Accepted));
-                if (enq.EnquiryItems.Count == 0) continue;
-                enq.Customer = await _repoCust.GetByIdAsync(enq.CustomerId);
 
-                int projectManagerId = enq.ProjectManager == null ? 1: enq.ProjectManager.Id;
+                var enqItems = await _unitOfWork.Repository<EnquiryItem>().GetEntityListWithSpec(
+                    new EnquiryItemsSpecs(enqId.Id, enumItemReviewStatus.Accepted));
+                if (enqItems.Count == 0) continue;
+                enq.EnquiryItems = enqItems;
+                if (enq.Customer == null) enq.Customer = await _repoCust.GetByIdAsync(enq.CustomerId);
+                int projectManagerId = enq.ProjectManager == null ? 1 : enq.ProjectManager.Id;
 
                 var mgr = await _empRepo.GetByIdAsync(projectManagerId);
                 var emp = await _empRepo.GetByIdAsync(iHRManagerId);
 
                 var sTaskDescription = ComposeAndSendDLForwardMessageToHR(enq, emp, mgr);
 
-                var fwd = new DLForwardToHR(iHRManagerId, dtForwarded, enqId.Id);
-                var dlFwd = await _unitOfWork.Repository<DLForwardToHR>().AddAsync(fwd);
+                //var fwd = new DLForwardToHR(iHRManagerId, dtForwarded, enqId.Id);
+                //var dlFwd = await _unitOfWork.Repository<DLForwardToHR>().AddAsync(fwd);
 
-                if (dlFwd == null) continue;
+                //if (dlFwd == null) continue;
 
                 enqs.Add(enq);
-                    
+
                 var toDo = new ToDo(projectManagerId, iHRManagerId, dtForwarded, dtForwarded.AddDays(7),
                     sTaskDescription, enumTaskType.HRDeptHeadAssignment, enqId.Id);
-                    
+
                 await _unitOfWork.Repository<ToDo>().AddAsync(toDo);
 
             }
-            dlForwarded.Enquiries=enqs;
-            
+            dlForwarded.Enquiries = enqs;
+
             return dlForwarded;
         }
 
         public async Task<IReadOnlyList<EnquiryForwarded>> DLForwardToAssociatesAsync(
-            IReadOnlyList<IdInt> customerOfficialIds, int enquiryId, 
+            IReadOnlyList<IdInt> customerOfficialIds, int enquiryId,
             IReadOnlyList<IdInt> enqItemIds, string mode, DateTime dtForwarded)
         {
-            var enqFwdd = await ForwardTheEnquiry(dtForwarded, enquiryId, enqItemIds, customerOfficialIds, mode);         
+            var enqFwdd = await ForwardTheEnquiry(dtForwarded, enquiryId, enqItemIds, customerOfficialIds, mode);
             return enqFwdd;
         }
 
@@ -90,9 +94,9 @@ namespace Infrastructure.Services
         }
 
         public async Task<IReadOnlyList<EnquiryForwarded>> GetEnquiriesForwardedForAnEnquiry(
-            EnqForwardSpecParams enqFwdParams)
+            EnquiryForwardedParams enqFwdParams)
         {
-            var spec = new EnqForwardedWithFilterSpec(enqFwdParams);
+            var spec = new EnquiryForwardedSpecs (enqFwdParams);
             return await _unitOfWork.Repository<EnquiryForwarded>().ListWithSpecAsync(spec);
         }
 
@@ -105,28 +109,28 @@ namespace Infrastructure.Services
         }
 
 
-/// privates
+        /// privates
         private async Task<IReadOnlyList<EnquiryForwarded>> ForwardTheEnquiry(
-            DateTime dtForwarded, int enqId, IReadOnlyList<IdInt> enqItemIds, 
+            DateTime dtForwarded, int enqId, IReadOnlyList<IdInt> enqItemIds,
             IReadOnlyList<IdInt> officialIds, string forwardedByMode)
         {
             if (officialIds == null) return null;
 
             var officials = await _unitOfWork.Repository<CustomerOfficial>().
                 GetEntityListWithSpec(new CustomerOfficialsSpecs(officialIds, true));
-            
+
             var forwardedList = new List<EnquiryForwarded>();
 
             Enquiry enq = await _unitOfWork.Repository<Enquiry>()
-                .GetEntityWithSpec(new EnquirySpecs(enqId, false, false)); 
+                .GetEntityWithSpec(new EnquirySpecs(enqId, enumEnquiryStatus.ReviewedAndAccepted, false, false));
 
             var enqForwardedItemsList = new List<EnquiryItemForwarded>();   //to write to child table
-                        //EnquiryItemForwarded, for each parent Id of EnquiryForwarded (EnquiryForwrds in db)
+                                                                            //EnquiryItemForwarded, for each parent Id of EnquiryForwarded (EnquiryForwrds in db)
             var enqFwdItemToAdd = new EnquiryItemForwarded();
 
             var enqItems = await _unitOfWork.Repository<EnquiryItem>().GetEntityListWithSpec(
                     new EnquiryItemsSpecs(0, false));
-                
+
             if (enqItemIds == null || enqItemIds.Count == 0)   // get items from db
             {
                 enqItems = await _unitOfWork.Repository<EnquiryItem>()
@@ -134,11 +138,11 @@ namespace Infrastructure.Services
                         enqId, enumItemReviewStatus.Accepted));
                 if (enqItems == null || enqItems.Count == 0) return null;
 
-                foreach(var item in enqItems)
+                foreach (var item in enqItems)
                 {
-//                    enqFwdItemToAdd.EnquiryItemId=item.Id;
+                    //                    enqFwdItemToAdd.EnquiryItemId=item.Id;
                     enqForwardedItemsList.Add(
-                        new EnquiryItemForwarded{EnquiryItemId = item.Id});
+                        new EnquiryItemForwarded { EnquiryItemId = item.Id });
                 }
             }
             else
@@ -147,17 +151,17 @@ namespace Infrastructure.Services
                 // do not match the EnquiryId or are not contract reviewed.Accepted
                 // will be excluded
                 enqItems = await _unitOfWork.Repository<EnquiryItem>()
-                .GetEntityListWithSpec(new EnquiryItemsSpecs(enqItemIds, 
+                .GetEntityListWithSpec(new EnquiryItemsSpecs(enqItemIds,
                     enqId, enumItemReviewStatus.Accepted, false));
                 if (enqItems == null || enqItems.Count == 0) return null;
 
-                foreach(var i in enqItemIds)
+                foreach (var i in enqItemIds)
                 {
-                    enqFwdItemToAdd.EnquiryItemId=i.Id;
+                    enqFwdItemToAdd.EnquiryItemId = i.Id;
                     enqForwardedItemsList.Add(enqFwdItemToAdd);
                 }
             }
-                
+
             foreach (var off in officials)
             {
                 var add = forwardedByMode == "mail" ? off.email : forwardedByMode == "sms" ? off.Mobile : off.Mobile2;
@@ -167,11 +171,11 @@ namespace Infrastructure.Services
 
                 //var forwarded = await _unitOfWork.Repository<EnquiryForwarded>().UpdateAsync(fwd);
                 var forwarded = await _unitOfWork.Repository<EnquiryForwarded>().AddAsync(fwd);
-                
+
                 if (forwarded == null) continue;
                 forwardedList.Add(forwarded);
             }
-                
+
             // ComposeDLForwardMessage needs List<EnquiryItem> entity to retrieve field values
             var cust = await _unitOfWork.Repository<Customer>().GetByIdAsync(enq.CustomerId);
             if (cust == null) return null;
@@ -184,7 +188,7 @@ namespace Infrastructure.Services
         }
 
 
-        private string ComposeAndSendDLForwardMessageToHR(Enquiry enq, 
+        private string ComposeAndSendDLForwardMessageToHR(Enquiry enq,
             Employee emp, Employee mgr)
         {
             var enqNumber = enq.EnquiryNo;
@@ -194,7 +198,7 @@ namespace Infrastructure.Services
 
             var assignedToId = emp.Id;
             var assignedToNameAndDesignation =
-                emp.Gender == "M" ? "Mr." : "Ms." + emp.FullName + ", " + 
+                emp.Gender == "M" ? "Mr." : "Ms." + emp.FullName + ", " +
                 Environment.NewLine + emp.Designation;
             var assignedToemailId = emp.Email;
             var assignedToMobile = emp.Mobile;
@@ -205,7 +209,7 @@ namespace Infrastructure.Services
             var ownerEmailId = mgr.Email;
             var ownerMobile = mgr.Mobile;
 
-            var requirementTable =  GetEnquiryItemTable(enq.EnquiryItems);
+            var requirementTable = GetEnquiryItemTable(enq.EnquiryItems);
 
             var sTaskDescription = "To:" + Environment.NewLine + assignedToNameAndDesignation +
                 Environment.NewLine + "email: " + assignedToemailId + ", Mobile:" + assignedToMobile +
@@ -223,7 +227,7 @@ namespace Infrastructure.Services
             return sTaskDescription;
         }
 
-        private int ComposeAndSendDLForwardMessageToAssociates(Enquiry enq, 
+        private int ComposeAndSendDLForwardMessageToAssociates(Enquiry enq,
             IReadOnlyList<EnquiryItem> enqItems, Customer cust, Employee ProjectManager,
             IReadOnlyList<CustomerOfficial> custOfficials)
         {
@@ -239,8 +243,8 @@ namespace Infrastructure.Services
             var ownerEmailId = ProjectManager.Email;
             var ownerMobile = ProjectManager.Mobile;
 
-            var requirementTable =  GetEnquiryItemTable(enqItems);
-            
+            var requirementTable = GetEnquiryItemTable(enqItems);
+
             foreach (var off in custOfficials)
             {
                 var assignedToEmailId = new List<string>();
@@ -270,7 +274,7 @@ namespace Infrastructure.Services
                 ListMessages.Add(sTaskDescription);
                 var emailCC = new List<string>();
                 var emailBCC = new List<string>();
-                var email = new EmailModel(assignedToNameAndDesignation, assignedToEmailId, 
+                var email = new EmailModel(assignedToNameAndDesignation, assignedToEmailId,
                     emailCC, emailBCC, "Invitation for your friends to take part for overseas employment opportunity" +
                     " in " + CustomerCity, sTaskDescription);
                 //_emailService.SendEmail(email);
@@ -281,7 +285,7 @@ namespace Infrastructure.Services
 
         private string GetEnquiryItemTable(IReadOnlyList<EnquiryItem> enqItems)
         {
-            
+
             var st = "<table>" +
                         "<tr>" +
                             "<th>Sr.No.</th>" +
@@ -290,14 +294,14 @@ namespace Infrastructure.Services
                             "<th>Job Description</th>" +
                             "<th>Remuneration</th>" +
                         "</tr>";
-            foreach(var item in enqItems)
+            foreach (var item in enqItems)
             {
-                st = st + "<tr>" + 
+                st = st + "<tr>" +
                     "<td>" + item.SrNo + "</td>" +
                     "<td>" + item.CategoryName + "</td>" +
                     "<td>" + item.Quantity + "</td>" +
                     "<td> click for job desc</td>" +
-                    "<td> click for remuneration</td>"  +
+                    "<td> click for remuneration</td>" +
                     "</tr>";
             }
             st = st + "</table>";

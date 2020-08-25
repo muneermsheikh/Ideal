@@ -20,6 +20,14 @@ namespace Core.Entities.Admin
             CreateEmailMessage = createEmailMessage;
             RemindOn = remindOn;
         }
+        public TaskItem(DateTime transDate, int? qntyConcluded, string transactionDetail, bool createEmailMessage, DateTime? remindOn)
+        {
+            TransDate = transDate;
+            QntyConcluded = qntyConcluded;
+            TransactionDetail = transactionDetail;
+            CreateEmailMessage = createEmailMessage;
+            RemindOn = remindOn;
+        }
 
         public int TaskId { get; set; }
         public DateTime TransDate { get; set; } = DateTime.Now;

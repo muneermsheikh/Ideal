@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities.HR;
 using Core.Entities.Identity;
 using Core.Entities.Masters;
 using Core.Interfaces;
 using Core.Specifications;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Services
@@ -13,8 +15,10 @@ namespace Infrastructure.Services
     public class EmployeeServices : IEmployeeService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public EmployeeServices(IUnitOfWork unitOfWork)
+        private readonly ATSContext _context;
+        public EmployeeServices(IUnitOfWork unitOfWork, ATSContext context)
         {
+            _context = context;
             _unitOfWork = unitOfWork;
         }
 
@@ -27,12 +31,12 @@ namespace Infrastructure.Services
             var adds = new List<EmployeeAddress>();
             var add = new EmployeeAddress("R", add1, add2, city, pin, district, state);
             adds.Add(add);
-            var emp = new Employee(firstNm, secondNm, familyNm, knownAs, gendr, DateOfBirth, 
+            var emp = new Employee(firstNm, secondNm, familyNm, knownAs, gendr, DateOfBirth,
                 passportNo, aadharNumber, mobile, email, adds, Designation, DateOfJoining);
-            
+
             return await _unitOfWork.Repository<Employee>().AddAsync(emp);
         }
- 
+
         public async Task<bool> DeleteEmployeeAsync(Employee employee)
         {
             var del = await _unitOfWork.Repository<Employee>().DeleteAsync(employee);
@@ -60,6 +64,10 @@ namespace Infrastructure.Services
         public async Task<Employee> UpdateEmployeeAsync(Employee employee)
         {
             return await _unitOfWork.Repository<Employee>().UpdateAsync(employee);
+        }
+        public string GetEmployeeName(int employeeId)
+        {
+            return _context.Employees.Where(x=>x.Id==employeeId).Select(x=>x.FullName).FirstOrDefault();
         }
 
     }

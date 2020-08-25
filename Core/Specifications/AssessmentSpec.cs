@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Core.Entities.HR;
+using Core.Enumerations;
 
 namespace Core.Specifications
 {
@@ -21,6 +24,22 @@ namespace Core.Specifications
         {
             AddInclude(x => x.AssessmentItems);
         }
+        
+        /*
+        public AssessmentSpec(int candidateId, int enquiryItemId, int minTotalMarks)
+            : base(x => ((x.AssessmentItems.Sum(y => y.PointsAllotted) >= minTotalMarks) &&
+                x.CandidateId == candidateId && x.EnquiryItemId == enquiryItemId))
+        {
+            AddInclude(x => x.AssessmentItems);
+        }
+        */
+        public AssessmentSpec(int candidateId, int enquiryItemId, List<enumAssessmentResult> resultList)
+            : base(x => (resultList.Contains(x.Result)) &&
+                x.CandidateId == candidateId && x.EnquiryItemId == enquiryItemId)
+        {
+            AddInclude(x => x.AssessmentItems);
+        }
+        
         public AssessmentSpec(int EnquiryItemId) : base(x => x.EnquiryItemId == EnquiryItemId)
         {
             AddOrderBy(x => x.AssessedOn);

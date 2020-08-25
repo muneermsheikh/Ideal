@@ -39,7 +39,7 @@ namespace Core.Entities.EnquiryAggregate
         //public virtual SiteAddress ShipToAddress { get; set; }
         public IReadOnlyList<EnquiryItem> EnquiryItems { get; set; }
         public bool ReadyToReview {get; set; } = false;         // this is set to true when all enquiryitems are reviewed
-        public enumEnquiryStatus EnquiryStatus { get; set; } = enumEnquiryStatus.Pending;
+        public enumEnquiryStatus EnquiryStatus { get; set; } = enumEnquiryStatus.ReviewPending;
         public virtual Employee ProjectManager { get; set; }
         public int ProjectManagerId {get; set; }
         public Customer Customer {get; set; }

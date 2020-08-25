@@ -19,8 +19,8 @@ namespace Core.Specifications
             ))
         {
             AddOrderByDescending(x => x.ApplicationNo);
-            AddInclude(x => x.CandidateCategories);
-            AddInclude(x => x.CandidateAddress);      
+            if (cParams.includeCategories) AddInclude(x => x.CandidateCategories);
+            if (cParams.includeAddress) AddInclude(x => x.CandidateAddress);      
         }
 
         public CandidateSpecs(int candidateId): base(x => x.Id == candidateId)

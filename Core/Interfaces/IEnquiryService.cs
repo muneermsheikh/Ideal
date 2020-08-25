@@ -5,6 +5,7 @@ using Core.Entities.Admin;
 using Core.Entities.EnquiryAggregate;
 using Core.Entities.Identity;
 using Core.Entities.Masters;
+using Core.Specifications;
 
 namespace Core.Interfaces
 {
@@ -12,7 +13,10 @@ namespace Core.Interfaces
     {
         Task<Enquiry> CreateEnquiryAsync (string basketId);
         Task<IReadOnlyList<Enquiry>> GetUserEnquiriesAsync (int CustomerId);
+        Task<IReadOnlyList<Enquiry>> GetEntityListWithSpec(EnquiryParams enqParam);
         Task<Enquiry> GetEnquiryWithSpecByIdAsync(int enquiryId);
+        Task<Enquiry> GetEnquiryByIdAsync(int enquiryId);
+        Task<Enquiry> GetEnquiryByEnquiryItemIdAsync(int enquiryItemId);
         Task<EnquiryItem> GetEnquiryItemByIdAsync(int enquiryItemId);
         Task<int> GetEnquiryItemsCountNotReviewed(int enquiryId);
         // Task<IReadOnlyList<Enquiry>> DLIndexTop500 ();

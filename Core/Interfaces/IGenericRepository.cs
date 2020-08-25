@@ -29,7 +29,7 @@ namespace Core.Interfaces
         Task<int> UpdateListAsync(List<T> entities);
         
         Task<int> DeleteAsync(T entity);
-
+        
                 
         Task<int> NextSequenceNoWithSpec(ISpecification<T> spec);
 

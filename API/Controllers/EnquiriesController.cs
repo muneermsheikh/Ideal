@@ -33,7 +33,7 @@ namespace API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<EnquiryToReturnDto>> CreateOrder(EnquiryDto enquiryDto)
+        public async Task<ActionResult<EnquiryToReturnDto>> CreateOrder([FromBody] EnquiryDto enquiryDto)
         {
             var email= HttpContext.User.RetrieveEmailFromPrincipal();
             if (email == null) return BadRequest(new ApiResponse(400, "Client email cannot be retrieved"));

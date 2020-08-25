@@ -32,9 +32,13 @@ namespace Infrastructure.Data.Config
             builder.HasIndex(x => x.PPNo).IsUnique();
 
             // when candidate is deleted, it will delete all its many side entities
-            builder.HasMany(o => o.CandidateCategories).WithOne().OnDelete(DeleteBehavior.Cascade);
+            //builder.HasMany(o => o.CandidateCategories).WithOne().OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(o => o.ReferredToEnquiryItems).WithOne().OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(o => o.Attachments).WithOne().OnDelete(DeleteBehavior.Cascade);
+
+            //Teacher-Candidate, classroom-category
+            //builder.HasMany(m => m.CandidateCategories).WithOne(m => m.Candidate).HasForeignKey(k => k.CandidateId);
+            //builder.HasMany(x => x.CandidateCategories).WithOne().HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

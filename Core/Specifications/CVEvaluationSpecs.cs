@@ -7,6 +7,11 @@ namespace Core.Specifications
     public class CVEvaluationSpecs : BaseSpecification<CVEvaluation>
     {
         
+        public CVEvaluationSpecs(string dummy, int id)
+            : base (x => x.Id == id)
+        {
+        }
+
         public CVEvaluationSpecs(int candidateId)
             : base (x => x.CandidateId == candidateId)
         {
@@ -16,10 +21,14 @@ namespace Core.Specifications
             : base (x => x.CandidateId == candidateId && x.EnquiryItemId == enquiryItemId)
         {
         }
+
+        public CVEvaluationSpecs(int enquiryItemId, string dummy)
+            : base (x => x.EnquiryItemId == enquiryItemId)
+        {
+        }
+        
         public CVEvaluationSpecs(CVEvaluationParam cvParam) 
         :  base( x => (
-                (string.IsNullOrEmpty(cvParam.Search) || 
-                    x.Candidate.FullName.ToLower().Contains(cvParam.Search)) &&
                 (!cvParam.ApplicationNo.HasValue || x.ApplicationNo == cvParam.ApplicationNo) &&
                 (!cvParam.HRExecutiveId.HasValue || x.HRExecutiveId == cvParam.HRExecutiveId) &&
                 (!cvParam.HRSupervisorId.HasValue || x.HRSupervisorId == cvParam.HRSupervisorId) &&
@@ -77,5 +86,6 @@ namespace Core.Specifications
             }
 
         }
+
     }
 }

@@ -77,7 +77,13 @@ namespace Infrastructure.Services
             return await _taskRepo.GetEntityListWithSpec(
                 new TaskSpecs(taskType, userId, onlyHeaders));
         }
-
+        public async Task<ToDo> GetTaskAsync(int enquiryItemId, enumTaskType taskType, 
+            enumTaskStatus taskStatus, bool onlyHeaders, int assignedToId)
+        {
+            return await _taskRepo.GetEntityWithSpec(new TaskSpecs(
+                enquiryItemId, assignedToId, taskType, taskStatus));
+        }
+        
         public async Task<IReadOnlyList<ToDo>> GetTaskListAsync(
             enumTaskType taskType, bool onlyHeaders, int userId)
         {
@@ -110,5 +116,7 @@ namespace Infrastructure.Services
         {
             return await _taskRepo.GetEntityListWithSpec(new TaskSpecs(taskStatus, assignedToId));
         }
+
+
     }
 }

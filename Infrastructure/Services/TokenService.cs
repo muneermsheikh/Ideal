@@ -26,11 +26,29 @@ namespace Infrastructure.Services
 
         public string CreateToken(AppUser user)
         {
+
+        /*
+            var userRoles = await _userManager.GetRolesAsync(user);
+            
+            var authClaims = new List<Claim>  
+            {  
+                new Claim(ClaimTypes.Name, user.UserName),  
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),  
+            };  
+  
+            foreach (var userRole in userRoles)  
+            {  
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));  
+            } 
+        */
+
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.DisplayName)
+                
             };
+
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

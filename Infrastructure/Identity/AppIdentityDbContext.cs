@@ -1,4 +1,5 @@
 using Core.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,7 @@ namespace Infrastructure.Identity
     {
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options)
         {
-             // UserValidator = new UserValidator<ApplicationUser>(this) { AllowOnlyAlphanumericUserNames = false };
+             //UserValidator = new UserValidator<ApplicationUser>(this) { AllowOnlyAlphanumericUserNames = false };
         }
 
         protected override void OnModelCreating(ModelBuilder builder){

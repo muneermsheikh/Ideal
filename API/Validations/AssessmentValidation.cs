@@ -18,7 +18,7 @@ namespace API.Validations
             {
                 if (q.IsMandatory && q.Assessed !=true) errorstring += "Mmandatory question not assessed";
                 if (q.PointsAllotted > q.MaxPoints)  errorstring += "Marks alloted for question No." + q.QuestionNo + " more than maxm points";
-                if (q.PointsAllotted.HasValue & q.Assessed != true) q.Assessed=true;
+                //if (q.PointsAllotted.HasValue & q.Assessed != true) q.Assessed=true;
             }
             return errorstring;
         }

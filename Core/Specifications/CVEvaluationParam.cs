@@ -17,7 +17,7 @@ namespace Core.Specifications
             set => _pageSize = (value > MaxmPageSize) ? MaxmPageSize : value;
         }
         public int Id { get; set; }
-        public string FullName {get; set;}
+        public int EnquiryItemId {get; set; }
         public int? ApplicationNo{get; set; }
         public int? HRExecutiveId { get; set; }
         public DateTime? SubmittedByHRExecOn { get; set; }

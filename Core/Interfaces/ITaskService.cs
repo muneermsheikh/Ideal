@@ -11,8 +11,11 @@ namespace Core.Interfaces
 // tOdO
         Task<ToDo> CreateTaskAsync (ToDo todo);
         Task<IReadOnlyList<ToDo>> GetTasksAsync(TaskSpecParams taskSpecParams);
+        Task<ToDo> GetTaskAsync(int enquiryItemId, enumTaskType taskType, 
+            enumTaskStatus taskStatus, bool onlyHeaders, int assignedToId);
         Task<ToDo> GetTaskEnquiryitemIdAssignedToIdTaskTypeAsync(
             int enquiryItemId, int assignedToId, enumTaskType taskType);
+            
         Task<IReadOnlyList<ToDo>> GetTaskListAsync(enumTaskType taskType, 
             bool onlyHeaders, int userId);
         Task<IReadOnlyList<ToDo>> GetTaskListAsync (int enquiryItemId, enumTaskType taskType, 

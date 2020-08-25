@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Core.Enumerations;
 
 namespace Core.Entities.Admin
 {
@@ -36,6 +37,7 @@ namespace Core.Entities.Admin
         public string email { get; set; }
         public string PersonalEmail { get; set; }
         public bool IsValid { get; set; } = true;
+        public enumCustomerOfficialScope scope {get; set; }=enumCustomerOfficialScope.HR;
         public DateTime AddedOn { get; set; } = DateTime.Now;
 
     }

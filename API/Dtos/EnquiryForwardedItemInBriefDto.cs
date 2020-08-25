@@ -1,6 +1,6 @@
 namespace API.Dtos
 {
-    public class EnquiryItemInBriefDto
+    public class EnquiryForwardedItemInBriefDto
     {
         public int Id {get; set; }
         public int CategoryItemId { get; set; }

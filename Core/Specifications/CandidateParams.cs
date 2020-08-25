@@ -8,13 +8,15 @@ namespace Core.Specifications
 {
     public class CandidateParams
     {
+        public int? Id {get; set; }
         public int? ApplicationNo { get; set; }
         public DateTime? ApplicationDated { get; set; }
         public string Gender { get; set; }
         public string FirstName { get; set; }
         public string FamilyName { get; set; }
         public string PPNo { get; set; }
-        
+        public bool includeAddress {get; set; }
+        public bool includeCategories {get; set; }
         public enumCandidateStatus? CandidateStatus { get; set; } = enumCandidateStatus.Available;
         public string FullName {get {return FirstName + ", " + FamilyName;} }
 

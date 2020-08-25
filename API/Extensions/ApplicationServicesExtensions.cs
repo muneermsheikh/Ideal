@@ -16,7 +16,11 @@ namespace API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICandidateService, CandidateService>();
+            services.AddScoped<ICandidateCategoryService, CandidateCategoryService>();
             services.AddScoped<ICVEvaluationService, CVEvaluationService>();
+            services.AddScoped<IAssessmentService, AssessmentService>();
+            services.AddScoped<ICVRefService, CVRefService>();
             services.AddScoped<IDLService, DLService>();
             services.AddScoped<IDLForwardService, DLForwardService>();
             services.AddScoped<IEmployeeService, EmployeeServices>();

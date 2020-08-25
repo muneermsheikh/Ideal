@@ -46,7 +46,8 @@ namespace Core.Entities.EnquiryAggregate
         public string CategoryName { get; set; }
         public int Quantity { get; set; }
         public bool ECNR { get; set; } = false;
-
+        public bool AssessmentReqd {get; set; }=false;
+        public bool EvaluationReqd {get; set; }=false;
         public int? HRExecutiveId {get; set; }
         public virtual Employee AssessingHRExec {get; set; }
         public int? AssessingSupId { get; set; }

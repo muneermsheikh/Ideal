@@ -36,8 +36,8 @@ namespace Core.Specifications
             AddOrderBy(o => o.EnquiryNo);
         }
     
-        public EnquirySpecs(int enquiryId, bool includeCustomer, bool includeItems) 
-            :base (o => (o.Id == enquiryId))
+        public EnquirySpecs(int enquiryId, enumEnquiryStatus enquiryStatus, bool includeCustomer, bool includeItems) 
+            :base (o => (o.Id == enquiryId && o.EnquiryStatus==enquiryStatus))
         {
             if (includeCustomer) AddInclude(o => o.Customer);
             if (includeItems) AddInclude(o => o.EnquiryItems);

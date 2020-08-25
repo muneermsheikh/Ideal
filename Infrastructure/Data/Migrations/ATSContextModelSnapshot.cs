@@ -16,41 +16,104 @@ namespace Infrastructure.Data.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.4");
 
-            modelBuilder.Entity("Core.Entities.Admin.CVSource", b =>
+            modelBuilder.Entity("Core.Entities.Admin.CVForward", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ApplicationId")
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CustomerOfficialId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateForwarded")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EnquiryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IncludeGrade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IncludePhoto")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IncludeSalary")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OfficialEmailId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("SendMessageToClient")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CVForwards");
+                });
+
+            modelBuilder.Entity("Core.Entities.Admin.CVForwardItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CVForwardId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EnquiryItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CVForwardId");
+
+                    b.ToTable("CVForwardItems");
+                });
+
+            modelBuilder.Entity("Core.Entities.Admin.CVRef", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ApplicationNo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EnquiryForwardedId")
+                    b.Property<int?>("CVForwardItemId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ReceivedFromAssociateId")
+                    b.Property<int>("CandidateId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ReceivedFromCandidateId")
+                    b.Property<DateTime>("DateForwarded")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EnquiryItemId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SourceId")
+                    b.Property<int>("HRExecutiveId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("RefStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SentReference")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StatusDate")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnquiryForwardedId");
+                    b.HasIndex("CVForwardItemId");
 
-                    b.HasIndex("ReceivedFromAssociateId");
-
-                    b.HasIndex("ReceivedFromCandidateId");
-
-                    b.HasIndex("SourceId");
-
-                    b.ToTable("CVSource");
+                    b.ToTable("CVRefs");
                 });
 
             modelBuilder.Entity("Core.Entities.Admin.ContractReviewItem", b =>
@@ -83,7 +146,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<bool>("LogisticallyFeasible")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ReviewedBy")
+                    b.Property<int>("ReviewedBy")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("ReviewedOn")
@@ -263,6 +326,9 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("scope")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
@@ -292,6 +358,8 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EnquiryId");
 
                     b.HasIndex("ToDoId");
 
@@ -504,7 +572,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("LogisticsExecutiveId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ProjectManagerId")
+                    b.Property<int>("ProjectManagerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("ReadyToReview")
@@ -551,7 +619,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("AssessingSupId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CVSourceId")
+                    b.Property<bool>("AssessmentReqd")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("CandidateId")
@@ -570,6 +638,9 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("EnquiryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("EvaluationReqd")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("HRExecutiveId")
@@ -592,8 +663,6 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("AssessingHRMId");
 
                     b.HasIndex("AssessingSupId");
-
-                    b.HasIndex("CVSourceId");
 
                     b.HasIndex("CandidateId");
 
@@ -735,6 +804,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("EnquiryItemId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Grade")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Remarks")
                         .HasColumnType("TEXT");
 
@@ -751,7 +823,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("EnquiryItemId", "CandidateId")
                         .IsUnique();
 
-                    b.ToTable("Assessment");
+                    b.ToTable("Assessments");
                 });
 
             modelBuilder.Entity("Core.Entities.HR.AssessmentItem", b =>
@@ -778,7 +850,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("MaxPoints")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("PointsAllotted")
+                    b.Property<int>("PointsAllotted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Question")
@@ -798,7 +870,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("QuestionNo", "AssessmentId")
                         .IsUnique();
 
-                    b.ToTable("AssessmentItem");
+                    b.ToTable("AssessmentItems");
                 });
 
             modelBuilder.Entity("Core.Entities.HR.AssessmentQ", b =>
@@ -858,6 +930,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("AttachmentType")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AttachmentUrl")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("CandidateId")
                         .HasColumnType("INTEGER");
 
@@ -868,7 +943,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CandidateId");
 
-                    b.ToTable("Attachment");
+                    b.ToTable("Attachments");
                 });
 
             modelBuilder.Entity("Core.Entities.HR.CVEvaluation", b =>
@@ -978,7 +1053,13 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("ReferredById")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("SecondName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("email")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -992,6 +1073,28 @@ namespace Infrastructure.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Candidates");
+                });
+
+            modelBuilder.Entity("Core.Entities.HR.CandidateCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CandId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CandidateId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CatId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("CandidateCategories");
                 });
 
             modelBuilder.Entity("Core.Entities.HR.EnquiryItemAssessmentQ", b =>
@@ -1094,6 +1197,12 @@ namespace Infrastructure.Data.Migrations
                     b.Property<bool>("RemunerationAcceptable")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("SalaryExpectCurrency")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SalaryExpectation")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("ServiceChargesAcceptable")
                         .HasColumnType("INTEGER");
 
@@ -1156,9 +1265,6 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CandidateId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("IndustryTypeId")
                         .HasColumnType("INTEGER");
 
@@ -1171,8 +1277,6 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CandidateId");
 
                     b.HasIndex("IndustryTypeId");
 
@@ -1461,23 +1565,18 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Processings");
                 });
 
-            modelBuilder.Entity("Core.Entities.Admin.CVSource", b =>
+            modelBuilder.Entity("Core.Entities.Admin.CVForwardItem", b =>
                 {
-                    b.HasOne("Core.Entities.Admin.EnquiryForwarded", null)
-                        .WithMany("CVSources")
-                        .HasForeignKey("EnquiryForwardedId");
+                    b.HasOne("Core.Entities.Admin.CVForward", null)
+                        .WithMany("CVForwardItems")
+                        .HasForeignKey("CVForwardId");
+                });
 
-                    b.HasOne("Core.Entities.Admin.Customer", "ReceivedFromAssociate")
-                        .WithMany()
-                        .HasForeignKey("ReceivedFromAssociateId");
-
-                    b.HasOne("Core.Entities.HR.Candidate", "ReceivedFromCandidate")
-                        .WithMany()
-                        .HasForeignKey("ReceivedFromCandidateId");
-
-                    b.HasOne("Core.Entities.Masters.Source", "Source")
-                        .WithMany()
-                        .HasForeignKey("SourceId");
+            modelBuilder.Entity("Core.Entities.Admin.CVRef", b =>
+                {
+                    b.HasOne("Core.Entities.Admin.CVForwardItem", null)
+                        .WithMany("CVsRef")
+                        .HasForeignKey("CVForwardItemId");
                 });
 
             modelBuilder.Entity("Core.Entities.Admin.Customer", b =>
@@ -1498,6 +1597,12 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Admin.DLForwardToHR", b =>
                 {
+                    b.HasOne("Core.Entities.EnquiryAggregate.Enquiry", "EnquiryWithItems")
+                        .WithMany()
+                        .HasForeignKey("EnquiryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Core.Entities.Admin.ToDo", "ToDo")
                         .WithMany()
                         .HasForeignKey("ToDoId");
@@ -1564,7 +1669,9 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasOne("Core.Entities.Masters.Employee", "ProjectManager")
                         .WithMany()
-                        .HasForeignKey("ProjectManagerId");
+                        .HasForeignKey("ProjectManagerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Core.Entities.Masters.Employee", "ReviewedBy")
                         .WithMany()
@@ -1584,10 +1691,6 @@ namespace Infrastructure.Data.Migrations
                     b.HasOne("Core.Entities.Masters.Employee", "AssessingSup")
                         .WithMany()
                         .HasForeignKey("AssessingSupId");
-
-                    b.HasOne("Core.Entities.Admin.CVSource", null)
-                        .WithMany("EnquiryItems")
-                        .HasForeignKey("CVSourceId");
 
                     b.HasOne("Core.Entities.HR.Candidate", null)
                         .WithMany("ReferredToEnquiryItems")
@@ -1742,6 +1845,13 @@ namespace Infrastructure.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Core.Entities.HR.CandidateCategory", b =>
+                {
+                    b.HasOne("Core.Entities.HR.Candidate", null)
+                        .WithMany("CandidateCategories")
+                        .HasForeignKey("CandidateId");
+                });
+
             modelBuilder.Entity("Core.Entities.HR.EnquiryItemAssessmentQ", b =>
                 {
                     b.HasOne("Core.Entities.Masters.DomainSub", "DomainSub")
@@ -1781,11 +1891,6 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Masters.Category", b =>
                 {
-                    b.HasOne("Core.Entities.HR.Candidate", null)
-                        .WithMany("CandidateCategories")
-                        .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Core.Entities.Masters.IndustryType", "IndustryType")
                         .WithMany()
                         .HasForeignKey("IndustryTypeId")

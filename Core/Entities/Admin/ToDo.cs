@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Core.Enumerations;
 using Core.Entities.Masters;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities.Admin
 {
@@ -26,6 +27,21 @@ namespace Core.Entities.Admin
         }
 
         public ToDo(int ownerId, int assignedToId, DateTime taskDate, DateTime completeBy, 
+            string taskDescription,  enumTaskType? taskType, int? enquiryId, int? enquiryItemId,
+            List<TaskItem> taskItems)
+        {
+            EnquiryId = enquiryId;
+            OwnerId = ownerId;
+            AssignedToId = assignedToId;
+            TaskDate = taskDate;
+            CompleteBy = completeBy;
+            TaskType = taskType;
+            TaskDescription = taskDescription;
+            EnquiryItemId = enquiryItemId;
+            TaskItems = taskItems;
+        }
+
+        public ToDo(int ownerId, int assignedToId, DateTime taskDate, DateTime completeBy, 
             string taskDescription,  enumTaskType? taskType, int? enquiryId)
         {
             EnquiryId = enquiryId;
@@ -41,12 +57,16 @@ namespace Core.Entities.Admin
         public int? EnquiryId {get; set; }
         public int? EnquiryItemId { get; set; }      // FK - EnquiryItem.Id
         public Employee Owner { get; set; }            // FK - Employee.Id
+        [Required]
         public int OwnerId { get; set; }
         public Employee AssignedTo { get; set; }       // FK - Employee.Id
+        [Required]
         public int AssignedToId { get; set; }   
+        [Required]
         public DateTime TaskDate { get; set; } = DateTime.Now;
         public DateTime CompleteBy { get; set; }
         public enumTaskType? TaskType { get; set; } = enumTaskType.Administrative;
+        [Required]
         public string TaskDescription { get; set; }
         public enumTaskStatus TaskStatus { get; set; }=enumTaskStatus.NotStarted;
         public virtual List<TaskItem> TaskItems { get; set; }

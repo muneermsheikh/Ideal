@@ -125,6 +125,13 @@ namespace Core.Specifications
                         x.TaskType==taskType))
         {
         }
-
+        
+        public TaskSpecs(int enquiryItemId, int assignedToId, enumTaskType taskType, 
+            enumTaskStatus taskStatus)
+            : base(x => (x.EnquiryItemId==enquiryItemId && 
+                        x.AssignedToId==assignedToId &&
+                        x.TaskType==taskType && x.TaskStatus==taskStatus))
+        {
+        }
     }
 }

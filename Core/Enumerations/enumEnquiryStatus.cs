@@ -4,13 +4,13 @@ namespace Core.Enumerations
 {
     public enum enumEnquiryStatus
     {
-        [EnumMember(Value = "Pending")]
-        Pending,
+        [EnumMember(Value = "Review Pending")]
+        ReviewPending,
 
-        [EnumMember(Value = "Payment Received")]
-        PaymentRecevied,
+        [EnumMember(Value = "Accepted")]
+        ReviewedAndAccepted,
 
-        [EnumMember(Value = "Payment Failed")]
-        PaymentFailed
+        [EnumMember(Value = "Rejected")]
+        ReviewedAndRejected
     }
 }

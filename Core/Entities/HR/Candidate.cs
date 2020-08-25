@@ -23,17 +23,18 @@ namespace Core.Entities.HR
         public string PPNo { get; set; }
         public string AadharNo { get; set; }
         public DateTime DOB { get; set; }
-
-        public string FullName {get {return FirstName + ", " + FamilyName;} }
-
+        
+        public int? ReferredById {get; set;}
+        public string email {get; set; }
         public virtual CandidateAddress CandidateAddress { get; set; }
-        public List<Category> CandidateCategories { get; set; }
         public virtual List<EnquiryItem> ReferredToEnquiryItems { get; set; }
         public enumCandidateStatus CandidateStatus { get; set; } = enumCandidateStatus.Available;
         public virtual Employee LastStatusUpdatedBy { get; set; }
+        
         public DateTime LastStatusUpdatedOn { get; set; } = DateTime.Now;
         public virtual List<Attachment> Attachments {get; set; }
 
-        // public string FullName {get {return Person_FirstName + ", " + Person_FamilyName;} }
+        public virtual List<CandidateCategory> CandidateCategories {get; set; }
+        public string FullName {get {return FirstName + " " + FamilyName;} }
     }
 }

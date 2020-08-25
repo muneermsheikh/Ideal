@@ -17,16 +17,22 @@ namespace Infrastructure.Data
         {
         }
 
+        public DbSet<Assessment> Assessments {get; set; }
+        public DbSet<AssessmentItem> AssessmentItems {get; set; }
+        public DbSet<Attachment> Attachments {get; set;}
         public DbSet<AssessmentQ> AssessmentQs {get; set; }
         public DbSet<AssessmentQBank> AssessmentQsBank {get; set;}
         public DbSet<Category> Categories {get; set; }
         public DbSet<Candidate> Candidates {get; set; }
+        public DbSet<CandidateCategory> CandidateCategories {get; set; }
         public DbSet<ContractReviewItem> ContractReviewItems {get; set; }
         public DbSet<CustomerAddress> CustomerAddresses {get; set; }
         public DbSet<Customer> Customers {get; set; }
         public DbSet<CustomerOfficial> CustomerOfficials {get; set; }
         public DbSet<CVEvaluation> CVEvaluations {get; set; }
-
+        public DbSet<CVForward> CVForwards {get; set; }
+        public DbSet<CVForwardItem> CVForwardItems {get; set; }
+        public DbSet<CVRef> CVRefs {get; set; }
         public DbSet<DomainSub> DomainSubs {get; set; }
         public DbSet<DeliveryMethod> DeliveryMethods {get; set; }
         public DbSet<DLForwardToHR> DLForwardToHR {get; set; }

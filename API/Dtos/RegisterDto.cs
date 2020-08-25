@@ -34,14 +34,11 @@ namespace API.Dtos
 
         public string Mobile {get; set; }
         public string IntroducedBy {get; set; }
-        // 6 to 15 characters, no special characters, alphanumeric characters
         public string Street { get; set; }
-        [RegularExpression("(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{6,15})$",
-            ErrorMessage="alphanumeric characters, with min 1 numeric and min 1 alpha, 6 to 15 characters long")]
         public string UserName {get; set; }
         [Required]
         [RegularExpression("(?=^.{6,10}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$", 
-        ErrorMessage = "Password must have 1 Uppercase, 1 Lowercase, 1 number, 1 non alphanumeric and at least 6 characters")]
+        ErrorMessage = "Password should be 6-15 char long, min 1 char numeric, min 1 char uppercase, min 1 char lower case, min 1 numeric char and 1 special char")]
         public string Password { get; set; }
     }
 }

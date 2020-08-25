@@ -119,7 +119,6 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
 
-
                 if (!context.CustomerOfficials.Any())
                 {
                     var offData = File.ReadAllText("../Infrastructure/Data/SeedData/customerOfficial.json");

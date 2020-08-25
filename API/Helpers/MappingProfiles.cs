@@ -19,8 +19,6 @@ namespace API.Helpers
             CreateMap<Category, CategoryToReturnDto>()
                 .ForMember(x => x.IndustryType, o => o.MapFrom(s => s.IndustryType.Name))
                 .ForMember(x => x.SkillLevel, o => o.MapFrom(s => s.SkillLevel.Name));
-                // .ForMember(x => x.imageUrl, o => o.MapFrom<MachineryImageResolver>());
-            
             
             CreateMap<Core.Entities.Identity.Address, AddressDto>().ReverseMap();
             CreateMap<BasketItem, EnquiryItem>();
@@ -31,13 +29,10 @@ namespace API.Helpers
             CreateMap<Enquiry, EnquiryToReturnDto>()
                 .ForMember(x => x.EnquiryStatus, o => o.MapFrom(
                     s => Enum.GetName(typeof(enumEnquiryStatus), s.EnquiryStatus)));
-               // .ForMember(x => x.ProjectManager, o => o.MapFrom(s => s.ProjectManager.KnownAs))
-               // .ForMember(x => x.HRExecutive , o => o.MapFrom(s => s.HRExecutive.Name))
-               // .ForMember(x => x.LogisticsExecutive, o => o.MapFrom(s => s.LogisticsExecutive.Name))
-               // .ForMember(x => x.AccountExecutive, o => o.MapFrom(s => s.AccountExecutive.Name))
-               // .ForMember(x => x.CustomerName, o => o.MapFrom(s => s.Customer.CustomerName));
                  
-            CreateMap<EnquiryItem, EnquiryItemToReturnDto>();
+            CreateMap<EnquiryItem, EnquiryItemToReturnDto>()
+                .ForMember(d => d.AssessingSup, o => o.MapFrom<EnquiryItemSupNameResolver>())
+                .ForMember(d => d.AssessingHRM, o => o.MapFrom<EnquiryItemHRMNameResolver>());
             CreateMap<EnquiryItemToReturnDto, EnquiryItem>();
             CreateMap<EnquiryItem, EnquiryItemToEditDto>().ReverseMap();
             
@@ -48,14 +43,31 @@ namespace API.Helpers
                 .ForMember(d => d.Status, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.Status)))
                 .ForMember(d => d.ReviewedByName, o => o.MapFrom<ReviewItemReviewedByResolver>());
 
+        // for CV Evaluation
+            CreateMap<CVEvaluation, CVEvaluationDto>()
+                .ForMember(d => d.Category, o => o.MapFrom<CVEvalCategoryResolver>())
+                .ForMember(d => d.FullName, o => o.MapFrom<CVEvalCandidateNameResolver>())
+                .ForMember(d => d.HRExecutive, o => o.MapFrom<CVEvalHRExecNameResolver>())
+                .ForMember(d => d.HRManager, o => o.MapFrom<CVEvalHRManagerNameResolver>())
+                .ForMember(d => d.HRSupervisor, o => o.MapFrom<CVEvalHRSupNameResolver>())
+                .ForMember(d => d.HRMReviewResult, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.HRMReviewResult)))
+                .ForMember(d => d.HRSupReviewResult, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.HRSupReviewResult)));
+
         // for DLForwardedToHRDto
             CreateMap<Customer, CustomerToReturnInBriefDto>();
-            CreateMap<EnquiryItem, EnquiryItemInBriefDto>();
-            //CreateMap<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryInBriefDto>>();
-            CreateMap<Enquiry, EnquiryInBriefDto>();
-
-            CreateMap<DLForwarded, DLForwardedToHRDto>();
-
+            CreateMap<EnquiryItem, EnquiryForwardedItemInBriefDto>();
+                  CreateMap<DLForwardToHR, EnquiryForwardedInBriefDto>()
+                .ForMember(d => d.Customer, o => o.MapFrom<DLFwdToHRCustomerResolver>());
+            CreateMap<DLForwardToHR, DLForwardedToHRDto>();
+            
+            CreateMap<EnquiryForwarded, EnquiryForwardedInBriefDto>()
+                .ForMember(d => d.Customer, o => o.MapFrom<EnquiryForwardedCustomerResolver>());
+            CreateMap<EnquiryItemForwarded, EnquiryForwardedItemInBriefDto>();
+            CreateMap<Customer, CustomerInBriefDto>();
+            CreateMap<EnquiryForwarded, EnquiryForwardedDto>()
+                .ForMember(d => d.ForwardedToAssociate, o => o.MapFrom<EnquiryForwardedAssociateResolver>());
+    
+    //JOB DESC           
             CreateMap<JobDesc, JobDescDto>();
             CreateMap<Remuneration, RemunerationDto>()
                 .ForMember(x => x.Food, o => o.MapFrom(s => Enum.GetName(typeof(enumProvision), s.Food)))
@@ -83,12 +95,33 @@ namespace API.Helpers
             CreateMap<HRSkillClaim, HRSkillClaimsDto>();
             CreateMap<AssessmentQ, AssessmentItem>();
             CreateMap<Employee, EmployeeToReturnDto>();
-                // .ForMember(x => x.EmployeeName, o => o.MapFrom(s => s.Person.FullName))
-                // .ForMember(x => x.KnownAs, o => o.MapFrom(s => s.Person.KnownAs));
             CreateMap<IndustryType, IndustryToReturnDto>();
             CreateMap<SkillLevel, IndustryToReturnDto>();
 
             CreateMap<EmailModel, EmailDto>();
-        }
+
+    // assessment
+            CreateMap<AssessmentToAddDto, Assessment>()
+                .ForMember(d => d.CustomerNameAndCity, o => o.MapFrom<AssessmentDtoCustomerNameCityResolver>())
+                .ForMember(d => d.Enquiryitem, o => o.MapFrom<AssessmentDtoEnquiryItemResolver>())
+                .ForMember(d => d.CategoryNameAndRef, o => o.MapFrom<AssessmentDtoCategoryNameRefResolver>()).ReverseMap();
+            CreateMap<AssessmentItemToAddDto, AssessmentItem>();
+
+    //candidate
+            CreateMap<Category, CategoryNameDto>();
+            CreateMap<Candidate, CandidateDto>()
+                .ForMember(d => d.Age, o => o.MapFrom<CandidateDtoAgeResolver>())            
+                .ForMember(d => d.City, o => o.MapFrom<CandidateDtoCityResolver>())
+                .ForMember(d => d.CandidateStatus, 
+                    o => o.MapFrom(s => Enum.GetName(typeof(enumCandidateStatus), s.CandidateStatus)));
+            CreateMap<CandidateCategory, CategoryNameDto>()
+                //.ForMember(d => d.Name, o => o.MapFrom<CategoryNameResolver>());
+                .ForMember(d => d.Name, o => o.MapFrom<CategoryNameResolver>());
+                //.ConstructUsing(ct => Map<CandidateCategory>(ct.CatId))
+                //.ForAllMembers(opt => opt.Ignore());
+                
+                
+            CreateMap<CandidateTempToAddDto, Candidate>();
+       }
     }
 }

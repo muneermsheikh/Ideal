@@ -7,6 +7,8 @@ namespace Core.Interfaces
 {
     public interface ICategoryService
     {
+        string GetCategoryNameWithRefFromEnquiryItemId(int enquiryItemId);
+        string getCategoryNameFromCategoryId(int categoryId);
         Task<Category> CreateCategoryAsync (string name, int indTypeId, int skillLevelId);
         
         Task<IReadOnlyList<Category>> CategoryListAsync ();

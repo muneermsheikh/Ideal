@@ -32,6 +32,7 @@ namespace Core.Entities.HR
         public DateTime AssessedOn { get; set; } = DateTime.Now;
         public List<AssessmentItem> AssessmentItems {get; set; }
         public virtual enumAssessmentResult Result { get; set; }
+        public int Grade {get; set;}
         public string Remarks {get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace API.Dtos
         public int AssignedTo  { get; set; } 
         public string AssignedToName {get; set; }
         public DateTime AssignedOn { get; set; } 
-        public IReadOnlyList<EnquiryInBriefDto> Enquiries { get; set; }
+        public IReadOnlyList<EnquiryForwardedInBriefDto> EnquiryWithItemsDto { get; set; }
         
     }
 }

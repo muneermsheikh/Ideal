@@ -28,7 +28,7 @@ namespace Core.Entities.HR
         public string Question { get; set; }
         public string Remarks { get; set; }
         public int MaxPoints { get; set; }
-        public int? PointsAllotted {get; set;}
+        public int PointsAllotted {get; set;}
 
     }
 }

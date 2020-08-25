@@ -17,7 +17,8 @@ namespace Core.Entities.HR
         public bool WillingToEmigrate { get; set; }
         public bool WillingToTravelWithinTwoWeeksOfSelection { get; set; }
         public bool RemunerationAcceptable { get; set; }
-
+        public string SalaryExpectCurrency {get; set;}
+        public int SalaryExpectation {get; set; }
         public bool ServiceChargesAcceptable { get; set; }
         public bool SuspiciousCandidate { get; set; }
         public bool OkToForwardCVToClient { get; set; }

@@ -29,8 +29,12 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(MappingProfiles));
+            
             services.AddControllers();
-
+            // replaced with flg, to address circular references with CandidateCategory many to many relationship
+            //services.AddControllers().AddNewtonsoftJson(
+                //options => options.SerializerSettings.ReferenceLoopHandling = 
+                //Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSingleton<IConnectionMultiplexer>(c => {
                 var configuration = ConfigurationOptions.Parse(_config
                     .GetConnectionString("Redis"), true);

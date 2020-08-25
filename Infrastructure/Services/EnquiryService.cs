@@ -48,13 +48,20 @@ namespace Infrastructure.Services
         {
 
             var basket = await _basketRepo.GetBasketAsync(basketId);
-            if (basket == null) return null;
+            if (basket == null) throw new Exception("failed to retrieve the basket");
             
             int customerId = basket.CustomerId; // appUser.Address.CustomerId; // GetCustomerIdFromLoggedInemail(buyerEmail, shippingAddress).Result;
-            if (customerId == 0) return null;       // should never happen
+            if (customerId == 0) throw new Exception("Customer Id not defined");
             int officialId = basket.OfficialId;
-            if (officialId == 0) return null;
-
+            if (officialId == 0) //get available official Id from db for the customer
+            {
+                var offId = await _context.CustomerOfficials
+                    .Where(x => x.CustomerId==customerId && x.IsValid)      //consider order by scope
+                    .Select(x => x.Id).FirstOrDefaultAsync();
+                if (offId == 0) throw new Exception("the Official Id does not correspond to the customer");
+                officialId=offId;
+            }
+            
             var enquiryItems = new List<EnquiryItem>();
             var jdList = new List<JobDesc>();
             var remunList = new List<Remuneration>();
@@ -97,8 +104,8 @@ namespace Infrastructure.Services
 
             var enqAdded = await enqRepo.AddAsync(enquiry);            
 
-            if(enqAdded == null) return null;
-
+            if(enqAdded==null) throw new Exception("Failed to add the enquiry");
+            
             // add JobDesc and Remuneration for each enquiryItem
            for(int j = 1; j < i; j++)
             {
@@ -141,15 +148,29 @@ namespace Infrastructure.Services
         {
             //return await _unitOfWork.Repository<Enquiry>().GetByIdAsync(enquiryId); 
             return await _unitOfWork.Repository<Enquiry>().GetEntityWithSpec(
-                new EnquirySpecs(enquiryId, false, false));
+                new EnquirySpecs(enquiryId, enumEnquiryStatus.ReviewedAndAccepted, false, false));
         }
 
+        public async Task<Enquiry> GetEnquiryByIdAsync(int enquiryId)
+        {
+            return await _unitOfWork.Repository<Enquiry>().GetByIdAsync(enquiryId);
+        }
+        public async Task<IReadOnlyList<Enquiry>> GetEntityListWithSpec(EnquiryParams enqParam)
+        {
+            return await _unitOfWork.Repository<Enquiry>().GetEntityListWithSpec(new EnquirySpecs(enqParam));
+        }
         public async Task<int> GetEnquiryItemsCountNotReviewed(int enquiryId)
         {
             var spec = new EnquiryItemsSpecs(enquiryId, (int)enumItemReviewStatus.NotReviewed);
             return await _unitOfWork.Repository<EnquiryItem>().CountWithSpecAsync(spec);
         }
 
+        public async Task<Enquiry> GetEnquiryByEnquiryItemIdAsync(int enquiryItemId)
+        {
+            var item =  await _unitOfWork.Repository<EnquiryItem>().GetByIdAsync(enquiryItemId);
+            if (item==null) return null;
+            return await _unitOfWork.Repository<Enquiry>().GetByIdAsync(item.EnquiryId);
+        }
         public async Task<EnquiryItem> GetEnquiryItemByIdAsync(int enquiryItemId)
         {
             return await _unitOfWork.Repository<EnquiryItem>().GetByIdAsync(enquiryItemId); 
@@ -287,7 +308,6 @@ namespace Infrastructure.Services
                 new EnquiryItemsSpecs(enquiryId, enquiryItemId, "EnqAndItemId"));
             return (item == null ? true: false);
         }
-
 
     }
 }

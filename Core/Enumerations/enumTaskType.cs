@@ -31,7 +31,13 @@ namespace Core.Enumerations
         [EnumMember(Value = "Ticketing Assignment")]
         TicketingAssignment,
         [EnumMember(Value = "CV Acknowledgement to candidate")]
-        CVAcknowledgementToCandidate
+        CVAcknowledgementToCandidate,
+        [EnumMember(Value = "CV Referral")]
+        CVReferral,
+        [EnumMember(Value="DL Forward to Associates")]
+        DLForward,
+        [EnumMember(Value="DL Forward to HR")]
+        DLForwardToHR
 
 
     }

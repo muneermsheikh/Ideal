@@ -4,7 +4,6 @@
         "CustomerName": "Saudi Bilfal Heavy Indutries",
         "KnownAs": "Bilfal",
         "CityName": "Dammam",
-        
         "IntroducedBy": "Sheikh Ziyauddin Kamrani",
         "Phone1": "00966-12-12345678", 
         "Phone2": "00966-12-12345789"
@@ -12,7 +11,7 @@
     {
         "CustomerType": 0,
         "CustomerName": "Zamil Heavy INdustries",
-        "KnownAs": "Zamil Heavy INdustries",
+        "KnownAs": "Zamil Heavy Industries",
         "CityName": "Dammam",
         "IntroducedBy": "Sheikh Qamruddin Jehadi",
         "Phone1": "00966-12-12345678", 
@@ -41,7 +40,6 @@
         "CustomerName": "Saudi Binladen Group",
         "KnownAs": "Saudi Binladen",
         "CityName": "Jeddah",
-        
         "IntroducedBy": "Sheikh Rahamatulah Ansari",
         "Phone1": "00966-12-1232278", 
         "Phone2": "00966-12-123343789"
@@ -72,6 +70,66 @@
         "IntroducedBy": "Direct source",
         "Phone1": "00966-12-1333444", 
         "Phone2": "00966-12-1344490"
-    }
-
+    },
+    {
+        "customerType": 0,
+        "customerName":"Saudi Kuwaiti Cement Company",
+        "knownAs": "SKC",
+        "cityName": "Jeddah",
+        "email": "admin@skc.com.sa",
+        "phone1": "99988889",
+        "companyUrl": "http://www.skc.com.sa",
+        "customerStatus": 1,
+        "customerAddresses": [{
+            "addressType": "F",
+            "address2": "k-8, Madinah Road",
+            "city": "Jeddah",
+            "pin": "21424",
+            "country": "Saudi Arabia",
+            "valid": true,
+            "addedOn": "2019-07-26T00:39:30.447Z"
+          }
+        ],
+          "customerOfficials": [{
+            "name": "Mrs. Shazia Haider",
+            "designation": "Recruitment Officer",
+            "gender": "M",
+            "phone": "99999999",
+            "mobile": "88888888",
+            "email": "ravi@sbg.com",
+            "isValid": true,
+            "addedOn": "2020-07-26T00:39:30.447Z"
+          }],
+        "addedOn": "2020-07-26T00:39:30.447Z"
+      },
+      {
+        "customerType": 0,
+        "customerName":"Prince Mohammed University",
+        "knownAs": "PMU",
+        "cityName": "Dammam",
+        "email": "admin@pmu.com.sa",
+        "phone1": "9993434349",
+        "companyUrl": "http://www.pmu.com.sa",
+        "customerStatus": 1,
+        "customerAddresses": [{
+            "addressType": "F",
+            "address2": "k-8, Madinah Road",
+            "city": "Jeddah",
+            "pin": "21424",
+            "country": "Saudi Arabia",
+            "valid": true,
+            "addedOn": "2019-07-26T00:39:30.447Z"
+          }],
+          "customerOfficials": [{
+            "name": "Mrs. Shazia Haider",
+            "designation": "Recruitment Officer",
+            "gender": "M",
+            "phone": "99999999",
+            "mobile": "88888888",
+            "email": "ravi@sbg.com",
+            "isValid": true,
+            "addedOn": "2020-07-26T00:39:30.447Z"
+          }],
+        "addedOn": "2020-07-26T00:39:30.447Z"
+      }
 ]

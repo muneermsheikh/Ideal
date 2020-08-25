@@ -1,6 +1,8 @@
+using System;
+
 namespace Core.Specifications
 {
-    public class EnqForwardSpecParams
+    public class EnquiryForwardedParams
     {
         private const int MaxmPageSize = 50;
         
@@ -14,19 +16,20 @@ namespace Core.Specifications
             set => _pageSize = (value > MaxmPageSize) ? MaxmPageSize : value;
         }
 
-        public int? EnquiryId {get; set; }
-        public int? EnquiryItemId {get; set; }
         public int? CustomerId { get; set; }
-        public int? CustomerOfficialId { get; set; }
-        public string ModeOfSending {get; set; }
+        public bool includeItems {get; set; }
+        public bool includeCustomers {get; set; }
         public string Sort { get; set; }
 
         private string _search;
-
         public string Search 
         { 
             get => _search; 
             set => value.ToLower(); 
         }
+
+        public DateTime? Date1 {get; set;}
+        public DateTime? Date2 {get; set; }
+
     }
 }
