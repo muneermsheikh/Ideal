@@ -91,6 +91,16 @@ namespace Infrastructure.Data
             return await _context.SaveChangesAsync();
         }
 
+        public async Task<int> DeleteListAsync(List<T> entities)
+        {
+            foreach(var item in entities)
+            {
+                _context.Set<T>().Attach(item);
+                _context.Entry(item).State=EntityState.Deleted;
+            }
+            return await _context.SaveChangesAsync();
+        }
+
         
         public async Task<int> UpdateListAsync(List<T> entities)
         {

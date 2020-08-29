@@ -25,7 +25,6 @@ namespace API.Controllers
         private readonly IInternalHRService _internalHrService;
         private readonly IAssessmentService _cvEvalService;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IHRService _hrService;
 
         public InternalHRController(
             IUnitOfWork unitOfWork,
@@ -33,11 +32,9 @@ namespace API.Controllers
             IGenericRepository<HRSkillClaim> skillRepo,
             IMapper mapper,
             IInternalHRService internalHrService,
-            IAssessmentService cvEvalService,
-            IHRService hrService
+            IAssessmentService cvEvalService
         )
         {
-            _hrService = hrService;
             _cvEvalService = cvEvalService;
             _internalHrService = internalHrService;
             _skillRepo = skillRepo;

@@ -33,7 +33,7 @@ namespace Infrastructure.Data
         public DbSet<CVForward> CVForwards {get; set; }
         public DbSet<CVForwardItem> CVForwardItems {get; set; }
         public DbSet<CVRef> CVRefs {get; set; }
-        public DbSet<DomainSub> DomainSubs {get; set; }
+        //public DbSet<DomainSub> DomainSubs {get; set; }
         public DbSet<DeliveryMethod> DeliveryMethods {get; set; }
         public DbSet<DLForwardToHR> DLForwardToHR {get; set; }
         public DbSet<Employee> Employees {get; set; }

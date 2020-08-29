@@ -1,6 +1,6 @@
 namespace Core.Specifications
 {
-    public class AssessmentQParams
+    public class AssessmentQFromBankParams
     {
         private const int MaxmPageSize = 50;
         
@@ -14,9 +14,7 @@ namespace Core.Specifications
             set => _pageSize = (value > MaxmPageSize) ? MaxmPageSize : value;
         }
 
-        public int EnquiryItemId { get; set; }
-        public int? DomainSubId { get; set; }
-        public string DomainSub { get; set; }
+        public int? CategoryId {get; set; }
         public bool IsStandardQuestion { get; set; }
         public string AssessmentParameter { get; set; }
         private string _search;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.Entities.EnquiryAggregate;
 using Core.Enumerations;
 using Core.Entities.Masters;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities.HR
 {
@@ -14,12 +15,13 @@ namespace Core.Entities.HR
 
         public int ApplicationNo { get; set; }
         public DateTime ApplicationDated { get; set; }
-        
+        [Required]
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string FamilyName { get; set; }
+        [Required]
         public string KnownAs { get; set; }
-        public string Gender { get; set; }
+        public string Gender { get; set; }="M";
         public string PPNo { get; set; }
         public string AadharNo { get; set; }
         public DateTime DOB { get; set; }

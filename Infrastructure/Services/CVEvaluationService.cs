@@ -270,8 +270,8 @@ namespace Infrastructure.Services
         public async Task<IReadOnlyList<CVEvaluation>> GetPendingEvaluationOfAUser(int userId)
         {
             return await _context.CVEvaluations.Where(
-                x => (x.HRSupervisorId==userId && x.ReviewedByHRSup==false) || 
-                (x.HRManagerId == userId && x.ReviewedByHRM==false)).ToListAsync();
+                x => (x.HRSupervisorId==userId && (x.ReviewedByHRSup ?? false) ==false) || 
+                (x.HRManagerId == userId && (x.ReviewedByHRM??false)==false)).ToListAsync();
         }
 
 //privates
@@ -290,6 +290,34 @@ namespace Infrastructure.Services
             var cvEval = new CVEvaluationValidity();
 
             // TO do *** if application setting REQUIRES HR ASSIGNMENT=false, return true
+
+            // check if the enquiryitemId category is contained in candidate.categories.
+             var catExist = await _context.CandidateCategories.Where(x => x.CandId==CandidateId)
+                .Select(x => new { catid =   _context.EnquiryItems
+                .Where(x => x.Id == EnquiryItemId)
+                .Select(x => x.CategoryItemId).Take(1).SingleOrDefault(),
+                 }).ToListAsync();
+            if (catExist==null || catExist.Count==0)
+            {
+                throw new Exception("selected candidate does not share the " +
+                    "skills of the Category");
+            }
+           
+        
+                // Enumerator failed to MoveNextAsync
+            /* int categoryId=await _context.EnquiryItems.Where(x => x.Id == EnquiryItemId)
+                .Select(x => x.CategoryItemId).SingleOrDefaultAsync();
+            if (categoryId==0)
+            {
+                throw new Exception("invalid enquiry Item");
+            }else
+            {
+                var catExist = await _context.CandidateCategories.Where(x => x.CatId == categoryId).ToListAsync();
+                if (catExist==null || catExist.Count==0) throw new Exception("selected candidate does not share the " +
+                    "skills of the Category");
+            }
+            */
+
             // check if the User is tasked with the HR taskd
             if(!anyOneCanEvaluateCV)
             {

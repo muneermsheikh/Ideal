@@ -6,12 +6,23 @@ namespace Core.Entities.Masters
         {
         }
 
+        public AssessmentQBank(int srNo, int categoryId, bool isStandardQuestion, 
+            string assessmentParameter, string question, DomainSub domainSubj, int maxPoints)
+        {
+            SrNo = srNo;
+            CategoryId = categoryId;
+            IsStandardQuestion = isStandardQuestion;
+            AssessmentParameter = assessmentParameter;
+            Question = question;
+            MaxPoints = maxPoints;
+        }
+
         public int SrNo {get; set; }
-        public int DomainSubId { get; set; }
+        public int CategoryId {get; set;}
         public bool IsStandardQuestion { get; set; }
         public string AssessmentParameter { get; set; }
         public string Question { get; set; }
         public int MaxPoints {get; set; }
-        public DomainSub DomainSubj { get; set; }
+
     }
 }

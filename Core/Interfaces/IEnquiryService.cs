@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Entities;
 using Core.Entities.Admin;
 using Core.Entities.EnquiryAggregate;
 using Core.Entities.Identity;
@@ -40,6 +41,7 @@ namespace Core.Interfaces
         
         Task<bool> UpdateEnquiryReadyToReview(Enquiry enquiry);
         
-        
+// category orderno details
+        Task<CategoryRefFromEnquiryItemId> GetDetailsFromEnquiryItemId(int enquiryItemId);        
     }
 }

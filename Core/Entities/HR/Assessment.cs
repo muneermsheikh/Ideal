@@ -33,6 +33,7 @@ namespace Core.Entities.HR
         public List<AssessmentItem> AssessmentItems {get; set; }
         public virtual enumAssessmentResult Result { get; set; }
         public int Grade {get; set;}
+        public string GradeString {get; set; }
         public string Remarks {get; set; }
     }
 }

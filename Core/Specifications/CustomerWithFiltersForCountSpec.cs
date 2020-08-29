@@ -16,8 +16,7 @@ namespace Core.Specifications
                     x.CustomerName.ToLower().Contains(custParams.Email)) &&
                 (!custParams.CustomerType.HasValue || x.CustomerType == custParams.CustomerType) &&
                 (!custParams.CustomerStatus.HasValue || x.CustomerStatus == custParams.CustomerStatus)) &&
-                (!custParams.CustomerId.HasValue || 
-                x.Id == custParams.CustomerId))
+                (!custParams.CustomerId.HasValue || x.Id == custParams.CustomerId))
         {
         }
     }

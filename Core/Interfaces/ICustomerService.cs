@@ -15,6 +15,9 @@ namespace Core.Interfaces
         Task<int> DeleteCustomerByIdAsync(int customerId);
         Task<int> UpdateCustomerByIdAsync(Customer customer);
         Task<int> GetCustomerIdFromEmail(CustomerSpecParams custParams);
+//officials
         Task<IReadOnlyList<CustomerOfficial>> GetCustomerOfficialList(int CustomerId);
+        Task<IReadOnlyList<CustomerOfficial>> InsertOfficials(List<CustomerOfficial> officials);
+        Task<int> UpdateOfficials(List<CustomerOfficial> officials);
     }
 }

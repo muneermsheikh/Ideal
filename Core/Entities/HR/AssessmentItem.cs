@@ -8,12 +8,11 @@ namespace Core.Entities.HR
         {
         }
 
-        public AssessmentItem(int questionNo, bool isMandatory, string domainSubject, 
+        public AssessmentItem(int questionNo, bool isMandatory, 
             string assessmentParameter, string question, int maxPoints)
         {
             IsMandatory = isMandatory;
             QuestionNo = questionNo;
-            DomainSubject = domainSubject;
             AssessmentParameter = assessmentParameter;
             Question = question;
             MaxPoints = maxPoints;

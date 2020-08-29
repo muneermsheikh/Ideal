@@ -8,6 +8,24 @@ namespace Infrastructure.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AssessmentQsBank",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SrNo = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false),
+                    IsStandardQuestion = table.Column<bool>(nullable: false),
+                    AssessmentParameter = table.Column<string>(nullable: false),
+                    Question = table.Column<string>(nullable: false),
+                    MaxPoints = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssessmentQsBank", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ContractReviewItems",
                 columns: table => new
                 {
@@ -96,7 +114,7 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DomainSubs",
+                name: "DomainSub",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -105,7 +123,7 @@ namespace Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DomainSubs", x => x.Id);
+                    table.PrimaryKey("PK_DomainSub", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -273,30 +291,6 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AssessmentQsBank",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SrNo = table.Column<int>(nullable: false),
-                    DomainSubId = table.Column<int>(nullable: false),
-                    IsStandardQuestion = table.Column<bool>(nullable: false),
-                    AssessmentParameter = table.Column<string>(nullable: false),
-                    Question = table.Column<string>(nullable: false),
-                    MaxPoints = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AssessmentQsBank", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AssessmentQsBank_DomainSubs_DomainSubId",
-                        column: x => x.DomainSubId,
-                        principalTable: "DomainSubs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EnquiryItemAssessmentQs",
                 columns: table => new
                 {
@@ -316,9 +310,9 @@ namespace Infrastructure.Data.Migrations
                 {
                     table.PrimaryKey("PK_EnquiryItemAssessmentQs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EnquiryItemAssessmentQs_DomainSubs_DomainSubId",
+                        name: "FK_EnquiryItemAssessmentQs_DomainSub_DomainSubId",
                         column: x => x.DomainSubId,
-                        principalTable: "DomainSubs",
+                        principalTable: "DomainSub",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -334,7 +328,7 @@ namespace Infrastructure.Data.Migrations
                     FirstName = table.Column<string>(nullable: false),
                     SecondName = table.Column<string>(nullable: true),
                     FamilyName = table.Column<string>(nullable: false),
-                    KnownAs = table.Column<string>(nullable: true),
+                    KnownAs = table.Column<string>(nullable: false),
                     Gender = table.Column<string>(nullable: false),
                     PPNo = table.Column<string>(nullable: false),
                     AadharNo = table.Column<string>(nullable: true),
@@ -872,12 +866,11 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AssessmentQs",
+                name: "AssessmentQsForEnquiryItem",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AssessmentId = table.Column<int>(nullable: false),
                     EnquiryItemId = table.Column<int>(nullable: false),
                     EnquiryId = table.Column<int>(nullable: false),
                     QuestionNo = table.Column<int>(nullable: false),
@@ -890,9 +883,9 @@ namespace Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AssessmentQs", x => x.Id);
+                    table.PrimaryKey("PK_AssessmentQsForEnquiryItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AssessmentQs_EnquiryItems_EnquiryItemId",
+                        name: "FK_AssessmentQsForEnquiryItem_EnquiryItems_EnquiryItemId",
                         column: x => x.EnquiryItemId,
                         principalTable: "EnquiryItems",
                         principalColumn: "Id",
@@ -1072,20 +1065,20 @@ namespace Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_AssessmentQs_EnquiryItemId",
-                table: "AssessmentQs",
-                column: "EnquiryItemId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AssessmentQsBank_AssessmentParameter",
                 table: "AssessmentQsBank",
                 column: "AssessmentParameter");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AssessmentQsBank_DomainSubId_SrNo",
+                name: "IX_AssessmentQsBank_CategoryId_IsStandardQuestion_SrNo",
                 table: "AssessmentQsBank",
-                columns: new[] { "DomainSubId", "SrNo" },
+                columns: new[] { "CategoryId", "IsStandardQuestion", "SrNo" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AssessmentQsForEnquiryItem_EnquiryItemId",
+                table: "AssessmentQsForEnquiryItem",
+                column: "EnquiryItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assessments_CandidateId",
@@ -1193,8 +1186,8 @@ namespace Infrastructure.Data.Migrations
                 column: "ToDoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DomainSubs_DomainSubName",
-                table: "DomainSubs",
+                name: "IX_DomainSub_DomainSubName",
+                table: "DomainSub",
                 column: "DomainSubName",
                 unique: true);
 
@@ -1395,10 +1388,10 @@ namespace Infrastructure.Data.Migrations
                 name: "AssessmentItems");
 
             migrationBuilder.DropTable(
-                name: "AssessmentQs");
+                name: "AssessmentQsBank");
 
             migrationBuilder.DropTable(
-                name: "AssessmentQsBank");
+                name: "AssessmentQsForEnquiryItem");
 
             migrationBuilder.DropTable(
                 name: "Attachments");
@@ -1470,7 +1463,7 @@ namespace Infrastructure.Data.Migrations
                 name: "CVForwardItems");
 
             migrationBuilder.DropTable(
-                name: "DomainSubs");
+                name: "DomainSub");
 
             migrationBuilder.DropTable(
                 name: "EnquiryForwards");

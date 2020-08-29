@@ -24,7 +24,6 @@ namespace API.Extensions
             services.AddScoped<IDLService, DLService>();
             services.AddScoped<IDLForwardService, DLForwardService>();
             services.AddScoped<IEmployeeService, EmployeeServices>();
-            services.AddScoped<IHRService, HRService>();
             services.AddScoped<IInternalHRService, InternalHRService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IEnquiryService, EnquiryService>();

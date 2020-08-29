@@ -6,6 +6,11 @@ namespace Core.Entities.Masters
         {
         }
 
+        public DomainSub(string domainSubName)
+        {
+            DomainSubName = domainSubName;
+        }
+
         public string DomainSubName { get; set; }
     }
 }

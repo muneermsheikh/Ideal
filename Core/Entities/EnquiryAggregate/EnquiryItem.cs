@@ -13,9 +13,6 @@ namespace Core.Entities.EnquiryAggregate
         }
 
         public EnquiryItem(CategoryItemOrdered itemOrdered, int srNo, int quantity, bool eCNR, DateTime completeBy)
-            /*int expDesiredInYrsMin, int expDesiredInYrsMax, string jobDescInBrief,
-            string jobDescAttachment, int salaryRangeMin, int salaryRangeMax, int contractPeriodInMonths,
-            enumProvision food, enumProvision housing, enumProvision transport, DateTime completeBy) */
         {
             //EnquiryId = enquiryId;
             SrNo = srNo;
@@ -24,23 +21,11 @@ namespace Core.Entities.EnquiryAggregate
             CategoryName = itemOrdered.CategoryName;
             ECNR = eCNR;
             Quantity = quantity;
-        /*    
-            ExpDesiredInYrsMin = expDesiredInYrsMin;
-            ExpDesiredInYrsMax = expDesiredInYrsMax;
-            JobDescInBrief = jobDescInBrief;
-            JobDescAttachment = jobDescAttachment;
-            SalaryRangeMin = salaryRangeMin;
-            SalaryRangeMax = salaryRangeMax;
-            ContractPeriodInMonths = contractPeriodInMonths;
-            Food = food;
-            Housing = housing;
-            Transport = transport;
-        */
             CompleteBy = completeBy;
            }
 
         public int EnquiryId { get; set; }
-        public CategoryItemOrdered ItemOrdered {get; set; }
+        public virtual CategoryItemOrdered ItemOrdered {get; set; }
         public int SrNo {get; set; }
         public int CategoryItemId { get; set; }
         public string CategoryName { get; set; }

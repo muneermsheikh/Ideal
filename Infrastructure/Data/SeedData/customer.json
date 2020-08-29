@@ -1,7 +1,7 @@
 [
     {
         "CustomerType": 0,
-        "CustomerName": "Saudi Bilfal Heavy Indutries",
+        "CustomerName": "Saudi Bilfal Heavy Industries",
         "KnownAs": "Bilfal",
         "CityName": "Dammam",
         "IntroducedBy": "Sheikh Ziyauddin Kamrani",
@@ -72,64 +72,64 @@
         "Phone2": "00966-12-1344490"
     },
     {
-        "customerType": 0,
-        "customerName":"Saudi Kuwaiti Cement Company",
-        "knownAs": "SKC",
-        "cityName": "Jeddah",
-        "email": "admin@skc.com.sa",
-        "phone1": "99988889",
-        "companyUrl": "http://www.skc.com.sa",
-        "customerStatus": 1,
-        "customerAddresses": [{
-            "addressType": "F",
-            "address2": "k-8, Madinah Road",
-            "city": "Jeddah",
-            "pin": "21424",
-            "country": "Saudi Arabia",
-            "valid": true,
-            "addedOn": "2019-07-26T00:39:30.447Z"
+        "CustomerType": 0,
+        "CustomerName":"Saudi Kuwaiti Cement Company",
+        "KnownAs": "SKC",
+        "CityName": "Jeddah",
+        "Email": "admin@skc.com.sa",
+        "Phone1": "99988889",
+        "CompanyUrl": "http://www.skc.com.sa",
+        "CustomerStatus": 1,
+        "CustomerAddresses": [{
+            "AddressType": "F",
+            "Address2": "k-8, Madinah Road",
+            "City": "Jeddah",
+            "PIN": "21424",
+            "Country": "Saudi Arabia",
+            "Valid": true,
+            "AddedOn": "2019-07-26T00:39:30.447Z"
           }
         ],
-          "customerOfficials": [{
-            "name": "Mrs. Shazia Haider",
-            "designation": "Recruitment Officer",
-            "gender": "M",
-            "phone": "99999999",
-            "mobile": "88888888",
+          "CustomerOfficials": [{
+            "Name": "Mrs. Shazia Haider",
+            "Designation": "Recruitment Officer",
+            "Gender": "M",
+            "Phone": "99999999",
+            "Mobile": "88888888",
             "email": "ravi@sbg.com",
-            "isValid": true,
-            "addedOn": "2020-07-26T00:39:30.447Z"
+            "IsValid": true,
+            "AddedOn": "2020-07-26T00:39:30.447Z"
           }],
-        "addedOn": "2020-07-26T00:39:30.447Z"
+        "AddedOn": "2020-07-26T00:39:30.447Z"
       },
       {
-        "customerType": 0,
-        "customerName":"Prince Mohammed University",
-        "knownAs": "PMU",
-        "cityName": "Dammam",
-        "email": "admin@pmu.com.sa",
-        "phone1": "9993434349",
-        "companyUrl": "http://www.pmu.com.sa",
-        "customerStatus": 1,
-        "customerAddresses": [{
-            "addressType": "F",
-            "address2": "k-8, Madinah Road",
-            "city": "Jeddah",
-            "pin": "21424",
-            "country": "Saudi Arabia",
-            "valid": true,
-            "addedOn": "2019-07-26T00:39:30.447Z"
+        "CustomerType": 0,
+        "CustomerName":"Prince Mohammed University",
+        "KnownAs": "PMU",
+        "CityName": "Dammam",
+        "Email": "admin@pmu.com.sa",
+        "Phone1": "9993434349",
+        "CompanyUrl": "http://www.pmu.com.sa",
+        "CustomerStatus": 1,
+        "CustomerAddresses": [{
+            "AddressType": "F",
+            "Address2": "k-8, Madinah Road",
+            "City": "Jeddah",
+            "PIN": "21424",
+            "Country": "Saudi Arabia",
+            "Valid": true,
+            "AddedOn": "2019-07-26T00:39:30.447Z"
           }],
-          "customerOfficials": [{
-            "name": "Mrs. Shazia Haider",
-            "designation": "Recruitment Officer",
-            "gender": "M",
-            "phone": "99999999",
-            "mobile": "88888888",
+          "CustomerOfficials": [{
+            "Name": "Mrs. Shazia Haider",
+            "Designation": "Recruitment Officer",
+            "Gender": "M",
+            "Phone": "99999999",
+            "Mobile": "88888888",
             "email": "ravi@sbg.com",
-            "isValid": true,
-            "addedOn": "2020-07-26T00:39:30.447Z"
+            "IsValid": true,
+            "AddedOn": "2020-07-26T00:39:30.447Z"
           }],
-        "addedOn": "2020-07-26T00:39:30.447Z"
+        "AddedOn": "2020-07-26T00:39:30.447Z"
       }
 ]

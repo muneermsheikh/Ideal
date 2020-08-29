@@ -15,22 +15,23 @@ namespace API.Controllers
     public class CustomersController : BaseApiController
     {
         private readonly IGenericRepository<Customer> _custRepo;
-
+        private readonly ICustomerService _custService;
         private readonly IMapper _mapper;
 
         public CustomersController(
-            IGenericRepository<Customer> custRepo,
+            IGenericRepository<Customer> custRepo, ICustomerService custService, 
             IMapper mapper
         )
         {
             _mapper = mapper;
             _custRepo = custRepo;
+            _custService = custService;
         }
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Pagination<IReadOnlyList<CustomerDto>>>> GetCustomers(
-            [FromQuery]CustomerSpecParams custParams)
+            [FromBody]CustomerSpecParams custParams)
         {
             var spec = new CustomerSpecs(custParams);
             var countSpec = new CustomerWithFiltersForCountSpec(custParams);
@@ -43,6 +44,7 @@ namespace API.Controllers
             return Ok(new Pagination<CustomerDto>(custParams.PageIndex,
                 custParams.PageSize, totalItems, data));
         }
+
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -73,5 +75,26 @@ namespace API.Controllers
             if (deleted == 0) return BadRequest(new ApiResponse(400, "Failed to delete"));
             return true;
         }
+
+//officials
+
+        [HttpGet("officials/{customerId}")]
+        public async Task<ActionResult<IReadOnlyList<CustomerOfficialDto>>> GetCustomerOfficials (int customerId)
+        {
+            var off = await _custService.GetCustomerOfficialList(customerId);
+            if (off==null || off.Count ==0) return NotFound(new ApiResponse(404, "No officials on record for selected entity"));
+            var offReturn = _mapper.Map<IReadOnlyList<CustomerOfficial>, IReadOnlyList<CustomerOfficialDto>>(off);
+            return Ok(offReturn);
+        }
+
+        [HttpPost("officials")]
+        public async Task<ActionResult<IReadOnlyList<CustomerOfficialDto>>> InsertCustomerOfficials(
+            [FromBody]List<CustomerOfficial> officials)
+        {
+            var offs = await _custService.InsertOfficials(officials);
+            if(offs==null || offs.Count==0) return BadRequest(new ApiResponse(404, "Failed to isnert the officials"));
+            return Ok(_mapper.Map<IReadOnlyList<CustomerOfficial>, IReadOnlyList<CustomerOfficialDto>>(offs));
+        }
+
     }
 }

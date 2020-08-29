@@ -10,12 +10,28 @@ using System;
 using Core.Entities.Emails;
 using System.Collections.Generic;
 
+
 namespace API.Helpers
 {
     public class MappingProfiles : Profile
     {
         public MappingProfiles()
         {
+
+    // assessment
+            CreateMap<AssessmentToAddDto, Assessment>()
+                .ForMember(d => d.CustomerNameAndCity, o => o.MapFrom<AssessmentDtoCustomerNameCityResolver>())
+                .ForMember(d => d.Enquiryitem, o => o.MapFrom<AssessmentDtoEnquiryItemResolver>())
+                .ForMember(d => d.CategoryNameAndRef, o => o.MapFrom<AssessmentDtoCategoryNameRefResolver>()).ReverseMap();
+            CreateMap<AssessmentItemToAddDto, AssessmentItem>();
+
+            CreateMap<AssessmentQ, AssessmentQItemDto>();   //items
+            //CreateMap<AssessmentQ, AssessmentQDto>();   //items
+            CreateMap<AssessmentQBankToAddDto, AssessmentQBank>().ReverseMap();
+            CreateMap<AssessmentQBank, AssessmentQBankToAddDto>()
+                .ForMember(d => d.CategoryRef, o => o.MapFrom<AssessmentQBankToAddDtoCategoryNameResolver>());
+            
+//category
             CreateMap<Category, CategoryToReturnDto>()
                 .ForMember(x => x.IndustryType, o => o.MapFrom(s => s.IndustryType.Name))
                 .ForMember(x => x.SkillLevel, o => o.MapFrom(s => s.SkillLevel.Name));
@@ -85,6 +101,8 @@ namespace API.Helpers
                 //.ForMember(x => x.CustomerStatus, o => o.MapFrom(s => s.enumCustomerStatus.Value));
             
             CreateMap<CustomerOfficial, CustOfficialToReturnDto>();
+            CreateMap<CustomerOfficial, CustomerOfficialDto>()
+                .ForMember(d => d.CustomerName, o => o.MapFrom<CustomerOfficialCustomerNameResolver>());
             
             CreateMap<AddressDto, SiteAddress>();
             CreateMap<CustomerAddress, CustomerAddressDto>();
@@ -93,19 +111,12 @@ namespace API.Helpers
             CreateMap<ToDo, TaskToReturnDto>();
             CreateMap<TaskItem, TaskItemDto>();
             CreateMap<HRSkillClaim, HRSkillClaimsDto>();
-            CreateMap<AssessmentQ, AssessmentItem>();
+            //CreateMap<AssessmentQ, AssessmentItem>();
             CreateMap<Employee, EmployeeToReturnDto>();
             CreateMap<IndustryType, IndustryToReturnDto>();
             CreateMap<SkillLevel, IndustryToReturnDto>();
 
             CreateMap<EmailModel, EmailDto>();
-
-    // assessment
-            CreateMap<AssessmentToAddDto, Assessment>()
-                .ForMember(d => d.CustomerNameAndCity, o => o.MapFrom<AssessmentDtoCustomerNameCityResolver>())
-                .ForMember(d => d.Enquiryitem, o => o.MapFrom<AssessmentDtoEnquiryItemResolver>())
-                .ForMember(d => d.CategoryNameAndRef, o => o.MapFrom<AssessmentDtoCategoryNameRefResolver>()).ReverseMap();
-            CreateMap<AssessmentItemToAddDto, AssessmentItem>();
 
     //candidate
             CreateMap<Category, CategoryNameDto>();
@@ -122,6 +133,10 @@ namespace API.Helpers
                 
                 
             CreateMap<CandidateTempToAddDto, Candidate>();
+    //candidatecategory
+            CreateMap<CandidateCategory, CandidateCategoryDto>()
+                .ForMember(d => d.CandidateName, o=>o.MapFrom<CandidateCategoryCandidateNameResolver>())
+                .ForMember(d => d.CategoryName, o => o.MapFrom<CandidateCategoryCategoryNameResolver>());
        }
     }
 }

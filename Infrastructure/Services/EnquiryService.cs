@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Entities;
 using Core.Entities.Admin;
 using Core.Entities.EnquiryAggregate;
 using Core.Entities.Identity;
@@ -309,5 +310,21 @@ namespace Infrastructure.Services
             return (item == null ? true: false);
         }
 
+        public async Task<CategoryRefFromEnquiryItemId> GetDetailsFromEnquiryItemId(int enquiryItemId)
+        {   
+           var rs = await
+             (from o in _context.Enquiries join e in _context.EnquiryItems
+                on o.Id equals e.EnquiryId join c in _context.Categories 
+                on e.CategoryItemId equals c.Id 
+                where e.Id == enquiryItemId
+                select (new { orderNo = o.EnquiryNo, orderDt = o.EnquiryDate, 
+                    srNo = e.SrNo, catName=c.Name, customerName = o.Customer.CustomerName, 
+                    cityName=o.Customer.CityName })
+            ).FirstOrDefaultAsync();
+           
+            var cat = new CategoryRefFromEnquiryItemId(rs.customerName, rs.cityName, 
+                rs.orderNo + "-" + rs.srNo + "-" + rs.catName, rs.orderNo + "/" + rs.orderDt);
+            return cat;
+        }
     }
 }

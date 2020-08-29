@@ -56,6 +56,10 @@ namespace Infrastructure.Services
             return await _candCatRepo.UpdateAsync(candidateCategory);
         }
 
+        public async Task<int> UpdateCandidateCategories( List<CandidateCategory> candcategories)
+        {
+            return await _candCatRepo.UpdateListAsync(candcategories);
+        }
         public async Task<List<Category>> GetCandidateCategories(int candidateId)
         {
             var cats = await _context.CandidateCategories

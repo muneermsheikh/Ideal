@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ATSContext))]
-    [Migration("20200824080206_InitialCreate")]
+    [Migration("20200827092025_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -875,13 +875,10 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("AssessmentItems");
                 });
 
-            modelBuilder.Entity("Core.Entities.HR.AssessmentQ", b =>
+            modelBuilder.Entity("Core.Entities.HR.AssessmentQForEnquiryItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AssessmentId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("AssessmentParameter")
@@ -917,7 +914,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("EnquiryItemId");
 
-                    b.ToTable("AssessmentQs");
+                    b.ToTable("AssessmentQsForEnquiryItem");
                 });
 
             modelBuilder.Entity("Core.Entities.HR.Attachment", b =>
@@ -1043,6 +1040,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("KnownAs")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("LastStatusUpdatedById")
@@ -1235,7 +1233,7 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DomainSubId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsStandardQuestion")
@@ -1255,7 +1253,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("AssessmentParameter");
 
-                    b.HasIndex("DomainSubId", "SrNo")
+                    b.HasIndex("CategoryId", "IsStandardQuestion", "SrNo")
                         .IsUnique();
 
                     b.ToTable("AssessmentQsBank");
@@ -1306,7 +1304,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("DomainSubName")
                         .IsUnique();
 
-                    b.ToTable("DomainSubs");
+                    b.ToTable("DomainSub");
                 });
 
             modelBuilder.Entity("Core.Entities.Masters.Employee", b =>
@@ -1767,7 +1765,7 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Core.Entities.HR.AssessmentQ", b =>
+            modelBuilder.Entity("Core.Entities.HR.AssessmentQForEnquiryItem", b =>
                 {
                     b.HasOne("Core.Entities.EnquiryAggregate.EnquiryItem", "EnquiryItem")
                         .WithMany()
@@ -1878,15 +1876,6 @@ namespace Infrastructure.Data.Migrations
                     b.HasOne("Core.Entities.Masters.SkillLevel", "SkillLevel")
                         .WithMany()
                         .HasForeignKey("SkillLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Core.Entities.Masters.AssessmentQBank", b =>
-                {
-                    b.HasOne("Core.Entities.Masters.DomainSub", "DomainSubj")
-                        .WithMany()
-                        .HasForeignKey("DomainSubId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

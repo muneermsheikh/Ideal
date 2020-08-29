@@ -1,3 +1,5 @@
+D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\linux-armel\native\libe_sqlite3.so
+D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\linux-x64\native\libe_sqlite3.so
 D:\atsOne\api\bin\Debug\netcoreapp3.1\appsettings.Development.json
 D:\atsOne\api\bin\Debug\netcoreapp3.1\appsettings.json
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
@@ -67,9 +69,7 @@ D:\atsOne\api\bin\Debug\netcoreapp3.1\System.Threading.Channels.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\alpine-x64\native\libe_sqlite3.so
 D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\linux-arm\native\libe_sqlite3.so
 D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\linux-arm64\native\libe_sqlite3.so
-D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\linux-armel\native\libe_sqlite3.so
 D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\linux-musl-x64\native\libe_sqlite3.so
-D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\linux-x64\native\libe_sqlite3.so
 D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\linux-x86\native\libe_sqlite3.so
 D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\osx-x64\native\libe_sqlite3.dylib
 D:\atsOne\api\bin\Debug\netcoreapp3.1\runtimes\win-arm\native\e_sqlite3.dll

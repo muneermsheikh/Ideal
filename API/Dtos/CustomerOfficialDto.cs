@@ -6,6 +6,7 @@ namespace API.Dtos
     {
         public int Id {get; set; }
         public int CustomerId { get; set; }
+        public string CustomerName {get; set;}
         public string Name { get; set; }
         public string Designation { get; set; }
         public string Gender { get; set; }

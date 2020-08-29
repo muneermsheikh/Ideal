@@ -19,4 +19,5 @@ namespace API.Dtos
         public enumAssessmentResult Result { get; set; }=enumAssessmentResult.Referred;
         public string Remarks {get; set; }
     }
+
 }

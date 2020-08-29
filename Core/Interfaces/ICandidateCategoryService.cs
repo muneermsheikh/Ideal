@@ -10,6 +10,7 @@ namespace Core.Interfaces
         Task<CandidateCategory> AddCandidateCategory(int CandidateId, int CategoryId);
         Task<IReadOnlyList<CandidateCategory>> AddCandidateCategories(IReadOnlyList<CandidateCategory> candidateCategoryList);
         Task<CandidateCategory> UpdateCandidateCategory(CandidateCategory candidateCategory);
+        Task<int> UpdateCandidateCategories( List<CandidateCategory> candcategories);
         Task<int> DeleteCandidatecategory(CandidateCategory candidateCategory);
         Task<List<Category>> GetCandidateCategories(int candidateId);
         Task<List<CandidateCategory>> GetCandidateCategoryType(int candidateId);

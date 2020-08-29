@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -99,20 +100,28 @@ namespace Infrastructure.Services
 
         public async Task<bool> ValidateCandidateToAdd(Candidate candidate)
         {
-            if (await CandidateAppNoOrPPNoOrAadharNoOrEmailExist(candidate)) return false;
+            if (string.IsNullOrEmpty(candidate.PPNo) && string.IsNullOrEmpty(candidate.AadharNo))
+                throw new Exception("Either PP number or Aadhar Card No must be provided"); 
+
+            if (candidate.CandidateCategories.Count == 0) 
+                throw new Exception("atleast one category must be provided");
+
+            int appNo = await CandidateAppNoOrPPNoOrAadharNoOrEmailExist(candidate);
+            if (appNo !=0) throw new Exception("Application No. " + appNo + 
+                " exists that contains same PP No, AadharNo or eMailID");
             return true;
         }
-        public async Task<bool> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(Candidate candidate)
+        public async Task<int> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(Candidate candidate)
         {
 
-            var exist = await _context.Candidates.AsNoTracking().Where
+            var appNo = await _context.Candidates.AsNoTracking().Where
                 (x => x.ApplicationNo == candidate.ApplicationNo &&
                     candidate.ApplicationNo != 0 ||
                 (!string.IsNullOrEmpty(candidate.PPNo) && x.PPNo == candidate.PPNo) ||
                 (!string.IsNullOrEmpty(candidate.AadharNo) && x.AadharNo == candidate.AadharNo) ||
                 (!string.IsNullOrEmpty(candidate.email) && x.email == candidate.email))
-                .FirstOrDefaultAsync();
-            return exist == null ? false : true;
+                .Select(x=>x.ApplicationNo).FirstOrDefaultAsync();
+            return appNo;
         }
 
         public async Task<int> GetNextApplicationNo()
@@ -125,6 +134,11 @@ namespace Infrastructure.Services
             var candName = _context.Candidates.Where(x=>x.Id==candidateId).Select(x=>x.FullName).FirstOrDefault();
             if(string.IsNullOrEmpty(candName)) return "invalid candidateId";
             return candName;
+        }
+
+        public async Task<int> UpdateCandidateCategories(List<CandidateCategory> candCats)
+        {
+            return await _candidateCategoryService.UpdateCandidateCategories(candCats);
         }
     }
 }

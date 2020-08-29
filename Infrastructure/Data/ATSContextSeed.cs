@@ -20,21 +20,6 @@ namespace Infrastructure.Data
             var loggr = loggerFactory.CreateLogger<ATSContext>();
             try
             {
-                // var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                loggr.LogInformation("entered ind types");
-               
-
-                if (!context.DomainSubs.Any())
-                {
-                    var delData = File.ReadAllText("../Infrastructure/Data/SeedData/domainSubject.json");
-                    var dels = JsonSerializer.Deserialize<List<DomainSub>>(delData);
-                    foreach (var item in dels)
-                    {
-                        context.DomainSubs.Add(item);
-                    }
-                    await context.SaveChangesAsync();
-                }
-
                if (!context.AssessmentQsBank.Any())
                 {
                     var indData = File.ReadAllText("../Infrastructure/Data/SeedData/assessmentQBank.json");
@@ -50,8 +35,6 @@ namespace Infrastructure.Data
                 if (!context.IndustryTypes.Any())
                 {
                     loggr.LogInformation("entered industry types");
-                    // var indData =
-                       // File.ReadAllText(path + @"/Data/SeedData/industryType.json");
                     var indData = File.ReadAllText("../Infrastructure/Data/SeedData/industryType.json");
                     var inds = JsonSerializer.Deserialize<List<IndustryType>>(indData);
                     
@@ -85,7 +68,7 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
-
+/*
                 if (!context.DeliveryMethods.Any())
                 {
                     var delData = File.ReadAllText("../Infrastructure/Data/SeedData/deliveryMethod.json");
@@ -96,7 +79,7 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
-
+*/
                 if (!context.Candidates.Any())
                 {
                     var candData = File.ReadAllText("../Infrastructure/Data/SeedData/candidate.json");
@@ -151,8 +134,29 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
+                if (!context.Enquiries.Any())
+                {
+                    var enqData = File.ReadAllText("../Infrastructure/Data/SeedData/enquiry.json");
+                    var enqs = JsonSerializer.Deserialize<List<Enquiry>>(enqData);
+                    foreach (var item in enqs)
+                    {
+                        context.Enquiries.Add(item);
+                    }
+                    await context.SaveChangesAsync();
+                }
 
-                 if (!context.DLForwardToHR.Any())
+                if (!context.EnquiryItems.Any())
+                {
+                    var itemData = File.ReadAllText("../Infrastructure/Data/SeedData/enquiryItem.json");
+                    var items = JsonSerializer.Deserialize<List<EnquiryItem>>(itemData);
+                    foreach (var item in items)
+                    {
+                        context.EnquiryItems.Add(item);
+                    }
+                    await context.SaveChangesAsync();
+                }
+
+                if (!context.DLForwardToHR.Any())
                 {
                     var empData = File.ReadAllText("../Infrastructure/Data/SeedData/dlForwardToHR.json");
                     var emps = JsonSerializer.Deserialize<List<DLForwardToHR>>(empData);
@@ -162,6 +166,7 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
+
 
                 if (!context.ToDos.Any())
                 {
@@ -185,27 +190,6 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
          
-                if (!context.Enquiries.Any())
-                {
-                    var enqData = File.ReadAllText("../Infrastructure/Data/SeedData/enquiry.json");
-                    var enqs = JsonSerializer.Deserialize<List<Enquiry>>(enqData);
-                    foreach (var item in enqs)
-                    {
-                        context.Enquiries.Add(item);
-                    }
-                    await context.SaveChangesAsync();
-                }
-
-                if (!context.EnquiryItems.Any())
-                {
-                    var itemData = File.ReadAllText("../Infrastructure/Data/SeedData/enquiryItem.json");
-                    var items = JsonSerializer.Deserialize<List<EnquiryItem>>(itemData);
-                    foreach (var item in items)
-                    {
-                        context.EnquiryItems.Add(item);
-                    }
-                    await context.SaveChangesAsync();
-                }
 
             }
             catch (Exception ex)

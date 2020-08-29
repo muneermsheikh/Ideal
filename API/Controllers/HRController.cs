@@ -25,16 +25,14 @@ namespace API.Controllers
         private readonly ATSContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IHRService _hrService;
         private readonly ICandidateService _candidateService;
         private readonly ICandidateCategoryService _candidateCategoryService;
         public HRController(ATSContext context,
             ICandidateService candidateService, IUnitOfWork unitOfWork,
-            IHRService hrService, ICandidateCategoryService candidateCategoryService, IMapper mapper)
+            ICandidateCategoryService candidateCategoryService, IMapper mapper)
         {
             _candidateCategoryService = candidateCategoryService;
             _candidateService = candidateService;
-            _hrService = hrService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _context = context;
@@ -63,24 +61,12 @@ namespace API.Controllers
         public async Task<ActionResult<Candidate>> RegisterCandidate([FromBody] Candidate candidate)
         {
 
-            if (string.IsNullOrEmpty(candidate.PPNo) && string.IsNullOrEmpty(candidate.AadharNo))
-            { return BadRequest(new ApiResponse(404, "Either PP No or Aadhar Card No must be provided")); }
-
-            if (candidate.CandidateCategories.Count == 0) return BadRequest(new ApiResponse(404, "atleast one category must be provided"));
-
-            //var candidateToAdd = _mapper.Map<CandidateToAddDto, Candidate>(candidateAddDto);
-
-            //CandidateCategories object is not written to DB.
-            //so candidate obj w/o candidatecategoreis is mapped to CandidateToAddDto
-            //the object CandidateCategories is separately passed on to the registerCandidate method
-
             var candidateAdded = await _candidateService.RegisterCandidate(candidate);
 
             if (candidateAdded == null) return BadRequest(new ApiResponse(404, "Failed to register the candidate"));
             return Ok(candidateAdded);
 
         }
-
 
         [HttpPut("candidate")]      // *** to do - shift validation to services
         public async Task<ActionResult<Candidate>> UpdateCandidate(Candidate candidate)
@@ -131,11 +117,17 @@ namespace API.Controllers
         }
 
         [HttpPut("updateCandidateCategory")]    //tested
-        public async Task<ActionResult<CandidateCategory>> UpdateCandidateCategory(CandidateCategory candidateCategory)
+        public async Task<ActionResult<CandidateCategoryDto>> UpdateCandidateCategory(CandidateCategory candidateCategory)
         {
             var cat = await _candidateCategoryService.UpdateCandidateCategory(candidateCategory);
             if (cat==null) return BadRequest(new ApiResponse(404, "Failed to update the category for the candidate"));
-            return cat;
+            return _mapper.Map<CandidateCategory, CandidateCategoryDto>(cat);
+        }
+
+        [HttpPut("categories")]
+        public async Task<int> UpdateCandidateCategories(List<CandidateCategory> candCategories)
+        {
+            return await _candidateCategoryService.UpdateCandidateCategories(candCategories);
         }
 
         [HttpDelete("DeleteCandidateCategory")]
@@ -143,7 +135,6 @@ namespace API.Controllers
         {
             return await _candidateCategoryService.DeleteCandidatecategory(candidateCategory);
         }
-
 
     }
 }
