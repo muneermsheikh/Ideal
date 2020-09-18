@@ -93,6 +93,11 @@ namespace Infrastructure.Services
             return candidateAdded;
         }
 
+        public async Task<IReadOnlyList<Candidate>> RegisterCandidates(IReadOnlyList<Candidate> candidates)
+        {
+            return await _candidateRepo.AddListAsync(candidates);
+        }
+
         public Task<Candidate> UpdateCandidate(Candidate candidateToUpdateDto)
         {
             throw new System.NotImplementedException();
@@ -103,6 +108,7 @@ namespace Infrastructure.Services
             if (string.IsNullOrEmpty(candidate.PPNo) && string.IsNullOrEmpty(candidate.AadharNo))
                 throw new Exception("Either PP number or Aadhar Card No must be provided"); 
 
+            if (candidate.CandidateCategories==null) throw new Exception ("candidate must have atleast one category");
             if (candidate.CandidateCategories.Count == 0) 
                 throw new Exception("atleast one category must be provided");
 
@@ -139,6 +145,11 @@ namespace Infrastructure.Services
         public async Task<int> UpdateCandidateCategories(List<CandidateCategory> candCats)
         {
             return await _candidateCategoryService.UpdateCandidateCategories(candCats);
+        }
+
+        public Task<IReadOnlyList<Candidate>> RegisterCandidate(IReadOnlyList<Candidate> candidate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

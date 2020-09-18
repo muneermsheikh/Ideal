@@ -21,7 +21,7 @@ namespace Core.Specifications
                     (!eParam.EnquiryNo.HasValue || x.EnquiryNo == eParam.EnquiryNo) &&
                     (!eParam.EnquiryDate.HasValue || DateTime.Compare(
                         x.EnquiryDate.Date, eParam.EnquiryDate.Value.Date)==0) &&
-                    (!eParam.status.HasValue || x.EnquiryStatus == eParam.status))
+                    (!eParam.status.HasValue || x.EnquiryReviewStatusId == eParam.status))
             )
         {
             AddInclude(o => o.Customer);
@@ -36,8 +36,8 @@ namespace Core.Specifications
             AddOrderBy(o => o.EnquiryNo);
         }
     
-        public EnquirySpecs(int enquiryId, enumEnquiryStatus enquiryStatus, bool includeCustomer, bool includeItems) 
-            :base (o => (o.Id == enquiryId && o.EnquiryStatus==enquiryStatus))
+        public EnquirySpecs(int enquiryId, enumEnquiryReviewStatus enquiryStatus, bool includeCustomer, bool includeItems) 
+            :base (o => (o.Id == enquiryId && o.EnquiryReviewStatusId==enquiryStatus))
         {
             if (includeCustomer) AddInclude(o => o.Customer);
             if (includeItems) AddInclude(o => o.EnquiryItems);

@@ -2,7 +2,7 @@ using System.Runtime.Serialization;
 
 namespace Core.Enumerations
 {
-    public enum enumReviewStatus
+    public enum enumEnquiryReviewStatus
     {
         [EnumMember(Value = "Not Reviewed")]
         NotReviewed,

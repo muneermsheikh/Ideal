@@ -1,10 +1,13 @@
 using System;
+using Core.Enumerations;
 
 namespace API.Dtos
 {
     public class ReviewItemDto
     {
+        public int Id {get;set;}
         public int EnquiryId { get; set; }
+        public int EnquiryItemId {get; set;}
         public string EnquiryNoAndDate {get; set;}
         public string CustomerName {get; set;}
         public string CategoryName {get; set; }
@@ -19,8 +22,10 @@ namespace API.Dtos
         public string ServiceChargesInINR { get; set; }
         public string FeeFromClientCurrency { get; set; }
         public int FeeFromClient { get; set; } 
-        public string Status { get; set; } 
+        public enumItemReviewStatus Status { get; set; } 
+        public string StatusString { get; set; } 
         public DateTime ReviewedOn { get; set; }
+        public int ReviewedBy {get; set;}
         public string ReviewedByName { get; set; }
 
     }

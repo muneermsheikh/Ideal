@@ -37,6 +37,7 @@ namespace Infrastructure.Data
         public DbSet<DeliveryMethod> DeliveryMethods {get; set; }
         public DbSet<DLForwardToHR> DLForwardToHR {get; set; }
         public DbSet<Employee> Employees {get; set; }
+        public DbSet<Emolument> Emoluments{get; set;}
         public DbSet<EnquiryForwarded> EnquiryForwards {get; set; }
         public DbSet<Enquiry> Enquiries {get; set; }
         public DbSet<EnquiryItem> EnquiryItems {get; set; }
@@ -47,11 +48,13 @@ namespace Infrastructure.Data
         public DbSet<JobCard> JobCards {get; set; }
         
         public DbSet<JobDesc> JobDescriptions {get; set; }
-        public DbSet<Processing> Processings {get; set; }
+        public DbSet<Process> Processes {get; set; }
+        public DbSet<ProcessStatus> ProcessStatuses {get; set;}
         
         public DbSet<Remuneration> Remunerations{get; set; }
         public DbSet<Role> Roles {get; set; }
-        
+
+        public DbSet<SelDecision> SelDecisions {get; set; }        
         public DbSet<SkillLevel> SkillLevels {get; set; }
         public DbSet<Source> Sources {get; set; }
         public DbSet<SourceGroup> SourceGroups {get; set; }

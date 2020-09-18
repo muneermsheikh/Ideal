@@ -8,9 +8,5 @@ namespace Core.Entities.Admin
         public int Id {get; set; }
     }
 
-    [NotMapped]
-    public class strObject
-    {
-        public string Name {get; set;}
-    }
+    
 }

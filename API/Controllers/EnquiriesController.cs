@@ -15,6 +15,9 @@ using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructure.Data;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -24,9 +27,11 @@ namespace API.Controllers
     {
         private readonly IEnquiryService _enqService;
         private readonly IMapper _mapper;
+        private readonly ATSContext _context;
 
-        public EnquiriesController(IEnquiryService enqService, IMapper mapper)
+        public EnquiriesController(IEnquiryService enqService, IMapper mapper, ATSContext context)
         {
+            _context = context;
             _mapper = mapper;
             _enqService = enqService;
         }
@@ -35,9 +40,9 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<EnquiryToReturnDto>> CreateOrder([FromBody] EnquiryDto enquiryDto)
         {
-            var email= HttpContext.User.RetrieveEmailFromPrincipal();
+            var email = HttpContext.User.RetrieveEmailFromPrincipal();
             if (email == null) return BadRequest(new ApiResponse(400, "Client email cannot be retrieved"));
-        
+
             //var address = enquiryDto.ShipToAddress;
 
             var enquiry = await _enqService.CreateEnquiryAsync(enquiryDto.BasketId);
@@ -46,18 +51,13 @@ namespace API.Controllers
 
             // *** create acknowledgement to client by email / WhatsApp / SMS
             var enqToReturn = _mapper.Map<Enquiry, EnquiryToReturnDto>(enquiry);
-            
+
             //add customer object
-            enqToReturn.Customer = _mapper.Map<Customer, CustomerToReturnDto>(
-                await _enqService.CustomerToReturn(enqToReturn.CustomerId));
-            
-            //add customer official HR Executive object
-            /* if ((int)enquiry.HRExecutiveId !=0) 
-            {enqToReturn.CustOfficialHRExec = _mapper.Map<CustomerOfficial, CustOfficialToReturnDto>(
-                await _enqService.CustomerOfficialToReturn((int)enquiry.HRExecutiveId));
-            }
-            */ 
-            
+            var cust = await _context.Customers.Where(x => x.Id == enqToReturn.CustomerId)
+                .FirstOrDefaultAsync();
+
+            enqToReturn.Customer = _mapper.Map<Customer, CustomerToReturnDto>(cust);
+
             //add enquiry items
             enqToReturn.enquiryItems = _mapper.Map<IReadOnlyList<EnquiryItem>,
                 IReadOnlyList<EnquiryItemToReturnDto>>(enquiry.EnquiryItems);

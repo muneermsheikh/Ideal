@@ -14,6 +14,8 @@ namespace API.Extensions
         {
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAdminServices, AdminServices>();
+            services.AddScoped<ISelDecisionService, SelDecisionServices>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICandidateService, CandidateService>();
@@ -25,6 +27,7 @@ namespace API.Extensions
             services.AddScoped<IDLForwardService, DLForwardService>();
             services.AddScoped<IEmployeeService, EmployeeServices>();
             services.AddScoped<IInternalHRService, InternalHRService>();
+            services.AddScoped<IProcessServices, ProcessServices>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IEnquiryService, EnquiryService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();

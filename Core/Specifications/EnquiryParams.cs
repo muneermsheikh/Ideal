@@ -24,7 +24,7 @@ namespace Core.Specifications
         public DateTime? EnquiryDate {get; set; }
         public int? EnquiryNo {get; set; }
         private string _customerName;
-        public enumEnquiryStatus? status;
+        public enumEnquiryReviewStatus? status;
         
     }
 }

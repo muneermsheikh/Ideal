@@ -1,12 +1,102 @@
 [
     {"CustomerId": 1, "EnquiryNo": 1050, "ProjectManagerId": 1, "EnquiryRef": "Telephonic message",
-        "CompleteBy": "2020-11-10T00:00:00"},
+        "CompleteBy": "2020-01-10T00:00:00","EnquiryDate": "2020-01-10T00:00:00",
+        "EnquiryItems": [
+            {"SrNo": 1, "CategoryItemId": 1,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"},
+            {"SrNo": 2, "CategoryItemId": 2,"Quantity": 4, "MinCVs": 12,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"}]},
+
     {"CustomerId": 2,"EnquiryNo": 1051, "ProjectManagerId": 1, "EnquiryRef": "Telephonic message",
-        "CompleteBy": "2020-11-15T00:00:00"},
+        "CompleteBy": "2020-01-25T00:00:00","EnquiryDate": "2020-01-15T00:00:00",
+        "EnquiryItems": [
+            {"SrNo": 1, "CategoryItemId": 3,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"},
+            {"SrNo": 2, "CategoryItemId": 4,"Quantity": 2, "MinCVs": 6,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"}]},
+
     {"CustomerId": 1,"EnquiryNo": 1052,"ProjectManagerId": 2, "EnquiryRef": "Telephonic message",
-        "CompleteBy": "2020-01-10T00:00:00"},
-    {"CustomerId": 2,"EnquiryNo": 1053,"ProjectManagerId": 1, "EnquiryRef": "email message" },
-    {"CustomerId": 3,"EnquiryNo": 1054,"ProjectManagerId": 2, "EnquiryRef": "email message" },
-    {"CustomerId": 4, "EnquiryNo": 1055, "ProjectManagerId": 1, "EnquiryRef": "email message"},
-    {"CustomerId": 3,"EnquiryNo": 1055,"ProjectManagerId": 1, "HRExecutiveId": 2,"EnquiryRef": "email message"}
+        "CompleteBy": "2020-02-15T00:00:00","EnquiryDate": "2020-02-10T00:00:00",
+    "EnquiryItems": [
+        {"SrNo": 1, "CategoryItemId": 1,"Quantity": 3, "MinCVs":9,"MaxCVs": 20,"ECNR": true, 
+            "RequireAssessment": false, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+            "CompleteBy": "2020-11-15T00:00:00"},
+        {"SrNo": 2, "CategoryItemId": 2,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+            "RequireAssessment": false, "HRExecutiveId": 4,"HRSupervisorId": 3, "HRManagerId": 1, 
+            "CompleteBy": "2020-11-15T00:00:00"}]},
+
+    {"CustomerId": 2,"EnquiryNo": 1053,"ProjectManagerId": 1, "EnquiryRef": "email message",
+        "CompleteBy": "2020-03-10T00:00:00","EnquiryDate": "2020-03-05T00:00:00",
+        "EnquiryItems": [
+            {"SrNo": 1, "CategoryItemId": 4,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"},
+            {"SrNo": 2, "CategoryItemId": 5,"Quantity": 1, "MinCVs": 3,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 3,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"}]},
+
+    {"CustomerId": 3,"EnquiryNo": 1054,"ProjectManagerId": 2, "EnquiryRef": "email message" ,
+        "CompleteBy": "2020-04-20T00:00:00","EnquiryDate": "2020-04-10T00:00:00",
+        "EnquiryItems": [
+            {"SrNo": 1, "CategoryItemId": 5,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"},
+            {"SrNo": 2, "CategoryItemId": 1,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"}]},
+
+    {"CustomerId": 4, "EnquiryNo": 1055, "ProjectManagerId": 1, "EnquiryRef": "email message",
+        "CompleteBy": "2020-05-20T00:00:00","EnquiryDate": "2020-05-10T00:00:00",
+        "EnquiryItems": [
+            {"SrNo": 1, "CategoryItemId": 7,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"},
+            {"SrNo": 2, "CategoryItemId": 8,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": false, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"}]},
+
+    {"CustomerId": 5,"EnquiryNo": 1056,"ProjectManagerId": 1, "HRExecutiveId": 2,"EnquiryRef": "email message",
+        "CompleteBy": "2020-01-20T00:00:00","EnquiryDate": "2020-01-10T00:00:00",
+        "EnquiryItems": [
+            {"SrNo": 1, "CategoryItemId": 4,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"},
+            {"SrNo": 2, "CategoryItemId": 3,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"}]},
+    
+    {"CustomerId": 6,"EnquiryNo": 1057,"ProjectManagerId": 1, "HRExecutiveId": 2,"EnquiryRef": "email message",
+        "CompleteBy": "2020-01-15T00:00:00","EnquiryDate": "2020-01-12T00:00:00",
+        "EnquiryItems": [
+            {"SrNo": 1, "CategoryItemId": 4,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": false, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"},
+            {"SrNo": 2, "CategoryItemId": 6,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": false, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"}]},
+    
+    {"CustomerId": 6,"EnquiryNo": 1058,"ProjectManagerId": 1, "HRExecutiveId": 2,"EnquiryRef": "email message", 
+        "CompleteBy": "2020-01-15T00:00:00","EnquiryDate": "2020-01-14T00:00:00",
+        "EnquiryItems": [
+            {"SrNo": 1, "CategoryItemId": 4,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": false, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"},
+            {"SrNo": 2, "CategoryItemId":7,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": false, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2020-11-15T00:00:00"}]},
+
+    {"CustomerId": 6,"EnquiryNo": 1059,"ProjectManagerId": 1, "HRExecutiveId": 2,"EnquiryRef": "email message",
+        "CompleteBy": "2020-01-28T00:00:00","EnquiryDate": "2020-01-10T00:00:00",
+        "EnquiryItems": [
+            {"SrNo": 1, "CategoryItemId": 4,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2019-11-15T00:00:00"},
+            {"SrNo": 2, "CategoryItemId": 8,"Quantity": 5, "MinCVs": 15,"MaxCVs": 20,"ECNR": true, 
+                "RequireAssessment": true, "HRExecutiveId": 2,"HRSupervisorId": 3, "HRManagerId": 1, 
+                "CompleteBy": "2019-12-15T00:00:00"}]}
+         
 ]

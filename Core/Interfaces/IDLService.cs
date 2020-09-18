@@ -22,7 +22,7 @@ namespace Core.Interfaces
         Task<EnquiryItem> GetDLItemAsync(int enquiryItemId);
         Task<EnquiryItem> UpdateDLItemAsync(EnquiryItem enquiryItem);
         Task<bool> DeleteDLItemAsync(EnquiryItem enquiryItem);
-        Task<EnquiryItem> AddDLItemAsync(EnquiryItem enquiryItem);
+        Task<IReadOnlyList<EnquiryItem>> AddDLItemsAsync(List<EnquiryItem> enquiryItems);
         Task<Category> GetEnquiryItemCategory (int enquiryItemId);
 
 

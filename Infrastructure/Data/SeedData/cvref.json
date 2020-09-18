@@ -1,0 +1,6 @@
+{ "DateForwarded": "2020-01-02T00:00:00", "CustomerOfficialId": 1, "CustomerId": 1,  "ForwardedBy":"hafiz",
+    "EnquiryItemId": 1, "EnquiryId": 1, "CandidateId": 1, "ApplicationNo": 1000,
+    "IncludePhoto": false,  "IncludeGrade": false,  "IncludeSalaryExpectation": false,
+    "candidateAndEnqItemIds":
+    [{"candidateId":10, "enquiryItemId":4}, {"candidateId":22, "enquiryItemId":5}]
+  }

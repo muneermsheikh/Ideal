@@ -6,14 +6,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Config
 {
-    public class ProcessingConfiguration : IEntityTypeConfiguration<Processing>
+    public class ProcessingConfiguration : IEntityTypeConfiguration<Process>
     {
-        public void Configure(EntityTypeBuilder<Processing> builder)
+        public void Configure(EntityTypeBuilder<Process> builder)
         {
             builder.Property(x => x.CVRefId).IsRequired();
-            builder.HasIndex(x => x.CVRefId);
             builder.Property(x => x.Status).IsRequired();
-
+            builder.HasIndex("CVRefId");
+            builder.HasIndex("CVRefId", "Status").IsUnique();
+            
             builder.Property(s => s.Status)
                 .HasConversion(
                     o => o.ToString(),

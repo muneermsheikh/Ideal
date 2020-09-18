@@ -127,7 +127,7 @@ namespace Infrastructure.Services
             //adding JobDesc also adds Remuneration to the db
             //await _unitOfWork.Repository<Remuneration>().AddListAsync(remunList);
             
-            enqAdded.EnquiryItems=await _unitOfWork.Repository<EnquiryItem>().GetEntityListWithSpec(
+            enqAdded.EnquiryItems=(List<EnquiryItem>) await _unitOfWork.Repository<EnquiryItem>().GetEntityListWithSpec(
                 new EnquiryItemsSpecs(enqAdded.Id,enumItemReviewStatus.NotReviewed));
     
             // delete basket
@@ -149,12 +149,14 @@ namespace Infrastructure.Services
         {
             //return await _unitOfWork.Repository<Enquiry>().GetByIdAsync(enquiryId); 
             return await _unitOfWork.Repository<Enquiry>().GetEntityWithSpec(
-                new EnquirySpecs(enquiryId, enumEnquiryStatus.ReviewedAndAccepted, false, false));
+                new EnquirySpecs(enquiryId, enumEnquiryReviewStatus.Accepted, false, false));
         }
 
         public async Task<Enquiry> GetEnquiryByIdAsync(int enquiryId)
         {
-            return await _unitOfWork.Repository<Enquiry>().GetByIdAsync(enquiryId);
+            var enq = await _context.Enquiries.Where(x=>x.Id==enquiryId)
+                .Include(x=>x.EnquiryItems).SingleOrDefaultAsync();
+            return enq;
         }
         public async Task<IReadOnlyList<Enquiry>> GetEntityListWithSpec(EnquiryParams enqParam)
         {
@@ -205,26 +207,15 @@ namespace Infrastructure.Services
             return (todoAdded != null);
         }
 
-    // employees
+// employees
         public async Task<Employee> EmployeeToReturn(int employeeId)
         {
             return await _unitOfWork.Repository<Employee>().GetByIdAsync(employeeId);
         }
 
 
-    // customer
-        public async Task<CustomerOfficial> CustomerOfficialToReturn(int custOfficialId)
-        {
-            return await _unitOfWork.Repository<CustomerOfficial>().GetByIdAsync(custOfficialId);
-        }
 
-        public async Task<Customer> CustomerToReturn(int customerId)
-        {
-            return await _unitOfWork.Repository<Customer>().GetByIdAsync(customerId);
-        }
-
-
-    // job desc
+// job desc
         public async Task<JobDesc> GetJobDescriptionBySpecAsync(int enquiryItemId)
         {
             var jd = await _unitOfWork.Repository<JobDesc>().GetEntityWithSpec(
@@ -246,7 +237,7 @@ namespace Infrastructure.Services
         }
 
 
-    // remuneration
+// remuneration
         public async Task<Remuneration> GetRemunerationBySpecEnquiryItemIdAsync(int enquiryItemId)
         {
             var spec = new RemunerationSpecs(enquiryItemId);
@@ -267,11 +258,6 @@ namespace Infrastructure.Services
         {
             return await _unitOfWork.Repository<Remuneration>().UpdateAsync(remuneration);
         }
-
-
-    // contract review
-
-
 
     //PRIVATE METHODS
         // if a customer with email exists, get the entity and return its Id
@@ -317,12 +303,12 @@ namespace Infrastructure.Services
                 on o.Id equals e.EnquiryId join c in _context.Categories 
                 on e.CategoryItemId equals c.Id 
                 where e.Id == enquiryItemId
-                select (new { orderNo = o.EnquiryNo, orderDt = o.EnquiryDate, 
+                select (new { orderNo = o.EnquiryNo, orderid=o.Id, orderDt = o.EnquiryDate, 
                     srNo = e.SrNo, catName=c.Name, customerName = o.Customer.CustomerName, 
                     cityName=o.Customer.CityName })
             ).FirstOrDefaultAsync();
            
-            var cat = new CategoryRefFromEnquiryItemId(rs.customerName, rs.cityName, 
+            var cat = new CategoryRefFromEnquiryItemId(rs.customerName, rs.cityName, rs.orderid,
                 rs.orderNo + "-" + rs.srNo + "-" + rs.catName, rs.orderNo + "/" + rs.orderDt);
             return cat;
         }

@@ -14,7 +14,7 @@ namespace Core.Specifications
                     (!eParam.EnquiryNo.HasValue || x.EnquiryNo == eParam.EnquiryNo) &&
                     (!eParam.EnquiryDate.HasValue || DateTime.Compare(
                         x.EnquiryDate.Date, eParam.EnquiryDate.Value.Date)==0) &&
-                    (!eParam.status.HasValue || x.EnquiryStatus == eParam.status))
+                    (!eParam.status.HasValue || x.EnquiryReviewStatusId  == eParam.status))
             )
         {
         }

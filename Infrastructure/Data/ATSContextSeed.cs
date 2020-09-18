@@ -10,6 +10,7 @@ using Core.Entities.HR;
 using Core.Entities.Masters;
 using Core.Entities.Admin;
 using Microsoft.Extensions.Logging;
+using Core.Entities.Processing;
 
 namespace Infrastructure.Data
 {
@@ -20,7 +21,7 @@ namespace Infrastructure.Data
             var loggr = loggerFactory.CreateLogger<ATSContext>();
             try
             {
-               if (!context.AssessmentQsBank.Any())
+               if (!context.AssessmentQsBank.Any())         //works
                 {
                     var indData = File.ReadAllText("../Infrastructure/Data/SeedData/assessmentQBank.json");
                     var inds = JsonSerializer.Deserialize<List<AssessmentQBank>>(indData);
@@ -32,13 +33,11 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
 
-                if (!context.IndustryTypes.Any())
+                if (!context.IndustryTypes.Any())           //works
                 {
                     loggr.LogInformation("entered industry types");
                     var indData = File.ReadAllText("../Infrastructure/Data/SeedData/industryType.json");
                     var inds = JsonSerializer.Deserialize<List<IndustryType>>(indData);
-                    
-                    loggr.LogWarning("finished industry types json");
                     
                     foreach (var item in inds)
                     {
@@ -47,7 +46,7 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
 
-                if (!context.SkillLevels.Any())
+                if (!context.SkillLevels.Any())             //works
                 {
                     var levelData = File.ReadAllText("../Infrastructure/Data/SeedData/skillLevel.json");
                     var levels = JsonSerializer.Deserialize<List<SkillLevel>>(levelData);
@@ -58,7 +57,7 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
 
-                if (!context.Categories.Any())
+                if (!context.Categories.Any())              //works
                 {
                     var catData = File.ReadAllText("../Infrastructure/Data/SeedData/category.json");
                     var cats = JsonSerializer.Deserialize<List<Category>>(catData);
@@ -79,8 +78,21 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
+
 */
-                if (!context.Candidates.Any())
+
+                if (!context.ProcessStatuses.Any())
+                {
+                    var prcsData = File.ReadAllText("../Infrastructure/Data/SeedData/ProcessStatus.json");
+                    var prcs = JsonSerializer.Deserialize<List<ProcessStatus>>(prcsData);
+                    foreach (var item in prcs)
+                    {
+                        context.ProcessStatuses.Add(item);
+                    }
+                    await context.SaveChangesAsync();
+                }
+
+                if (!context.Candidates.Any())              //works
                 {
                     var candData = File.ReadAllText("../Infrastructure/Data/SeedData/candidate.json");
                     var cands = JsonSerializer.Deserialize<List<Candidate>>(candData);
@@ -89,7 +101,20 @@ namespace Infrastructure.Data
                         context.Candidates.Add(item);
                     }
                     await context.SaveChangesAsync();
+               }
+               
+                /*
+                if (!context.CandidateCategories.Any())     //includes in caandidates
+                {
+                    var cvData = File.ReadAllText("../Infrastructure/Data/SeedData/candidateCategories.json");
+                    var cvs = JsonSerializer.Deserialize<List<CandidateCategory>>(cvData);
+                    foreach (var item in cvs)
+                    {
+                        context.CandidateCategories.Add(item);
+                    }
+                    await context.SaveChangesAsync();
                 }
+*/
 
                 if (!context.Customers.Any())
                 {
@@ -101,8 +126,8 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
-
-                if (!context.CustomerOfficials.Any())
+            /*
+                if (!context.CustomerOfficials.Any())           //inlucded in customers
                 {
                     var offData = File.ReadAllText("../Infrastructure/Data/SeedData/customerOfficial.json");
                     var offs = JsonSerializer.Deserialize<List<CustomerOfficial>>(offData);
@@ -112,8 +137,9 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
+            */
 
-                 if (!context.Roles.Any())
+                 if (!context.Roles.Any())      //works
                 {
                     var roleData = File.ReadAllText("../Infrastructure/Data/SeedData/roles.json");
                     var rols = JsonSerializer.Deserialize<List<Role>>(roleData);
@@ -124,7 +150,7 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
 
-                 if (!context.Employees.Any())
+                 if (!context.Employees.Any())      //works
                 {
                     var empData = File.ReadAllText("../Infrastructure/Data/SeedData/employee.json");
                     var emps = JsonSerializer.Deserialize<List<Employee>>(empData);
@@ -144,8 +170,8 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
-
-                if (!context.EnquiryItems.Any())
+            /*
+                if (!context.EnquiryItems.Any())        //included in enquiries
                 {
                     var itemData = File.ReadAllText("../Infrastructure/Data/SeedData/enquiryItem.json");
                     var items = JsonSerializer.Deserialize<List<EnquiryItem>>(itemData);
@@ -155,8 +181,11 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
+            */
 
-                if (!context.DLForwardToHR.Any())
+
+            
+                if (!context.DLForwardToHR.Any())           //works
                 {
                     var empData = File.ReadAllText("../Infrastructure/Data/SeedData/dlForwardToHR.json");
                     var emps = JsonSerializer.Deserialize<List<DLForwardToHR>>(empData);
@@ -190,6 +219,16 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
          
+          if (!context.AssessmentQsBank.Any())
+                {
+                    var taskData = File.ReadAllText("../Infrastructure/Data/SeedData/assessmentQBank.json");
+                    var tasks = JsonSerializer.Deserialize<List<AssessmentQBank>>(taskData);
+                    foreach (var item in tasks)
+                    {
+                        context.AssessmentQsBank.Add(item);
+                    }
+                    await context.SaveChangesAsync();
+                }
 
             }
             catch (Exception ex)

@@ -14,7 +14,8 @@ namespace Core.Specifications
                 (!cParams.ApplicationDated.HasValue || DateTime.Compare(
                     x.ApplicationDated.Date, cParams.ApplicationDated.Value.Date) == 0) &&
                 (!cParams.CandidateStatus.HasValue || 
-                    x.CandidateStatus == cParams.CandidateStatus)
+                    x.CandidateStatus == cParams.CandidateStatus) &&
+                (!cParams.Id.HasValue || x.Id == cParams.Id)
             ))
         {
         }

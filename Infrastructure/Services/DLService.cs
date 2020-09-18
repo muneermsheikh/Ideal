@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +36,12 @@ namespace Infrastructure.Services
 
         public async Task<IReadOnlyList<Enquiry>> GetDLIndexLast500Async()
         {
-            return await _unitOfWork.Repository<Enquiry>().ListAllAsync();
+            //return await _unitOfWork.Repository<Enquiry>().ListAllAsync();
+            return await _context.Enquiries
+                .Include(x=>x.EnquiryItems)
+                .OrderBy(x=>x.EnquiryNo)
+                .Take(500)
+            .ToListAsync();
         }
 
         public async Task<Enquiry> UpdateDLAsync(Enquiry enquiry)
@@ -50,7 +56,7 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Customer>().GetByIdAsync(enq.CustomerId);
         }
 
-        //DL Items
+//DL Items
         public async Task<EnquiryItem> GetDLItemAsync(int enquiryItemId)
         {
             return await _unitOfWork.Repository<EnquiryItem>().GetByIdAsync(enquiryItemId);
@@ -89,9 +95,9 @@ namespace Infrastructure.Services
             return await _itemRepo.UpdateAsync(enquiryItem);
         }
 
-        public async Task<EnquiryItem> AddDLItemAsync(EnquiryItem enquiryItem)
+        public async Task<IReadOnlyList<EnquiryItem>> AddDLItemsAsync(List<EnquiryItem> enquiryItems)
         {
-            return await _itemRepo.AddAsync(enquiryItem);
+            return await _itemRepo.AddListAsync(enquiryItems);
         }
 
         public async Task<bool> DeleteDLItemAsync(EnquiryItem enquiryItem)
@@ -106,7 +112,7 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Category>().GetByIdAsync(item.CategoryItemId);
         }
 
-        // CONRACT REVIEW ITEMS
+// CONRACT REVIEW ITEMS
         public async Task<int> DeleteContractReviewItem(ContractReviewItem contractReviewItem)
         {
             return await _unitOfWork.Repository<ContractReviewItem>().DeleteAsync(contractReviewItem);
@@ -116,14 +122,16 @@ namespace Infrastructure.Services
         public async Task<IReadOnlyList<ContractReviewItem>> GenerateReviewItemsOfAnEnquiryAsync(
             int enquiryId)
         {
-            return await CreateReviewItemsOfEnquiry(enquiryId, enumItemReviewStatus.NotReviewed);
+            return await CreateReviewItemsOfEnquiry(enquiryId);
         }
 
         //adds a contract review item if one does not exist
         public async Task<ContractReviewItem> GetOrAddReviewItemAsync(int enquiryItemId)
         {
-            var item = await _unitOfWork.Repository<ContractReviewItem>()
-                .GetEntityWithSpec(new ContractReviewItemSpec(enquiryItemId));
+            //var item = await _unitOfWork.Repository<ContractReviewItem>()
+                //.GetEntityWithSpec(new ContractReviewItemSpec(enquiryItemId));
+            var item = await _context.ContractReviewItems.Where(x => x.EnquiryItemId==enquiryItemId)
+                .FirstOrDefaultAsync();
             if (item == null)
             {
                 var enq = await _unitOfWork.Repository<EnquiryItem>().GetByIdAsync(enquiryItemId);
@@ -136,21 +144,63 @@ namespace Infrastructure.Services
 
         public async Task<IReadOnlyList<ContractReviewItem>> GetOrAddReviewItemsOfEnquiryAsync(int enquiryId)
         {
-            var rvws = await _unitOfWork.Repository<ContractReviewItem>()
-                .GetEntityListWithSpec(new ContractReviewItemSpec("", enquiryId));
-            if (rvws.Count == 0) return await CreateReviewItemsOfEnquiry(enquiryId, enumItemReviewStatus.NotReviewed);
-
+            var rvws = await CreateReviewItemsOfEnquiry(enquiryId); 
             return rvws;
         }
 
-
-        public async Task<ContractReviewItem> UpdateReviewItemAsync(ContractReviewItem reviewItem)
+       public async Task<ContractReviewItem> UpdateReviewItemAsync(ContractReviewItem reviewItem)
         {
-            return await _unitOfWork.Repository<ContractReviewItem>().UpdateAsync(reviewItem);
+            return  await _unitOfWork.Repository<ContractReviewItem>().UpdateAsync(reviewItem);
+
         }
 
         public async Task<int> UpdateReviewItemListAsync(List<ContractReviewItem> reviewItems)
         {
+            var isDistinct = (from c in reviewItems select c.EnquiryId).ToList().Distinct();
+            if (isDistinct.Count() > 1) throw new Exception ("Please include review items of " +
+                "one DL at a time");
+            var distinctIdList = isDistinct.ToArray();
+            int userId=reviewItems[0].ReviewedBy;
+            var bSelected=false;
+            var bRejected=false;
+            var items = new List<EnquiryItem>();
+            foreach(var item in reviewItems)
+            {
+                var eItem = await _context.EnquiryItems.Where(x => x.Id == item.EnquiryItemId)
+                    .FirstOrDefaultAsync();
+                eItem.Status = item.Status;
+                items.Add(eItem);
+                switch(eItem.Status)
+                {
+                    case enumItemReviewStatus.Accepted:
+                        bSelected=true;
+                        break;
+                    case enumItemReviewStatus.Rejected_CustomerLowStanding:
+                    case enumItemReviewStatus.Rejected_RequirementSuspect:
+                    case enumItemReviewStatus.Rejected_SalaryOfferedNotFeasible:
+                    case enumItemReviewStatus.Rejected_TechNotFeasible:
+                    case enumItemReviewStatus.Rejected_VisasNotAvailable:
+                    case enumItemReviewStatus.RequirementConcluded:
+                        bRejected=true;
+                        break;
+                    default:
+                        break;
+                }
+                var enq= await _context.Enquiries.Where(x=>x.Id == distinctIdList[0]).FirstOrDefaultAsync();
+                
+                enq.ReviewedById=userId;
+                enq.ReviewedOn=DateTime.Now;
+
+                if(bSelected && !bRejected) 
+                {enq.EnquiryReviewStatusId = enumEnquiryReviewStatus.Accepted_WithExceptions; }
+                else if(bSelected) {enq.EnquiryReviewStatusId = enumEnquiryReviewStatus.Accepted;} 
+                else if (bRejected) {enq.EnquiryReviewStatusId = enumEnquiryReviewStatus.Declined; }
+                
+                await _unitOfWork.Repository<Enquiry>().UpdateAsync(enq);
+            }
+            
+            await _itemRepo.UpdateListAsync(items);
+
             return await _unitOfWork.Repository<ContractReviewItem>().UpdateListAsync(reviewItems);
         }
 
@@ -195,7 +245,7 @@ namespace Infrastructure.Services
 
 
 
-        //JOB DESC        
+    //JOB DESC        
         public async Task<int> DeleteJobDescAsync(JobDesc jobDescription)
         {
             return await _unitOfWork.Repository<JobDesc>().DeleteAsync(jobDescription);
@@ -228,7 +278,7 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<JobDesc>().UpdateAsync(jobDesc);
         }
 
-        //REMUNERATIONS
+//REMUNERATIONS
         public async Task<int> DeleteRemunerationAsync(Remuneration remuneration)
         {
             return await _unitOfWork.Repository<Remuneration>().DeleteAsync(remuneration);
@@ -261,7 +311,7 @@ namespace Infrastructure.Services
         {
             return await _unitOfWork.Repository<Remuneration>().UpdateAsync(remuneration);
         }
-        //privates
+//privates
         private async Task<bool> EnquiryItemIdMatchesWithEnquiryId(int enquiryItemId, int enquiryId)
         {
             var item = await _itemRepo.GetEntityWithSpec(
@@ -269,26 +319,29 @@ namespace Infrastructure.Services
             return (item == null ? false : true);
         }
 
-        private async Task<IReadOnlyList<ContractReviewItem>> CreateReviewItemsOfEnquiry(int enquiryId, enumItemReviewStatus status)
+        private async Task<IReadOnlyList<ContractReviewItem>> CreateReviewItemsOfEnquiry(int enquiryId)
         {
-            var cReviewItemsList = new List<ContractReviewItem>();
+ 
+            var itemids = await _context.EnquiryItems.Where(x=>x.EnquiryId==enquiryId)
+                .OrderBy(x => x.Id).Select(x => x.Id).ToListAsync();
+            var reviewids = await _context.ContractReviewItems.Where(x => x.EnquiryId == enquiryId)
+                .OrderBy(x => x.EnquiryItemId).Select(x => x.EnquiryItemId).ToListAsync();
+            IEnumerable<int> itemlist = itemids.ToArray();
+            IEnumerable<int> reviewlist = reviewids.ToArray();
 
-            var _repoItem = _unitOfWork.Repository<EnquiryItem>();
-            var enqItems = await _repoItem.GetEntityListWithSpec(
-                new EnquiryItemsSpecs(enquiryId, status));
-            var _repoReview = _unitOfWork.Repository<ContractReviewItem>();
-            foreach (var eItem in enqItems)
+            var missingids = reviewids == null ? itemlist: itemlist.Except(reviewlist);
+        
+            var cReviewItems = new List<ContractReviewItem>();
+            foreach(var item in missingids)
             {
-                var item = await _repoReview.GetEntityWithSpec(new ContractReviewItemSpec(eItem.Id));
-                if (item == null)
-                {
-                    var reviewItem = await _repoReview.AddAsync(new ContractReviewItem(eItem.Id, enquiryId));
-                    if (reviewItem != null) cReviewItemsList.Add(reviewItem);
-                }
+                cReviewItems.Add(new ContractReviewItem(item, enquiryId));
             }
-
-            return cReviewItemsList;
-
+            
+            if (cReviewItems.Count > 0) await _unitOfWork.Repository<ContractReviewItem>().AddListAsync(cReviewItems);
+            return await _unitOfWork.Repository<ContractReviewItem>().GetEntityListWithSpec(
+                new ContractReviewItemSpec("dummy", enquiryId));
         }
+
+        
     }
 }

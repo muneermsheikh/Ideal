@@ -7,6 +7,8 @@ namespace Core.Enumerations
   public enum enumAssessmentResult
     {
         
+        [EnumMember(Value="Not Assessed")]
+        NotReviewed=0,
         [EnumMember(Value = "Shortlisted - First option")]
         Shortlisted_FirstOption = 100,
 

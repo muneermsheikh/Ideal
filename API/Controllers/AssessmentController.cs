@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Core.Entities.Admin;
 using Core.Entities.HR;
 using Core.Entities.Identity;
 using Core.Entities.Masters;
+using Core.Enumerations;
 using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Data;
@@ -36,45 +38,47 @@ namespace API.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        //assessment of candidates
-        [HttpPost("assessment")]
-        public async Task<ActionResult<Assessment>> CreateCandidateAssessment(int enquiryItemId, int candidateId)
+    //assessment of candidates
+        [HttpGet("assess/{itemid}/{candidateid}")]
+        public async Task<ActionResult<AssessmentDto>> CreateAssessmentSheet(int itemid, int candidateid)
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(HttpContext.User);
             if (user == null) return Unauthorized(new ApiResponse(401));
-            var candidateAssessment = await _assessService.CreateAssessment(enquiryItemId, candidateId, user.DisplayName);
+            var candidateAssessment = await _assessService.CreateAssessment(itemid, candidateid, user.DisplayName);
             if (candidateAssessment==null) return null;
-            return candidateAssessment;
+            //var s= await MapAssessmenttoAssessmentDto(candidateAssessment);
+            return Ok(candidateAssessment);
+            //return candidateAssessment;
         }
 
-        [HttpPut("updateassessment")]
-        public async Task<ActionResult<Assessment>> UpdateAssessment(AssessmentToAddDto assessmentAdd)
+        [HttpPost("assess")]
+        public async Task<ActionResult<AssessmentDto>> UpdateAssessment(Assessment assessment)
         {
-            var assess = _mapper.Map<AssessmentToAddDto, Assessment>(assessmentAdd);
-            if (assess == null) return BadRequest(new ApiResponse(400));
-            var assessed = await _assessService.UpdateAssessment(assess);
-            return Ok(await _unitOfWork.Repository<Assessment>().AddAsync(assess));
+            var assessed = await _assessService.UpdateAssessment(assessment);
+            if (assessed==null) return BadRequest(new ApiResponse(404, "failed to update the assessment sheet"));
+            return Ok( MapAssessmenttoAssessmentDto(assessed));
         }
 
-        [HttpGet("assessmentsheet")]
-        public async Task<ActionResult<Assessment>> GetCandidateAssessmentSheet(
-            int CandidateId, int EnquiryItemId)
+        [HttpGet("sheet/{itemid}/{id}")]
+        public async Task<ActionResult<AssessmentDto>> GetCandidateAssessmentSheet(int itemid, int id)
         {
-            var sheet = await _unitOfWork.Repository<Assessment>().GetEntityWithSpec(
-                new AssessmentSpec(CandidateId, EnquiryItemId));
+            var sheet = await _unitOfWork.Repository<Assessment>().GetEntityWithSpec(new AssessmentSpec(id, itemid));
             if (sheet == null) return NotFound(new ApiResponse(404));
-            return Ok(sheet);
+            
+            return Ok(_mapper.Map<Assessment, AssessmentDto>(sheet));
         }
 
 
-        [HttpGet("assessmentsheet/{id}")]
-        public async Task<ActionResult<Assessment>> GetCandidateAssessmentSheet(int id)
+        [HttpGet("assessmentsheet/{assessmentid}")]
+        public async Task<ActionResult<AssessmentDto>> GetCandidateAssessmentSheet(int assessmentid)
         {
-            return await _unitOfWork.Repository<Assessment>().GetByIdAsync(id);
+            var sheet = await _unitOfWork.Repository<Assessment>().GetByIdAsync(assessmentid);
+            if (sheet == null) return NotFound(new ApiResponse(400, "No assessments available for candidate chosen"));
+            return Ok(_mapper.Map<Assessment, AssessmentDto>(sheet));
         }
 
-        //assessment q for enqiry items
-        [HttpPost("enquiryitemqspec/{id}")]
+    //assessment q for enqiry items
+        [HttpPost("specqforitem/{id}")]
         public async Task<ActionResult<AssessmentQDto>> CreateAssessmentQForEnquiryItem(int id)
         {
             var Qs = await _assessService.CopyQToAssessmentQOfEnquiryItem(id);
@@ -82,47 +86,14 @@ namespace API.Controllers
             return Ok(LstHdr);
         }
 
-        [HttpPost("enquiryitemqstdd/{id}")]
-        public async Task<ActionResult<AssessmentQDto>> GenerateStddAssessmentQForEnquiryItem(
-                int id)
+        [HttpPost("stddqforitem/{id}")]
+        public async Task<ActionResult<AssessmentQDto>> GenerateStddAssessmentQForEnquiryItem(int id)
         {
             var Qs = await _assessService.CopyStddQToAssessmentQOfEnquiryItem(id);
             if (Qs == null || Qs.Count == 0) return BadRequest(new ApiResponse(400, "Failed to copy standard assessment Questions"));
 
             var LstHdr = MapAssessmentQtoAssessmentQDto(id, Qs);
             return Ok(LstHdr);
-            /*
-            var lst = new List<AssessmentQItemDto>();
-            int j = 0;
-            foreach (var q in Qs)
-            {
-                lst.Add(new AssessmentQItemDto(++j, q.IsMandatory, q.AssessmentParameter,
-                    q.Question, q.MaxPoints));
-            }
-            
-            var assessQ = await (from e in _context.Enquiries 
-                join i in _context.EnquiryItems on e.Id equals i.EnquiryId
-                join c in _context.Categories on i.CategoryItemId equals c.Id 
-                where i.Id == id 
-                select new {enqno = e.EnquiryNo, enqdt = e.EnquiryDate, 
-                    srno=i.SrNo, catname=c.Name}).SingleOrDefaultAsync();
-            
-
-            var item  = await _context.EnquiryItems.Where(x => x.Id == id)
-                .Select(x => new {x.EnquiryId, x.SrNo, x.CategoryItemId}).FirstOrDefaultAsync();
-            var enq = await _context.Enquiries.Where(x=>x.Id==item.EnquiryId)
-                .Select(x=> new {x.EnquiryNo, x.EnquiryDate, x.Customer.CustomerName}).FirstOrDefaultAsync();
-            var cat = await _context.Categories.Where(x=>x.Id==item.CategoryItemId).Select(x=>x.Name).FirstOrDefaultAsync();
-            
-            var LstHdr = new AssessmentQDto();
-            LstHdr.EnquiryItemId = id;
-            LstHdr.CategoryRef=enq.EnquiryNo+"-"+item.SrNo+"-"+cat;
-            LstHdr.EnquiryNoAndDate=enq.EnquiryNo + "/" + enq.EnquiryDate;
-            LstHdr.CustomerName=enq.CustomerName;
-            LstHdr.AssessmentQItemListDto = lst;
-
-            return Ok(LstHdr);
-            */
         }
 
         [HttpPut("qforenquiryitem")]
@@ -142,7 +113,7 @@ namespace API.Controllers
         }
 
 
-        //AssessmentQBank
+//AssessmentQBank
         [HttpPost("assessqbank")]
         public async Task<IReadOnlyList<AssessmentQBankToAddDto>> AddQListToAssessmentQBank([FromBody]
             List<AssessmentQBank> Qs)
@@ -161,12 +132,12 @@ namespace API.Controllers
         }
 
         [HttpGet("qbankforcategory/{id}")]
-        public async Task<ActionResult<AssessmentQBankToAddDto>> GetQBankForACategory(int id)
+        public async Task<ActionResult<AssessmentQForCategoryDto>> GetQBankForACategory(int id)
         {
             var qs = await _assessService.GetQBankForACategory(id);
-            var Qs = _mapper.Map<IReadOnlyList<AssessmentQBank>, IReadOnlyList<AssessmentQBankToAddDto>>(qs);
-            //var LstHdr = MapAssessmentQtoAssessmentQDto(id, qs);
-            return Ok(Qs);
+            //var Qs = _mapper.Map<IReadOnlyList<AssessmentQBank>, IReadOnlyList<AssessmentQBankToAddDto>>(qs);
+            var LstHdr = MapAssessmentQBankForCategorytoAssessmentQDto(id, qs);
+            return Ok(LstHdr);
 
         }
 
@@ -207,5 +178,77 @@ namespace API.Controllers
             return LstHdr;
         }
 
+        private async Task<AssessmentQForCategoryDto> MapAssessmentQBankForCategorytoAssessmentQDto(int categoryId, IReadOnlyList<AssessmentQBank> Qs)
+        {
+            /* var item = await _context.EnquiryItems.Where(x => x.CategoryItemId == categoryId)
+                .Select(x => new { x.EnquiryId, x.SrNo, x.CategoryItemId }).FirstOrDefaultAsync();
+            var enq = await _context.Enquiries.Where(x => x.Id == item.EnquiryId)
+                .Select(x => new { x.EnquiryNo, x.EnquiryDate, x.Customer.CustomerName }).FirstOrDefaultAsync();
+            */
+            var cat = await _context.Categories.Where(x => x.Id == categoryId).Select(x => x.Name).FirstOrDefaultAsync();
+
+            var LstHdr = new AssessmentQForCategoryDto();
+            LstHdr.Category = cat;
+            LstHdr.CountOfItems = Qs.Count;
+
+            var lst = new List<AssessmentQItemDto>();
+            int j = 0;
+            foreach (var q in Qs)
+            {
+                lst.Add(new AssessmentQItemDto(++j, q.IsMandatory, q.AssessmentParameter,
+                    q.Question, q.MaxPoints));
+            }
+
+            LstHdr.AssessmentQItemListDto = lst;
+
+            return LstHdr;
+        }
+
+        private async Task<AssessmentDto> MapAssessmenttoAssessmentDto(Assessment assessment)
+        {
+            /*
+            var item = await _context.EnquiryItems.Where(x => x.Id == assessment.EnquiryItemId)
+                .Select(x => new { x.EnquiryId, x.SrNo, x.CategoryItemId }).FirstOrDefaultAsync();
+            var enq = await _context.Enquiries.Where(x => x.Id == item.EnquiryId)
+                .Select(x => new { x.EnquiryNo, x.EnquiryDate, x.Customer.CustomerName }).FirstOrDefaultAsync();
+            var cat = await _context.Categories.Where(x => x.Id == item.CategoryItemId).Select(x => x.Name).FirstOrDefaultAsync();
+            */
+            if (assessment.CandidateId==0 || assessment.EnquiryItemId==0) return null;
+
+            var qry = await (from i in _context.EnquiryItems join e in _context.Enquiries
+                on i.EnquiryId equals e.Id 
+                join c in _context.Categories on i.CategoryItemId equals c.Id 
+                where i.Id == assessment.EnquiryItemId 
+                select new { enquiryno = e.EnquiryNo, enquirydate=e.EnquiryDate,
+                    srno=i.SrNo, cat = c.Name, customername=e.Customer.CustomerName,
+                    city=e.Customer.CityName})
+                .FirstOrDefaultAsync();
+            var cnd = await _context.Candidates.Where(x=>x.Id==assessment.CandidateId)
+                .Select(x => new {appno = x.ApplicationNo, name=x.FullName}).FirstOrDefaultAsync();
+            var LstHdr = new AssessmentDto();
+            LstHdr.EnquiryItemId = assessment.EnquiryItemId;
+            LstHdr.CategoryNameAndRef = qry.enquiryno + "-" + qry.srno + "-" + qry.cat;
+            LstHdr.OrderNoAndDate = qry.enquiryno + "/" + qry.enquirydate;
+            LstHdr.CustomerNameAndCity = qry.customername + ", " + qry.city;
+            LstHdr.CandidateName = cnd.name;
+            LstHdr.ApplicationNo = cnd.appno;
+            LstHdr.AssessedBy=assessment.AssessedBy;
+            LstHdr.GradeString= LstHdr.GradeString + " %ge (" + assessment.GradeString + ")";
+            LstHdr.Result = Enum.GetName(typeof(enumAssessmentResult), assessment.Result);
+ 
+            LstHdr.TotalCount = assessment.AssessmentItems.Count;
+
+            var lst = new List<AssessmentItemDto>();
+            int j = 0;
+            foreach (var q in assessment.AssessmentItems)
+            {
+                lst.Add(new AssessmentItemDto(++j, q.IsMandatory, q.Assessed, q.AssessmentParameter,
+                    q.Question, q.MaxPoints, q.PointsAllotted, q.AssessmentId));
+            }
+
+            LstHdr.Assessments = lst;
+
+            return LstHdr;
+        }
     }
 }

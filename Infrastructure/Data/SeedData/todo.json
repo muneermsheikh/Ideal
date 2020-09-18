@@ -1,23 +1,32 @@
 [
-    { 
-        "OwnerId": 1, 
-        "AssignedToId": 2, 
-        "CompleteBy": "2020-04-04T00:00:00",
-        "TaskType": 1,
-        "TaskDescription": "sample task description 1"
+    { "OwnerId": 1,  "AssignedToId": 2, "CompleteBy": "2020-04-04T00:00:00", "TaskType": 1, 
+        "TaskDescription": "sample task description 1",
+        "TaskItems": [{ "TransactionDetail": "transaction details one one", "TransDate": "2020-04-05T00:00:00"},
+            { "TransactionDetail": "transaction details one two", "TransDate": "2020-04-06T00:00:00"}]
     },
-    { 
-        "OwnerId": 2, 
-        "AssignedToId": 1, 
-        "CompleteBy": "2020-03-04T00:00:00",
-        "TaskType": 2,
-        "TaskDescription": "sample task description 2"
+    { "OwnerId": 2, "AssignedToId": 1, "CompleteBy": "2020-03-04T00:00:00", "TaskType": 2,
+        "TaskDescription": "sample task description 2",
+        "TaskItems": [{ "TransactionDetail": "transaction details two one", "TransDate": "2020-03-05T00:00:00"},
+            { "TransactionDetail": "transaction details two two", "TransDate": "2020-03-06T00:00:00"}]
     },
-    { 
-        "OwnerId": 1, 
-        "AssignedToId": 3, 
-        "CompleteBy": "2020-01-04T00:00:00",
-        "TaskType": 1,
-        "TaskDescription": "sample task description 3"
+    { "OwnerId": 2, "AssignedToId": 4, "CompleteBy": "2020-03-14T00:00:00", "TaskType": 1,
+        "TaskDescription": "sample task description 3",
+        "TaskItems": [{ "TransactionDetail": "transaction details three one", "TransDate": "2020-03-15T00:00:00"},
+            { "TransactionDetail": "transaction details three two", "TransDate": "2020-03-16T00:00:00"}]
+    },
+    { "OwnerId": 2, "AssignedToId": 4, "CompleteBy": "2020-03-14T00:00:00", "TaskType": 2,
+        "TaskDescription": "sample task description 4",
+        "TaskItems": [{ "TransactionDetail": "transaction details four one", "TransDate": "2020-03-15T00:00:00"},
+            { "TransactionDetail": "transaction details four two", "TransDate": "2020-03-16T00:00:00"}]
+    },
+    { "OwnerId": 1, "AssignedToId": 3, "CompleteBy": "2020-03-14T00:00:00", "TaskType": 2,
+        "TaskDescription": "sample task description 5",
+        "TaskItems": [{ "TransactionDetail": "transaction details five one", "TransDate": "2020-03-15T00:00:00"},
+            { "TransactionDetail": "transaction details five two", "TransDate": "2020-03-16T00:00:00"}]
+    },
+    { "OwnerId": 1, "AssignedToId": 3, "CompleteBy": "2020-03-14T00:00:00", "TaskType": 1,
+        "TaskDescription": "sample task description 6",
+        "TaskItems": [{ "TransactionDetail": "transaction details six one", "TransDate": "2020-03-15T00:00:00"},
+            { "TransactionDetail": "transaction details six two", "TransDate": "2020-03-16T00:00:00"}]
     }
 ]

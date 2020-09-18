@@ -18,16 +18,9 @@ namespace API.Helpers
         public string Resolve(AssessmentToAddDto source, Assessment destination, string destMember, ResolutionContext context)
         {
             if (source.EnquiryitemId == 0) return null;
-            var item = _enqService.GetEnquiryItemByIdAsync(source.EnquiryitemId).Result;
-            if (item == null) return null;
-            var cat = _catService.CategoryByIdAsync(source.EnquiryitemId).Result;
-            if (cat==null) return null;
-
-            var enq = _enqService.GetEnquiryByIdAsync(item.EnquiryId).Result;
-            if (enq==null) return null;
             
-            return enq.EnquiryNo + "-" + item.SrNo + "-" + cat.Name;
-
+            var cat = _catService.GetCategoryNameWithRefFromEnquiryItemId(source.EnquiryitemId);
+            return cat;
         }
     }
 }

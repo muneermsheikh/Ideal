@@ -39,14 +39,7 @@ namespace API.Controllers
             _context = context;
         }
         
-//Forward to clients
-        [HttpPost("refcvstoclient")]
-        public async Task<CVForward> ForwardCVsToClient(CVForward cvforward)
-        {
-            var cvsReferred = await _cvrefService.ReferCVsToForward(cvforward);
 
-            return cvsReferred;
-        }
 //evaluation
         
         [HttpGet("getevalbyid/{id}")]

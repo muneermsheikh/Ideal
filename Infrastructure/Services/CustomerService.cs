@@ -1,16 +1,24 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities.Admin;
 using Core.Interfaces;
 using Core.Specifications;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services
 {
     public class CustomerService : ICustomerService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CustomerService(IUnitOfWork unitOfWork)
+        private readonly IDLService _dLService;
+        private readonly ATSContext _context;
+
+        public CustomerService(IUnitOfWork unitOfWork, IDLService dLService, ATSContext context)
         {
+            _dLService = dLService;
+            _context = context;
             _unitOfWork = unitOfWork;
         }
 
@@ -37,7 +45,7 @@ namespace Infrastructure.Services
         public async Task<int> DeleteCustomerByIdAsync(int customerId)
         {
             var cust = await _unitOfWork.Repository<Customer>().GetByIdAsync(customerId);
-            return  await _unitOfWork.Complete();
+            return await _unitOfWork.Complete();
         }
 
         public async Task<int> GetCustomerIdFromEmail(CustomerSpecParams custParams)
@@ -59,7 +67,7 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Customer>().GetCustomerFromEmailAsync(email);
         }
 
-//officials
+        //officials
         public async Task<IReadOnlyList<CustomerOfficial>> GetCustomerOfficialList(int CustomerId)
         {
             return await _unitOfWork.Repository<CustomerOfficial>().GetEntityListWithSpec(
@@ -76,6 +84,15 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<CustomerOfficial>().UpdateListAsync(officials);
         }
 
-      
+        public async Task<clsString> GetCustomerFromEnquiryItemId(int EnquiryItemId)
+        {
+            var enqid = await _context.EnquiryItems.Where(x=>x.Id==EnquiryItemId)
+                .Select(x=>x.EnquiryId).SingleOrDefaultAsync();
+            var custname = await _context.Enquiries.Where(x=>x.Id==enqid)
+                .Select(x=>x.Customer.CustomerName + " " + x.Customer.CityName).SingleOrDefaultAsync();
+            var r = new clsString();
+            r.Name=custname;
+            return r;
+        }
     }
 }

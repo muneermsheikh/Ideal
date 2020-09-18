@@ -7,7 +7,7 @@ namespace API.Dtos
     {
         public string ApplicationNo {get; set; }
         public string CandidateName {get; set;}
-        public List<strObject> CategoryNames {get; set; }
+        public List<clsString> CategoryNames {get; set; }
     }
 
 }

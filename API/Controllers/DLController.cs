@@ -67,8 +67,9 @@ namespace API.Controllers
         {
             var enq = await _enqService.GetEnquiryByIdAsync(enquiryId);
             if (enq == null) return NotFound(new ApiResponse(400, "There is no record with that Id"));
-
-            foreach (var item in enq.EnquiryItems)
+            var enqItems = enq.EnquiryItems;
+            if (enqItems==null) throw new Exception("The Demand Letter has no items");
+            foreach (var item in enqItems)
             {
                 item.JobDesc = await _enqService.GetJobDescriptionBySpecAsync(item.Id);
                 item.Remuneration = await _enqService.GetRemunerationBySpecEnquiryItemIdAsync(item.Id);
@@ -142,12 +143,12 @@ namespace API.Controllers
             return BadRequest(new ApiResponse(400));
         }
 
-        [HttpPost("enquiryItem")]
-        public async Task<ActionResult<EnquiryItemToReturnDto>> InsertDLItem(EnquiryItem enquiryItem)
+        [HttpPost("enquiryItems")]
+        public async Task<ActionResult<IReadOnlyList<EnquiryItemToReturnDto>>> InsertDLItems(List<EnquiryItem> enquiryItems)
         {
-            var enqItem = await _unitOfWork.Repository<EnquiryItem>().AddAsync(enquiryItem);
+            var enqItem = await _unitOfWork.Repository<EnquiryItem>().AddListAsync(enquiryItems);
             if (enqItem == null) return BadRequest(new ApiResponse(400));
-            return Ok(_mapper.Map<EnquiryItem, EnquiryItemToReturnDto>(enqItem));
+            return Ok(_mapper.Map<IReadOnlyList<EnquiryItem>, IReadOnlyList<EnquiryItemToReturnDto>>(enqItem));
         }
          
 
@@ -225,21 +226,6 @@ namespace API.Controllers
 
             if (rvwItems == 0 ) return BadRequest(new ApiResponse(404, "Bad request, or the review item does not exist"));
             return Ok();
-        /*
-            var reviews = await _dLService.UpdateReviewItemsAsync(reviewItems);
-            if (reviews == null) return BadRequest(new ApiResponse(400, "Failed to update review item"));
-
-            // POST UPDATE - Update Enquiry.ReadyToReview to true if all enquiry items reviewed 
-            int notReviewed = await _enqService.GetEnquiryItemsCountNotReviewed(reviewItems[0].EnquiryId);
-            if (notReviewed > 0) return Ok(reviews);        // do nothing, as not all items are reviewed
-
-            // all enquiry items reviewed. update Enquiry.ReadyForReview flag
-            var enq = await _enqService.GetEnquiryWithSpecByIdAsync(reviewItems[0].EnquiryId);
-            if (enq == null) return BadRequest(new ApiResponse(400, "Failed to retrieve enquiry by Id"));
-            var res = await _enqService.UpdateEnquiryReadyToReview(enq);
-
-            return Ok(reviews);
-        */
         }
 
         [HttpPost("reviewitems")]

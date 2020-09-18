@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Core.Entities.EnquiryAggregate;
 using Core.Entities.HR;
 using Core.Entities.Identity;
 using Core.Entities.Masters;
+using Core.Enumerations;
 using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Data;
@@ -38,6 +40,7 @@ namespace API.Controllers
             _context = context;
         }
 
+//candidates
         [HttpGet("candidates")]     // ***TO DO - nested mapping
         public async Task<ActionResult<Pagination<IReadOnlyList<CandidateDto>>>> GetCandidates([FromBody] CandidateParams candidateParams)
         {
@@ -47,13 +50,34 @@ namespace API.Controllers
             if (totalItems == 0) return NotFound(new ApiResponse(400, "Your search conditions did not return any candidate"));
 
             var cvs = await _candidateService.GetCandidatesBySpecs(candidateParams);
-            //var cvs = await _unitOfWork.Repository<Candidate>().GetEntityListWithSpec(
-                //new CandidateSpecs(candidateParams));
 
-            var data = _mapper.Map<IReadOnlyList<Candidate>, IReadOnlyList<CandidateDto>>(cvs);
+            //var data = _mapper.Map<IReadOnlyList<Candidate>, IReadOnlyList<CandidateDto>>(cvs);
+            //var data = MapToCandidateDto(cvs);
 
-            return Ok(new Pagination<CandidateDto>(
-                candidateParams.PageIndex, candidateParams.PageSize, totalItems, data));
+            var dtoList = new List<CandidateDto>();
+            foreach(var cand in cvs)
+            {
+                var catList = new List<CategoryNameDto>();
+                //var candCategories = cand.CandidateCategories;
+                var candCategories= await _context.CandidateCategories.Where(x => x.CandId == cand.Id).ToListAsync();
+                if (candCategories !=null || candCategories.Count > 0)
+                {
+                    foreach(var item in candCategories)
+                    {
+                        var cat = await _context.Categories.Where(x=>x.Id==item.CatId)
+                            .Select(x=> new {x.Id, x.Name}).FirstOrDefaultAsync();
+                        catList.Add(new CategoryNameDto(cat.Id, cat.Name));
+                    }
+                }
+                var cityname = cand.CandidateAddress==null ? "undefined": cand.CandidateAddress.City;
+                dtoList.Add(new CandidateDto(cand.Id,cand.ApplicationNo,cand.ApplicationDated,
+                    cand.Gender, cand.FullName, DateTime.Now.Year - cand.DOB.Year, cand.PPNo,
+                    cand.AadharNo, cityname,
+                    Enum.GetName(typeof(enumCandidateStatus), cand.CandidateStatus), catList));
+            }
+
+           return Ok(new Pagination<CandidateDto>(
+                candidateParams.PageIndex, candidateParams.PageSize, totalItems, dtoList));
         }
 
         [HttpPost("registercandidate")]
@@ -62,6 +86,17 @@ namespace API.Controllers
         {
 
             var candidateAdded = await _candidateService.RegisterCandidate(candidate);
+
+            if (candidateAdded == null) return BadRequest(new ApiResponse(404, "Failed to register the candidate"));
+            return Ok(candidateAdded);
+
+        }
+
+        [HttpPost("registercandidates")]
+        // ***TO DO - embed candidatecategory in candidate object
+        public async Task<ActionResult<IReadOnlyList<Candidate>>> RegisterCandidates([FromBody] IReadOnlyList<Candidate> candidates)
+        {
+            var candidateAdded = await _candidateService.RegisterCandidates(candidates);
 
             if (candidateAdded == null) return BadRequest(new ApiResponse(404, "Failed to register the candidate"));
             return Ok(candidateAdded);
@@ -83,13 +118,14 @@ namespace API.Controllers
         }
 
 //candidate categories
-        [HttpGet("candidatecategories/{categoryid}")]       //tested
-        public async Task<ActionResult<IReadOnlyList<CandidateDto>>> CandidatesMatchingCategories(IReadOnlyList<int> categoryIntIds)
+        [HttpGet("candwithcats")]       //tested
+        public async Task<ActionResult<IReadOnlyList<CandidateDto>>> CandidatesMatchingCategories([FromBody] IReadOnlyList<int> categoryIntIds)
         {
             var cands = await _candidateCategoryService.GetCandidatesWithMatchingCategories(categoryIntIds);
             if (cands==null) return NotFound(new ApiResponse(400, "Your instructions did not return any candidates"));
             if (cands.Count==0) return NotFound(new ApiResponse(400, "Your instructions did not return any candidates"));
-            return Ok(cands);
+            var dto =  MapToCandidateDto(cands);
+            return Ok(dto);
         }
 
         [HttpGet("categoriesofcandidate/{candidateid}")]        //tested
@@ -136,5 +172,33 @@ namespace API.Controllers
             return await _candidateCategoryService.DeleteCandidatecategory(candidateCategory);
         }
 
+//private
+        private async Task<List<CandidateDto>> MapToCandidateDto(IReadOnlyList<Candidate> candidates)
+        {
+            
+            var dtoList = new List<CandidateDto>();
+            foreach(var cand in candidates)
+            {
+                var catList = new List<CategoryNameDto>();
+                //var candCategories = cand.CandidateCategories;
+                var candCategories= await _context.CandidateCategories.Where(x => x.CandId == cand.Id).ToListAsync();
+                if (candCategories !=null)
+                {
+                    foreach(var item in candCategories)
+                    {
+                        var cat = await _context.Categories.Where(x=>x.Id==item.CatId)
+                            .Select(x=> new {x.Id, x.Name}).FirstOrDefaultAsync();
+                        catList.Add(new CategoryNameDto(cat.Id, cat.Name));
+                    }
+                }
+                var cityname = cand.CandidateAddress==null ? "undefined": cand.CandidateAddress.City;
+                dtoList.Add(new CandidateDto(cand.Id,cand.ApplicationNo,cand.ApplicationDated,
+                    cand.Gender, cand.FullName, DateTime.Now.Year - cand.DOB.Year, cand.PPNo,
+                    cand.AadharNo, cityname,
+                    Enum.GetName(typeof(enumCandidateStatus), cand.CandidateStatus), catList));
+            }
+
+            return dtoList;
+        }
     }
 }

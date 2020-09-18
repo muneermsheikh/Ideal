@@ -23,6 +23,9 @@ namespace Core.Enumerations
         Rejected_VisasNotAvailable,
 
         [EnumMember(Value = "Rejected - Requirement Suspect")]
-        Rejected_RequirementSuspect
+        Rejected_RequirementSuspect,
+
+        [EnumMember(Value = "Concluded")]
+        RequirementConcluded
     }
 }

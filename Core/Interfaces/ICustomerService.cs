@@ -8,7 +8,7 @@ namespace Core.Interfaces
     public interface ICustomerService
     {
         Task<Customer> CreateCustomerAsync (Customer customerDto);
-        
+        Task<clsString> GetCustomerFromEnquiryItemId(int EnquiryItemId);
         Task<IReadOnlyList<Customer>> CustomerListAsync (CustomerSpecParams custParams);
 
         Task<Customer> CustomerByIdAsync(int customerId);

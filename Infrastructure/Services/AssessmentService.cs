@@ -29,9 +29,12 @@ namespace Infrastructure.Services
             _taskService = taskService;
         }
 
-        //assessmentQForEnquiryItem
+//assessmentQForEnquiryItem
         public async Task<IReadOnlyList<AssessmentQ>> CopyStddQToAssessmentQOfEnquiryItem(int EnquiryItemId)
         {
+            var qs = await _context.AssessmentQs.Where(x => x.EnquiryItemId==EnquiryItemId).ToListAsync();
+            if (qs != null && qs.Count > 0) throw new Exception ("The selected enquiry item already has assessment questions defined");
+            
             var QBank = await _context.AssessmentQsBank.Where(x => x.IsStandardQuestion == true)
                 .OrderBy(x => x.SrNo).ToListAsync();
             if (QBank == null || QBank.Count == 0) throw new Exception("No standard assessment questions exist on record");
@@ -48,26 +51,9 @@ namespace Infrastructure.Services
 
         public async Task<IReadOnlyList<AssessmentQ>> CopyQToAssessmentQOfEnquiryItem(int EnquiryItemId)
         {
-            /*
-            var catExist = await _context.CandidateCategories.Where(x => x.CandId==CandidateId)
-                .Select(x => new { catid =   _context.EnquiryItems
-                .Where(x => x.Id == EnquiryItemId)
-                .Select(x => x.CategoryItemId).Take(1).SingleOrDefault(),
-                 }).ToListAsync();
-
-            var catExist = await _context.EnquiryItems.Where(x => x.Id == EnquiryItemId)
-                .Select(x => new { catid = _context.EnquiryItems
-                .Where(x => x.Id == EnquiryItemId).Select(x => x.CategoryItemId).Take(1).SingleOrDefault(),
-                 }).ToListAsync();
-
+            var qs = await _context.AssessmentQs.Where(x => x.EnquiryItemId==EnquiryItemId).ToListAsync();
+            if (qs != null && qs.Count > 0) throw new Exception ("The selected enquiry item already has assessment questions defined");
             
-             var enq = await _context.EnquiryItems.Where(x => x.Id == EnquiryItemId)
-                .Select(x => new { categoryId=x.CategoryItemId, EnquiryId= x.EnquiryId})
-                .FirstOrDefaultAsync();
-            var Qs = await _context.AssessmentQsBank.Where(x => x.IsStandardQuestion==false
-                && x.CategoryId == enq.categoryId).ToListAsync();
-       */
-
             var Qs = await _context.AssessmentQsBank
                 .Join(_context.EnquiryItems, e => e.CategoryId, q => q.CategoryItemId,
                 (e, q) => new { e, q })
@@ -95,9 +81,18 @@ namespace Infrastructure.Services
         public async Task<IReadOnlyList<AssessmentQ>> GetAssessmentQsOfEnquiryItem(int enquiryItemId)
         {
             var Qs = await _context.AssessmentQs.Where(x => x.EnquiryItemId == enquiryItemId)
-                .OrderBy(x => x.AssessmentParameter).ToListAsync();
+                .OrderBy(x => x.QuestionNo).ToListAsync();
             return Qs;
         }
+
+        public async Task<IReadOnlyList<AssessmentQ>> GetAssessmentQsOfEnquiry(int enquiryId)
+        {
+            var Qs = await _context.AssessmentQs.Where(x => x.EnquiryId == enquiryId)
+                .OrderBy(x => x.EnquiryItemId). OrderBy(x => x.QuestionNo).ToListAsync();
+            return Qs;
+        }
+
+
         public async Task<int> DeleteStddQOfEnquiryItem(List<AssessmentQ> assessmentQs)
         {
             return await _unitOfWork.Repository<AssessmentQ>()
@@ -111,12 +106,11 @@ namespace Infrastructure.Services
             return affected;
         }
 
-        //Assessment of candidates
+//Assessment of candidates
         public async Task<Assessment> CreateAssessment(int enquiryItemId, int candidateId, string loggedInUserName)
         {
             //validate AssessmentCreation
-            var b = await OkToCreateAssessment(enquiryItemId, candidateId);
-            if (b != true) return null;
+            if (!await CheckIfCandidateAlreadyAssessed(enquiryItemId, candidateId)) return null;
 
             var qs = await _context.AssessmentQs.Where(x => x.EnquiryItemId == enquiryItemId)
                 .OrderBy(x => x.QuestionNo).ToListAsync();
@@ -131,6 +125,7 @@ namespace Infrastructure.Services
 
             var itemdetails = await _enqService.GetDetailsFromEnquiryItemId(enquiryItemId);
 
+            ass.CandidateId=candidateId;
             ass.EnquiryItemId = enquiryItemId;
             ass.CustomerNameAndCity = itemdetails.CustomerName + ", " + itemdetails.CityName;
             ass.CategoryNameAndRef = itemdetails.CategoryRef;
@@ -143,15 +138,9 @@ namespace Infrastructure.Services
 
         public async Task<Assessment> UpdateAssessment(Assessment assessment)
         {
-            //var list = from p in assessment.AssessmentItems where p.Assessed==true select (p=>p.AssessmentItems);
-            var list = assessment.AssessmentItems.Where(x=>x.Assessed==true);
-            var totPoints = list.Sum(x=>x.MaxPoints);
-            var totGiven = list.Sum(x=>x.PointsAllotted);
-            var GradeString = GetGrade(totPoints, totGiven);
-            assessment.Grade= 100*totGiven/totPoints;
-            assessment.GradeString= GetGrade(totPoints, totGiven);
-
-            return await _unitOfWork.Repository<Assessment>().UpdateAsync(assessment);
+            if (!await CheckAssessmentData(assessment)) return null;
+            var assessUpdated= await UpdateAssessmentGrades(assessment);
+            return await _unitOfWork.Repository<Assessment>().AddAsync(assessUpdated);
         }
 
         public async Task<int> DeleteAssessment(Assessment assessment)
@@ -164,7 +153,7 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Assessment>().GetEntityListWithSpec(new AssessmentSpec(assessmentParam));
         }
 
-        //assessment Q Bank
+//assessment Q Bank
         public async Task<IReadOnlyList<AssessmentQBank>> AddQListToAssessmentQBank(
             IReadOnlyList<AssessmentQBank> Qs)
         {
@@ -209,62 +198,85 @@ namespace Infrastructure.Services
             if (q == null || q.Count == 0) throw new Exception("Question Bank is empty");
             return q;
         }
-        //domains - deleted
-        /*
-                public async Task<IReadOnlyList<DomainSub>> AddDomains(IReadOnlyList<strObject> domainList)
-                {
-                    var dmnList = new List<DomainSub>();
-                    foreach(var dmn in domainList)
-                    {
-                        dmnList.Add(new DomainSub(dmn.Name));
-                    }
-                    var domainsAdded = await _unitOfWork.Repository<DomainSub>().AddListAsync(dmnList);
-                    if(domainsAdded==null || domainsAdded.Count==0) 
-                        throw new Exception("Failed to add the domains");
-                    return domainsAdded;
-                }
 
-                public async Task<int> DeleteDomains(List<DomainSub> domainSubs)
-                {
-                    return await _unitOfWork.Repository<DomainSub>().DeleteListAsync(domainSubs);
-                }
-
-                public async Task<int> UpdateDomains(List<DomainSub> domainList)
-                {
-                    return await _unitOfWork.Repository<DomainSub>().UpdateListAsync(domainList);
-                }
-
-                public async Task<IReadOnlyList<DomainSub>> GetDomainList()
-                {
-                    return await _context.DomainSubs.OrderBy(x=>x.DomainSubName).ToListAsync();
-                }
-            */
-
-        public async Task<bool> OkToCreateAssessment(int enquiryItemId, int candidateId)
+        public async Task<bool> CheckAssessmentData(Assessment assessment)
         {
+            //There is no guarantee only valid data will come from clients. make following checks
 
-            var exist = await _context.AssessmentQs.Where(x => x.EnquiryItemId == enquiryItemId)
-                .SingleOrDefaultAsync();
-            if (exist == null) throw new Exception("Before a candidate can be assessed against a " +
+            if(Enum.IsDefined(typeof(enumAssessmentResult), assessment.Result)==false)
+            {
+                throw new Exception("Invalid assessment result value. check enumAssessmentResult " +
+                    "for acceptable values");
+            }
+
+            if (assessment.Result==0) throw new Exception("assessment result not provided");
+
+            if(string.IsNullOrEmpty(assessment.AssessedBy)) throw new Exception("name of Assessor not available");
+            if(assessment.CandidateId==0) throw new Exception("candidate id not provided");
+            if(assessment.EnquiryItemId==0) throw new Exception ("requirement reference not provided");
+            if(assessment.AssessmentItems.Count==0) throw new Exception("Assessment items not present");
+
+            var exist = await _context.AssessmentQs.Where(x => x.EnquiryItemId == assessment.EnquiryItemId)
+                .ToListAsync();
+            if (exist == null || exist.Count == 0) throw new Exception("Before a candidate can be assessed against a " +
                   "requriement, assessment questions need to be designed for the requirement. " +
                   "If the assessment questions do not need to be customised to customer job descriptions, " +
                   "you may consider copying the standard assessment questions");
 
-            //does the enquiry item has assessment
-            var qs = await _context.Assessments.Where(x => x.EnquiryItemId == enquiryItemId
-                && x.CandidateId == candidateId)
-                .Select(x => new { by = x.AssessedBy, on = x.AssessedOn })
-                .FirstOrDefaultAsync();
-            if (qs != null) throw new Exception("the candidate has already been " +
-                  "assessed for the same requirement on " + qs.on + " by " + qs.by +
-                  ". If you want to edit the assessment, choose the edit option");
+            //does the candidte possess category skills as per the requirement
+            //- check if candidatecategories.catId==enquriyitem.categoryid
+            var qry = await (from e in _context.CandidateCategories 
+                        join i in _context.EnquiryItems
+                        on e.CatId equals i.CategoryItemId 
+                        where i.Id == assessment.EnquiryItemId && e.CandId==assessment.CandidateId
+                        select e.Id ).FirstOrDefaultAsync();
+            
+            if (qry==0) throw new Exception("Candidate category skills are not shared with the " +
+                "category skill required by the Order Item category.");
+            
+            if (await CheckIfCandidateAlreadyAssessed(assessment.CandidateId, assessment.EnquiryItemId)) return false;
 
             return true;
         }
 
 
+        public async Task<Assessment> UpdateAssessmentGrades(Assessment assessment)
+        {
+            // items is from DB
+            var QFromDB = await _context.AssessmentQs.Where(x=>x.EnquiryItemId==assessment.EnquiryItemId)
+                .OrderBy(x=>x.QuestionNo).ToListAsync();
+           
+            bool found=false;
+            foreach(var Qdb in QFromDB)
+            {
+                foreach(var itm in assessment.AssessmentItems)
+                {
+                    found=false;
+                    if(itm.QuestionNo==Qdb.QuestionNo)
+                    {
+                        itm.Question=Qdb.Question;
+                        itm.AssessmentParameter=Qdb.AssessmentParameter;
+                        itm.IsMandatory=Qdb.IsMandatory;
+                        itm.MaxPoints=Qdb.MaxPoints;
+                        found=true;
+                        break;
+                    }
+                }
+                if(!found && Qdb.IsMandatory) throw new Exception("Question No." + Qdb.QuestionNo +
+                    "(" + Qdb.Question +") not included in client response");
+            }
+
+            //var list = from p in assessment.AssessmentItems where p.Assessed==true select (p=>p.AssessmentItems);
+            var totGiven = assessment.AssessmentItems.Where(x=>x.Assessed==true).Sum(x => x.PointsAllotted);
+            var totPoints = assessment.AssessmentItems.Where(x=>x.Assessed==true).Sum(x => x.MaxPoints);
+            assessment.Grade= 100*totGiven/totPoints;
+            assessment.GradeString= "Grade " + GetGrade(totPoints, totGiven);
+
+            return assessment;
+        }
         private string GetGrade(int totalPoints, int totalGiven)
         {
+            if (totalPoints==0) throw new Exception("total Points not retrieved");
             int Pt = 100 * totalGiven/ totalPoints;
 
             if (Pt >=90) {return "A";}
@@ -273,5 +285,19 @@ namespace Infrastructure.Services
             else if(Pt >=40) {return "D";}
             else {return "E";}
         }
+
+        public async Task<bool> CheckIfCandidateAlreadyAssessed(int candidateId, int enquiryItemId)
+        {
+            //does the enquiry item has assessment
+            var qs = await _context.Assessments.Where(x => x.EnquiryItemId == enquiryItemId
+                && x.CandidateId == candidateId)
+                .Select(x => new { by = x.AssessedBy, on = x.AssessedOn })
+                .FirstOrDefaultAsync();
+            if (qs != null) throw new Exception("the candidate has already been " +
+                  "assessed for the same requirement on " + qs.on + " by " + qs.by +
+                  ". If you want to edit the assessment, choose the edit option");
+            return false;
+        }
+
     }
 }

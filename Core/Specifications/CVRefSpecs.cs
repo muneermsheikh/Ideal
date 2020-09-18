@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Core.Entities.Admin;
 using Core.Enumerations;
@@ -8,49 +8,63 @@ namespace Core.Specifications
 {
     public class CVRefSpecs : BaseSpecification<CVRef>
     {
-        public CVRefSpecs(CVRefParam param) 
-        : base(x => 
-                (
-                    (!param.Id.HasValue || x.Id == param.Id) && 
-                    (!param.EnquiryItemId.HasValue || x.EnquiryItemId == param.EnquiryItemId) && 
-                    (!param.CandidateId.HasValue || x.CandidateId == param.CandidateId) && 
-                    (!param.ApplicationNo.HasValue || x.ApplicationNo == param.ApplicationNo) && 
-                    (!param.HRExecutiveId.HasValue || x.HRExecutiveId == param.HRExecutiveId) && 
-                    (!param.ReferredOn.HasValue || DateTime.Compare(
-                        x.DateForwarded.Date, param.ReferredOn.Value.Date)==0)
-                ))
+        
+
+        public CVRefSpecs(): base (x => x.RefStatus==enumSelectionResult.Referred)
         {
-            AddOrderBy(x => x.DateForwarded);
+            AddOrderBy(x => x.EnquiryId);
+            AddOrderBy(x => x.EnquiryItem);
         }
 
-        public CVRefSpecs(int candidateId): base(x => x.CandidateId==candidateId)
+        public CVRefSpecs(string dummy, int[] enquiryItemIds): base (x => enquiryItemIds.Contains(x.EnquiryItemId))
         {
-            AddOrderBy(x => x.DateForwarded);
         }
 
-        public CVRefSpecs(int candidateId, int enquiryItemId)
-            : base(x => x.CandidateId==candidateId && x.EnquiryItemId==enquiryItemId)
+        public CVRefSpecs(int[] enquiryIds): base (x => enquiryIds.Contains(x.EnquiryId))
         {
-            AddOrderBy(x => x.DateForwarded);
+        }
+        public CVRefSpecs(DateTime date1, DateTime date2)
+            : base (x =>                     
+                (DateTime.Compare(x.DateForwarded.Date, date1.Date) >= 0 &&
+                DateTime.Compare(x.DateForwarded.Date, date2.Date) <= 0))
+        {
+            AddOrderBy(x => x.DateForwarded.Date);
         }
 
-         public CVRefSpecs(List<int> enquiryItemIds)
-            : base(x => enquiryItemIds.Contains(x.EnquiryItemId))
-        {
-            AddOrderBy(x => x.DateForwarded);
-        }
 
-        public CVRefSpecs(List<int> enquiryItemIds, enumSelectionResult result)
-            : base(x => enquiryItemIds.Contains(x.EnquiryItemId) && x.RefStatus==result)
-        {
-            AddOrderBy(x => x.DateForwarded);
-        }
+        public CVRefSpecs(CVRefParam param)
+            :  base( x => 
+            (
+                (!param.Id.HasValue || x.Id == param.Id) &&
+                (!param.EnquiryId.HasValue || x.EnquiryId == param.EnquiryId) &&
+                (!param.EnquiryItemId.HasValue || x.EnquiryItemId == param.EnquiryItemId) &&
+                (!param.ForwardedFrom.HasValue && !param.ForwardedUpto.HasValue|| 
+                    (DateTime.Compare(x.DateForwarded.Date, (DateTime)param.ForwardedFrom) >= 0 &&
+                    DateTime.Compare(x.DateForwarded.Date, (DateTime)param.ForwardedUpto) <= 0))
+            ))
+        {            
+            
+            ApplyPaging(param.PageSize * (param.PageIndex-1), param.PageSize);
 
-        public CVRefSpecs(DateTime dateFrom, DateTime dateUpto)
-            : base(x => ((DateTime.Compare(x.DateForwarded.Date, dateFrom.Date)>=0) &&
-                DateTime.Compare(x.DateForwarded.Date, dateUpto.Date) <=0))
-        {
-            AddOrderBy(x => x.DateForwarded);
+                if (!string.IsNullOrEmpty(param.Sort))
+                {
+                    switch (param.Sort.ToLower())
+                    {
+                        case "enquiryid":
+                            AddOrderBy(x => x.EnquiryId);
+                            break;
+                        case "enquiryiddesc":
+                            AddOrderByDescending(x => x.EnquiryId);
+                            break;
+
+                        case "dateforwardeddesc":
+                            AddOrderByDescending(x => x.DateForwarded.Date);
+                            break;
+                        default:
+                            AddOrderBy(x => x.DateForwarded.Date);
+                            break;
+                }
+            }
         }
     }
 }

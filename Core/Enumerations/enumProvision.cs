@@ -5,7 +5,7 @@ namespace Core.Enumerations
     public enum enumProvision
     {
         [EnumMember(Value = "Provided Free")]
-        Provided_Free,
+        ProvidedFree,
 
         [EnumMember(Value = "Not Provided")]
         NotProvided,

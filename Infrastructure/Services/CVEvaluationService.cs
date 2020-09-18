@@ -16,7 +16,6 @@ namespace Infrastructure.Services
 {
     public class CVEvaluationService : ICVEvaluationService
     {
-        private readonly int constDocControllerAdminId = 5;
         private readonly bool anyOneCanEvaluateCV=true;
 
         private readonly IUnitOfWork _unitOfWork;

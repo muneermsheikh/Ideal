@@ -1,0 +1,17 @@
+[
+    {"id": 1, "seqId": 1, "mandatory": 1, "statusId": 0, "name": "Selected", "nextStatusId": 1},
+    {"id": 2, "seqId": 2, "mandatory": 1, "statusId": 1, "name": "Offer Accepted", "nextStatusId": 2},
+    {"id": 3, "seqId": 3, "mandatory": 1, "statusId": 2, "name": "Referred for Medicals", "nextStatusId": 3},
+    {"id": 4, "seqId": 4, "mandatory": 1, "statusId": 3, "name": "Medical Test Passed", "nextStatusId": 5},
+    {"id": 5, "seqId": 4, "mandatory": 0, "statusId": 4, "name": "Medical Test Failed", "nextStatusId": 0},
+    {"id": 6, "seqId": 5, "mandatory": 1, "statusId": 5, "name": "Visa Docs submitted", "nextStatusId": 6},
+    {"id": 7, "seqId": 6, "mandatory": 1, "statusId": 6, "name": "Visa Received/Endorsed", "nextStatusId": 8},
+    {"id": 8, "seqId": 6, "mandatory": 0, "statusId": 7, "name": "Visa Denied", "nextStatusId": 0},
+    {"id": 9, "seqId": 7, "mandatory": 1, "statusId": 8, "name": "Emigration Doc submitted", "nextStatusId": 9},
+    {"id": 10, "seqId": 8, "mandatory": 1, "statusId": 9, "name": "Emigration clearance granted", "nextStatusId": 11},
+    {"id": 11, "seqId": 8, "mandatory": 0, "statusId": 10, "name": "Emigration clearance denied", "nextStatusId": 0},
+    {"id": 12, "seqId": 9, "mandatory": 1, "statusId": 11, "name": "Ticket Booked", "nextStatusId": 12},
+    {"id": 13, "seqId": 10, "mandatory": 1, "statusId": 12, "name": "Traveled", "nextStatusId": 13},
+    {"id": 14, "seqId": 11, "mandatory": 1, "statusId": 13, "name": "Reached destination", "nextStatusId": 0}
+]
+

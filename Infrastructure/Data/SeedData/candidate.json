@@ -1,48 +1,63 @@
 [
-    {
-        "ApplicationNo": 1000,
-        "ApplicationDated": "2020-01-01", 
-        "FirstName": "Ramesh Pandurang",
-        "FamilyName": "Patil", 
-        "KnownAs": "Ramesh", 
-        "Gender": "M",
-        "PPNo": "A12345", 
-        "AadharNo": "123456789012", 
-        "DOB": "1991-12-10T12:32:10"
+    {   "ApplicationNo": 1000, "ApplicationDated": "2020-01-02",  "FirstName": "Subhash Rajaram","FamilyName": "Kulkarni", 
+        "KnownAs": "Subhash", "Gender": "M", "PPNo": "A1234034", "AadharNo": "123456533", "DOB": "1985-12-10T12:32:10",
+        "candidateCategories":[{"catId": 3}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
     },
-    {
-        "ApplicationNo": 1001,
-        "ApplicationDated": "2020-01-02", 
-        "FirstName": "Subhash Rajaram",
-        "FamilyName": "Kulkarni", 
-        "KnownAs": "Subhash", 
-        "Gender": "M",
-        "PPNo": "A12346", 
-        "AadharNo": "123456789013", 
-        "DOB": "1985-12-10T12:32:10"
-       
+    {   "ApplicationNo": 1001, "ApplicationDated": "2010-01-01", "FirstName": "Rajesh Jamadar", "FamilyName": "Kulkarni", 
+        "KnownAs": "Rajesh", "Gender": "M", "PPNo": "A1234566", "AadharNo": "1233434893",  "DOB": "1991-12-10T12:32:10",
+        "candidateCategories":[{"catId": 4}, {"catId": 2}, {"catId": 7}, {"catId": 8}]
     },
-    {
-        "ApplicationNo": 1002,
-        "ApplicationDated": "2010-01-01", 
-        "FirstName": "Rajesh Jamadar",
-        "FamilyName": "Kulkarni", 
-        "KnownAs": "Rajesh", 
-        "Gender": "M",
-        "PPNo": "A123455", 
-        "AadharNo": "1233434789012", 
-        "DOB": "1991-12-10T12:32:10"
+    {   "ApplicationNo": 1002, "ApplicationDated": "2015-01-02", "FirstName": "Rajeesh Haalaram", "FamilyName": "Haldankar", 
+        "KnownAs": "Rajesh", "Gender": "M", "PPNo": "A1333422623", "AadharNo": "123790131", "DOB": "1980-12-10T12:32:10",
+        "candidateCategories":[{"catId": 5}, {"catId": 3}, {"catId": 11}, {"catId": 10}]
+    },   
+    {   "ApplicationNo": 1003, "ApplicationDated": "2020-01-01",  "FirstName": "James", "FamilyName": "Butt",  
+        "KnownAs": "James", "Gender": "M", "PPNo": "U12343312", "AadharNo": "1904562412", "DOB": "1991-12-10T12:32:10",
+        "candidateCategories":[{"catId": 6}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
     },
-    {
-        "ApplicationNo": 1003,
-        "ApplicationDated": "2015-01-02", 
-        "FirstName": "Rajeesh Haalaram",
-        "FamilyName": "Haldankar", 
-        "KnownAs": "Rajesh", 
-        "Gender": "M",
-        "PPNo": "A133346", 
-        "AadharNo": "123789013", 
-        "DOB": "1980-12-10T12:32:10"
+    {   "ApplicationNo": 1004, "ApplicationDated": "2020-01-02",  "FirstName": "Josephine","FamilyName": "Darakjy", 
+        "KnownAs": "Josephine", "Gender": "F", "PPNo": "B15544655", "AadharNo": "204564533", "DOB": "1985-12-10T12:32:10",
+        "candidateCategories":[{"catId": 7}, {"catId": 10}, {"catId": 9}, {"catId": 8}]
+    },
+    {   "ApplicationNo": 1005, "ApplicationDated": "2010-01-01", "FirstName": "Donnett", "FamilyName": "Foller", 
+        "KnownAs": "Donnet", "Gender": "F", "PPNo": "M023546", "AadharNo": "123347783",  "DOB": "1991-12-10T12:32:10",
+        "candidateCategories":[{"catId": 8}, {"catId": 12}, {"catId": 13}, {"catId": 14}]
+    },
+    {   "ApplicationNo": 1006, "ApplicationDated": "2015-01-02", "FirstName": "Simon", "FamilyName": "Morasca", 
+        "KnownAs": "Simon", "Gender": "M", "PPNo": "A133343223", "AadharNo": "123890131", "DOB": "1980-12-10T12:32:10",
+        "candidateCategories":[{"catId": 9}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+    },
+    {   "ApplicationNo": 1007, "ApplicationDated": "2020-01-01",  "FirstName": "Gladys", "FamilyName": "Rim",  
+        "KnownAs": "Gladys", "Gender": "F", "PPNo": "A12345112", "AadharNo": "1235623412", "DOB": "1991-12-10T12:32:10",
+        "candidateCategories":[{"catId": 10}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+    },
+    {   "ApplicationNo": 1008, "ApplicationDated": "2020-01-02",  "FirstName": "Fletcher","FamilyName": "Flossy", 
+        "KnownAs": "Fletcher", "Gender": "M", "PPNo": "A12134634", "AadharNo": "134564533", "DOB": "1985-12-10T12:32:10",
+        "candidateCategories":[{"catId": 3}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+    },
+    {   "ApplicationNo": 1009, "ApplicationDated": "2010-01-01", "FirstName": "Valentine", "FamilyName": "Gillian", 
+        "KnownAs": "Valentine", "Gender": "F", "PPNo": "A33145566", "AadharNo": "154347893",  "DOB": "1991-12-10T12:32:10",
+        "candidateCategories":[{"catId": 3}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+    },
+    {   "ApplicationNo": 1010, "ApplicationDated": "2015-01-02", "FirstName": "Fatima Saylors", "FamilyName": "Stanton", 
+        "KnownAs": "Fatima", "Gender": "M", "PPNo": "z44446213", "AadharNo": "144490131", "DOB": "1980-12-10T12:32:10",
+        "candidateCategories":[{"catId": 3}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+    },
+    {   "ApplicationNo": 1011, "ApplicationDated": "2020-01-01",  "FirstName": "John", "FamilyName": "Lobo",  
+        "KnownAs": "John", "Gender": "M", "PPNo": "M13544112", "AadharNo": "9455623412", "DOB": "1991-12-10T12:32:10",
+        "candidateCategories":[{"catId": 9}, {"catId": 11}, {"catId": 12}, {"catId": 14}]
+    },
+    {   "ApplicationNo": 1012, "ApplicationDated": "2020-01-02",  "FirstName": "Karl","FamilyName": "Rossy", 
+        "KnownAs": "Karl", "Gender": "M", "PPNo": "A1016134", "AadharNo": "1164533", "DOB": "1985-12-10T12:32:10",
+        "candidateCategories":[{"catId": 7}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+    },
+    {   "ApplicationNo": 1013, "ApplicationDated": "2010-01-01", "FirstName": "Mohammed Aftab", "FamilyName": "Saiyyad", 
+        "KnownAs": "Aftab", "Gender": "M", "PPNo": "A1234166", "AadharNo": "2334347893",  "DOB": "1991-12-10T12:32:10",
+        "candidateCategories":[{"catId": 1}, {"catId": 6}, {"catId": 5}, {"catId": 7}]
+    },
+    {   "ApplicationNo": 1014, "ApplicationDated": "2015-01-02", "FirstName": "Syed Aziz", "FamilyName": "Khadaklat", 
+        "KnownAs": "Abdul Aziz", "Gender": "M", "PPNo": "A1331123", "AadharNo": "137890131", "DOB": "1980-12-10T12:32:10",
+        "candidateCategories":[{"catId": 1}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
     }
 
 ]

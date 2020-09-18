@@ -69,12 +69,12 @@ namespace API.Controllers
                 {
                     case 0:
                         provFood = enumProvision.NotProvided;
-                        provHousing = enumProvision.Provided_Free;
+                        provHousing = enumProvision.ProvidedFree;
                         provTransport = enumProvision.NotProvided;
                         break;
                     default:
                         provFood = enumProvision.NotProvided;
-                        provHousing = enumProvision.Provided_Free;
+                        provHousing = enumProvision.ProvidedFree;
                         provTransport = enumProvision.NotProvided;
                         break;
                 }

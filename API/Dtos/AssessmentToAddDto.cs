@@ -15,9 +15,9 @@ namespace API.Dtos
         public int AssessedById { get; set; }
         public DateTime AssessedOn { get; set; } = DateTime.Now;
         [Required]
-        public List<AssessmentItemToAddDto> AssessmentItemsToAdDto {get; set; }
         public enumAssessmentResult Result { get; set; }=enumAssessmentResult.Referred;
         public string Remarks {get; set; }
+        public List<AssessmentItemToAddDto> AssessmentItemsToAddDto {get; set; }
     }
 
 }

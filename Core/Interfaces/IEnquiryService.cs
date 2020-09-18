@@ -24,11 +24,7 @@ namespace Core.Interfaces
 
     //employee
         Task<Employee> EmployeeToReturn(int employeeId);
-        Task<CustomerOfficial> CustomerOfficialToReturn(int custOfficialId);
     
-    //customer
-        Task<Customer> CustomerToReturn(int customerId);
-
     //JD
         Task<JobDesc> GetJobDescriptionBySpecAsync(int enquiryItemId);
         Task<JobDesc> UpdateJDAsync(JobDesc jobDesc);

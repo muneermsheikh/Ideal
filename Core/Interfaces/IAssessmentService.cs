@@ -30,7 +30,7 @@ namespace Core.Interfaces
 
 //domain subjects
 /*
-        Task<IReadOnlyList<DomainSub>> AddDomains(IReadOnlyList<strObject> domainList);
+        Task<IReadOnlyList<DomainSub>> AddDomains(IReadOnlyList<clsString> domainList);
         Task<int> DeleteDomains(List<DomainSub> domainSubs);
         Task<int> UpdateDomains(List<DomainSub> domainList);
         Task<IReadOnlyList<DomainSub>> GetDomainList();

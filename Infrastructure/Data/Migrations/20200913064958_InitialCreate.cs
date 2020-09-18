@@ -15,6 +15,7 @@ namespace Infrastructure.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     SrNo = table.Column<int>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
+                    IsMandatory = table.Column<bool>(nullable: false),
                     IsStandardQuestion = table.Column<bool>(nullable: false),
                     AssessmentParameter = table.Column<string>(nullable: false),
                     Question = table.Column<string>(nullable: false),
@@ -76,28 +77,6 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CVForwards",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DateForwarded = table.Column<DateTime>(nullable: false),
-                    Remarks = table.Column<string>(nullable: true),
-                    EnquiryId = table.Column<int>(nullable: false),
-                    CustomerId = table.Column<int>(nullable: false),
-                    CustomerOfficialId = table.Column<int>(nullable: false),
-                    OfficialEmailId = table.Column<string>(nullable: true),
-                    IncludeSalary = table.Column<bool>(nullable: false),
-                    IncludeGrade = table.Column<bool>(nullable: false),
-                    IncludePhoto = table.Column<bool>(nullable: false),
-                    SendMessageToClient = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CVForwards", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DeliveryMethods",
                 columns: table => new
                 {
@@ -124,6 +103,42 @@ namespace Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DomainSub", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Emoluments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CVRefId = table.Column<int>(nullable: false),
+                    SalaryCurrency = table.Column<string>(nullable: false),
+                    BasicSalary = table.Column<int>(nullable: false),
+                    WeeklyWorkHours = table.Column<int>(nullable: false, defaultValue: 48)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ContractPeriodInMonths = table.Column<int>(nullable: false, defaultValue: 24)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Housing = table.Column<int>(nullable: false, defaultValue: 0),
+                    HousingAllowance = table.Column<int>(nullable: false),
+                    Food = table.Column<int>(nullable: false, defaultValue: 1),
+                    FoodAllowance = table.Column<int>(nullable: false),
+                    Transport = table.Column<int>(nullable: false, defaultValue: 0),
+                    TransportAllowance = table.Column<int>(nullable: false),
+                    OtherAllowance = table.Column<int>(nullable: false),
+                    OtherAllowanceAmount = table.Column<int>(nullable: false),
+                    LeaveEntitlementAfterMonths = table.Column<int>(nullable: false, defaultValue: 23)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AnnualLeaveInDays = table.Column<int>(nullable: false),
+                    AirportOfBoarding = table.Column<string>(nullable: true),
+                    AirportOfDestination = table.Column<string>(nullable: false),
+                    OfferAcceptedByCandidate = table.Column<bool>(nullable: false),
+                    OfferAcceptedOn = table.Column<DateTime>(nullable: false),
+                    OfferRevised = table.Column<bool>(nullable: false),
+                    OfferLetterUrl = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Emoluments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -181,20 +196,20 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Processings",
+                name: "ProcessStatuses",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CVRefId = table.Column<int>(nullable: false),
-                    ProcessingDate = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<string>(nullable: false),
-                    NextProcessingId = table.Column<int>(nullable: true),
-                    Remarks = table.Column<string>(nullable: true)
+                    SeqId = table.Column<int>(nullable: false),
+                    Mandatory = table.Column<bool>(nullable: false),
+                    StatusId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    NextStatusId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Processings", x => x.Id);
+                    table.PrimaryKey("PK_ProcessStatuses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -271,26 +286,6 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CVForwardItems",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    EnquiryItemId = table.Column<int>(nullable: false),
-                    CVForwardId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CVForwardItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CVForwardItems_CVForwards_CVForwardId",
-                        column: x => x.CVForwardId,
-                        principalTable: "CVForwards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EnquiryItemAssessmentQs",
                 columns: table => new
                 {
@@ -331,6 +326,7 @@ namespace Infrastructure.Data.Migrations
                     KnownAs = table.Column<string>(nullable: false),
                     Gender = table.Column<string>(nullable: false),
                     PPNo = table.Column<string>(nullable: false),
+                    ECNR = table.Column<bool>(nullable: false),
                     AadharNo = table.Column<string>(nullable: true),
                     DOB = table.Column<DateTime>(nullable: false),
                     ReferredById = table.Column<int>(nullable: true),
@@ -346,7 +342,8 @@ namespace Infrastructure.Data.Migrations
                     CandidateAddress_Valid = table.Column<bool>(nullable: true),
                     CandidateStatus = table.Column<string>(nullable: false),
                     LastStatusUpdatedById = table.Column<int>(nullable: true),
-                    LastStatusUpdatedOn = table.Column<DateTime>(nullable: false)
+                    LastStatusUpdatedOn = table.Column<DateTime>(nullable: false),
+                    AddedOn = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -471,6 +468,34 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CVForwards",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DateForwarded = table.Column<DateTime>(nullable: false),
+                    Remarks = table.Column<string>(nullable: true),
+                    CustomerId = table.Column<int>(nullable: false),
+                    CustomerOfficialId = table.Column<int>(nullable: false),
+                    OfficialEmailId = table.Column<string>(nullable: true),
+                    IncludeSalary = table.Column<bool>(nullable: false),
+                    IncludeGrade = table.Column<bool>(nullable: false),
+                    IncludePhoto = table.Column<bool>(nullable: false),
+                    MailSentRef = table.Column<string>(nullable: true),
+                    SentMessageToClient = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CVForwards", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CVForwards_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EnquiryForwards",
                 columns: table => new
                 {
@@ -532,33 +557,6 @@ namespace Infrastructure.Data.Migrations
                         name: "FK_IndustryTypes_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CVRefs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    EnquiryItemId = table.Column<int>(nullable: false),
-                    CandidateId = table.Column<int>(nullable: false),
-                    ApplicationNo = table.Column<int>(nullable: false),
-                    HRExecutiveId = table.Column<int>(nullable: false),
-                    DateForwarded = table.Column<DateTime>(nullable: false),
-                    RefStatus = table.Column<int>(nullable: false),
-                    StatusDate = table.Column<DateTime>(nullable: false),
-                    SentReference = table.Column<string>(nullable: true),
-                    CVForwardItemId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CVRefs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CVRefs_CVForwardItems_CVForwardItemId",
-                        column: x => x.CVForwardItemId,
-                        principalTable: "CVForwardItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -652,6 +650,7 @@ namespace Infrastructure.Data.Migrations
                     EnquiryRef = table.Column<string>(nullable: true),
                     CompleteBy = table.Column<DateTime>(nullable: true),
                     ReviewedById = table.Column<int>(nullable: true),
+                    EnquiryReviewStatusId = table.Column<int>(nullable: true),
                     ReviewedOn = table.Column<DateTime>(nullable: true),
                     Remarks = table.Column<string>(nullable: true)
                 },
@@ -694,6 +693,31 @@ namespace Infrastructure.Data.Migrations
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CVForwardItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CVForwardId = table.Column<int>(nullable: false),
+                    SrNo = table.Column<int>(nullable: false),
+                    EnquiryId = table.Column<int>(nullable: false),
+                    EnquiryItemId = table.Column<int>(nullable: false),
+                    CandidateId = table.Column<int>(nullable: false),
+                    ApplicationNo = table.Column<int>(nullable: false),
+                    CVRefId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CVForwardItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CVForwardItems_CVForwards_CVForwardId",
+                        column: x => x.CVForwardId,
+                        principalTable: "CVForwards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -819,6 +843,7 @@ namespace Infrastructure.Data.Migrations
                     CategoryItemId = table.Column<int>(nullable: false),
                     CategoryName = table.Column<string>(nullable: true),
                     Quantity = table.Column<int>(nullable: false),
+                    MaxCVsToSend = table.Column<int>(nullable: false),
                     ECNR = table.Column<bool>(nullable: false),
                     AssessmentReqd = table.Column<bool>(nullable: false),
                     EvaluationReqd = table.Column<bool>(nullable: false),
@@ -828,6 +853,7 @@ namespace Infrastructure.Data.Migrations
                     AssessingHRMId = table.Column<int>(nullable: true),
                     CompleteBy = table.Column<DateTime>(nullable: true),
                     Status = table.Column<string>(nullable: false),
+                    EnquiryStatus = table.Column<int>(nullable: false),
                     CandidateId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -866,7 +892,7 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AssessmentQsForEnquiryItem",
+                name: "AssessmentQs",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -883,9 +909,9 @@ namespace Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AssessmentQsForEnquiryItem", x => x.Id);
+                    table.PrimaryKey("PK_AssessmentQs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AssessmentQsForEnquiryItem_EnquiryItems_EnquiryItemId",
+                        name: "FK_AssessmentQs_EnquiryItems_EnquiryItemId",
                         column: x => x.EnquiryItemId,
                         principalTable: "EnquiryItems",
                         principalColumn: "Id",
@@ -906,6 +932,7 @@ namespace Infrastructure.Data.Migrations
                     AssessedOn = table.Column<DateTime>(nullable: false),
                     Result = table.Column<string>(nullable: false),
                     Grade = table.Column<int>(nullable: false),
+                    GradeString = table.Column<string>(nullable: true),
                     Remarks = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -965,6 +992,36 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CVRefs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    EnquiryItemId = table.Column<int>(nullable: false),
+                    EnquiryId = table.Column<int>(nullable: false),
+                    CandidateId = table.Column<int>(nullable: false),
+                    ApplicationNo = table.Column<int>(nullable: false),
+                    grade = table.Column<string>(nullable: true),
+                    photourl = table.Column<string>(nullable: true),
+                    salaryexpectation = table.Column<string>(nullable: true),
+                    HRExecutiveId = table.Column<int>(nullable: false),
+                    DateForwarded = table.Column<DateTime>(nullable: false),
+                    RefStatus = table.Column<int>(nullable: false),
+                    StatusDate = table.Column<DateTime>(nullable: false),
+                    SentReference = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CVRefs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CVRefs_EnquiryItems_EnquiryItemId",
+                        column: x => x.EnquiryItemId,
+                        principalTable: "EnquiryItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobDescriptions",
                 columns: table => new
                 {
@@ -996,8 +1053,11 @@ namespace Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    CVRefId = table.Column<int>(nullable: false),
                     EnquiryId = table.Column<int>(nullable: false),
                     EnquiryItemId = table.Column<int>(nullable: false),
+                    CandidateId = table.Column<int>(nullable: false),
+                    OfferLetterDate = table.Column<DateTime>(nullable: false),
                     ContractPeriodInMonths = table.Column<int>(nullable: false),
                     SalaryCurrency = table.Column<string>(maxLength: 3, nullable: true),
                     SalaryMin = table.Column<int>(nullable: false),
@@ -1035,7 +1095,6 @@ namespace Infrastructure.Data.Migrations
                     Assessed = table.Column<bool>(nullable: false),
                     IsMandatory = table.Column<bool>(nullable: false),
                     QuestionNo = table.Column<int>(nullable: false),
-                    DomainSubject = table.Column<string>(nullable: true),
                     AssessmentParameter = table.Column<string>(nullable: true),
                     Question = table.Column<string>(nullable: false),
                     Remarks = table.Column<string>(nullable: true),
@@ -1053,6 +1112,56 @@ namespace Infrastructure.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Processes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CVRefId = table.Column<int>(nullable: false),
+                    ProcessingDate = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<string>(nullable: false),
+                    NextProcessingId = table.Column<int>(nullable: true),
+                    Remarks = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Processes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Processes_CVRefs_CVRefId",
+                        column: x => x.CVRefId,
+                        principalTable: "CVRefs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SelDecisions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SelectionDate = table.Column<DateTime>(nullable: false),
+                    CVRefID = table.Column<int>(nullable: false),
+                    EnquiryItemId = table.Column<int>(nullable: false),
+                    EnquiryId = table.Column<int>(nullable: false),
+                    CandidateId = table.Column<int>(nullable: false),
+                    ApplicationNo = table.Column<int>(nullable: false),
+                    SelectionRef = table.Column<string>(nullable: true),
+                    SelectionResult = table.Column<int>(nullable: false),
+                    Remarks = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SelDecisions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SelDecisions_CVRefs_CVRefID",
+                        column: x => x.CVRefID,
+                        principalTable: "CVRefs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AssessmentItems_AssessmentId",
                 table: "AssessmentItems",
@@ -1065,20 +1174,14 @@ namespace Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AssessmentQs_EnquiryItemId",
+                table: "AssessmentQs",
+                column: "EnquiryItemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AssessmentQsBank_AssessmentParameter",
                 table: "AssessmentQsBank",
                 column: "AssessmentParameter");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AssessmentQsBank_CategoryId_IsStandardQuestion_SrNo",
-                table: "AssessmentQsBank",
-                columns: new[] { "CategoryId", "IsStandardQuestion", "SrNo" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AssessmentQsForEnquiryItem_EnquiryItemId",
-                table: "AssessmentQsForEnquiryItem",
-                column: "EnquiryItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assessments_CandidateId",
@@ -1105,6 +1208,12 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_CandidateCategories_CandidateId",
                 table: "CandidateCategories",
                 column: "CandidateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CandidateCategories_CatId_CandId",
+                table: "CandidateCategories",
+                columns: new[] { "CatId", "CandId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Candidates_ApplicationNo",
@@ -1171,9 +1280,14 @@ namespace Infrastructure.Data.Migrations
                 column: "CVForwardId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CVRefs_CVForwardItemId",
+                name: "IX_CVForwards_CustomerId",
+                table: "CVForwards",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CVRefs_EnquiryItemId",
                 table: "CVRefs",
-                column: "CVForwardItemId");
+                column: "EnquiryItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DLForwardToHR_EnquiryId",
@@ -1189,6 +1303,12 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_DomainSub_DomainSubName",
                 table: "DomainSub",
                 column: "DomainSubName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Emoluments_CVRefId",
+                table: "Emoluments",
+                column: "CVRefId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1317,9 +1437,15 @@ namespace Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Processings_CVRefId",
-                table: "Processings",
+                name: "IX_Processes_CVRefId",
+                table: "Processes",
                 column: "CVRefId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Processes_CVRefId_Status",
+                table: "Processes",
+                columns: new[] { "CVRefId", "Status" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Remunerations_EnquiryItemId",
@@ -1336,6 +1462,12 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_Roles_Name",
                 table: "Roles",
                 column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelDecisions_CVRefID",
+                table: "SelDecisions",
+                column: "CVRefID",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1388,10 +1520,10 @@ namespace Infrastructure.Data.Migrations
                 name: "AssessmentItems");
 
             migrationBuilder.DropTable(
-                name: "AssessmentQsBank");
+                name: "AssessmentQs");
 
             migrationBuilder.DropTable(
-                name: "AssessmentQsForEnquiryItem");
+                name: "AssessmentQsBank");
 
             migrationBuilder.DropTable(
                 name: "Attachments");
@@ -1409,13 +1541,16 @@ namespace Infrastructure.Data.Migrations
                 name: "CVEvaluations");
 
             migrationBuilder.DropTable(
-                name: "CVRefs");
+                name: "CVForwardItems");
 
             migrationBuilder.DropTable(
                 name: "DeliveryMethods");
 
             migrationBuilder.DropTable(
                 name: "DLForwardToHR");
+
+            migrationBuilder.DropTable(
+                name: "Emoluments");
 
             migrationBuilder.DropTable(
                 name: "EmployeeAddress");
@@ -1439,13 +1574,19 @@ namespace Infrastructure.Data.Migrations
                 name: "JobDescriptions");
 
             migrationBuilder.DropTable(
-                name: "Processings");
+                name: "Processes");
+
+            migrationBuilder.DropTable(
+                name: "ProcessStatuses");
 
             migrationBuilder.DropTable(
                 name: "Remunerations");
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "SelDecisions");
 
             migrationBuilder.DropTable(
                 name: "SourceGroups");
@@ -1460,7 +1601,7 @@ namespace Infrastructure.Data.Migrations
                 name: "Assessments");
 
             migrationBuilder.DropTable(
-                name: "CVForwardItems");
+                name: "CVForwards");
 
             migrationBuilder.DropTable(
                 name: "DomainSub");
@@ -1475,13 +1616,13 @@ namespace Infrastructure.Data.Migrations
                 name: "SkillLevels");
 
             migrationBuilder.DropTable(
+                name: "CVRefs");
+
+            migrationBuilder.DropTable(
                 name: "ToDos");
 
             migrationBuilder.DropTable(
                 name: "EnquiryItems");
-
-            migrationBuilder.DropTable(
-                name: "CVForwards");
 
             migrationBuilder.DropTable(
                 name: "Candidates");

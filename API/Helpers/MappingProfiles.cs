@@ -9,7 +9,7 @@ using Core.Entities.Identity;
 using System;
 using Core.Entities.Emails;
 using System.Collections.Generic;
-
+using Core.Entities.Processing;
 
 namespace API.Helpers
 {
@@ -19,6 +19,15 @@ namespace API.Helpers
         {
 
     // assessment
+            CreateMap<Assessment, AssessmentDto>()
+                .ForMember(d=>d.CandidateName, o=>o.MapFrom<AssessmentCandidateNameResolver>())
+                .ForMember(d=>d.CategoryNameAndRef, o=>o.MapFrom<AssessmentCategoryResolver>())
+                .ForMember(d=>d.CustomerNameAndCity, o=>o.MapFrom<AssessmentCustomerResolver>())
+                .ForMember(d=>d.ApplicationNo, o=>o.MapFrom<AssessmentApplicationNoResolver>())
+                .ForMember(d=>d.Result, o => o.MapFrom(s => 
+                    Enum.GetName(typeof(enumAssessmentResult), s.Result)));
+            CreateMap<AssessmentItem, AssessmentItemDto>();
+                    
             CreateMap<AssessmentToAddDto, Assessment>()
                 .ForMember(d => d.CustomerNameAndCity, o => o.MapFrom<AssessmentDtoCustomerNameCityResolver>())
                 .ForMember(d => d.Enquiryitem, o => o.MapFrom<AssessmentDtoEnquiryItemResolver>())
@@ -42,13 +51,15 @@ namespace API.Helpers
             CreateMap<BasketItemDto, BasketItem>();
             CreateMap<CustomerAddress, CustomerAddressDto>();
 
+//enquiry
             CreateMap<Enquiry, EnquiryToReturnDto>()
                 .ForMember(x => x.EnquiryStatus, o => o.MapFrom(
                     s => Enum.GetName(typeof(enumEnquiryStatus), s.EnquiryStatus)));
                  
             CreateMap<EnquiryItem, EnquiryItemToReturnDto>()
                 .ForMember(d => d.AssessingSup, o => o.MapFrom<EnquiryItemSupNameResolver>())
-                .ForMember(d => d.AssessingHRM, o => o.MapFrom<EnquiryItemHRMNameResolver>());
+                .ForMember(d => d.AssessingHRM, o => o.MapFrom<EnquiryItemHRMNameResolver>())
+                .ForMember(d => d.Category, o => o.MapFrom<EnquiryItemCategoryResolver>());
             CreateMap<EnquiryItemToReturnDto, EnquiryItem>();
             CreateMap<EnquiryItem, EnquiryItemToEditDto>().ReverseMap();
             
@@ -56,10 +67,12 @@ namespace API.Helpers
                 .ForMember(d => d.CustomerName, o => o.MapFrom<ReviewItemCustomerNameResolver>())
                 .ForMember(d => d.CategoryName, o => o.MapFrom<ReviewItemCategoryNameResolver>())
                 .ForMember(d => d.EnquiryNoAndDate, o => o.MapFrom<ReviewItemEnquiryNoDateResolver>())
-                .ForMember(d => d.Status, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.Status)))
+                .ForMember(d => d.StatusString, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.Status)))
                 .ForMember(d => d.ReviewedByName, o => o.MapFrom<ReviewItemReviewedByResolver>());
 
-        // for CV Evaluation
+
+
+    // for CV Evaluation
             CreateMap<CVEvaluation, CVEvaluationDto>()
                 .ForMember(d => d.Category, o => o.MapFrom<CVEvalCategoryResolver>())
                 .ForMember(d => d.FullName, o => o.MapFrom<CVEvalCandidateNameResolver>())
@@ -69,7 +82,7 @@ namespace API.Helpers
                 .ForMember(d => d.HRMReviewResult, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.HRMReviewResult)))
                 .ForMember(d => d.HRSupReviewResult, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.HRSupReviewResult)));
 
-        // for DLForwardedToHRDto
+    // for DLForwardedToHRDto
             CreateMap<Customer, CustomerToReturnInBriefDto>();
             CreateMap<EnquiryItem, EnquiryForwardedItemInBriefDto>();
                   CreateMap<DLForwardToHR, EnquiryForwardedInBriefDto>()
@@ -120,23 +133,84 @@ namespace API.Helpers
 
     //candidate
             CreateMap<Category, CategoryNameDto>();
+
             CreateMap<Candidate, CandidateDto>()
                 .ForMember(d => d.Age, o => o.MapFrom<CandidateDtoAgeResolver>())            
                 .ForMember(d => d.City, o => o.MapFrom<CandidateDtoCityResolver>())
                 .ForMember(d => d.CandidateStatus, 
                     o => o.MapFrom(s => Enum.GetName(typeof(enumCandidateStatus), s.CandidateStatus)));
+                    
             CreateMap<CandidateCategory, CategoryNameDto>()
-                //.ForMember(d => d.Name, o => o.MapFrom<CategoryNameResolver>());
                 .ForMember(d => d.Name, o => o.MapFrom<CategoryNameResolver>());
-                //.ConstructUsing(ct => Map<CandidateCategory>(ct.CatId))
-                //.ForAllMembers(opt => opt.Ignore());
-                
+               
                 
             CreateMap<CandidateTempToAddDto, Candidate>();
     //candidatecategory
             CreateMap<CandidateCategory, CandidateCategoryDto>()
                 .ForMember(d => d.CandidateName, o=>o.MapFrom<CandidateCategoryCandidateNameResolver>())
                 .ForMember(d => d.CategoryName, o => o.MapFrom<CandidateCategoryCategoryNameResolver>());
+            
+    //cvref
+            CreateMap<CVRef, CVRefHdrDto>()
+                .ForMember(d => d.customername, o => o.MapFrom<CVRefCustomerNameResolver>())
+                .ForMember(d => d.customercity, o => o.MapFrom<CVRefCustomerCityResolver>());
+            CreateMap<CVRef, CVRefItemDto>()
+                .ForMember(d => d.candidatename, o => o.MapFrom<CVRefCandidateNameResolver>())
+                .ForMember(d => d.categoryref, o => o.MapFrom<CVRefCategoryRefResolver>())
+                .ForMember(d => d.ppno, o => o.MapFrom<CVRefPPNoResolver>());
+            /*
+            CreateMap<CVRef, CVRefDto>()
+                .ForMember(d => d.CandidateName, o => o.MapFrom<CVRefToDtoCandidateNameResolver>())
+                .ForMember(d => d.CategoryRef, o => o.MapFrom<CVRefToDtoCategoryRefResolver>())
+                .ForMember(d => d.CustomerName, o => o.MapFrom<CVRefToDtoCustomerNameResolver>())
+                .ForMember(d => d.DateForwarded, o => o.MapFrom(s => s.DateForwarded.Date));
+            CreateMap<Process, ProcessDto>();
+            */
+
+            CreateMap<CVRef, CandidateHistoryDto>()
+                .ForMember(d => d.CandidateName, o => o.MapFrom<CVRefToHistoryCandidateNameResolver>())
+                .ForMember(d => d.CategoryRef, o => o.MapFrom<CVRefToHistoryCategoryRefResolver>())
+                .ForMember(d => d.CustomerName, o => o.MapFrom<CVRefToHistoryCustomerNameResolver>())
+                .ForMember(d => d.DateReferred, o => o.MapFrom(s => s.DateForwarded.Date.ToString()))
+                .ForMember(d => d.CurrentStatus, o => o.MapFrom(s => s.DateForwarded.Date));
+                
+            CreateMap<Process, HistoryItemDto>();
+     
+            CreateMap<EnquiryItem, CVRefDto>()
+                .ForMember(d => d.CategoryRef, o => o.MapFrom<EnquiryItemToCVRefDtoCategoryRefResolver>())
+                .ForMember(d => d.CustomerName, o => o.MapFrom<EnquiryItemToCVRefDtoCustomerNameResolver>());
+
+    //cv fwd
+            CreateMap<CVForward, CVForwardDto>()
+                .ForMember(d => d.CustomerName, o => o.MapFrom<CVForwardDtoCustomerNameResolver>())
+                .ForMember(d => d.OfficialName, o => o.MapFrom<CVForwardOfficialNameResolver>());
+
+            CreateMap<CVForwardItem, CVForwardItemDto>()
+                .ForMember(d => d.ApplicationNo, o => o.MapFrom<CVForwardItemDtoAppNoResolver>())
+                .ForMember(d => d.CandidateName, o => o.MapFrom<CVForwardItemDtoCandidateNameResolver>())
+                .ForMember(d => d.CategoryRef, o => o.MapFrom<CVForwardItemDtoCategoryRefResolver>());
+
+    //process
+            CreateMap<Process, ProcessDto>()
+                .ForMember(d => d.ApplicationNo, o => o.MapFrom<ProcessToDtoAppNoResolver>())
+                .ForMember(d => d.PPNo, o => o.MapFrom<ProcessToDtoPPNoResolver>())
+                .ForMember(d => d.CandidateName, o => o.MapFrom<ProcessToDtoCandidateNameResolver>());
+            
+            CreateMap<CVRef, ProcessDto>()
+                .ForMember(d => d.ApplicationNo, o => o.MapFrom<CVRefToProcessDtoAppNoResolver>())
+                .ForMember(d => d.PPNo, o => o.MapFrom<CVRefToProcessDtoPPNoResolver>())
+                .ForMember(d => d.CandidateName, o => o.MapFrom<CVRefToProcessDtoCandidateNameResolver>());
+            
+            CreateMap<Process, ProcessReferredDto>()
+                .ForMember(d => d.CustomerName , o => o.MapFrom<ProcessToReferredDtoCustomerNameResolver>())
+                .ForMember(d => d.CategoryRef, o => o.MapFrom<ProcessToReferredDtoCategoryRefResolver>())
+                .ForMember(d => d.DateReferred, o => o.MapFrom<ProcessToReferredDtoDateReferredResolver>())
+                .ForMember(d => d.RefStatusDate, o => o.MapFrom<ProcessToReferredDtoRefStatusDateResolver>())
+                .ForMember(d => d.CurrentStatus, o => o.MapFrom<ProcessToReferredDtoCurrentStatusResolver>());
+            
+            CreateMap<Process, ProcessItemDto>()
+                .ForMember(d => d.Status, o => o.MapFrom(s => Enum.GetName(typeof(enumProcessingStatus), s.Status)));           
+                
        }
     }
 }

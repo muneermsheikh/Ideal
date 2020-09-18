@@ -9,7 +9,7 @@ namespace Core.Entities.Admin
         {
         }
 
-        public ContractReview(bool readyToFinalize, int enquiryId, int reviewedBy, enumReviewStatus reviewStatus)
+        public ContractReview(bool readyToFinalize, int enquiryId, int reviewedBy, enumEnquiryReviewStatus reviewStatus)
         {
             ReadyToFinalize = readyToFinalize;
             EnquiryId = enquiryId;
@@ -22,6 +22,6 @@ namespace Core.Entities.Admin
         public int EnquiryId { get; set; }
         public int ReviewedBy { get; set; }
         public DateTime ReviewedOn { get; set; } = DateTime.Now;
-        public enumReviewStatus ReviewStatus { get; set; } = enumReviewStatus.NotReviewed;
+        public enumEnquiryReviewStatus ReviewStatus { get; set; } = enumEnquiryReviewStatus.NotReviewed;
     }
 }

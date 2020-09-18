@@ -40,13 +40,13 @@ namespace Infrastructure.Services
             foreach (var enqId in enquiryIds)
             {
                 var enq = await _unitOfWork.Repository<Enquiry>()
-                    .GetEntityWithSpec(new EnquirySpecs(enqId.Id, enumEnquiryStatus.ReviewedAndAccepted, false, false));
+                    .GetEntityWithSpec(new EnquirySpecs(enqId.Id, enumEnquiryReviewStatus .Accepted, false, false));
                 if (enq == null) continue;
 
                 var enqItems = await _unitOfWork.Repository<EnquiryItem>().GetEntityListWithSpec(
                     new EnquiryItemsSpecs(enqId.Id, enumItemReviewStatus.Accepted));
                 if (enqItems.Count == 0) continue;
-                enq.EnquiryItems = enqItems;
+                enq.EnquiryItems =(List<EnquiryItem>)enqItems;
                 if (enq.Customer == null) enq.Customer = await _repoCust.GetByIdAsync(enq.CustomerId);
                 int projectManagerId = enq.ProjectManager == null ? 1 : enq.ProjectManager.Id;
 
@@ -122,7 +122,7 @@ namespace Infrastructure.Services
             var forwardedList = new List<EnquiryForwarded>();
 
             Enquiry enq = await _unitOfWork.Repository<Enquiry>()
-                .GetEntityWithSpec(new EnquirySpecs(enqId, enumEnquiryStatus.ReviewedAndAccepted, false, false));
+                .GetEntityWithSpec(new EnquirySpecs(enqId, enumEnquiryReviewStatus.Accepted, false, false));
 
             var enqForwardedItemsList = new List<EnquiryItemForwarded>();   //to write to child table
                                                                             //EnquiryItemForwarded, for each parent Id of EnquiryForwarded (EnquiryForwrds in db)

@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities.Admin;
 using Core.Enumerations;
+using Core.Specifications;
 
 namespace Core.Interfaces
 {
     public interface ICVRefService
     {
-         Task<IReadOnlyList<CVRef>> GetCVRefOfACandidate(int candidateId);
-         Task<IReadOnlyList<CVRef>> ReferCVsToClient(int userId, int enquiryItemId, 
-            List<int> candidateIds, DateTime dateForwarded, bool includeSalaryExpectation,
-            bool includeGrade, bool includePhoto);
-        Task<CVForward> ReferCVsToForward(CVForward cVForward);
-         Task<IReadOnlyList<CVRef>> GetCVReferredForEnquiryItem(int enquiryItemId);
-         Task<IReadOnlyList<CVRef>> GetCVReferredForEnquiryitemIdWithStatus(int enquiryItemId, enumSelectionResult result);
-         Task<IReadOnlyList<CVRef>> GetCVReferredForEnquiryIdWithStatus(int enquiryId, enumSelectionResult result);
-         Task<IReadOnlyList<CVRef>> GetCVReferredForEnquiryIdWithAllStatus(int enquiryId);
+         Task<IReadOnlyList<CVForwardItem>> GetCVRefOfACandidate(int candidateId);
+         Task<CVForward> ReferCVsToClient(int userId, CVRefToAddDto cvrefdto);
+         Task<IReadOnlyList<CVForward>> GetCVsForwarded(CVForwardParam cvfwdParam);
+
+         Task<IReadOnlyList<CVForwardItem>> GetCVRefForEnquiryItem(int enquiryItemId);
+         // *** implement this with CVRefSpecs document -- Task<IReadOnlyList<CVRef>> GetCVRefForEnquiryitemIdWithStatus(int enquiryItemId, enumSelectionResult result);
+         // *** implement this with CVRefSpecs document -- Task<IReadOnlyList<CVRef>> GetCVRefForEnquiryIdWithStatus(int enquiryId, enumSelectionResult result);
+         Task<IReadOnlyList<CVForwardItem>> GetCVRefForEnquiryIdWithAllStatus(int enquiryId);
+
+         Task<List<CVForward>> GetCVForwards(int enquiryno);
          
-    //
-        Task<CVForward> ForwardCVsToClient(CVForward cvForward);
-        
     }
 }
