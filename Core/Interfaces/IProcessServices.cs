@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Entities;
 using Core.Entities.Admin;
 using Core.Entities.EnquiryAggregate;
 using Core.Entities.Processing;
@@ -11,7 +12,7 @@ namespace Core.Interfaces
     public interface IProcessServices
     {
         Task<IReadOnlyList<Process>> AddProcessTransactions(DateTime TransactionDate, 
-            enumProcessingStatus status, string remarks, int[] cvrefIds);
+            enumProcessingStatus status, string remarks, int[] cvrefIds, TravelToAddDto travel);
         Task<int> UpdateProcessTransactions(List<Process> processings);
 
         Task<Process> UpdateProcessTransaction (Process process);

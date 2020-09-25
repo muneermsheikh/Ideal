@@ -57,16 +57,16 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
 
-                if (!context.Categories.Any())              //works
-                {
-                    var catData = File.ReadAllText("../Infrastructure/Data/SeedData/category.json");
+              // if (!context.Categories.Any())              //works
+//                {
+                    var catData = File.ReadAllText("../Infrastructure/Data/SeedData/categorycopy.json");
                     var cats = JsonSerializer.Deserialize<List<Category>>(catData);
                     foreach (var item in cats)
                     {
                         context.Categories.Add(item);
                     }
                     await context.SaveChangesAsync();
-                }
+  //              }
 /*
                 if (!context.DeliveryMethods.Any())
                 {
@@ -83,7 +83,7 @@ namespace Infrastructure.Data
 
                 if (!context.ProcessStatuses.Any())
                 {
-                    var prcsData = File.ReadAllText("../Infrastructure/Data/SeedData/ProcessStatus.json");
+                    var prcsData = File.ReadAllText("../Infrastructure/Data/SeedData/processstatus.json");
                     var prcs = JsonSerializer.Deserialize<List<ProcessStatus>>(prcsData);
                     foreach (var item in prcs)
                     {
@@ -138,6 +138,7 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
             */
+
 
                  if (!context.Roles.Any())      //works
                 {

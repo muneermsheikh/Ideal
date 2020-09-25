@@ -102,6 +102,22 @@ namespace API.Controllers
         }
 
 // industryType
+        [HttpGet("indTypes")]
+        public async Task<ActionResult<IReadOnlyList<IndustryType>>> GetIndustryTypesWoPagination ([FromQuery]IndTypeSpecParams param)
+        {
+            //var inds = await _indRepo.ListAllAsync();
+            
+            var spec = new IndTypeSpecs(param);
+            var ctSpec = new IndTypeSpecsCount(param);
+            //var totalItems = await _unitOfWork.Repository<IndustryType>().CountWithSpecAsync(ctSpec);
+            var totalItems = await _indRepo.CountWithSpecAsync(ctSpec);
+            var inds = await _indRepo.ListWithSpecAsync(spec);
+            //var inds = await _unitOfWork.Repository<IndustryType>().ListWithSpecAsync(spec);
+            if (inds == null) return NotFound(new ApiResponse(400));
+
+            return Ok(inds);
+         }
+
         [HttpGet("indType")]
         public async Task<ActionResult<Pagination<IReadOnlyList<IndustryType>>>> GetIndustryTypes ([FromQuery]IndTypeSpecParams param)
         {
@@ -162,6 +178,20 @@ namespace API.Controllers
         }
 
     // skillLevel
+        [HttpGet("skillLevels")]
+        public async Task<ActionResult<IndustryToReturnDto>> GetSkillLevelsWoPagination(
+            [FromQuery]IndTypeSpecParams param)
+        {
+            var spec = new SkillLevelSpec(param);
+            var ctSpec = new SkillLevelCount(param);
+            var totalItems = await _unitOfWork.Repository<SkillLevel>().CountWithSpecAsync(ctSpec);
+            var sks = await _unitOfWork.Repository<SkillLevel>().ListWithSpecAsync(spec);
+            if (sks == null) return NotFound(new ApiResponse(400));
+            var data = _mapper.Map<IReadOnlyList<SkillLevel>, 
+                IReadOnlyList<IndustryToReturnDto>>(sks);
+            return Ok(data);
+        }
+        
         // no separate paramter SkillLevelParam  necessary, as IndustryTypeParam serves the purpose
         [HttpGet("skillLevel")]
         public async Task<ActionResult<Pagination<IndustryToReturnDto>>> GetSkillLevels(

@@ -36,14 +36,17 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IReadOnlyList<ProcessDto>>> AddProcessTransaction([FromBody]ProcessTransactionsAddDto processAdd)
+        public async Task<ActionResult<IReadOnlyList<ProcessAddedDto>>> AddProcessTransaction([FromBody]ProcessTransactionsAddDto processAdd)
         {
             var prcs =  await _procservice.AddProcessTransactions(processAdd.TransactionDate, 
-                processAdd.ProcessingStatus, processAdd.Remarks, processAdd.CVRefIds);
+                processAdd.ProcessingStatus, processAdd.Remarks, processAdd.CVRefIds, processAdd.travelToAddDto);
             if (prcs==null) return NotFound(new ApiResponse(404, "No processing records found"));
-            var data = _mapper.Map<IReadOnlyList<Process>, IReadOnlyList<ProcessDto>>(prcs);
+
+            var data = _mapper.Map<IReadOnlyList<Process>, IReadOnlyList<ProcessAddedDto>>(prcs);
+            
             return Ok(data);
         }
+
 
         [HttpPut("transaction")]
         public async Task<ActionResult<Process>> UpdateProcessTransaction(Process process)

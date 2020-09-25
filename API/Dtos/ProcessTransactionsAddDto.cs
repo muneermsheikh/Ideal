@@ -1,4 +1,6 @@
 using System;
+using Core.Entities;
+using Core.Entities.Processing;
 using Core.Enumerations;
 
 namespace API.Dtos
@@ -10,5 +12,6 @@ namespace API.Dtos
         public enumProcessingStatus ProcessingStatus {get; set;}
         public string Remarks {get; set;}
         public int[] CVRefIds {get; set;}
+        public TravelToAddDto travelToAddDto{get; set;}
     }
 }

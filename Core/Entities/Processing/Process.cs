@@ -22,6 +22,8 @@ namespace Core.Entities.Processing
         public DateTime ProcessingDate { get; set; }
         public enumProcessingStatus Status { get; set; }
         public enumProcessingStatus? NextProcessingId { get; set; }
+        public string attachmentUrl {get; set;}
+        public virtual Travel Travel {get; set;}
         public string Remarks { get; set; }
     }
 }

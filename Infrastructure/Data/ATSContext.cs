@@ -60,6 +60,7 @@ namespace Infrastructure.Data
         public DbSet<SourceGroup> SourceGroups {get; set; }
         public DbSet<ToDo> ToDos {get; set; }
         public DbSet<TaskItem> TaskItems {get; set; }
+        public DbSet<Travel> Travels {get; set; }
 
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {

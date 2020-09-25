@@ -6,7 +6,7 @@ using Infrastructure.Data;
 
 namespace API.Helpers
 {
-    public class ProcessToDtoAppNoResolver : IValueResolver<Process, ProcessDto, int>
+    public class ProcessToDtoAppNoResolver : IValueResolver<Process, ProcessAddedDto, string>
     {
         private readonly ATSContext _context;
         public ProcessToDtoAppNoResolver(ATSContext context)
@@ -14,10 +14,18 @@ namespace API.Helpers
             _context = context;
         }
 
-        public int Resolve(Process source, ProcessDto destination, int destMember, ResolutionContext context)
+        public string Resolve(Process source, ProcessAddedDto destination, string destMember, ResolutionContext context)
         {
-            var candidateid = _context.CVRefs.Where(x=>x.Id==source.CVRefId).Select(x=>x.CandidateId).SingleOrDefault();
-            return _context.Candidates.Where(x=>x.Id==candidateid).Select(x=>x.ApplicationNo).SingleOrDefault();
+            var v = (from rf in _context.CVRefs
+                join cnd in _context.Candidates on rf.CandidateId equals cnd.Id
+                where rf.Id == source.CVRefId
+                select new {nm = cnd.FullName, appno = cnd.ApplicationNo, ppno = cnd.PPNo}
+                ).SingleOrDefault();
+                
+            if (v==null) return "invalid request";
+            return v.appno + "-" + v.nm + ", PP No." + v.ppno;
         }
+
+
     }
 }

@@ -11,6 +11,7 @@ using Core.Specifications;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
@@ -22,6 +23,7 @@ namespace API.Controllers
         private readonly IGenericRepository<SkillLevel> _skillRepo;
         private readonly IGenericRepository<IndustryType> _indRepo;
         private readonly IMapper _mapper;
+        
 
         public CategoriesController(IGenericRepository<Category> catRepo,
                 IGenericRepository<SkillLevel> skillRepo,
@@ -37,6 +39,7 @@ namespace API.Controllers
         public async Task<ActionResult<Pagination<CategoryToReturnDto>>> GetCategories(
             [FromQuery]CategorySpecsParams catParams)
         {
+
             var spec = new CategorySpecs(catParams);
             var countSpec = new CategorySpecsCount(catParams);
             var totalItems = await  _catRepo.CountWithSpecAsync(countSpec);

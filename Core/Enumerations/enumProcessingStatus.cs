@@ -28,6 +28,10 @@ namespace Core.Enumerations
         [EnumMember(Value = "Visa Received/Endorsed")]
         VisaReceivedEndorsed=5000,
 
+        [EnumMember(Value = "Visa Denied")]
+        VisaReceivedDenied=5500,
+        
+
         [EnumMember(Value = "Emigration documents submitted")]
         EmigrationDocumentsSubmitted=6000,
 
@@ -44,6 +48,18 @@ namespace Core.Enumerations
         Traveled=9000,
         
         [EnumMember(Value = "Reached destination")]
-        ReachedSite=10000
+        ReachedSite=10000,
+
+        [EnumMember(Value = "Aborted due to failed process")]
+        AbortedDueTFailedProcess=100000,
+        
+        [EnumMember(Value="Canceled by Client")]
+        CanceledByClient=101000,
+
+        [EnumMember(Value="Canceled by Candidate")]
+        CanceledByCandidate=102000,
+
+        [EnumMember(Value="Undefined")]
+        Undefined=0
     }
 }
