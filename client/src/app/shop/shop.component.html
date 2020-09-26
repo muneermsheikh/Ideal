@@ -1,66 +1,84 @@
 
   <div class="row">
     <div class="col-3">  
-    <section>
-          <ng-container *ngIf="indtypes && skilllevels">
-          <h5 class="text-warning ml-3">Sort</h5>
+        <section>
+            <ng-container *ngIf="indtypes && skilllevels">
+                <h5 class="text-warning ml-3">Sort</h5>
         
-          <select class="custom-select mb-4" (change)="onSortSelected($event.target.value)">
-            <option *ngFor="let sort of sortOptions" 
-                [selected]="shopParams.sort === sort.value"
-                [value]="sort.value">
-                {{sort.name}}
-            </option>
-        </select>
+                <select class="custom-select mb-4" (change)="onSortSelected($event.target.value)">
+                <option *ngFor="let sort of sortOptions" 
+                    [selected]="shopParams.sort === sort.value"
+                    [value]="sort.value">
+                    {{sort.name}}
+                </option>
+                </select>
     
-          <h5 class="text-warning ml-3">industry types</h5>
-          <ul class="list-group">
+                <h5 class="text-warning ml-3">industry types</h5>
+                <ul class="list-group">
               <li class="list-group-item" *ngFor="let ind of indtypes"
                   [class.active]="ind.id === this.shopParams.industryTypeId"
                   [value]="ind.id"
                   (click)="onIndTypeSelected(ind.id)">
                   {{ind.name}}
               </li>
-          </ul>
+                </ul>
         
-          <h5 class="text-warning ml-3">Skill Levels</h5>
-          <ul class="list-group">
+                <h5 class="text-warning ml-3">Skill Levels</h5>
+                <ul class="list-group">
               <li class="list-group-item" *ngFor="let lvl of skilllevels" 
                     [class.active]="lvl.id === this.shopParams.skillLevelId"
                     [value]="lvl.id" 
                     (click)="onSkillLevelSelected(lvl.id)">
                     {{lvl.name}}
               </li>
-          </ul>
-      </ng-container>
-      </section>
+                </ul>
+            </ng-container>
+        </section>
     </div>
-    <div class="d-flex justify-content-center align-items-center">
-            <app-paging-header
-                [pageNumber]="this.shopParams.pageNumber"
-                [pageSize] = "this.shopParams.pageSize"
-                [totalCount]="totalCount" >
-            </app-paging-header>
+    <div class="col-9">
+    <div class="d-flex align-items-center justify-content-center">
+         
+        <app-paging-header
+            [totalCount]="totalCount"
+            [pageSize]="this.shopParams.pageSize"
+            [pageNumber]="this.shopParams.pageNumber">
+        </app-paging-header>
         
-            <div class="form-inline" *ngIf="categories" style="text-align: right;">
-                <input (keyup.enter)="onSearch()" class="form-control" 
-                      #search placeholder="Search" type="text">
-                    <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
-                <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
-            </div>
-            <div *ngFor="let item of categories">
-                <div class="row" >       
-                    <div class="col-5">{{item.name}} </div>
-                    <div class="col-5">{{item.industryType}} </div>  
-                    <div class="col-2">{{item.skillLevel}}</div>
-                </div>
-            </div> 
-
-            
-            <div class="d-flex justify-content-center">
-                <app-pager></app-pager>
-            </div>
+        <div class="form-inline" *ngIf="categories" >
+            <input (keyup.enter)="onSearch()" class="form-control" 
+                #search placeholder="Search" type="text" >
+            <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
+            <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
+        </div>
     </div>
-</div>
+        <div *ngFor="let item of categories" style="margin-top: 5px;">
+            <div class="row" >       
+                <div class="col-5">{{item.name}} </div>
+                <div class="col-4">{{item.industryType}} </div>  
+                <div class="col-3">{{item.skillLevel}}</div>
+            </div>
+        </div> 
+        
+        
+        <div class="d-flex justify-content-center my-3" *ngIf="this.totalCount > 0">
+            <app-pager
+                [pageSize]="shopParams.pageSize"
+                [pageNumber]="shopParams.pageNumber"
+                [totalCount]="totalCount"
+                (pageChanged)="onPageChanged($event)"
+                >
+            </app-pager>
+<!--            <pagination 
+                [boundaryLinks]="true" 
+                [totalItems]="this.totalCount"
+                (pageChanged)="onPageChanged($event)"
+                [itemsPerPage]="this.shopParams.pageSize" 
+                previousText="&lsaquo;" 
+                nextText="&rsaquo;" 
+                firstText="&laquo;"     
+                lastText="&raquo;">
+            </pagination> -->
+        </div>
+    </div>
   
 

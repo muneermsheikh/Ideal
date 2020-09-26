@@ -12,7 +12,7 @@ import { ShopService } from './shop.service';
 })
 
 export class ShopComponent implements OnInit {
-  @ViewChild('search') searchTerm: ElementRef;
+  @ViewChild('search', {static: false}) searchTerm: ElementRef;
   categories: ICategory[];
   indtypes: IIndustryType[];
   skilllevels: ISkillLevel[];
@@ -51,12 +51,12 @@ export class ShopComponent implements OnInit {
 
   getCategories(): any {
     this.shopService.getCategories(this.shopParams).subscribe(response => {
-    this.categories = response.data;
-    this.totalCount = response.count;
-    this.shopParams.pageNumber = response.pageNumber;
-    this.shopParams.pageSize = response.pageSize;
-  }, error => {
-    console.log(error);
+      this.categories = response.data;
+      this.totalCount = response.count;
+      this.shopParams.pageNumber = response.pageIndex;
+      this.shopParams.pageSize = response.pageSize;
+    }, error => {
+      console.log(error);
   });
 }
 
@@ -89,27 +89,30 @@ export class ShopComponent implements OnInit {
   }
 
   onPageChanged(event: any) {
-    // const params = this.shopService.getShopParams();
-    this.shopParams.pageNumber = event.page;
-    // if (params.pageNumber !== event) {
-    // params.pageNumber = event;
+    const params = this.shopService.getShopParams();
+    // this.shopParams.pageNumber = event;
+    if (params.pageNumber !== event) {
+      params.pageNumber = event;
 //      this.shopService.setShopParams(params);
-    this.getCategories();
-    // }
+      this.getCategories();
+    }
   }
 
-  onSearch(): any {
+  onSearch() {
+    console.log(this.searchTerm.nativeElement.value);
     const params = this.shopService.getShopParams();
     params.search = this.searchTerm.nativeElement.value;
     params.pageNumber = 1;
     this.shopService.setShopParams(params);
+
     this.getCategories();
   }
+
 
   onReset(): any {
     this.searchTerm.nativeElement.value = '';
     this.shopParams = new ShopParams();
-    this.shopService.setShopParams(this.shopParams);
+    // this.shopService.setShopParams(this.shopParams);
     this.getCategories();
   }
 
