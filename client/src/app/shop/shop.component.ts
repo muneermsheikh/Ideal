@@ -41,15 +41,7 @@ export class ShopComponent implements OnInit {
     this.getSkillLevels();
   }
 
-  /*
-  getCategories(): any {
-    this.shopService.getCategories(this.indtypeidSelected, this.skilllevelidSelected).subscribe(response =>
-      {this.categories = response.data; },
-      error => {console.log(error); } );
-  }
-*/
-
-  getCategories(): any {
+    getCategories(): any {
     this.shopService.getCategories(this.shopParams).subscribe(response => {
       this.categories = response.data;
       this.totalCount = response.count;
@@ -88,7 +80,7 @@ export class ShopComponent implements OnInit {
     this.getCategories();
   }
 
-  onPageChanged(event: any) {
+  onPageChanged(event: any): void {
     const params = this.shopService.getShopParams();
     // this.shopParams.pageNumber = event;
     if (params.pageNumber !== event) {
@@ -98,7 +90,7 @@ export class ShopComponent implements OnInit {
     }
   }
 
-  onSearch() {
+  onSearch(): void{
     console.log(this.searchTerm.nativeElement.value);
     const params = this.shopService.getShopParams();
     params.search = this.searchTerm.nativeElement.value;

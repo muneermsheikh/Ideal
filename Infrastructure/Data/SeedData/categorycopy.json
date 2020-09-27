@@ -1,6 +1,6 @@
 [
-    {   "Name": "Production Supervisor", "IndustryTypeId": 1,  "SkillLevelId": 4 },
-    {   "Name": "Site Engineer", "IndustryTypeId": 2, "SkillLevelId": 3},
+    {   "Name": "Production Supervisor", "IndustryTypeId": 5,  "SkillLevelId": 4 },
+    {   "Name": "Site Engineer", "IndustryTypeId": 4, "SkillLevelId": 3},
     {   "Name": "Architect-Senior", "IndustryTypeId": 2, "SkillLevelId": 3 },
     {   "Name": "Chief Finance Officer", "IndustryTypeId": 1,  "SkillLevelId": 1 },
     {   "Name": "Chief Finance Manager", "IndustryTypeId": 2, "SkillLevelId": 1 },
@@ -26,5 +26,4 @@
     {   "Name": "Planning Engineer", "IndustryTypeId": 1,  "SkillLevelId": 3 },
     {   "Name": "Electgrical Engineer", "IndustryTypeId": 2, "SkillLevelId": 3},
     {   "Name": "Electronics Manager", "IndustryTypeId": 2, "SkillLevelId": 2 }
-
 ]

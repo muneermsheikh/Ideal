@@ -57,16 +57,16 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
 
-              // if (!context.Categories.Any())              //works
-//                {
-                    var catData = File.ReadAllText("../Infrastructure/Data/SeedData/categorycopy.json");
+             if (!context.Categories.Any())              //works
+                {
+                    var catData = File.ReadAllText("../Infrastructure/Data/SeedData/category.json");
                     var cats = JsonSerializer.Deserialize<List<Category>>(catData);
                     foreach (var item in cats)
                     {
                         context.Categories.Add(item);
                     }
                     await context.SaveChangesAsync();
-  //              }
+             }
 /*
                 if (!context.DeliveryMethods.Any())
                 {

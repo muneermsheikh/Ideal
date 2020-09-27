@@ -1,8 +1,8 @@
 [
     {"Id": 1, "Name": "Top Management"},
-    {"Id": 2, "Name": "Senior Management / Managers"},
-    {"Id": 3, "Name": "Middle Management / Engineers"},
-    {"Id": 4, "Name": "Lower Management / Supervisor"},
+    {"Id": 2, "Name": "Senior Management/Managers"},
+    {"Id": 3, "Name": "Middle Management/Engineers"},
+    {"Id": 4, "Name": "Lower Management/Supervisor"},
     {"Id": 5, "Name": "Supervisory Management"},
     {"Id": 8, "Name": "Unskilled"},
     {"Id": 7, "Name": "Semi-skilled"},

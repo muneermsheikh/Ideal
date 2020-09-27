@@ -56,6 +56,10 @@ export class ShopService {
 
   }
 
+  getCategory(id: number) {
+    return this.http.get<ICategory>(this.baseUrl + 'category/' + id);
+  }
+
   getIndustryTypes(): any {
     return this.http.get<IIndustryType[]>(this.baseUrl + 'category/indTypes');
   }
@@ -71,5 +75,7 @@ export class ShopService {
   setShopParams(params: ShopParams): void {
     this.shopParams = params;
   }
+
+
 
 }

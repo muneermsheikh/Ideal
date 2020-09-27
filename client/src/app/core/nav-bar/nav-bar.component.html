@@ -2,9 +2,11 @@
   px-md-4 mb-1 bg-white border-bottom shadow-sm fixed-top">
     <!-- <img src="/assets/images/recruitlogo.jpg" style="max-height: 70px;" alt=""/>  -->
     <nav class="my-1 my-md-0 mr-md-3">
-      <a class="p-2 text-dark" href="#">Home</a>
-      <a class="p-2 text-dark" href="#">Administrative</a>
+      <a class="p-2 text-dark" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions] = "{exact: true}">Home</a>
+      <a class="p-2 text-dark" routerLink="/shop" routerLinkActive="active">Shop</a>
+      
       <a class="p-2 text-dark" href="#">HR</a>
+      <a class="p-2 text-dark" routerLink="/test-error" routerLinkActive="active" >Error</a>
       <a class="p-2 text-dark" href="#">Processing</a>
     </nav>
     

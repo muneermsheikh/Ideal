@@ -53,9 +53,14 @@
     </div>
         <div *ngFor="let item of categories" style="margin-top: 5px;">
             <div class="row" >       
-                <div class="col-5">{{item.name}} </div>
-                <div class="col-4">{{item.industryType}} </div>  
-                <div class="col-3">{{item.skillLevel}}</div>
+                <div class="col-5" routerLink="/shop/{{item.id}}">{{item.name}} </div>
+                <div class="col-3">{{item.industryType}} </div>  
+                <div class="col-2">{{item.skillLevel}}</div>
+                <div class="col-2">
+                    <button class="btn-outline-secondary fa fa-shopping-cart" routerLink="/shop/{{item.id}}"></button> | 
+                    <button class="btn btn-outline-secondary fa fa-eye" routerLink="/shop/{{item.id}}"></button>
+                </div>
+
             </div>
         </div> 
         
@@ -68,16 +73,6 @@
                 (pageChanged)="onPageChanged($event)"
                 >
             </app-pager>
-<!--            <pagination 
-                [boundaryLinks]="true" 
-                [totalItems]="this.totalCount"
-                (pageChanged)="onPageChanged($event)"
-                [itemsPerPage]="this.shopParams.pageSize" 
-                previousText="&lsaquo;" 
-                nextText="&rsaquo;" 
-                firstText="&laquo;"     
-                lastText="&raquo;">
-            </pagination> -->
         </div>
     </div>
   
