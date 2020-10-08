@@ -44,6 +44,23 @@ namespace API.Controllers
             _appContext = appContext;
         }
 
+        [Authorize]
+        [HttpGet]
+        // [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var user = await _userManager.FindByEmailFromClaimsPrincipal(HttpContext.User);
+            if (user==null) return NotFound(new ApiResponse(404, "User not found"));
+            return new UserDto
+            {
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Token = _tokenService.CreateToken(user),
+                //EmployeeId=user.EmployeeId
+            };
+        }
+
+
         // Usermanager is derived from Microsoft.Identity. Usermanager has
         // built in function FindByEmailAsync.
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
@@ -164,21 +181,6 @@ namespace API.Controllers
             };
         }
 
-        [Authorize]
-        [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDto>> GetCurrentUser()
-        {
-            var user = await _userManager.FindByEmailFromClaimsPrincipal(HttpContext.User);
-            if (user==null) return NotFound(new ApiResponse(404, "User not found"));
-            return new UserDto
-            {
-                DisplayName = user.DisplayName,
-                Email = user.Email,
-                Token = _tokenService.CreateToken(user),
-                //EmployeeId=user.EmployeeId
-            };
-        }
 
         [HttpGet("emailexists")]
         public async Task<ActionResult<bool>> CheckEmailExists([FromQuery] string email)

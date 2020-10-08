@@ -4,6 +4,7 @@ using Core.Entities.Masters;
 using Core.Interfaces;
 using Infrastructure.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 // this controller is for Users with Authority = AddMasterValues;
 // another contorller CategoriesController is used by loggedin users, who are clients or candidates, and
@@ -20,6 +21,10 @@ namespace Infrastructure.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<IReadOnlyList<Category>> CategoriesFromCategoryIds(int[] categoryIds)
+        {
+            return await _context.Categories.Where(x => categoryIds.Contains(x.Id)).OrderBy(x=>x.Id).ToListAsync();
+        }
 
         public string GetCategoryNameWithRefFromEnquiryItemId(int enquiryItemId)
         {
@@ -107,11 +112,20 @@ namespace Infrastructure.Services
             return category;
         }
 
+        public async Task<bool> CategoryExists(string nm, int indId, int skId)
+        {
+            var cat = await _context.Categories
+                .Where(x => x.Name == nm && x.IndustryTypeId == indId && x.SkillLevelId == skId)
+                .SingleOrDefaultAsync();
+            
+            return (cat == null) ? true : false;
+        }
         // industry types
 
         public async Task<IReadOnlyList<IndustryType>> GetIndustryTypes()
         {
-            return await _unitOfWork.Repository<IndustryType>().ListAllAsync();
+            // return await _unitOfWork.Repository<IndustryType>().ListAllAsync();
+            return await _context.IndustryTypes.OrderBy(x => x.Name).ToListAsync();
         }
 
         public async Task<IndustryType> CreateIndustryType(string name)
@@ -141,7 +155,7 @@ namespace Infrastructure.Services
         }
 
 
-        // skill Level
+    // skill Level
         public async Task<SkillLevel> CreateSkillLevel(string name)
         {
             var skillLvl = new SkillLevel(name);
@@ -160,7 +174,7 @@ namespace Infrastructure.Services
 
         public async Task<IReadOnlyList<SkillLevel>> GetSkillLevels()
         {
-            return await _unitOfWork.Repository<SkillLevel>().ListAllAsync();
+            return await _context.SkillLevels.OrderBy(x => x.Name).ToListAsync();
         }
 
 

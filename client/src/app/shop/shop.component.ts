@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { BasketService } from '../basket/basket.service';
 import { ICategory } from '../shared/models/category';
 import { IIndustryType } from '../shared/models/industryType';
 import { ShopParams } from '../shared/models/shopParams';
@@ -31,7 +32,7 @@ export class ShopComponent implements OnInit {
     { name: 'Ascending by skill level', value: 'skillLevelDesc' }
   ];
 
-  constructor(private shopService: ShopService) {
+  constructor(private shopService: ShopService, private basketService: BasketService) {
     this.shopParams = this.shopService.getShopParams();
    }
 
@@ -41,7 +42,7 @@ export class ShopComponent implements OnInit {
     this.getSkillLevels();
   }
 
-    getCategories(): any {
+  getCategories(): any {
     this.shopService.getCategories(this.shopParams).subscribe(response => {
       this.categories = response.data;
       this.totalCount = response.count;

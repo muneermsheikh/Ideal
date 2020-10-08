@@ -15,12 +15,12 @@
     
                 <h5 class="text-warning ml-3">industry types</h5>
                 <ul class="list-group">
-              <li class="list-group-item" *ngFor="let ind of indtypes"
-                  [class.active]="ind.id === this.shopParams.industryTypeId"
-                  [value]="ind.id"
-                  (click)="onIndTypeSelected(ind.id)">
-                  {{ind.name}}
-              </li>
+                    <li class="list-group-item" *ngFor="let ind of indtypes"
+                        [class.active]="ind.id === this.shopParams.industryTypeId"
+                        [value]="ind.id"
+                        (click)="onIndTypeSelected(ind.id)">
+                        {{ind.name}}
+                    </li>
                 </ul>
         
                 <h5 class="text-warning ml-3">Skill Levels</h5>
@@ -52,15 +52,22 @@
         </div>
     </div>
         <div *ngFor="let item of categories" style="margin-top: 5px;">
-            <div class="row" >       
+            <div class="row" >      
+                <!--
+                <app-category-item></app-category-item> 
+                <div class="col-4 mb-4" *ngFor="let item of categories">
+                    <app-category-item [category]="item"></app-category-item>
+                </div>
+                -->    
                 <div class="col-5" routerLink="/shop/{{item.id}}">{{item.name}} </div>
                 <div class="col-3">{{item.industryType}} </div>  
                 <div class="col-2">{{item.skillLevel}}</div>
-                <div class="col-2">
-                    <button class="btn-outline-secondary fa fa-shopping-cart" routerLink="/shop/{{item.id}}"></button> | 
-                    <button class="btn btn-outline-secondary fa fa-eye" routerLink="/shop/{{item.id}}"></button>
+                
+                <div class="col-2" style="cursor: pointer">
+                    <button class="btn btn-outline-secondary fa fa-shopping-cart social-ig"  
+                        routerLink="/shop/{{item.id}}" ></button>  
                 </div>
-
+            
             </div>
         </div> 
         

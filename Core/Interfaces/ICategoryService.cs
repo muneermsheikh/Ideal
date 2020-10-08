@@ -9,10 +9,15 @@ namespace Core.Interfaces
     {
         string GetCategoryNameWithRefFromEnquiryItemId(int enquiryItemId);
         string getCategoryNameFromCategoryId(int categoryId);
+        
+        Task<bool> CategoryExists(string nm, int indId, int skId);
+
         Task<Category> CreateCategoryAsync (string name, int indTypeId, int skillLevelId);
         
         Task<IReadOnlyList<Category>> CategoryListAsync ();
 
+        Task<IReadOnlyList<Category>> CategoriesFromCategoryIds(int[] categoryIds);
+        
         Task<Category> CategoryByIdAsync(int Id);
         Task<Category> DeleteCategoryByIdAsync(int Id);
         Task<Category> UpdateCategoryAsync(Category category);

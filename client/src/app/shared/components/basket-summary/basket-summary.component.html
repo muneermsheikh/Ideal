@@ -1,0 +1,24 @@
+<ng-container *ngIf="items.length > 0">
+    <div class="table-responsive">
+        <table class="table table-borderless">
+            <thead [class.thead-light]="isBasket || isOrder" class="border-0">
+                <tr>
+                    <th><div>Category</div></th>
+                    <th><div>Quantity</div></th>
+                    <th><div>Salary Range</div></th>
+                    <th><div>Total</div></th>
+                    <th *ngIf="isBasket" class="border-0"><div>Remove</div></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of items" class="border-0">
+                    <td>{{item.id}} - {{item.categoryName}}</td>
+                    <td>{{item.quantity}}</td>    
+                    <td>{{item.salaryRangeMin}}</td>
+                    <td>{{item.salaryRangMin}}></td>
+                    <td>remove</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-container>

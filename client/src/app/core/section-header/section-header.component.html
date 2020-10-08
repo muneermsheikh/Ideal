@@ -1,0 +1,16 @@
+<ng-container *ngIf="(breadcrumb$ | async) as breadcrumbs">
+    <section *ngIf="breadcrumbs.length > 0 && breadcrumbs[breadcrumbs.length-1].label !== 'home'" 
+            style="margin-top: 45px; background-color: #f5f5f5;">
+        <div class="container" >
+            <div class="row align-items-centre">
+                <div class="col-6">
+                 {{breadcrumbs.length > 0 && breadcrumbs[breadcrumbs.length-1].label | titlecase}}
+                </div>
+                <div class="col-6">
+                    <xng-breadcrumb>
+                    </xng-breadcrumb>
+                </div>
+            </div>
+        </div>
+    </section>
+</ng-container>

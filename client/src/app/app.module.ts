@@ -9,6 +9,9 @@ import { CoreModule } from './core/core.module';
 // import { ShopModule } from './shop/shop.module'; - not required fter lazy loading
 import { HomeModule } from './home/home.module';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { LoadingInterceptor } from './core/interceptors/loading.interceptors';
+import { ProfessionModule } from './profession/profession.module';
 
 
 @NgModule({
@@ -22,10 +25,13 @@ import { ErrorInterceptor } from './core/interceptors/error.interceptor';
     HttpClientModule,
     CoreModule,
     // ShopModule,    // taken out after lazy loading of shop and category details routes
-    HomeModule
+    HomeModule,
+    NgxSpinnerModule,
+    ProfessionModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Errors;
@@ -36,6 +37,24 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDto basket)
         {
+            // update categorynames in the dto basket
+
+            var intIds = (from t in basket.Items select t.Id).ToArray();
+                
+            var cats = await _catService.CategoriesFromCategoryIds(intIds);
+            
+            foreach(var bskt in basket.Items)
+            {
+                foreach(var item in cats)                
+                {
+                    if (bskt.Id == item.Id)
+                    {
+                        bskt.CategorytName = item.Name;
+                        break;
+                    }
+                }
+            }
+            //the basket obj now has correct category names
             var custBasket = _mapper.Map<CustomerBasketDto, CustomerBasket>(basket);
             var updateBasket = await _basketRepo.UpdatebasketAsync(custBasket);
             if (updateBasket == null) return BadRequest(new ApiResponse(400, "Failed to update the basket"));

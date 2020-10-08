@@ -10,11 +10,12 @@
             
         </a>
         <div class="btn-group mt-auto">
-            <button type="button" class="btn btn-outline-secondary fa fa-shopping-cart mr-2" ></button>
-            <button type="button" class="btn btn-outline-secondary">View</button>
+            <button (click)="addItemToBasket()" type="button" class="btn btn-outline-secondary fa fa-shopping-cart mr-2" ></button>
+            <button routerLink="/shop/{{category.id}}" type="button" class="btn btn-outline-secondary">View</button>
         </div>
     </div>
 </div>
+-->
 
 <div style="font-size: small;">
     <div class="row">
@@ -22,9 +23,8 @@
         <div class="col-3"> {{category.industryType}} </div>
         <div class="col-3"> {{category.skillLevel}}   </div>
         <div class="col-2">
-            <button type="button" class="btn btn-outline-secondary fa fa-shopping-cart mr-2" ></button> |
-            <button type="button" class="btn btn-outline-secondary fa fa-shopping-cart"></button>
+            <button (click)="addItemToBasket()" type="button" class="btn btn-outline-secondary fa fa-shopping-cart mr-2" ></button> |
+            <button routerLink="/shop/{{category.id}}" type="button" class="btn btn-outline-secondary fa fa-shopping-cart"></button>
         </div>
     </div>
 </div>
--->

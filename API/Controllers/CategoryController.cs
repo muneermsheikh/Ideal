@@ -10,6 +10,7 @@ using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructure.Data;
 
 namespace API.Controllers
 {
@@ -17,7 +18,6 @@ namespace API.Controllers
     public class CategoryController : BaseApiController
     {
         private readonly ICategoryService _categoryService;
-
         private readonly IGenericRepository<Category> _catRepo;
         private readonly IGenericRepository<IndustryType> _indRepo;
         private readonly IGenericRepository<SkillLevel> _skillRepo;
@@ -74,7 +74,7 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CategoryToReturnDto>>AddACategory(
-            CategoryDto categoryDto)
+            [FromQuery] CategoryDto categoryDto)
         {
             var cat = await _categoryService.CreateCategoryAsync(
                 categoryDto.Name, categoryDto.IndustryTypeId, categoryDto.SkillLevelId);
@@ -101,7 +101,20 @@ namespace API.Controllers
             return await  _categoryService.DeleteCategoryByIdAsync(id);
         }
 
+
+        [HttpGet("exists")]
+        public async Task<bool> CategoryExists(string cat, int industryTypeId, int skillLevelId)
+        {
+            return await _categoryService.CategoryExists(cat, industryTypeId, skillLevelId);
+        }
+
 // industryType
+        [HttpGet("IndustryTypesWoPagination")]
+        public async Task<ActionResult<IReadOnlyList<IndustryType>>> GetIndustryTypes()
+        {
+            return Ok(await _categoryService.GetIndustryTypes());
+        }
+
         [HttpGet("indTypes")]
         public async Task<ActionResult<IReadOnlyList<IndustryType>>> GetIndustryTypesWoPagination ([FromQuery]IndTypeSpecParams param)
         {
@@ -178,8 +191,16 @@ namespace API.Controllers
         }
 
     // skillLevel
+
+        [HttpGet("SkillLevelsWoPagination")]
+        public async Task<ActionResult<IReadOnlyList<SkillLevel>>> GetSkillLevelsWoPagination()
+        {
+            return Ok(await _categoryService.GetSkillLevels());
+        }
+
+
         [HttpGet("skillLevels")]
-        public async Task<ActionResult<IndustryToReturnDto>> GetSkillLevelsWoPagination(
+        public async Task<ActionResult<IndustryToReturnDto>> GetSkillLevelsWoPaginationNParam(
             [FromQuery]IndTypeSpecParams param)
         {
             var spec = new SkillLevelSpec(param);
@@ -232,7 +253,5 @@ namespace API.Controllers
         {
             return await  _categoryService.DeleteSkillLevelById(id);
         }
-
-
     }
 }

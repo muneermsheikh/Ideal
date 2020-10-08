@@ -1,0 +1,48 @@
+<div *ngIf="!professions">
+    no professions on record
+</div>
+
+<div class="d-flex align-items-center justify-content-center">
+    <app-paging-header
+        [totalCount]="totalCount"
+        [pageSize]="this.profParams.pageSize"
+        [pageNumber]="this.profParams.pageNumber">
+    </app-paging-header>
+    
+    <div class="form-inline" *ngIf="professions" >
+        <input (keyup.enter)="onSearch()" class="form-control" 
+            #search placeholder="Search" type="text" >
+        <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
+        <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
+        <button routerLink="/profession-add" class="btn btn-outline-success ml-2">New Category</button>
+    </div>
+</div>
+
+<div class="col-9, px-5; line-height: 1em;" *ngFor="let item of professions" style="margin-top: 5px; font-size: small;">
+    <div class="row" >      
+        <div class="col-4" routerLink="/shop/{{item.id}}">{{item.name}} </div>
+        <div class="col-3">{{item.industryType}} </div>  
+        <div class="col-2">{{item.skillLevel}}</div>
+        
+        <div class="col-3" style="cursor: pointer">
+            <button class="btn btn-outline-secondary fa fa-pencil" routerLink="/profession/{{item.id}}" ></button>  
+            <button class="btn btn-outline-secondary fa fa-trash" routerLink="/profession/{{item.id}}" ></button>  
+        </div>
+    </div>
+</div> 
+
+
+<div class="d-flex justify-content-center my-3" *ngIf="this.totalCount > 0">
+    <app-pager
+        [pageSize]="profParams.pageSize"
+        [pageNumber]="profParams.pageNumber"
+        [totalCount]="totalCount"
+        (pageChanged)="onPageChanged($event)"
+        >
+    </app-pager>
+</div>
+
+
+
+
+
