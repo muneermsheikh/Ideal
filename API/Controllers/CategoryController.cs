@@ -73,8 +73,7 @@ namespace API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoryToReturnDto>>AddACategory(
-            [FromQuery] CategoryDto categoryDto)
+        public async Task<ActionResult<CategoryToReturnDto>>AddACategory([FromQuery] CategoryDto categoryDto)
         {
             var cat = await _categoryService.CreateCategoryAsync(
                 categoryDto.Name, categoryDto.IndustryTypeId, categoryDto.SkillLevelId);
