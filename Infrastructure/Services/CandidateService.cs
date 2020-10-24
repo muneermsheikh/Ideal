@@ -72,6 +72,7 @@ namespace Infrastructure.Services
 
         public async Task<Candidate> RegisterCandidate(Candidate candidate)
         {
+            
             if (!await ValidateCandidateToAdd(candidate)) return null;
             if (candidate.ApplicationNo == 0)
             {

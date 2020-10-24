@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { IClient } from 'src/app/shared/models/client';
 import { ClientParams } from 'src/app/shared/models/clientParams';
 import { ClientsService } from './clients.service';
@@ -14,7 +14,7 @@ export class ClientsComponent implements OnInit {
   @Input() clientType: number;
   params = new ClientParams();
   totalCount: number;
-  form: FormBuilder;
+  form: FormGroup;
   clients: IClient[] = [];
 
   constructor(private fb: FormBuilder, private service: ClientsService) { }

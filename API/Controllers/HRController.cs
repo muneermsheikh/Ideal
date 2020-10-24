@@ -113,7 +113,40 @@ namespace API.Controllers
         // ***TO DO - embed candidatecategory in candidate object
         public async Task<ActionResult<Candidate>> RegisterCandidate([FromBody] CandidateToAddDto dto)
         {
-            // candidadress and professions are recd as flat vlues
+            
+            // change candidate model - convert candidateaddress to list
+            if (dto.AddressListDto == null || dto.AddressListDto.Count == 0)
+            {
+                return BadRequest(new ApiResponse(400, "Address not defined"));
+            }
+            if (dto.ProfListDto == null || dto.ProfListDto.Count == 0)
+            {
+                return BadRequest(new ApiResponse(400, "Candidate profession not defined"));
+            }
+
+            var lst = dto.AddressListDto[0];
+            
+            var candAddList = new CandidateAddress      // change candidate model - make this list
+                {
+                    AddressType = lst.AddressType,
+                    Address1 = lst.Address1,
+                    Address2 = lst.Address2,
+                    City = lst.City,
+                    PIN = lst.PIN,
+                    State= lst.State,
+                    District = lst.District,
+                    Country = lst.Country,
+                    Valid = true
+                };
+
+            var profList = new List<CandidateCategory>();
+            foreach(var prof in dto.ProfListDto)
+            {
+                profList.Add(new CandidateCategory
+                {
+                    CatId = prof.ProfessionId
+                });
+            }
 
             var cand = new Candidate
             {
@@ -130,15 +163,8 @@ namespace API.Controllers
                 email = dto.email,
                 CandidateStatus = enumCandidateStatus.Available,
                 AddedOn = DateTime.Now,
-                CandidateAddress = new CandidateAddress{
-                    AddressType = dto.AddressType,
-                    Address1 = dto.Address1,
-                    Address2 = dto.Address2,
-                    City = dto.City,
-                    PIN = dto.PIN,
-                    State = dto.State,
-                    Country = dto.Country
-                }
+                CandidateAddress = candAddList,
+                CandidateCategories=profList
             };
 
 

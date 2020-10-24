@@ -36,7 +36,7 @@ export class UsersService {
 
 
   /* delete returns integer - correct flg
-  
+
   deleteCandidate(values: ICandidate) {
     return this.http.delete(this.baseUrl + 'HR/candidate', values).pipe(
       map((cand: number) => {

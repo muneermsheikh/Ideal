@@ -20,10 +20,13 @@ namespace API.Dtos
         public string AadharNo { get; set; }
         public DateTime DOB { get; set; }
 
-        public int ProfessionId {get; set; }
+        // public int ProfessionId {get; set; }
+        public List<CandidateProfessionDto> ProfListDto {get; set;}
         public string MobileNo {get; set; }
         public string email {get; set; }
-      
+
+        public List<CandidateAddressDto> AddressListDto {get; set;}
+      /*
         public string AddressType {get; set; }
         public string Address1 {get; set; }
         public string Address2 {get; set; }
@@ -32,6 +35,23 @@ namespace API.Dtos
         public string State {get; set; }
         public string District {get; set; }
         public string Country {get; set;}
+    */
+    }
 
+    public class CandidateProfessionDto
+    {
+        public int ProfessionId{get; set;}
+    }
+
+    public class CandidateAddressDto
+    {
+        public string AddressType {get; set; }
+        public string Address1 {get; set; }
+        public string Address2 {get; set; }
+        public string City {get; set; }
+        public string PIN {get; set; }
+        public string State {get; set; }
+        public string District {get; set; }
+        public string Country {get; set;}
     }
 }

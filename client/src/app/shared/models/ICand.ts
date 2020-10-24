@@ -17,7 +17,7 @@ export interface ICandidate {
   aadharNo: string;
   mobileNo: string;
   email: string;
-  candidateAddress: CandAddress;
+  candidateAddress: CandAddress[];
   candidateCategories: CandProfession[];
 }
 

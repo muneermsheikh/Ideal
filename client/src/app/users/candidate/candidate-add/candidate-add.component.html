@@ -1,8 +1,8 @@
 <div style="margin-left: 10px; line-height: 10px; font-size: small; ">
         
-    <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="mx-4">
-                <h1 class="h3 mb-3 font-weight-normal">Add a candidate</h1>
+                <h4 class="h3 mb-3 font-weight-normal">Add a candidate</h4>
         </div>
 
         <div class="form-group">
@@ -25,28 +25,58 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-3">
-                    <label for="professionId">Profession</label>
-                    <select formControlName="professionId" class="form-control" >
-                        <option *ngFor="let item of professions" [ngValue]=item.id>{{item.name}}</option>
-                    </select>
-                </div>
-            <!--
-                <div class="col">
-                    <button class="btn btn-sm" (click)="addCandidateProf({{professionId}})"></button>
-                </div>
-                <div class="col">
-                    <ul *ngFor="let prof of candProfAdded">
-                        <div class="col-3">{{prof.profName}}</div>
-                        <div class="col-3">{{prof.industryType}}</div>
-                        <div class="col-3">{{prof.skillLevel}}</div>
-                        <div class="col-3">
-                            <button class="btn btn-sm" (click)="removeProfAdded({{prof.id}})" type="submit">remove</button>
+                <div>
+                    <button type="button" 
+                        class="btn btn-primary mb-2" (click)="addProfession()">Add Profession
+                    </button>
+                    <section style="margin-left: 10px;" class="container border p-3" formArrayName="categoryFormArray" 
+                            *ngFor="let category of CategoryControls; let i = index;">
+                        <div [formGroupName]="i">
+                            <div class="row">
+                                <div class="col-2"><h4>Profession {{i + 1}}</h4> </div>
+                                <div class="col-10 text-right">
+                                    <button type="button" class="btn btn-danger btn-sm" 
+                                        (click)="removeProfession(i)">Remove
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="name" placeholder="name"/>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>industry Type</label>
+                                        <select class="form-control" 
+                                            formControlName="industryTypeId" placeholder="industry Type">
+                                            <option *ngFor="let item of industryTypes" [ngValue]=item.id>
+                                                {{item.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Skill Level</label>
+                                        <select class="form-control" 
+                                            formControlName="skillLevelId" placeholder="Skill Level">
+                                            <option *ngFor="let item of skillLevels" [ngValue]=item.id>
+                                                {{item.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </ul>
+                    </section>
                 </div>
-            -->
-                <div class="col">
+            </div>
+
+            <div class="col">
                     <label for="name">Passport No</label>
                     <input type="text" id="ppNo" formControlName="ppNo" class="form-control" placeholder="PP No" >
                 </div>
@@ -77,6 +107,93 @@
             </div>
 
             <br>
+            <div class="row">
+                <div class="row justify-content-center">
+                    <button type="button" 
+                        class="btn btn-primary mb-2" (click)="addAddress()">Add Address
+                    </button>
+                    <section class="container border mb-4 p-3" formArrayName="addressFormArray" 
+                        *ngFor="let address of AddressControls; let i = index;">
+                        <div [formGroupName]="i">
+                            <div class="row">
+                                <div class="col-6"><h4>Address {{i + 1}}</h4> </div>
+                                <div class="col-6 text-right">
+                                    <button type="button" class="btn btn-danger btn-sm" 
+                                        (click)="removeAddress(i)">Remove
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Address Type</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="addressType" placeholder="Type"/>
+                                    </div>
+                                </div>  
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="address1" placeholder="Address"/>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Street</label>
+                                        <input type="text" class="form-control" 
+                                            formControlName="address2" placeholder="Street"/>
+                                    </div>
+                                </div>
+                            </div>
+          
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>City</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="city" placeholder="Mumbai"/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>PIN</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="pin" placeholder="PIN"/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>State</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="state" placeholder="State"/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Country</label>
+                                        <select class="form-control" 
+                                            formControlName="country" placeholder="India">
+                                            <option value="india">India</option>
+                                            <option value="usa">USA</option>
+                                            <option value="england">England</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <div class="col-3">
+                    <label for="professionId">Profession</label>
+                    <select formControlName="professionId" class="form-control" >
+                        <option *ngFor="let item of professions" [ngValue]=item.id>{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+
+
             <div class="row">
                 <div class="col-1 mr-2">
                     <label for="name">Address Type</label>
@@ -125,7 +242,5 @@
                     </ul>
                 </div>
             </div>
-        </div>
     </form>
-
 </div>
