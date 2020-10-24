@@ -1,0 +1,250 @@
+<div style="margin-left: 10px; line-height: 10px; font-size: small; ">
+        
+    <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+        <div class="mx-4">
+                <h1 class="h3 mb-3 font-weight-normal">Add a candidate</h1>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" formControlName="firstName" class="form-control" placeholder="First Name" >
+                </div>    
+                <div class="col">
+                    <label for="secondName">Second Name:</label>
+                    <input type="text" id="secondName" formControlName="secondName" class="form-control" placeholder="Second Name" >
+                </div>
+                <div class="col">
+                    <label for="familyName">Family Name:</label>
+                    <input type="text" id="familyName" formControlName="familyName" class="form-control" placeholder="Family Name" >
+                </div>
+                <div class="col">
+                    <label for="knownAs">Known As</label>
+                    <input type="text" id="knownAs" formControlName="knownAs" class="form-control" placeholder="Known As" >
+                </div>
+            </div>
+            <div class="row">
+                <div class="row justify-content-center">
+                    <button type="button" 
+                        class="btn btn-primary mb-2" (click)="addProfession()">Add Profession
+                    </button>
+                    <section class="container border mb-4 p-3" formArrayName="categoryFormArray" 
+                            *ngFor="let category of categpruControls; let i = index;">
+                        <div [formGroupName]="i">
+                            <div class="row">
+                                <div class="col-6"><h4>Profession {{i + 1}}</h4> </div>
+                                <div class="col-6 text-right">
+                                    <button type="button" class="btn btn-danger btn-sm" 
+                                        (click)="removeProfession(i)">Remove
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="name" placeholder="name"/>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>industry Type</label>
+                                        <select class="form-control" 
+                                            formControlName="industryTypeId" placeholder="industry Type">
+                                            <option *ngFor="let item of professions" [ngValue]=item.id>
+                                                {{item.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>industry Type</label>
+                                        <select class="form-control" 
+                                            formControlName="skillLevelId" placeholder="Skill Level">
+                                            <option *ngFor="let item of skillLevels" [ngValue]=item.id>
+                                                {{item.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div class="col">
+                    <label for="name">Passport No</label>
+                    <input type="text" id="ppNo" formControlName="ppNo" class="form-control" placeholder="PP No" >
+                </div>
+                <div class="col">
+                    <label for="name">Emig Clear Not Reqd</label>
+                    <input type="text" id="eCNR" formControlName="eCNR" class="form-control" placeholder="ECNR" >
+                </div>
+
+                <div class="col">
+                    <label for="name">Aadhar No</label>
+                    <input type="text" id="aadharNo" formControlName="aadharNo" class="form-control" placeholder="Aadhar No" >
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-3">
+                    <label for="name">Mobile No:</label>
+                    <input type="text" id="mobileNo" formControlName="mobileNo" class="form-control" placeholder="Mobile No" >
+                </div>
+                <div class="col-3">
+                    <label for="dOB">Date of birth</label>
+                    <input type="text" id="dOB" formControlName="dOB" class="form-control" placeholder="Date of birth" >
+                </div>
+                <div class="col-3">
+                    <label for="name">email</label>
+                    <input type="text" id="email" formControlName="email" class="form-control" placeholder="email" >
+                </div>
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="row justify-content-center">
+                    <button type="button" 
+                        class="btn btn-primary mb-2" (click)="addAddress()">Add Address
+                    </button>
+                    <section class="container border mb-4 p-3" formArrayName="addressFormArray" 
+                        *ngFor="let address of addressControls; let i = index;">
+                        <div [formGroupName]="i">
+                            <div class="row">
+                                <div class="col-6"><h4>Address {{i + 1}}</h4> </div>
+                                <div class="col-6 text-right">
+                                    <button type="button" class="btn btn-danger btn-sm" 
+                                        (click)="removeAddress(i)">Remove
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Address Type</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="addressType" placeholder="Type"/>
+                                    </div>
+                                </div>  
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="address1" placeholder="Address"/>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Street</label>
+                                        <input type="text" class="form-control" 
+                                            formControlName="address2" placeholder="Street"/>
+                                    </div>
+                                </div>
+                            </div>
+          
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>City</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="city" placeholder="Mumbai"/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>PIN</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="pin" placeholder="PIN"/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>State</label>
+                                        <input type="text" class="form-control" 
+                                        formControlName="state" placeholder="State"/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Country</label>
+                                        <select class="form-control" 
+                                            formControlName="country" placeholder="India">
+                                            <option value="india">India</option>
+                                            <option value="usa">USA</option>
+                                            <option value="england">England</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <div class="col-3">
+                    <label for="professionId">Profession</label>
+                    <select formControlName="professionId" class="form-control" >
+                        <option *ngFor="let item of professions" [ngValue]=item.id>{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+
+
+
+
+            <div class="row">
+                <div class="col-1 mr-2">
+                    <label for="name">Address Type</label>
+                    <input type="text" id="addressType" formControlName="addressType" class="form-control" placeholder="Address Type" >
+                </div>
+                <div class="col-3 ml-2">
+                    <label for="name">Address</label>
+                    <input type="text" id="address1" formControlName="address1" class="form-control" placeholder="Address" >
+                </div>
+                <div class="col-3">
+                    <label for="name">Address</label>
+                    <input type="text" id="address2" formControlName="address2" class="form-control" placeholder="Address2" >
+                </div>
+                <div class="col-3">
+                    <label for="name">City</label>
+                    <input type="text" id="city" formControlName="city" class="form-control" placeholder="city" >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 mr-2">
+                    <label for="name">PIN</label>
+                    <input type="text" id="pin" formControlName="pin" class="form-control" placeholder="pin" >
+                </div>
+                <div class="col-3">
+                    <label for="name">State</label>
+                    <input type="text" id="state" formControlName="state" class="form-control" placeholder="State" >
+                </div>
+                <div class="col-3">
+                    <label for="name">Country</label>
+                    <input type="text" id="Country" formControlName="country" class="form-control" placeholder="Country" >
+                </div>
+                <div class="col-3">
+                    <label for="name">App dated</label>
+                    <input type="text" id="applicationDated" formControlName="applicationDated" class="form-control" placeholder="applicationDated" >
+                </div>
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col-3">
+                    <button class="btn btn-sm btn-primary btn-block" type="submit">Update</button>
+                </div>
+                <div class="col-9">
+                    <ul class="text-danger list-unstyled" *ngIf="errors">
+                        <li *ngFor="let error of errors"> {{error}} </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

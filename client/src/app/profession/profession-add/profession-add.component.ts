@@ -46,6 +46,7 @@ createAddForm() {
       skillLevelId: [null, [Validators.required]]
     });
   }
+
   /*
 onSumit() {
     console.log(this.editForm.value);
@@ -61,6 +62,18 @@ onSumit() {
 
   onSubmit() {
     console.log(this.addProfForm.value);
+    this.profService.addProfession(this.addProfForm.value).subscribe(response => {
+    this.router.navigateByUrl('/profession');
+  }, error => {
+    console.log(error);
+    this.errors = error.errors;
+  });
+
+/*
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ headers: headers });
+
     this.profService.addProfession(JSON.stringify(
         this.addProfForm.value,
         function replacer(key, value){
@@ -73,6 +86,7 @@ onSumit() {
       console.log(error);
       this.errors = error.errors;
     });
+*/
   }
 
 }

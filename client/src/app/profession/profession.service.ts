@@ -1,6 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+
 
 import { IPagination, Pagination } from '../shared/models/pagination';
 import { ProfParams } from '../shared/models/profParams';
@@ -9,6 +10,8 @@ import { IProfession } from '../shared/models/profession';
 import { IPaginationProf, PaginationProf } from '../shared/models/paginationProf';
 import { IIndustryType } from '../shared/models/industryType';
 import { ISkillLevel } from '../shared/models/skillLevel';
+import { ICategory } from '../shared/models/category';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +19,8 @@ import { ISkillLevel } from '../shared/models/skillLevel';
 export class ProfessionService {
   private baseUrl = environment.apiUrl;
   professions: IProfession[] = [];
+  indTypes: IIndustryType[] = [];
+  skillLevels: ISkillLevel[] = [];
   paginationProf = new PaginationProf();
   profParams = new ProfParams();
 
@@ -24,31 +29,52 @@ export class ProfessionService {
 
   getProfession(id: number) {
     console.log('enered profservice.getProfession');
+
+    const profession = this.professions.find(p => p.id === id);
+
+    if (profession) {
+      return of(profession);
+    }
+
     return this.http.get<IProfession>(this.baseUrl + 'category/' + id);
   }
 
-  getProfessions(profParams: ProfParams) {
+  getProfessions(useCache: boolean) {
+    if (useCache === false) {
+      this.professions = [];
+    }
+
+    if (this.professions.length > 0 && useCache === true) {
+      const pagesReceived = Math.ceil(this.professions.length / this.profParams.pageSize);
+
+      if (this.profParams.pageNumber <= pagesReceived) {
+        this.paginationProf.data =
+          this.professions.slice((this.profParams.pageNumber - 1) * this.profParams.pageSize,
+            this.profParams.pageNumber * this.profParams.pageSize);
+
+        return of(this.paginationProf);
+      }
+    }
     console.log('entered profService.getProfessions');
 
     let params = new HttpParams();
 
-    if (profParams.industryTypeId !== 0) {
-      params = params.append('industryTypeId', profParams.industryTypeId.toString());
+    if (this.profParams.industryTypeId !== 0) {
+      params = params.append('industryTypeId', this.profParams.industryTypeId.toString());
     }
 
-    if (profParams.skillLevelId !== 0) {
-      params = params.append('skillLevelId', profParams.skillLevelId.toString());
+    if (this.profParams.skillLevelId !== 0) {
+      params = params.append('skillLevelId', this.profParams.skillLevelId.toString());
     }
 
-    if (profParams.search)
+    if (this.profParams.search)
     {
-      params = params.append('search', profParams.search);
+      params = params.append('search', this.profParams.search);
     }
 
-    params = params.append('sort', profParams.sort);
-
-    params = params.append('pageIndex', profParams.pageNumber.toString());
-    params = params.append('pageSize', profParams.pageSize.toString());
+    params = params.append('sort', this.profParams.sort);
+    params = params.append('pageIndex', this.profParams.pageNumber.toString());
+    params = params.append('pageSize', this.profParams.pageSize.toString());
     console.log(params);
 
     return this.http.get<IPaginationProf>(this.baseUrl + 'categories', { observe: 'response', params })
@@ -62,7 +88,9 @@ export class ProfessionService {
   }
 
   addProfession(values: any) {
-    return this.http.post(this.baseUrl + 'category', values).pipe(
+    return this.http.post(this.baseUrl + 'category', values
+       , {headers: {'Content-Type': 'application/json'}}
+      ).pipe(
       map((prof: IProfession) => {
         if (prof) {
           console.log('profession ' + prof.name + ' added'); }
@@ -113,10 +141,31 @@ export class ProfessionService {
 
 
   getIndustryTypes(): any {
-    return this.http.get<IIndustryType[]>(this.baseUrl + 'category/IndustryTypesWoPagination');
+    if (this.indTypes.length > 0) {
+      return of(this.indTypes);
+    }
+    return this.http.get<IIndustryType[]>(this.baseUrl + 'category/IndustryTypesWOPagination').pipe(
+      map(response => {
+        this.indTypes = response;
+        return response;
+      })
+    );
+
+    // return this.http.get<IIndustryType[]>(this.baseUrl + 'category/IndustryTypesWoPagination');
   }
 
-  getSkillLevels(): any {
-    return this.http.get<ISkillLevel[]>(this.baseUrl + 'category/SkillLevelsWoPagination');
+
+   getSkillLevels(): any {
+    if (this.skillLevels.length > 0) {
+      return of(this.skillLevels);
+    }
+    return this.http.get<ISkillLevel[]>(this.baseUrl + 'category/SkillLevelsWOPagination').pipe(
+      map(response => {
+        this.skillLevels = response;
+        return response;
+      })
+    );
+
+    // return this.http.get<ISkillLevel[]>(this.baseUrl + 'category/SkillLevelsWoPagination');
   }
 }

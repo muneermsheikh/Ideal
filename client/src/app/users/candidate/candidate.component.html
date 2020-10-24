@@ -1,0 +1,53 @@
+<div *ngIf="!candidates">
+    no candidates on record
+</div>
+
+<div class="d-flex align-items-center justify-content-center" style="margin-left: 10px;">
+    <app-paging-header
+        [totalCount]="totalCount"
+        [pageSize]="this.candParams.pageSize"
+        [pageNumber]="this.candParams.pageNumber">
+    </app-paging-header>
+    
+    <div class="form-inline" *ngIf="candidates" >
+        <input (keyup.enter)="onSearch()" class="form-control" 
+            #search placeholder="Search" type="text" >
+        <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
+        <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
+        <button routerLink="/candidate-add" class="btn btn-outline-success ml-2">New Candidate</button>
+    </div>
+</div>
+
+
+<div class="col-12, px-5; line-height: 8px;" *ngFor="let item of candidates" style="margin-top: 5px; margin-left: 10px; padding: 0px; font-size: small;">
+    <div class="row" >      
+        <div class="col-1">{{item.applicationNo}} </div>  
+        <div class="col-3" routerLink="/candidate/{{item.id}}">{{item.fullName}} </div>
+        <div class="col-1">{{item.ppNo}} </div>  
+        <div class="col-1">{{item.aadharNo}}</div>
+     <!--   <div style="display: block; " *ngFor="let prof of item.candidateCategories; 
+            let i=index">{{prof.name}} <br/></div>
+     -->   
+        <div class="col"></div>
+        <div class="col-2">{{item.mobileNo}}</div>
+        <div class="col-1">{{item.emailId}}</div>
+        <div class="col-1" style="cursor: pointer">
+            <button class="btn btn-sm btn-outline-secondary fa fa-pencil" routerLink="../candidate:{{item.id}}"></button>  
+            <button class="btn btn-sm btn-outline-secondary fa fa-trash" routerLink="/candidate/{{item.id}}"></button>  
+        </div>
+    </div>
+</div>
+
+
+
+<div class="d-flex justify-content-center my-3" *ngIf="this.totalCount > 0">
+    <app-pager
+        [pageSize]="candParams.pageSize"
+        [pageNumber]="candParams.pageNumber"
+        [totalCount]="totalCount"
+        (pageChanged)="onPageChanged($event)"
+        >
+    </app-pager>
+</div>
+
+

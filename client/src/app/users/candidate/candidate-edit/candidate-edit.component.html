@@ -1,0 +1,61 @@
+<div *ngIf="!candidate">
+    no candidate record available
+</div>
+<div *ngIf="candidate" class="d-flex justify-content-center mt-5">
+    <div class="col">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="text-center mb-4">
+          <h1 class="h3 mb-3 font-weight-normal">Edit a candidate </h1>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" formControlName="firstName" 
+                    [(ngModel)]="candidate.firstName" class="form-control" placeholder="category name" >
+                  </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="secondName">Second Name:</label>
+                    <input type="text" id="secondName" formControlName="secondName" 
+                    [(ngModel)]="candidate.secondName" class="form-control" placeholder="category name" >
+                  </div>
+  
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="familyName">First Name:</label>
+                    <input type="text" id="familyName" formControlName="familyName" 
+                    [(ngModel)]="candidate.familyName" class="form-control" placeholder="category name" >
+                  </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="professionId">Profession:</label>
+                <select formControlName="professionId" [(ngModel)]="candidate.professionId" class="form-control" >
+                    <option *ngFor="let item of professions" value="item.id">{{item.name}}</option>
+                </select>
+            </div>
+            <div class="col">
+
+            </div>
+        </div>                
+              
+        <div class="row">
+            <div class="col">
+                <ul class="text-danger list-unstyled" *ngIf="errors">
+                    <li *ngFor="let error of errors">
+                        {{error}}
+                    </li>
+                </ul>
+            </div>
+            <div class="col">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+            </div>
+        </div>
+        
+      </form>
+    </div>
+  </div>

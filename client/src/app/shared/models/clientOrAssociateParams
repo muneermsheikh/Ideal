@@ -1,0 +1,8 @@
+export class ClientOrAssociateParams {
+    countryName: string;
+    cityName: string;
+    sort = 'asc';
+    pageNumber = 1;
+    pageSize = 6;
+    search: string;
+}

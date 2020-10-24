@@ -16,5 +16,7 @@ namespace Core.Interfaces
          Task<Candidate> GetCandidateByApplicationNo(int ApplicationNo);
          Task<IReadOnlyList<Candidate>> GetCandidatesBySpecs(CandidateParams candidateParams);
          string GetCandidateName (int candidateId);
+         
+         Task<Candidate> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(int appno, string? ppno, string? aadharno, string? email);
     }
 }

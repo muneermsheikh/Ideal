@@ -41,7 +41,8 @@ namespace API.Dtos
         public string City { get; set; }
         public string ReferredBy {get; set;}
         
-        public string CandidateStatus { get; set; } 
+        public string CandidateStatus { get; set; }
+        public string CandidateString {get; set; }
         public virtual List<CategoryNameDto> CandidateCategories { get; set; }
         
     }

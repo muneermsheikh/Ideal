@@ -38,9 +38,12 @@ namespace Infrastructure.Services
             throw new System.NotImplementedException();
         }
 
-        public Task<Candidate> GetCandidateById(int candidateId)
+        public async Task<Candidate> GetCandidateById(int candidateId)
         {
-            throw new System.NotImplementedException();
+            var cv = await _context.Candidates.AsNoTracking().Where
+                (x => x.Id == candidateId)
+                .FirstOrDefaultAsync();
+            return cv;
         }
 
         public async Task<Candidate> GetCandidateBySpec(CandidateParams candidateParams)
@@ -108,15 +111,30 @@ namespace Infrastructure.Services
             if (string.IsNullOrEmpty(candidate.PPNo) && string.IsNullOrEmpty(candidate.AadharNo))
                 throw new Exception("Either PP number or Aadhar Card No must be provided"); 
 
+            /*
             if (candidate.CandidateCategories==null) throw new Exception ("candidate must have atleast one category");
             if (candidate.CandidateCategories.Count == 0) 
                 throw new Exception("atleast one category must be provided");
-
+        */
             int appNo = await CandidateAppNoOrPPNoOrAadharNoOrEmailExist(candidate);
             if (appNo !=0) throw new Exception("Application No. " + appNo + 
                 " exists that contains same PP No, AadharNo or eMailID");
             return true;
         }
+        
+        public async Task<Candidate> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(int appno, string? ppno, string? aadharno, string? email)
+        {
+            var cv = await _context.Candidates.AsNoTracking()
+                .Include(x => x.CandidateAddress)
+                .Where
+                (x => x.ApplicationNo == appno && appno != 0 ||
+                (!string.IsNullOrEmpty(ppno) && x.PPNo == ppno) ||
+                (!string.IsNullOrEmpty(aadharno) && x.AadharNo == aadharno) ||
+                (!string.IsNullOrEmpty(email) && x.email == email))
+                .FirstOrDefaultAsync();
+            return cv;
+        }
+
         public async Task<int> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(Candidate candidate)
         {
 

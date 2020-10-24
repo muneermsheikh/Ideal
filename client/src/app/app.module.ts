@@ -12,6 +12,8 @@ import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptors';
 import { ProfessionModule } from './profession/profession.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { UsersModule } from './users/users.module';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { ProfessionModule } from './profession/profession.module';
     // ShopModule,    // taken out after lazy loading of shop and category details routes
     HomeModule,
     NgxSpinnerModule,
-    ProfessionModule
+    ProfessionModule,
+    ReactiveFormsModule,
+    UsersModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

@@ -35,6 +35,7 @@ namespace API.Controllers
             _catRepo = catRepo;
         }
 
+        [Cached(600)]
         [HttpGet]
         public async Task<ActionResult<Pagination<CategoryToReturnDto>>> GetCategories(
             [FromQuery]CategorySpecsParams catParams)
@@ -53,6 +54,7 @@ namespace API.Controllers
                 (catParams.PageIndex, catParams.PageSize, totalItems, data));
         }
 
+        [Cached(600)]
         [HttpGet("{id}")]
         // following 2 for swagger 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -67,6 +69,7 @@ namespace API.Controllers
             return _mapper.Map<Category, CategoryToReturnDto>(cat);
         }
 
+        [Cached(600)]
         [HttpGet("indtypes")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IReadOnlyList<IndustryType>>> GetIndustryTypes()
@@ -76,6 +79,7 @@ namespace API.Controllers
             return Ok(inds);
         }
 
+        [Cached(600)]
         [HttpGet("skilllevels")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IReadOnlyList<SkillLevel>>> GetSkillLevels()

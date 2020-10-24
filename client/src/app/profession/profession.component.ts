@@ -12,7 +12,6 @@ import { ProfessionService } from './profession.service';
 export class ProfessionComponent implements OnInit {
   @ViewChild('search', {static: false}) searchTerm: ElementRef;
   professions: IProfession[];
-
   profParams = new ProfParams();
   totalCount: number;
   sortSelected = 'asc';
@@ -33,8 +32,8 @@ export class ProfessionComponent implements OnInit {
     this.getProfessions();
   }
 
-  getProfessions(): any {
-    this.profService.getProfessions(this.profParams).subscribe(response => {
+  getProfessions(useCache = false): any {
+    this.profService.getProfessions(useCache).subscribe(response => {
       this.professions = response.data;
       this.totalCount = response.count;
       this.profParams.pageNumber = response.pageIndex;
@@ -44,7 +43,16 @@ export class ProfessionComponent implements OnInit {
     });
   }
 
+  onPageChanged(event: any) {
+    const params = this.profService.getProfParams();
+    if (params.pageNumber !== event) {
+      params.pageNumber = event;
+      this.profService.setProfParams(params);
+      this.getProfessions(true);
+    }
+  }
 
+  /*
   onPageChanged(event: any): void {
     const params = this.profService.getProfParams();
     // this.shopParams.pageNumber = event;
@@ -54,6 +62,7 @@ export class ProfessionComponent implements OnInit {
       this.getProfessions();
     }
   }
+*/
 
   onSearch(): void{
     console.log(this.searchTerm.nativeElement.value);

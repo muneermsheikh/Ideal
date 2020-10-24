@@ -18,41 +18,41 @@ namespace API.Helpers
             _timeToLiveSeconds = timeToLiveSeconds;
         }
 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, 
-            ActionExecutionDelegate next)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var cacheService =
-                context.HttpContext.RequestServices.GetRequiredService<IResponseCacheService>();
-            var cacheKey = GenerateCacheKeyFromRequest(context.HttpContext.Request);
-            var cacheResponse = await cacheService.GetCacheResponseAsync(cacheKey);
+               var cacheService = context.HttpContext.RequestServices.GetRequiredService<IResponseCacheService>();
 
-            if (!string.IsNullOrEmpty(cacheResponse)) 
+            var cacheKey = GenerateCacheKeyFromRequest(context.HttpContext.Request);
+            var cachedResponse = await cacheService.GetCachedResponseAsync(cacheKey);
+
+            if (!string.IsNullOrEmpty(cachedResponse))
             {
                 var contentResult = new ContentResult
                 {
-                    Content=cacheResponse,
-                    ContentType="application/json",
+                    Content = cachedResponse,
+                    ContentType = "application/json",
                     StatusCode = 200
                 };
                 context.Result = contentResult;
+
                 return;
             }
 
-            var executedContext = await next();     //move to the controller
+            var executedContext = await next(); // move to controller
 
             if (executedContext.Result is OkObjectResult okObjectResult)
             {
-                await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, 
-                    TimeSpan.FromSeconds(_timeToLiveSeconds));
+                await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLiveSeconds));
             }
         }
 
-        private string GenerateCacheKeyFromRequest(HttpRequest request)
+        private static string GenerateCacheKeyFromRequest(HttpRequest request)
         {
             var keyBuilder = new StringBuilder();
+
             keyBuilder.Append($"{request.Path}");
 
-            foreach(var (key, value) in request.Query.OrderBy(x => x.Key))
+            foreach (var (key, value) in request.Query.OrderBy(x => x.Key))
             {
                 keyBuilder.Append($"|{key}-{value}");
             }

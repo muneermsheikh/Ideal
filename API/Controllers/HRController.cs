@@ -41,8 +41,35 @@ namespace API.Controllers
         }
 
 //candidates
+        [Cached(600)]
+        [HttpGet("getcandidate/{id}")]
+        public async Task<ActionResult<CandidateDto>> GetCandidate(int id)
+        {
+            var cv = await _candidateService.GetCandidateById(id);  
+            if (cv==null) return NotFound();
+            
+            return Ok( new CandidateDto(cv.Id, cv.ApplicationNo,cv.ApplicationDated,
+                    cv.Gender, cv.FullName,  DateTime.Now.Year - cv.DOB.Year, cv.PPNo,
+                    cv.AadharNo, "city",
+                    Enum.GetName(typeof(enumCandidateStatus), cv.CandidateStatus), null));
+        }
+
+        [HttpGet("candexists")]
+        public async Task<ActionResult<CandidateDto>> CheckCandidateExists(int appnumber, string? ppnumber, string? aadharnumber, string? email)
+        {
+            var cv = await _candidateService.CandidateAppNoOrPPNoOrAadharNoOrEmailExist(appnumber, ppnumber, aadharnumber, email);
+
+            if (cv==null) return NotFound();
+            
+            return Ok( new CandidateDto(cv.Id,cv.ApplicationNo,cv.ApplicationDated,
+                    cv.Gender, cv.FullName,  DateTime.Now.Year - cv.DOB.Year, cv.PPNo,
+                    cv.AadharNo, cv.CandidateAddress.City,
+                    Enum.GetName(typeof(enumCandidateStatus), cv.CandidateStatus), null));
+        }
+        
+        // [Cached(600)]
         [HttpGet("candidates")]     // ***TO DO - nested mapping
-        public async Task<ActionResult<Pagination<IReadOnlyList<CandidateDto>>>> GetCandidates([FromBody] CandidateParams candidateParams)
+        public async Task<ActionResult<Pagination<IReadOnlyList<CandidateDto>>>> GetCandidates([FromQuery] CandidateParams candidateParams)
         {
             var totalItems = await _unitOfWork.Repository<Candidate>().CountWithSpecAsync(
                 new CandidateSpecForCount(candidateParams));
@@ -60,6 +87,7 @@ namespace API.Controllers
                 var catList = new List<CategoryNameDto>();
                 //var candCategories = cand.CandidateCategories;
                 var candCategories= await _context.CandidateCategories.Where(x => x.CandId == cand.Id).ToListAsync();
+                // var catString = "";
                 if (candCategories !=null || candCategories.Count > 0)
                 {
                     foreach(var item in candCategories)
@@ -67,6 +95,7 @@ namespace API.Controllers
                         var cat = await _context.Categories.Where(x=>x.Id==item.CatId)
                             .Select(x=> new {x.Id, x.Name}).FirstOrDefaultAsync();
                         catList.Add(new CategoryNameDto(cat.Id, cat.Name));
+                        // cadString += cat.Name;
                     }
                 }
                 var cityname = cand.CandidateAddress==null ? "undefined": cand.CandidateAddress.City;
@@ -82,10 +111,38 @@ namespace API.Controllers
 
         [HttpPost("registercandidate")]
         // ***TO DO - embed candidatecategory in candidate object
-        public async Task<ActionResult<Candidate>> RegisterCandidate([FromBody] Candidate candidate)
+        public async Task<ActionResult<Candidate>> RegisterCandidate([FromBody] CandidateToAddDto dto)
         {
+            // candidadress and professions are recd as flat vlues
 
-            var candidateAdded = await _candidateService.RegisterCandidate(candidate);
+            var cand = new Candidate
+            {
+                ApplicationDated = dto.ApplicationDated,
+                FirstName = dto.FirstName,
+                SecondName = dto.SecondName,
+                FamilyName = dto.FamilyName,
+                KnownAs = dto.KnownAs,
+                Gender = dto.Gender,
+                PPNo = dto.PPNo,
+                ECNR = dto.ECNR,
+                AadharNo = dto.AadharNo,
+                DOB = dto.DOB,
+                email = dto.email,
+                CandidateStatus = enumCandidateStatus.Available,
+                AddedOn = DateTime.Now,
+                CandidateAddress = new CandidateAddress{
+                    AddressType = dto.AddressType,
+                    Address1 = dto.Address1,
+                    Address2 = dto.Address2,
+                    City = dto.City,
+                    PIN = dto.PIN,
+                    State = dto.State,
+                    Country = dto.Country
+                }
+            };
+
+
+            var candidateAdded = await _candidateService.RegisterCandidate(cand);
 
             if (candidateAdded == null) return BadRequest(new ApiResponse(404, "Failed to register the candidate"));
             return Ok(candidateAdded);
@@ -118,6 +175,7 @@ namespace API.Controllers
         }
 
 //candidate categories
+        [Cached(600)]
         [HttpGet("candwithcats")]       //tested
         public async Task<ActionResult<IReadOnlyList<CandidateDto>>> CandidatesMatchingCategories([FromBody] IReadOnlyList<int> categoryIntIds)
         {
@@ -128,6 +186,7 @@ namespace API.Controllers
             return Ok(dto);
         }
 
+        [Cached(600)]
         [HttpGet("categoriesofcandidate/{candidateid}")]        //tested
         public async Task<ActionResult<IReadOnlyList<CategoryToReturnDto>>> CandidateCategories(int candidateId)
         {

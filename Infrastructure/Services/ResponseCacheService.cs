@@ -6,7 +6,7 @@ using StackExchange.Redis;
 
 namespace Infrastructure.Services
 {
-    public class ResponseCacheService : IResponseCacheService
+    public class ResponseCacheService: IResponseCacheService
     {
         private readonly IDatabase _database;
         public ResponseCacheService(IConnectionMultiplexer redis)
@@ -16,7 +16,10 @@ namespace Infrastructure.Services
 
         public async Task CacheResponseAsync(string cacheKey, object response, TimeSpan timeToLive)
         {
-            if (response==null) return;
+            if (response == null)
+            {
+                return;
+            }
 
             var options = new JsonSerializerOptions
             {
@@ -28,13 +31,16 @@ namespace Infrastructure.Services
             await _database.StringSetAsync(cacheKey, serialisedResponse, timeToLive);
         }
 
-        public async Task<string> GetCacheResponseAsync(string cacheKey)
+        public async Task<string> GetCachedResponseAsync(string cacheKey)
         {
-            var cacheResponse = await _database.StringGetAsync(cacheKey);
+            var cachedResponse = await _database.StringGetAsync(cacheKey);
 
-            if (cacheResponse.IsNullOrEmpty) return null;
+            if (cachedResponse.IsNullOrEmpty)
+            {
+                return null;
+            }
 
-            return cacheResponse;
+            return cachedResponse;
         }
     }
 }

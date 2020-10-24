@@ -40,6 +40,20 @@ namespace API.Controllers
             _categoryService = categoryService;
         }
 
+        [Cached(600)]
+        [HttpGet("categories")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IReadOnlyList<CategoryToReturnDto>>> GetCategoriesWoPagination()
+        {
+            var cats = await _catRepo.ListAllAsync();
+        
+            if (cats==null) return NotFound(new ApiResponse(404, 
+                "No records available"));
+            
+            return Ok(cats);
+        }
+
+        [Cached(600)]
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Pagination<IReadOnlyList<CategoryToReturnDto>>>> GetCategories([FromQuery] CategorySpecsParams catParams)
@@ -58,6 +72,7 @@ namespace API.Controllers
                 catParams.PageIndex, catParams.PageSize, totalItems, data));
         }
 
+        [Cached(600)]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryToReturnDto>> GetCategory(int id)
@@ -72,11 +87,12 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoryToReturnDto>>AddACategory([FromQuery] CategoryDto categoryDto)
+        // [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CategoryToReturnDto>>AddACategory(CategoryDto catDto)
         {
-            var cat = await _categoryService.CreateCategoryAsync(
-                categoryDto.Name, categoryDto.IndustryTypeId, categoryDto.SkillLevelId);
+            // var cat = await _categoryService.CreateCategoryAsync(
+               // categoryDto.Name, categoryDto.IndustryTypeId, categoryDto.SkillLevelId);
+            var cat = await _categoryService.CreateCategoryAsync(catDto.Name, catDto.IndustryTypeId, catDto.SkillLevelId);
             if (cat == null) return BadRequest(new ApiResponse(400,"Failed to create the category"));
            // cat = await _categoryService.CategoryByIdAsync(cat.Id);
             var catToReturn = _mapper.Map<Category, CategoryToReturnDto>(cat);
@@ -101,6 +117,7 @@ namespace API.Controllers
         }
 
 
+        [Cached(600)]
         [HttpGet("exists")]
         public async Task<bool> CategoryExists(string cat, int industryTypeId, int skillLevelId)
         {
@@ -108,12 +125,14 @@ namespace API.Controllers
         }
 
 // industryType
+        [Cached(600)]
         [HttpGet("IndustryTypesWoPagination")]
         public async Task<ActionResult<IReadOnlyList<IndustryType>>> GetIndustryTypes()
         {
             return Ok(await _categoryService.GetIndustryTypes());
         }
 
+        [Cached(600)]
         [HttpGet("indTypes")]
         public async Task<ActionResult<IReadOnlyList<IndustryType>>> GetIndustryTypesWoPagination ([FromQuery]IndTypeSpecParams param)
         {
@@ -130,6 +149,7 @@ namespace API.Controllers
             return Ok(inds);
          }
 
+        [Cached(600)]
         [HttpGet("indType")]
         public async Task<ActionResult<Pagination<IReadOnlyList<IndustryType>>>> GetIndustryTypes ([FromQuery]IndTypeSpecParams param)
         {
@@ -147,7 +167,8 @@ namespace API.Controllers
                 param.PageIndex, param.PageSize, totalItems, inds));
          }
 
-         [HttpGet("indType/{id}")]
+        [Cached(600)] 
+        [HttpGet("indType/{id}")]
          public async Task<ActionResult<IndustryType>> GetIndustryTypeById (int id)
          {
              return await _indRepo.GetByIdAsync(id);
