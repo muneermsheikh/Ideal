@@ -54,8 +54,33 @@ namespace API.Controllers
                     Enum.GetName(typeof(enumCandidateStatus), cv.CandidateStatus), null));
         }
 
+        [HttpGet("ppnoexists")]
+        public async Task<ActionResult<CandidateDto>> PPNoExists(string ppnumber)
+        {
+            var cv = await _candidateService.PPNumberExists(ppnumber);
+            if (cv==null) return NotFound();
+            
+            return Ok( new CandidateDto(cv.Id,cv.ApplicationNo,cv.ApplicationDated,
+                    cv.Gender, cv.FullName,  DateTime.Now.Year - cv.DOB.Year, cv.PPNo,
+                    cv.AadharNo, cv.CandidateAddress.City,
+                    Enum.GetName(typeof(enumCandidateStatus), cv.CandidateStatus), null));
+        }
+
+        [HttpGet("aadharnoexists")]
+        public async Task<ActionResult<CandidateDto>> AadharNoExists(string aadharnumber)
+        {
+            var cv = await _candidateService.AadharNumberExists(aadharnumber);
+            if (cv==null) return NotFound();
+            
+            return Ok( new CandidateDto(cv.Id,cv.ApplicationNo,cv.ApplicationDated,
+                    cv.Gender, cv.FullName,  DateTime.Now.Year - cv.DOB.Year, cv.PPNo,
+                    cv.AadharNo, cv.CandidateAddress.City,
+                    Enum.GetName(typeof(enumCandidateStatus), cv.CandidateStatus), null));
+        }
+        
+
         [HttpGet("candexists")]
-        public async Task<ActionResult<CandidateDto>> CheckCandidateExists(int appnumber, string? ppnumber, string? aadharnumber, string? email)
+        public async Task<ActionResult<CandidateDto>> CheckCandidateExists(int appnumber, string ppnumber, string aadharnumber, string email)
         {
             var cv = await _candidateService.CandidateAppNoOrPPNoOrAadharNoOrEmailExist(appnumber, ppnumber, aadharnumber, email);
 
@@ -115,16 +140,16 @@ namespace API.Controllers
         {
             
             // change candidate model - convert candidateaddress to list
-            if (dto.AddressListDto == null || dto.AddressListDto.Count == 0)
+            if (dto.FormArrayAdd == null || dto.FormArrayAdd.Count == 0)
             {
                 return BadRequest(new ApiResponse(400, "Address not defined"));
             }
-            if (dto.ProfListDto == null || dto.ProfListDto.Count == 0)
+            if (dto.FormArrayCat == null || dto.FormArrayCat.Count == 0)
             {
                 return BadRequest(new ApiResponse(400, "Candidate profession not defined"));
             }
 
-            var lst = dto.AddressListDto[0];
+            var lst = dto.FormArrayAdd[0];
             
             var candAddList = new CandidateAddress      // change candidate model - make this list
                 {
@@ -132,7 +157,7 @@ namespace API.Controllers
                     Address1 = lst.Address1,
                     Address2 = lst.Address2,
                     City = lst.City,
-                    PIN = lst.PIN,
+                    Pin = lst.PIN,
                     State= lst.State,
                     District = lst.District,
                     Country = lst.Country,
@@ -140,7 +165,7 @@ namespace API.Controllers
                 };
 
             var profList = new List<CandidateCategory>();
-            foreach(var prof in dto.ProfListDto)
+            foreach(var prof in dto.FormArrayCat)
             {
                 profList.Add(new CandidateCategory
                 {
@@ -255,6 +280,16 @@ namespace API.Controllers
         public async Task<int> DeleteCandidateCategory(CandidateCategory candidateCategory)
         {
             return await _candidateCategoryService.DeleteCandidatecategory(candidateCategory);
+        }
+
+    //sources
+        [HttpGet("candidateSources")]
+        public async Task<ActionResult<IReadOnlyList<Source>>> GetCandidateSources()
+        {
+            var srcs = await _candidateService.GetSources();
+            if (srcs==null) return NotFound(new ApiResponse(400));
+
+            return Ok(srcs);
         }
 
 //private

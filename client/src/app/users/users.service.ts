@@ -4,6 +4,8 @@ import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CandidateParams } from '../shared/models/CandidateParams';
+import { ISource } from '../shared/models/candidateSource';
+import { IClient } from '../shared/models/client';
 import { ICandidate } from '../shared/models/ICand';
 import { IPaginationCandidate, PaginationCandidate } from '../shared/models/paginationCand';
 import { IProfession } from '../shared/models/profession';
@@ -22,7 +24,9 @@ export class UsersService {
 
   constructor(private http: HttpClient) { }
 
-  addCandidate(values: any) {
+  addCandidate(values: any): any {
+    console.log(values);
+    console.log(JSON.stringify(values));
     return this.http.post(this.baseUrl + 'HR/registercandidate', values).pipe(
       map((cand: ICandidate) => {
         if (cand) {
@@ -50,8 +54,8 @@ export class UsersService {
   }
 */
 
-  updateCandidate(values: ICandidate) {
-    return this.http.put(this.baseUrl + 'HR/candidate', values).pipe(
+  updateCandidate(values: ICandidate): any {
+    return this.http.put(this.baseUrl + 'HR/candidate', JSON.stringify(values)).pipe(
       map((prof: IProfession) => {
         if (prof) {
           console.log('profession ' + prof.name + ' updated'); }
@@ -63,7 +67,7 @@ export class UsersService {
   }
 
 
-  getCandidate(id: number) {
+  getCandidate(id: number): any {
     const candidate = this.candidates.find(p => p.id === id);
 
     if (candidate) {
@@ -73,11 +77,19 @@ export class UsersService {
     return this.http.get<ICandidate>(this.baseUrl + 'HR/getcandidate/' + id);
   }
 
-  getProfessions() {
+  getProfessions(): any {
     return this.http.get<IProfession[]>(this.baseUrl + 'Category/categories');
   }
 
-  getCandidates(useCache: boolean) {
+  getCandidateSources(): any {
+    return this.http.get<ISource[]>(this.baseUrl + 'HR/candidateSources');
+  }
+
+  getRecruitmentAgencies(): any {
+    return this.http.get<IClient[]>(this.baseUrl + 'Customers/recruitmentAgencies');
+  }
+
+  getCandidates(useCache: boolean): any {
 
     // console.log('entered userService.getCandidates');
 
@@ -140,12 +152,22 @@ export class UsersService {
     this.candParams = params;
   }
 
-  checkCandidateExists(ppnumber: string, aadharnumber: string) {
+  checkCandidateExists(ppnumber: string, aadharnumber: string): any {
     // int appnumber, string? ppnumber, string? aadharnumber, string? email)
     const exists =  this.http.get(this.baseUrl +
       'HR/candexists?appnumber=0 &ppnumber=' + ppnumber + '&aadharnumber=' + aadharnumber + '&email=""');
     return exists === null ? false : true;
   }
+
+  checkPPNoExists(ppno: string): any {
+    return this.http.get(this.baseUrl + 'hr/ppnoexists?ppnumber=' + ppno);
+  }
+
+  checkAadharNoExists(aadharno: string): any {
+    return this.http.get(this.baseUrl + 'hr/aadharnoexists?aadharno=' + aadharno);
+  }
+
+
 
 }
 

@@ -12,27 +12,35 @@ export interface ICandidate {
   categoryName: string;
   professionId: number;
   ppNo: string;
+  referredById: number;
+  sourceId: number;
   eCNR: boolean;
   dOB: string;
   aadharNo: string;
   mobileNo: string;
   email: string;
-  candidateAddress: CandAddress[];
-  candidateCategories: CandProfession[];
+  contactPreference: string;
+  candidateAddresses: CandidateAddress[];
+  candidateProfessions: Profession[];
 }
 
-export class CandProfession {
+export class Profession {
   id: number;
   name: string;
 }
 
-export interface CandAddress {
+export class CandidateCategory {
+  candId: number;
+  catId: number;
+}
+
+export interface CandidateAddress {
     candidateId: number;
     addressType: string;
     address1: string;
     address2: string;
     city: string;
-    pIN: string;
+    pin: string;
     state: string;
     district: string;
     country: string;

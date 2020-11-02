@@ -95,6 +95,24 @@ namespace API.Controllers
             if(offs==null || offs.Count==0) return BadRequest(new ApiResponse(404, "Failed to isnert the officials"));
             return Ok(_mapper.Map<IReadOnlyList<CustomerOfficial>, IReadOnlyList<CustomerOfficialDto>>(offs));
         }
+    // agents
+        [HttpGet("recruitmentAgencies")]
+        public async Task<ActionResult<IReadOnlyList<CustomerAgencyNamesDto>>> GetRecruitmentAgencies()
+        {
+            var cust = await _custService.GetAgencies();
+            if (cust == null) return null;
 
+            var dtoList = new List<CustomerAgencyNamesDto>();
+            foreach(var item in cust)
+            {
+                dtoList.Add(new CustomerAgencyNamesDto{
+                    Id=item.Id,
+                    CustomerName=item.CustomerName,
+                    CityName=item.CityName
+                });
+            }
+
+            return dtoList;
+        }
     }
 }

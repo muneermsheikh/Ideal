@@ -214,7 +214,7 @@ namespace API.Helpers
             
             CreateMap<Process, ProcessItemDto>()
                 .ForMember(d => d.Status, o => o.MapFrom(s => Enum.GetName(typeof(enumProcessingStatus), s.Status)));           
-                
+    
        }
     }
 }

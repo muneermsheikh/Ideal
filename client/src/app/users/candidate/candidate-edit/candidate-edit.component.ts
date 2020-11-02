@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ICandidate } from 'src/app/shared/models/ICand';
+import { CandidateCategory, ICandidate } from 'src/app/shared/models/ICand';
 import { IProfession } from 'src/app/shared/models/profession';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { UsersService } from '../../users.service';
@@ -15,7 +15,10 @@ export class CandidateEditComponent implements OnInit {
 
   candidate: ICandidate;
   professions: IProfession[] = [];
+  candProfessions: CandidateCategory[] = [];
   form: FormGroup;
+  candidateProfessions: FormArray;
+  candidateAddresses: FormArray;
   errors: string[];
   idnumber: number;
 
@@ -27,7 +30,9 @@ export class CandidateEditComponent implements OnInit {
     this.loadCandidate();
     this.getProfessions();
     this.createForm();
+    // this.populateFormArrays();
   }
+
 
   loadCandidate(): void {
 
@@ -51,7 +56,7 @@ export class CandidateEditComponent implements OnInit {
       error => {console.log(error); } );
   }
 
-  createForm() {
+  createForm(): void {
     this.form = this.fb.group({
       applicationNo: [null, [Validators.required]],
       applicationDated:  [null , [Validators.required]],
@@ -62,25 +67,70 @@ export class CandidateEditComponent implements OnInit {
       knownAs: [null, [Validators.required]],
       dOB: [null],
       eCNR: [null],
-      professionId: [null, [Validators.required]],
       ppNo:  [null],
       aadharNo:  [null] ,
       mobileNo:  [null, [Validators.required]],
       email:  [null, [Validators.email]],
-
-      addressType:   [null, [Validators.required]],
-      address1:   [null, [Validators.required]],
-      address2: [null],
-      city:   [null, [Validators.required]],
-      pin:   [null, [Validators.required]],
-      state:   [null],
-      district: [null],
-      country:   [null, [Validators.required]],
+      candidateProfessions: this.fb.array([this.createProfessionForm()]),
+      candidateAddresses: this.fb.array([this.createAddressForm()])
     });
   }
 
 
-onSubmit() {
+  createAddressForm(): FormGroup {
+    return this.fb.group({
+      id: [null],
+      addressType: [null, [Validators.required]],
+      address1: [null],
+      address2: [null],
+      city: [null, [Validators.required]],
+      pin: [null],
+      state: [null],
+      district: [null],
+      country: [null]
+      });
+    }
+
+    get AddressControls(): FormArray {
+      return this.form.get('candidateAddresses') as FormArray;  // ['controls'];
+    }
+
+
+    addAddress(): void {
+      this.candidateAddresses = this.form.get('candidateAddresses') as FormArray;
+      this.candidateAddresses.push(this.createAddressForm());
+    }
+
+    removeAddress(i: number): void {
+      this.candidateAddresses.removeAt(i);
+    }
+
+    logAddressValue(): void {
+      console.log(this.candidateAddresses.value);
+    }
+
+    createProfessionForm(): FormGroup {
+      return this.fb.group({
+        id: [null, [Validators.required]],
+        name: [null, [Validators.required]]
+      });
+   }
+
+    get CategoryControls(): FormArray {
+    // return this.form.get('categoryFormArray')['controls'];
+    return this.form.get('candidateProfessions') as FormArray; // ['controls'];
+  }
+
+    addProfession(): void {
+      this.candidateProfessions = this.form.get('candidateProfessions') as FormArray;
+      this.candidateProfessions.push(this.createProfessionForm());
+    }
+
+    removeProfession(i: number): void {
+      this.candidateProfessions.removeAt(i);
+    }
+
+onSubmit(): void {
     console.log(this.form.value);
     this.cvService.updateCandidate(this.form.value).subscribe(response => {
       this.router.navigateByUrl('candidate');

@@ -9,6 +9,7 @@ import { IUser } from '../shared/models/user';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AccountService {
   baseUrl = environment.apiUrl;
   private currentUserSource = new ReplaySubject<IUser>(1);

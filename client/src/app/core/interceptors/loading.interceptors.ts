@@ -24,5 +24,34 @@ export class LoadingInterceptor implements HttpInterceptor {
                 this.busyService.idle();
             })
         );
+    
+       /* 
+        if (!req.url.includes('emailexists'))
+        { this.busyService.busy(); }
+
+        if (!req.url.includes('ppnoexists'))
+        { this.busyService.busy(); }
+
+        if (!req.url.includes('aadharnoexists'))
+        { this.busyService.busy(); }
+
+        if (req.method === 'POST' && req.url.includes('orders')) {
+            return next.handle(req);
+        }
+        if (req.method === 'DELETE') {
+            return next.handle(req);
+        }
+        if (req.url.includes('emailexists')) {
+            return next.handle(req);
+        }
+        this.busyService.busy();
+
+        return next.handle(req).pipe(
+            finalize(() => {
+                this.busyService.idle();
+            })
+        );
+    */
+
     }
 }

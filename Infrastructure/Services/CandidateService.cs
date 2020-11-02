@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities.HR;
+using Core.Entities.Masters;
 using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Data;
@@ -122,8 +123,26 @@ namespace Infrastructure.Services
                 " exists that contains same PP No, AadharNo or eMailID");
             return true;
         }
+
+        public async Task<Candidate> PPNumberExists(string ppnumber)
+        {
+            var app = await _context.Candidates
+                .Where(x => x.PPNo == ppnumber)
+                .FirstOrDefaultAsync();
+            
+            return app;
+        }
+
+        public async Task<Candidate> AadharNumberExists(string aadharNo)
+        {
+            var app = await _context.Candidates.Where
+                (x => x.AadharNo == aadharNo)
+                .FirstOrDefaultAsync();
+            return app;
+        }
+
         
-        public async Task<Candidate> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(int appno, string? ppno, string? aadharno, string? email)
+        public async Task<Candidate> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(int appno, string ppno, string aadharno, string email)
         {
             var cv = await _context.Candidates.AsNoTracking()
                 .Include(x => x.CandidateAddress)
@@ -169,6 +188,12 @@ namespace Infrastructure.Services
         public Task<IReadOnlyList<Candidate>> RegisterCandidate(IReadOnlyList<Candidate> candidate)
         {
             throw new NotImplementedException();
+        }
+
+    //sources
+        public async Task<IReadOnlyList<Source>> GetSources()
+        {
+            return await _context.Sources.OrderBy(x => x.Name).ToListAsync();
         }
     }
 }

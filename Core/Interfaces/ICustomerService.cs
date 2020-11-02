@@ -19,5 +19,8 @@ namespace Core.Interfaces
         Task<IReadOnlyList<CustomerOfficial>> GetCustomerOfficialList(int CustomerId);
         Task<IReadOnlyList<CustomerOfficial>> InsertOfficials(List<CustomerOfficial> officials);
         Task<int> UpdateOfficials(List<CustomerOfficial> officials);
+    
+    //recruitment agencies
+        Task<IReadOnlyList<Customer>> GetAgencies();
     }
 }

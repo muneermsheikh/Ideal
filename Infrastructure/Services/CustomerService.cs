@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities.Admin;
+using Core.Enumerations;
 using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Data;
@@ -93,6 +94,15 @@ namespace Infrastructure.Services
             var r = new clsString();
             r.Name=custname;
             return r;
+        }
+
+    // recruitment agencies
+        public async Task<IReadOnlyList<Customer>> GetAgencies()
+        {
+            return await _context.Customers
+                .Where(x => x.CustomerType == enumCustomerType.Associate)
+                .OrderBy(x => x.CustomerName)
+                .ToListAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities.HR;
+using Core.Entities.Masters;
 using Core.Specifications;
 
 namespace Core.Interfaces
@@ -17,6 +18,12 @@ namespace Core.Interfaces
          Task<IReadOnlyList<Candidate>> GetCandidatesBySpecs(CandidateParams candidateParams);
          string GetCandidateName (int candidateId);
          
-         Task<Candidate> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(int appno, string? ppno, string? aadharno, string? email);
+         Task<Candidate> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(int appno, string ppno, string aadharno, string email);
+         Task<Candidate> PPNumberExists(string ppnumber);
+         Task<Candidate> AadharNumberExists(string aadharNo);
+
+    //sources
+        Task<IReadOnlyList<Source>> GetSources();
+        
     }
 }

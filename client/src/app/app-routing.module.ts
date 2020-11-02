@@ -9,6 +9,7 @@ import { ProfessionAddComponent } from './profession/profession-add/profession-a
 import { ProfessionDetailComponent } from './profession/profession-detail/profession-detail.component';
 import { ProfessionComponent } from './profession/profession.component';
 import { CandidateAddComponent } from './users/candidate/candidate-add/candidate-add.component';
+import { CandidateCreateComponent } from './users/candidate/candidate-create/candidate-create.component';
 /*
 import { CategoryDetailsComponent } from './shop/category-details/category-details.component';
 import { ShopComponent } from './shop/shop.component';
@@ -33,6 +34,8 @@ const routes: Routes = [
     .then(mod => mod.ProfessionModule), data: {breadcrumb: {skip: true}} },
   {path: 'profession-add', component: ProfessionAddComponent, data: {breadcrumb: 'add a category'}},
   {path: 'candidate-add', component: CandidateAddComponent, data: {breadcrumb: 'add a candidate'}},
+  {path: 'candidate-create', component: CandidateCreateComponent, data: {breadcrumb: 'add a candidate'}},
+  {path: 'candidateEdit/:id', component: CandidateAddComponent, data: {breadcrumb: 'add a candidate'}},
   {path: 'users', loadChildren: () => import('./users/users.module')
     .then(mod => mod.UsersModule), data: {breadcrumb: {skip: true}} },
   {path: 'account', loadChildren: () => import('./account/account.module')

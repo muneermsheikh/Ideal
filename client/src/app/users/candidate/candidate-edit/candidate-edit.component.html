@@ -1,61 +1,416 @@
-<div *ngIf="!candidate">
-    no candidate record available
-</div>
-<div *ngIf="candidate" class="d-flex justify-content-center mt-5">
-    <div class="col">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="text-center mb-4">
-          <h1 class="h3 mb-3 font-weight-normal">Edit a candidate </h1>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label for="firstName">First Name:</label>
-                    <input type="text" id="firstName" formControlName="firstName" 
-                    [(ngModel)]="candidate.firstName" class="form-control" placeholder="category name" >
-                  </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label for="secondName">Second Name:</label>
-                    <input type="text" id="secondName" formControlName="secondName" 
-                    [(ngModel)]="candidate.secondName" class="form-control" placeholder="category name" >
-                  </div>
-  
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label for="familyName">First Name:</label>
-                    <input type="text" id="familyName" formControlName="familyName" 
-                    [(ngModel)]="candidate.familyName" class="form-control" placeholder="category name" >
-                  </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label for="professionId">Profession:</label>
-                <select formControlName="professionId" [(ngModel)]="candidate.professionId" class="form-control" >
-                    <option *ngFor="let item of professions" value="item.id">{{item.name}}</option>
-                </select>
-            </div>
-            <div class="col">
+<!--
+<div class="container">
 
+
+<form [formGroup] = "form" (ngSubmit)="onSubmit()" class="form-horizontal px-4">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="panel-title">New candidate</div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col form-group">
+                    <label for="gender" class="control-label">Gender</label>
+                    <div class="col">
+                        <input id="gender" formControlName="gender" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col form-group">
+                    <label for="firstName" class="control-label">First Name</label>
+                    <div class="col">
+                        <input id="firstName" formControlName="firstName" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col form-group">
+                    <label for="secondName" class="control-label">Second Name</label>
+                    <div class="col">
+                        <input id="secondName" formControlName="secondName" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col form-group">
+                    <label for="familyName" class="control-label">Family Name</label>
+                    <div class="col">
+                        <input id="familyName" formControlName="familyName" type="text" class="form-control">
+                    </div>
+                </div>
             </div>
-        </div>                
-              
-        <div class="row">
-            <div class="col">
-                <ul class="text-danger list-unstyled" *ngIf="errors">
-                    <li *ngFor="let error of errors">
-                        {{error}}
-                    </li>
+            <div class="row">
+                <div class="col form-group">
+                    <label for="knownAs" class="control-label">Known As</label>
+                    <div class="col">
+                        <input id="knownAs" formControlName="knownAs" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col form-group">
+                    <label for="dOB" class="control-label">Date of birth</label>
+                    <div class="col">
+                        <input id="dOB" formControlName="dOB" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col form-group">
+                    <label for="ppNo" class="control-label">Passport No</label>
+                    <div class="col">
+                        <input id="ppNo" formControlName="ppNo" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col form-group">
+                    <label class="control-label">Emigration Clearance Reqd</label>
+                    <div class="col">
+                        <label class="radio-inline">
+                            <input type="radio" value="required" formControlName="eCNR" class="form-control">Yes
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" value="notRequired" formControlName="eCNR" class="form-control">No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col form-group">
+                    <label for="aadharNo" class="control-label">Aadhar Card No</label>
+                    <div>
+                        <input id="aadharNo" formControlName="aadharNo" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col form-group">
+                    <label for="email" class="control-label">email</label>
+                    <div>
+                        <input id="email" formControlName="email" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col form-group">
+                    <label for="mobileNo" class="control-label">Mobile No</label>
+                    <div>
+                        <input id="mobileNo" formControlName="monbileNo" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-sm btn-primary fa fa-sm fa-add" 
+                    [disabled]="formArrayCat.invalid" (click)="addProfession()">Profession
+                </button>
+                <div formGroupName="formArrayCat">
+                    <div class="form-group">
+                        <label for="professionId" class="control-label">Profession</label>
+                        <section class="container border" formArrayName="formArrayCat" 
+                            *ngFor="let category of CategoryControls.controls; let i = index;">
+                            <div [formGroupName]="i">
+                                <div class="col">
+                                    <div class="col-sm-2"><b>Profession {{i + 1}}</b> </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <select class="form-control" 
+                                                    formControlName="professionId" placeholder="profession">
+                                                    <option *ngFor="let item of professions" [ngValue]=item.id>
+                                                        {{item.name}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="col text-right">
+                                <button type="button" class="btn btn-danger btn-sm" 
+                                    (click)="removeProfession(i)">Remove
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div formGroupName="formArrayAdd">
+                <label for="address" class="col-sm-sm-2 control-label">Address</label>
+                <section class="container border mb-4 p-3" formArrayName="formArrayAdd"
+                    *ngFor="let add of AddressControls.controls; let i = index;">
+                    <div [formGroupName]="i">
+                        <div class="row">
+                            <div class="col-sm-sm-4">
+                                <div class="col"><b>Address {{i + 1}}</b> </div>
+                                <div class="form-group">
+                                    <label class="col-sm-sm-2 control-label" for="addressType">Address Type</label>
+                                    <div class="col-sm-sm-4">
+                                        <input id="addressType" formControlName="addressType" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address1" class="col-sm-sm-2 control-label">Address</label>
+                                    <div class="col-sm-sm-4">
+                                        <input id="address1" formControlName="address1" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address2" class="col-sm-sm-2 control-label">Steet Address</label>
+                                    <div class="col-sm-sm-4">
+                                        <input id="address2" formConrolName="address2" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="city" class="col-sm-sm-2 control-label">City</label>
+                                    <div class="col-sm-sm-4">
+                                        <input id="city" formControlName="city" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="pin" class="col-sm-sm-2 control-label">PIN</label>
+                                <div class="col-sm-sm-4">
+                                    <input id="pin" formControlName="pin" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="State" class="col-sm-sm-2 control-label">State</label>
+                                <div class="col-sm-sm-4">
+                                    <input id="state" formControlName="state" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="country" class="col-sm-sm-2 control-label">Country</label>
+                                <div class="col-sm-sm-4">
+                                    <input id="country" formControlName="country" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-primary" type="submit" >Save</button>
+    </div>
+    
+</form>
+</div> 
+<!-- 
+<form>
+    <div style="margin-left: 10px; line-height: 10px; font-size: small; padding: 0px;">
+        <div class="panel-heading">
+            <h5 class="panel-title">Add a candidate</h5>
+        </div>    
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="firstName" >First Name:</label>
+                <div class="col-sm-8">
+                    <input type="text" id="firstName" formControlName="firstName" class="form-control" placeholder="First Name" >
+                </div>
+            </div>    
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="secondName">Second Name:</label>
+                <div class="col-sm-8">
+                    <input type="text" id="secondName" formControlName="secondName" class="form-control" placeholder="Second Name" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="familyName">Family Name:</label>
+                <div class="col-sm-8">
+                    <input type="text" id="familyName" formControlName="familyName" class="form-control" placeholder="Family Name" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="knownAs">Known As</label>
+                <div class="col-sm-8">
+                    <input type="text" id="knownAs" formControlName="knownAs" class="form-control" placeholder="Known As" >
+                </div>            
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="name">Passport No</label>
+                <div class="col-sm-8">
+                    <input type="text" id="ppNo" formControlName="ppNo" class="form-control" placeholder="PP No" >
+                </div>            
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >Emigration Clearance Reqd</label>
+                <div class="col-sm-4">
+                    <label class="radio-inline">
+                        <input type="radio" value="Y" formControlName="eCNR" class="form-control">Yes
+                    </label>
+                    <label class="radio-inline col-sm-2-offset">
+                        <input type="radio" value="N" formControlName="eCNR" class="form-control">No
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="name">Aadhar No</label>
+                <div class="col-sm-8">
+                    <input type="text" id="aadharNo" formControlName="aadharNo" class="form-control" placeholder="Aadhar No" >
+                </div>    
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="name">Mobile No:</label>
+                <div class="col-sm-8">
+                    <input type="text" id="mobileNo" formControlName="mobileNo" class="form-control" placeholder="Mobile No" >
+                </div>            
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label" for="dOB">Date of birth</label>
+                <div class="col-sm-8">
+                    <input type="text" id="dOB" formControlName="dOB" class="form-control" placeholder="Date of birth" >
+                </div>
+            </div>
+            <div formGroupName="emailGroup">
+                <div class="form-group" [ngClass]="{'has-error': formErrors.email}">
+                    <label class="col-sm-2 control-label"  for="email">email</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" id="email" formControlName="email"  
+                            placeholder="email" (blur)="logValidationErrors()" >
+                        <span class="help-block" *ngIf(formErrors.email)>email required
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': formErrors.confirmEmail}">
+                    <label class="col-sm-2 control-label" for="confirmEmail">confirmEmail</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="confirmEmail" formControlName="confirmEmail" 
+                            class="form-control" placeholder="confirm email" (blur) ="logValidationErrors()">
+                        <span class="help-block" *ngIf(formErrors.confirmEmail)>email and confirm email do not match</span>
+                    </div>
+                </div>
+            </div>            
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"  for="name">App dated</label>
+                <div class="col-sm-8">
+                    <input type="text" id="applicationDated" formControlName="applicationDated" 
+                        class="form-control" placeholder="applicationDated" >
+                </div>    
+            </div>
+            <hr>
+            <div class="col-sm-3">professions
+                <button type="button" class="btn btn-sm btn-primary" 
+                    [disabled]="formArrayCat.invalid" (click)="addProfession()">Add Profession
+                <div formArrayName="candidateProfessions" 
+                    *ngFor="let category of CategoryControls.controls; let i = index;">
+                    <hr *ngIf="i>0">
+                    <div [formGroupName]="i">
+                        <div class="form-group" >
+                            [ngClass]="{'has-error': category.get('professionId').invalid && 
+                                                        category.get('professionId').touched }">
+                            
+                            <div class="col-sm-3"><b>Profession {{i + 1}}</b> </div>
+                            <div class="col-sm-6">
+                                <select class="form-control" 
+                                    formControlName="professionId" placeholder="profession">
+                                    <option *ngFor="let item of professions" [ngValue]=item.id>
+                                        {{item.name}}
+                                    </option>
+                                </select>
+                                <span *ngIf="category.get('professionId').errors?.required && 
+                                            category.get('professionId').touched" >
+                                    Category must be selected
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="button" class="btn btn-danger btn-sm fa fa-trash pull-right" 
+                                (click)="removeProfession(i) ">
+                            </button>
+                        </div>
+                    </div>
+                </div> 
+            <hr>
+                        
+            <button type="button" class="btn btn-primary btn-sm fa fa-add" 
+                [disabled]="formArrayAdd.invalid" (click)="addAddress()">address</button>
+                
+            <div formArrayName="candidateAddresses" 
+                *ngFor="let add of AddressControls.controls; let i = index;">
+                <hr *ngIf="i>0">
+                <div [formGroupName]="i">
+                    <div class="form-group"> 
+                        [ngClass]="{'has-error': add.get('addressType').invalid && 
+                                                        add.get('addressType').touched }">
+                        
+                        <div class="col-sm-2">
+                            <div class="form-control"> 
+                                <label class="col-sm-2 control-label" for="addressType">Address Type</label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="addressType" formControlName="addressType" class="form-control" placeholder="Type" />
+                                    <span *ngIf="add.get('addressType').errors?.required && 
+                                            add.get('addressType').touched" >
+                                        Address Type required
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="address1">address</label>
+                            <div class="col-sm-6">
+                                <input type="text" id="address1" formControlName="address1" 
+                                class="form-control" placeholder="address" >                                           
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 contorl-label" for="address1">street address</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="address2" formControlName="address2" 
+                                class="form-control" placeholder="street address" />
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': add.get('city').invalid && 
+                                                                            add.get('city').touched }">
+                            <label class="col-sm-2 control-label" for="city">city</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="city" formControlName="city" class="form-control" placeholder="city" />                                            
+                                <span *ngIf="add.get('city').errors?.required && 
+                                                add.get('city').touched" >
+                                    City required
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="pin">PIN</label>
+                            <div class="col-4">
+                                <input type="text" id="pin" formControlName="pin" class="form-control" placeholder="pin"/>
+                            </div>        
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="state">state</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="state" formControlName="state" class="form-control" placeholder="state" />  
+                            </div>                
+                        </div>
+                        
+                        <div class="form-group" [ngClass]="{'has-error': add.get('country').invalid && 
+                                                                            add.get('country').touched }">
+                            <label class="col-sm-2 control-label" for="country">country</label>
+                            <input type="text" id="country" class="form-control" placeholder="country" /> 
+                                <span *ngIf="add.get('country').errors?.required && 
+                                                add.get('country').touched" >
+                                    Country required
+                                </span>
+                        </div>
+                        <div class="col-sm-8">
+                            <button type="button" class="btn btn-danger btn-sm fa fa-trash pull-right" (click)="removeProfession(i)"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class="panel-footer">
+            <div class="col-sm-3">
+                <button class="btn btn-sm btn-primary btn-block" type="submit">Update</button>
+            </div>
+            <div class="col-sm-9">
+                <div>form valid = {{form.valid}}</div>
+                <div>{{form}}</div>
+                <ul class="text-danger list-unstyled" *ngIf="formErrors">
+                    <li *ngFor="let error of formErrors"> {{error}} </li>
                 </ul>
             </div>
-            <div class="col">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
-            </div>
         </div>
-        
-      </form>
+
     </div>
-  </div>
+</form>
+
+         
+
+-->

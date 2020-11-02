@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CandidateParams } from 'src/app/shared/models/CandidateParams';
 import { ICandidate } from 'src/app/shared/models/ICand';
 import { IProfession } from 'src/app/shared/models/profession';
@@ -28,12 +29,17 @@ export class CandidateComponent implements OnInit {
     { name: 'Descending by City Name', value: 'cityNameDesc' }
   ];
 
-  constructor(private cvService: UsersService, private fb: FormBuilder) { }
+  constructor(private cvService: UsersService, private fb: FormBuilder,
+              private router: Router) { }
 
   ngOnInit(): void {
     // this.createForm();
-    // this.getProfessions();
+    this.getProfessions();
     this.getCandidates();
+  }
+
+  editButtonClick(candidateId: number): void {
+    this.router.navigate(['/candidateEdit', candidateId]);
   }
 
   getProfessions(): any {
@@ -44,7 +50,7 @@ export class CandidateComponent implements OnInit {
   }
 
 
-  getCandidates(useCache = false)  {
+  getCandidates(useCache = false): void {
       console.log('candParams = ' + this.candParams.pageNumber + ' ' + this.candParams.pageSize);
       this.cvService.getCandidates(useCache).subscribe(response => {
       this.candidates = response.data;
@@ -56,7 +62,7 @@ export class CandidateComponent implements OnInit {
     });
   }
 
-  createForm() {
+  createForm(): void {
     this.form = this.fb.group({
       applicationNo: [null, [Validators.required]],
       applicationDated: [null, [Validators.required]],
@@ -71,7 +77,7 @@ export class CandidateComponent implements OnInit {
     });
   }
 
-  onPageChanged(event: any) {
+  onPageChanged(event: any): void {
     const params = this.cvService.getCandParams();
     if (params.pageNumber !== event) {
       params.pageNumber = event;

@@ -29,6 +29,7 @@ namespace Core.Entities.HR
         
         public int? ReferredById {get; set;}
         public string email {get; set; }
+        public string ContactPreference {get; set;}
         public virtual CandidateAddress CandidateAddress { get; set; }
         public virtual List<EnquiryItem> ReferredToEnquiryItems { get; set; }
         public enumCandidateStatus CandidateStatus { get; set; } = enumCandidateStatus.Available;
