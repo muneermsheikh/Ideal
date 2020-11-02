@@ -2,6 +2,10 @@ $color-primary: rgba(67,66,93,255);
 $color-text: #43425d;
 $color-text-lite: rgba(#4d4f5c,.5);
 
+    .text-danger {
+        font-size: 9px;
+        font-weight: bold;
+    }
     .btn-main {
         background: $color-primary;
     }

@@ -117,6 +117,7 @@ export class CandidateCreateComponent implements OnInit {
     this.service.getCandidateSources().subscribe(response => {
       this.candidateSources = response;
     }, error => {
+      this.errors = error.errors;
       console.log(error);
     });
   }
@@ -127,19 +128,24 @@ export class CandidateCreateComponent implements OnInit {
       applicationDated:  ['2020-10-10T00:00:00', [Validators.required]],
       gender:  ['M', [Validators.required, Validators.maxLength(1),
         Validators.pattern('^(?:m|M|f|F)$')]],
-      firstName:  ['Candidate 1022', [Validators.required]],
+      firstName:  ['Candidate 1022', [Validators.required,
+        Validators.maxLength(25), Validators.minLength(5)]],
       secondName:  ['secondname 1022'],
       familyName:  ['family1022'],
-      knownAs: ['known1022', [Validators.required]],
+      knownAs: ['known1022', [Validators.required, Validators.maxLength(15), Validators.minLength(4)]],
       dOB: ['1985-10-10T00:00:00'],
       eCNR: [false],
-      ppNo: ['X3985855', [Validators.required]],
+      ppNo: ['X3985855', [Validators.required],
+        [this.validatePPNumberNotTaken()]],
       referredById: [null],
       sourceId: [null],
-      aadharNo: [null, [Validators.minLength(12)]] ,
-      mobileNo: ['9834949332', [Validators.required]],
+      aadharNo: [null, [Validators.minLength(12), Validators.pattern('^([0-9]{12})$')],
+        [this.validateAadharNumberNotTaken]] ,
+      mobileNo: ['9834949332', [Validators.required, Validators.minLength(10), Validators.maxLength(15)]],
       // emailGroup: this.fb.group( {
-        email: ['1022@gmail.com', [Validators.email]],
+        email: ['1022@gmail.com', [Validators.required, Validators.email,
+          Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
+          ], [this.validateEmailNotTaken]],
     //  confirmEmail: ['1022@gmail.com', [Validators.required ]]
     //  }),
       formArrayCat: this.fb.array([this.createProfessionForm()]),

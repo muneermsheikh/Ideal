@@ -15,17 +15,27 @@ export class LoadingInterceptor implements HttpInterceptor {
         if (req.method === 'DELETE') {
             return next.handle(req);
         }
+
         if (req.url.includes('emailexists')) {
             return next.handle(req);
         }
+        if (req.url.includes('ppnoexists'))
+        {
+            return next.handle(req);
+        }
+        if (req.url.includes('aadharnoexists'))
+        {
+            return next.handle(req);
+        }
+
         this.busyService.busy();
         return next.handle(req).pipe(
             finalize(() => {
                 this.busyService.idle();
             })
         );
-    
-       /* 
+
+       /*
         if (!req.url.includes('emailexists'))
         { this.busyService.busy(); }
 

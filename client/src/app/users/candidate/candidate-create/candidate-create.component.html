@@ -12,12 +12,32 @@
                         <label for="ppNo" class="col-4control-label">PP No</label>
                         <div class="col-8">
                             <input id="ppNo" formControlName="ppNo" type="text" class="form-control">
+                            <div *ngIf="form.get('ppNo').valid && form.get('ppNo').touched &&
+                                form.get('ppNo').status === 'PENDING'" 
+                                class="fa fa-spinner fa-spin loader">
+                            </div>
                         </div>
                     </div>
                     <div class="col-3 form-group">
                         <label for="email" class="col-4 control-label">email</label>
                         <div  class="col-8">
                             <input id="email" formControlName="email" type="text" class="form-control">
+                            <div *ngIf="form.get('email').valid && form.get('email').touched &&
+                                form.get('email').status === 'PENDING'" 
+                                class="fa fa-spinner fa-spin loader">
+                            </div>
+                            <span class="text-danger" *ngIf="form.get('email').invalid && 
+                                form.get('email').touched && form.get('email').errors['pattern']">
+                                invalid email
+                            </span>
+                            <span class="text-danger" *ngIf="form.get('email').invalid && 
+                                form.get('email').touched && form.get('email').errors['required']">
+                                email is required
+                            </span>
+                            <span class="text-danger" *ngIf="form.get('email').touched && 
+                                form.get('email').valid && form.get('email').errors['emailExists']">
+                                email is taken
+                            </span>
                         </div>
                     </div>
                     <div class="col-3 form-group">
@@ -31,6 +51,19 @@
                         <label for="aadharNo" class="col-4 control-label">Aadhar No</label>
                         <div>
                             <input id="aadharNo" formControlName="aadharNo" type="text" class="col-8 form-control">
+                            <div *ngIf="form.get('aadharNo').valid && form.get('aadharNo').touched &&
+                            form.get('aadharNo').status === 'PENDING'" 
+                            class="fa fa-spinner fa-spin loader">
+                        </div>
+                        <span class="text-danger" *ngIf="form.get('aadharNo').invalid && 
+                            form.get('aadharNo').touched && form.get('aadharNo').errors['pattern']">
+                            Aadhar Number should be 12 numerical digits without any spaces
+                        </span>
+                        <span class="text-danger" *ngIf="form.get('aadharNo').touched && 
+                            form.get('aadharNo').valid && form.get('email').errors['aadharNoExists']">
+                            email is taken
+                    </span>
+
                         </div>
                     </div>
                 </div>
@@ -40,6 +73,18 @@
                         <label for="gender" class="col-4 control-label">Gender</label>
                         <div class="col-8">
                             <input id="gender" formControlName="gender" type="text" class="form-control col-2">
+                            <span class="text-danger" *ngIf="form.get('gender').invalid && 
+                                form.get('gender').touched && form.get('gender').errors['required']">
+                                Gender is required
+                            </span>
+                            <span class="text-danger" *ngIf="form.get('gender').invalid && 
+                                form.get('gender').touched && form.get('gender').errors['maxLength']">
+                                max length can be 1 characters only
+                            </span>
+                            <span class="text-danger" *ngIf="form.get('gender').invalid && 
+                                form.get('gender').touched && form.get('gender').errors['pattern']">
+                                gender can be either M (for male) or F (for female)
+                            </span>
                         </div>
                     </div>
                     <div class="col-3 form-group">
@@ -47,6 +92,14 @@
                         <div class="col-8">
                             <input id="firstName" formControlName="firstName" type="text" class="form-control">
                         </div>
+                        <span class="text-danger" *ngIf="form.get('firstName').invalid && 
+                            form.get('firstName').touched && form.get('firstName').errors['required']">
+                            First Name is required
+                        </span>
+                        <span class="text-danger" *ngIf="form.get('firstName').invalid && 
+                            form.get('firstName').touched && form.get('firstName').errors['minLength']">
+                                first name should be min 5 char long
+                        </span>
                     </div>
                     <div class="col-3 form-group">
                         <label for="secondName" class="col-8 control-label">Second Name</label>
@@ -67,6 +120,18 @@
                         <label for="knownAs" class="col-4 control-label">Known As</label>
                         <div class="col-8">
                             <input id="knownAs" formControlName="knownAs" type="text" class="form-control">
+                            <span class="text-danger" *ngIf="form.get('knownAs').invalid 
+                                && form.get('knownAs').touched && form.get('knownAs').errors['required']">
+                                Known As value is required
+                            </span>
+                            <span class="text-danger" *ngIf="form.get('knownAs').invalid 
+                                && form.get('knownAs').touched && form.get('knownAs').errors['maxLength']">
+                                Known As should not exceed 15 char
+                            </span>
+                            <span class="text-danger" *ngIf="form.get('knownAs').invalid && 
+                                form.get('knownAs').touched && form.get('knownAs').errors['minLength']">
+                                Known As should be min 5 characters long
+                            </span>
                         </div>
                     </div>
                     <div class="col-3 form-group">
@@ -80,6 +145,15 @@
                         <div class="col-8">
                             <input id="mobileNo" formControlName="mobileNo" type="text" class="form-control">
                         </div>
+                        <span class="text-danger" *ngIf="form.get('mobileNo').invalid && 
+                            form.get('mobileNo').touched && form.get('mobileNo').errors['required']">
+                            Mobile No is required
+                        </span>
+                        <span class="text-danger" *ngIf="form.get('mobileNo').invalid && 
+                            form.get('mobileNo').touched && (form.get('mobileNo').errors['maxLength'] 
+                            || form.get('mobileNo').errors['minLength'])">
+                            mobile number must be min 10 characters and max 15 characters long
+                        </span>
                     </div>
                     <div class="col-3"></div>
                 </div>
@@ -182,8 +256,11 @@
                 <!-- </div> -->
                 </div>
             </div>
+            <ul *ngFor="let error of errors">
+                <li>{{error}}</li>
+            </ul>
             <div class="panel-footer">
-                <button class="btn btn-primary" type="submit" >Save</button>
+                <button [disabled]="form.invalid" class="btn btn-primary" type="submit" >Save</button>
             </div>
         </div>
     </form>
