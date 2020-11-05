@@ -26,7 +26,19 @@ namespace API.Controllers
             _mapper = mapper;
             _empService = empService;
         }
-
+/*
+        [HttpGet("aadharNo/{id}")]
+        public async Task<EmployeeToReturnDto> GetEmployeeByName(string aadharNo)
+        {
+          
+            var emp = await _empService.GetEmployeeByIdAsync(aadharNo);
+            if (emp == null) return NotFound(new ApiResponse(404));
+            var empDto = _mapper.Map<Employee, EmployeeToReturnDto>(emp);
+            return empDto;
+          
+            return null;
+        }
+*/
         [HttpGet("{EmployeeId}")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<EmployeeToReturnDto>> GetEmployeeById(int EmployeeId)

@@ -2,6 +2,11 @@ $color-primary: rgba(67,66,93,255);
 $color-text: #43425d;
 $color-text-lite: rgba(#4d4f5c,.5);
 
+    .panel-heading {
+        margin-top: 0px;
+        margin-bottom: 5px;
+    }
+    
     .text-danger {
         font-size: 9px;
         font-weight: bold;

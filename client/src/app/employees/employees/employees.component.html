@@ -1,0 +1,50 @@
+<div *ngIf="!employees">
+    no employees on record
+</div>
+
+<div class="d-flex align-items-center justify-content-center" style="margin-left: 10px;">
+    <app-paging-header
+        [totalCount]="totalCount"
+        [pageSize]="this.empParams.pageSize"
+        [pageNumber]="this.empParams.pageNumber">
+    </app-paging-header>
+    
+    <div class="form-inline" *ngIf="employees" >
+        <input (keyup.enter)="onSearch()" class="form-control" 
+            #search placeholder="Search" type="text" >
+        <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
+        <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
+        <button routerLink="/employeeCreate" class="btn btn-outline-success ml-2">New Employee</button>
+    </div>
+</div>
+
+
+<div class="col-12, px-5; line-height: 8px;" *ngFor="let item of employees" 
+    style="margin-top: 5px; margin-left: 10px; padding: 0px; font-size: small;">
+    <div class="row" >      
+        <div class="col-1">{{item.id}} </div>  
+        <div class="col-3" routerLink="/employee/{{item.id}}">{{item.fullName}} </div>
+        <div class="col-1">{{item.aadharNo}} </div>  
+        <div class="col-1">{{item.pPNo}}</div>
+        <div class="col-2">{{item.mobile}}</div>
+        <div class="col-1">{{item.email}}</div>
+        <div class="col-1" style="cursor: pointer">
+            <button class="btn btn-sm btn-outline-secondary fa fa-pencil" 
+                (click)="editButtonClick(item.id)" ></button>  
+            <button class="btn btn-sm btn-outline-secondary fa fa-trash" 
+                routerLink="/employee/{{item.id}}"></button>  
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center my-3" *ngIf="this.totalCount > 0">
+    <app-pager
+        [pageSize]="empParams.pageSize"
+        [pageNumber]="empParams.pageNumber"
+        [totalCount]="totalCount"
+        (pageChanged)="onPageChanged($event)"
+        >
+    </app-pager>
+</div>
+
+

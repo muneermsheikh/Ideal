@@ -14,11 +14,15 @@ import { LoadingInterceptor } from './core/interceptors/loading.interceptors';
 import { ProfessionModule } from './profession/profession.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UsersModule } from './users/users.module';
+import { EmployeesComponent } from './employees/employees/employees.component';
+import { EmployeeCreateComponent } from './employees/employee-create/employee-create.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    EmployeesComponent,
+    EmployeeCreateComponent
   ],
   imports: [
     BrowserModule,

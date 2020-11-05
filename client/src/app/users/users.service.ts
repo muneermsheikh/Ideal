@@ -69,11 +69,11 @@ export class UsersService {
 
   getCandidate(id: number): any {
     const candidate = this.candidates.find(p => p.id === id);
-
+    console.log('users service');
+    console.log(candidate);
     if (candidate) {
       return of(candidate);
     }
-    console.log(id);
     return this.http.get<ICandidate>(this.baseUrl + 'HR/getcandidate/' + id);
   }
 
@@ -153,7 +153,6 @@ export class UsersService {
   }
 
   checkCandidateExists(ppnumber: string, aadharnumber: string): any {
-    // int appnumber, string? ppnumber, string? aadharnumber, string? email)
     const exists =  this.http.get(this.baseUrl +
       'HR/candexists?appnumber=0 &ppnumber=' + ppnumber + '&aadharnumber=' + aadharnumber + '&email=""');
     return exists === null ? false : true;
