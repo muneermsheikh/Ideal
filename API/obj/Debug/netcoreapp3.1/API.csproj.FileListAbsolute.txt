@@ -2,11 +2,6 @@ D:\atsOne\api\bin\Debug\netcoreapp3.1\appsettings.Development.json
 D:\atsOne\api\bin\Debug\netcoreapp3.1\appsettings.json
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 D:\atsOne\api\bin\Debug\netcoreapp3.1\API.exe
-D:\atsOne\api\bin\Debug\netcoreapp3.1\API.deps.json
-D:\atsOne\api\bin\Debug\netcoreapp3.1\API.runtimeconfig.json
-D:\atsOne\api\bin\Debug\netcoreapp3.1\API.runtimeconfig.dev.json
-D:\atsOne\api\bin\Debug\netcoreapp3.1\API.dll
-D:\atsOne\api\bin\Debug\netcoreapp3.1\API.pdb
 D:\atsOne\api\bin\Debug\netcoreapp3.1\AutoMapper.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
@@ -94,4 +89,9 @@ D:\atsOne\api\obj\Debug\netcoreapp3.1\staticwebassets\API.StaticWebAssets.Manife
 D:\atsOne\api\obj\Debug\netcoreapp3.1\staticwebassets\API.StaticWebAssets.xml
 D:\atsOne\api\obj\Debug\netcoreapp3.1\API.dll
 D:\atsOne\api\obj\Debug\netcoreapp3.1\API.pdb
+D:\atsOne\api\bin\Debug\netcoreapp3.1\API.deps.json
+D:\atsOne\api\bin\Debug\netcoreapp3.1\API.runtimeconfig.json
+D:\atsOne\api\bin\Debug\netcoreapp3.1\API.runtimeconfig.dev.json
+D:\atsOne\api\bin\Debug\netcoreapp3.1\API.dll
+D:\atsOne\api\bin\Debug\netcoreapp3.1\API.pdb
 D:\atsOne\api\obj\Debug\netcoreapp3.1\API.genruntimeconfig.cache

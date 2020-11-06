@@ -101,7 +101,7 @@ namespace API.Controllers
 
         [HttpPut("category")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoryToReturnDto>> UpdateCategory(Category cat)
+        public async Task<ActionResult<CategoryToReturnDto>> UpdateCategory([FromBody] Category cat)
         {
             var catUpdated= await _categoryService.UpdateCategoryAsync(cat);
             if (catUpdated==null) return BadRequest(new ApiResponse(400));

@@ -74,9 +74,12 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<EmployeeToReturnDto>> CreateNewEmployeeAsync(EmployeeToAddDto emp)
         {
-            var empToAdd = await _empService.CreateNewEmployeeAsync(emp.Gender, emp.FirstName,
-                emp.SecondName, emp.FamilyName, emp.KnownAs, emp.Address1, emp.Address2,
-                emp.City, emp.PIN, emp.District, emp.State, "India", emp.Mobile, emp.Email,
+        var empToAdd = await _empService.CreateNewEmployeeAsync(emp.Gender, emp.FirstName,
+                emp.SecondName, emp.FamilyName, emp.KnownAs, 
+        /*        emp.Address1, emp.Address2,
+                emp.City, emp.PIN, emp.District, emp.State, "India", 
+        */
+                emp.Mobile, emp.Email,
                 emp.AadharNo, emp.PassportNo, emp.Designation, emp.DateOfBirth, emp.DateOfJoining);
 
             if (empToAdd == null) return BadRequest(new ApiResponse(400));

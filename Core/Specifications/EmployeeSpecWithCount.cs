@@ -20,7 +20,7 @@ namespace Core.Specifications
                     (string.IsNullOrEmpty(eParam.Gender) || 
                         x.Gender == eParam.Gender ) &&
                     (!eParam.DOJ.HasValue || DateTime.Compare(
-                        x.DOJ.Date, eParam.DOJ.Value.Date)==0) &&
+                        x.DateOfJoining.Date, eParam.DOJ.Value.Date)==0) &&
                     (!eParam.IsInEmployment.HasValue || 
                         x.IsInEmployment==eParam.IsInEmployment) &&
                     (!eParam.Id.HasValue || x.Id==eParam.Id)

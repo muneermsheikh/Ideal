@@ -20,16 +20,18 @@ export class RegisterComponent implements OnInit {
     this.createRegisterForm();
   }
 
-  createRegisterForm() {
+  createRegisterForm(): void {
     this.registerForm = this.fb.group ({
       displayName: [null, [Validators.required]],
-      gender: ['M', [Validators.required]],
+      gender: ['M', [
+        Validators.required,
+        Validators.pattern('^(?:m|M|f|F)$')
+      ]],
       firstName: [null, Validators.required],
-      email:
-      [
-        null, [
-                Validators.required, Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
-              ],
+      email: [null, [
+              Validators.required,
+              Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
+          ],
               [this.validateEmailNotTaken()]
       ],
       password: [null, [Validators.required]],
@@ -37,7 +39,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     console.log(this.registerForm.value);
     this.accountService.register(this.registerForm.value).subscribe(response => {
       this.router.navigateByUrl('/shop');

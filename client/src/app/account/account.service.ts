@@ -17,7 +17,7 @@ export class AccountService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  loadCurrentUser(token: string) {
+  loadCurrentUser(token: string): any {
     if (token === null) {
       this.currentUserSource.next(null);
       return of(null);
@@ -36,7 +36,7 @@ export class AccountService {
     );
   }
 
-  login(values: any) {
+  login(values: any): any {
     return this.http.post(this.baseUrl + 'account/login', values).pipe(
       map((user: IUser) => {
         if (user) {
@@ -47,7 +47,7 @@ export class AccountService {
     );
   }
 
-  register(values: any) {
+  register(values: any): any {
     return this.http.post(this.baseUrl + 'account/register', values).pipe(
       map((user: IUser) => {
         if (user) {
@@ -58,13 +58,13 @@ export class AccountService {
     );
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
     this.currentUserSource.next(null);
     this.router.navigateByUrl('/');
   }
 
-  checkEmailExists(email: string) {
+  checkEmailExists(email: string): any {
     return this.http.get(this.baseUrl + 'account/emailexists?email=' + email);
   }
 

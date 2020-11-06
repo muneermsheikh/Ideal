@@ -15,14 +15,14 @@ import { ProfessionModule } from './profession/profession.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UsersModule } from './users/users.module';
 import { EmployeesComponent } from './employees/employees/employees.component';
-import { EmployeeCreateComponent } from './employees/employee-create/employee-create.component';
+import { EmpCreateComponent } from './employees/emp-create/emp-create.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     EmployeesComponent,
-    EmployeeCreateComponent
+    EmpCreateComponent
   ],
   imports: [
     BrowserModule,

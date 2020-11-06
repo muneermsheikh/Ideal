@@ -1501,10 +1501,10 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("AadharNo")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DOB")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DOJ")
+                    b.Property<DateTime>("DateOfJoining")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Designation")
@@ -1535,7 +1535,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("Mobile")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PPNo")
+                    b.Property<string>("PassportNo")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Remarks")

@@ -19,10 +19,10 @@ namespace Core.Entities.Masters
             FamilyName=familyName;
             KnownAs=knownAs;
             Gender=gender;
-            DOB=dOB;
+            DateOfBirth=dOB;
             Designation = designation;
-            DOJ = dOJ;
-            PPNo = pPNo;
+            DateOfJoining = dOJ;
+            PassportNo = pPNo;
             AadharNo = aadharNo;
             Mobile = mobile;
             Email = email;
@@ -34,21 +34,22 @@ namespace Core.Entities.Masters
         public string FamilyName { get; set; }
         public string KnownAs { get; set; }
         public string Gender { get; set; }
-        public string PPNo { get; set; }
+        public string PassportNo { get; set; }
         public string AadharNo { get; set; }
-        public DateTime? DOB { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public string Designation { get; set; }
-        public DateTime DOJ { get; set; }
+        public DateTime DateOfJoining { get; set; }
         public string Email {get; set; }
         public string Mobile {get; set; }
-        public virtual List<EmployeeAddress> Addresses { get; set; }
-        public virtual List<Role> Roles { get; set; }
         public int? RoleId { get; set; }
         public bool IsInEmployment { get; set; } = true;
         public DateTime? LastDateOfEmployment {get; set; }
         public string Remarks {get; set; }
 
+        public virtual List<EmployeeAddress> Addresses { get; set; }
+        public virtual List<Role> Roles { get; set; }
+        public virtual List<Skill> EmployeeSkills {get; set;}
         public string FullName {get {return FirstName + ", " + FamilyName;} }
     }
 }

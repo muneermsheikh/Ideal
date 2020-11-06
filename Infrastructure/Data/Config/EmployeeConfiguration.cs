@@ -9,7 +9,7 @@ namespace Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
             builder.Property(x => x.Designation).IsRequired();
-            builder.Property("DOJ").IsRequired();
+            builder.Property("DateOfJoining").IsRequired();
             // builder.OwnsOne(o => o.Person, a => {WIthOwner();});
         }
     }

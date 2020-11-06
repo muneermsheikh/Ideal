@@ -23,14 +23,18 @@ namespace Infrastructure.Services
         }
 
         public async Task<Employee> CreateNewEmployeeAsync(string gendr, string firstNm,
-            string secondNm, string familyNm, string knownAs, string add1, string add2,
-            string city, string pin, string district, string state, string country, string mobile,
+            string secondNm, string familyNm, string knownAs, 
+        /*  string add1, string add2,
+            string city, string pin, string district, string state, string country, 
+        */
+            string mobile,
             string email, string aadharNumber, string passportNo, string Designation,
             DateTime DateOfBirth, DateTime DateOfJoining)
         {
             var adds = new List<EmployeeAddress>();
-            var add = new EmployeeAddress("R", add1, add2, city, pin, district, state);
+        /*    var add = new EmployeeAddress("R", add1, add2, city, pin, district, state);
             adds.Add(add);
+        */
             var emp = new Employee(firstNm, secondNm, familyNm, knownAs, gendr, DateOfBirth,
                 passportNo, aadharNumber, mobile, email, adds, Designation, DateOfJoining);
 

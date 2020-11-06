@@ -54,7 +54,8 @@ namespace Infrastructure.Data
         public DbSet<Remuneration> Remunerations{get; set; }
         public DbSet<Role> Roles {get; set; }
 
-        public DbSet<SelDecision> SelDecisions {get; set; }        
+        public DbSet<SelDecision> SelDecisions {get; set; }   
+        public DbSet<Skill> Skills {get; set; }     
         public DbSet<SkillLevel> SkillLevels {get; set; }
         public DbSet<Source> Sources {get; set; }
         public DbSet<SourceGroup> SourceGroups {get; set; }

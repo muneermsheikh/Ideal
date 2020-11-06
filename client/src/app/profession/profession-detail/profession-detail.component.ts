@@ -32,7 +32,7 @@ export class ProfessionDetailComponent implements OnInit {
   }
 
   loadCategory(): void {
-    console.log('entered load category');
+    // console.log('entered load category');
     this.profService.getProfession(+this.activatedRoute.snapshot.paramMap.get('id')).subscribe( profession => {
       this.profession = profession;
       this.bcService.set('@categoryname', profession.name);
@@ -56,7 +56,7 @@ export class ProfessionDetailComponent implements OnInit {
       error => {console.log(error); } );
   }
 
-  createEditForm() {
+  createEditForm(): void {
     this.editForm = this.fb.group({
       name: [null, [Validators.required]],
       industryTypeId: [null, [Validators.required]],
@@ -64,7 +64,7 @@ export class ProfessionDetailComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     console.log(this.editForm.value);
     this.profService.updateProfession(this.editForm.value).subscribe(response => {
       this.router.navigateByUrl('/profession');

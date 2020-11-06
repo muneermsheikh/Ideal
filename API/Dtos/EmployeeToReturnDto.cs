@@ -11,7 +11,7 @@ namespace API.Dtos
         public string FullName { get; set; }
         public string KnownAs { get; set; }
         public string Designation { get; set; }
-        public string PPNo {get; set; }
+        public string PassportNo {get; set; }
         public string AadharNo {get; set; }
         public string Email { get; set; }
         public string Mobile { get; set; }

@@ -4,7 +4,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
 import { TestErrorComponent } from './core/test-error/test-error.component';
-import { EmployeeCreateComponent } from './employees/employee-create/employee-create.component';
+import { EmpCreateComponent } from './employees/emp-create/emp-create.component';
 import { EmployeesComponent } from './employees/employees/employees.component';
 import { HomeComponent } from './home/home.component';
 import { ProfessionAddComponent } from './profession/profession-add/profession-add.component';
@@ -39,7 +39,7 @@ const routes: Routes = [
   {path: 'candidate-create', component: CandidateCreateComponent, data: {breadcrumb: 'add a candidate'}},
   {path: 'candidateEdit/:id', component: CandidateCreateComponent, data: {breadcrumb: 'edit candidate'}},
   {path: 'employees', component: EmployeesComponent, data: {breadcrumb: 'edit candidate'}},
-  {path: 'employeeCreate', component: EmployeeCreateComponent, data: {breadcrumb: 'new employee'}},
+  {path: 'empCreate', component: EmpCreateComponent, data: {breadcrumb: 'new employee'}},
   {path: 'users', loadChildren: () => import('./users/users.module')
     .then(mod => mod.UsersModule), data: {breadcrumb: {skip: true}} },
   {path: 'account', loadChildren: () => import('./account/account.module')

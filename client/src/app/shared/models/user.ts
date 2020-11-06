@@ -10,9 +10,9 @@ export interface IEmployee {
     gender: string;
     email: string;
     firstName: string;
-    dob: Date;
-    doj: Date;
-    position: string;
+    dateOfBirth: Date;
+    dateOfJoining: Date;
+    designation: string;
     dept: string;
     token: string;
     employeeId: number;
