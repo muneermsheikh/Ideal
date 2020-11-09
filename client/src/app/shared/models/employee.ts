@@ -13,14 +13,10 @@ export interface IEmployee {
     aadharNo: string;
     mobile: string;
     email: string;
-/*    address1: string;
-    address2: string;
-    city: string;
-    pin: string;
-    state: string;
-*/
+    department: string;
+    designation: string;
     addresses: IEmployeeAddress[];
-    employeeSkills: ISkills[];
+    skills: ISkill[];
   }
 
 export interface IEmployeeAddress {
@@ -35,8 +31,8 @@ export interface IEmployeeAddress {
       valid: boolean;
   }
 
-export interface ISkills {
+export interface ISkill {
       skillName: string;
-      expInYrs: number;
+      expInYears: string;
       proficiency: string;
   }

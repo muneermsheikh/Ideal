@@ -16,6 +16,9 @@ namespace Core.Interfaces
             string mobile,
             string email, string aadharNumber, string passportNo, string Designation,
             DateTime DateOfBirth, DateTime DateOfJoining);
+         
+         Task<Employee> CreateNewEmployeeAsync(Employee emp);
+
          Task<Employee> UpdateEmployeeAsync(Employee employee);
          Task<bool> DeleteEmployeeAsync(Employee employee);
          Task<IReadOnlyList<Employee>> GetEmployeeListBySpecAsync(EmployeeParam empParam);

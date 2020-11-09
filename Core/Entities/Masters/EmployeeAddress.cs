@@ -6,8 +6,9 @@ namespace Core.Entities.Masters
         {
         }
 
-        public EmployeeAddress(string addressType, string address1, string address2, string city, string pIN, string district, string state)
+        public EmployeeAddress(int employeeId, string addressType, string address1, string address2, string city, string pIN, string district, string state)
         {
+            EmployeeId = employeeId;
             AddressType = addressType;
             Address1 = address1;
             Address2 = address2;
@@ -17,6 +18,7 @@ namespace Core.Entities.Masters
             District = district;
         }
 
+        public int EmployeeId {get; set; }
         public string AddressType { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }

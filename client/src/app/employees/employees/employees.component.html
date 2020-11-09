@@ -2,7 +2,7 @@
     no employees on record
 </div>
 
-<div class="d-flex align-items-center justify-content-center" style="margin-left: 10px;">
+<div class="d-flex" style="margin-left: 10px;">
     <app-paging-header
         [totalCount]="totalCount"
         [pageSize]="this.empParams.pageSize"
@@ -22,13 +22,18 @@
 <div class="col-12, px-5; line-height: 8px;" *ngFor="let item of employees" 
     style="margin-top: 5px; margin-left: 10px; padding: 0px; font-size: small;">
     <div class="row" >      
-        <div class="col-1">{{item.id}} </div>  
-        <div class="col-3" routerLink="/employee/{{item.id}}">{{item.fullName}} </div>
-        <div class="col-1">{{item.aadharNo}} </div>  
-        <div class="col-1">{{item.pPNo}}</div>
-        <div class="col-2">{{item.mobile}}</div>
-        <div class="col-1">{{item.email}}</div>
-        <div class="col-1" style="cursor: pointer">
+        <div class="col" routerLink="/employee/{{item.id}}">{{item.fullName}} </div>
+        <div class="col">{{item.aadharNo}} </div>  
+        <div class="col">{{item.passportNo}}</div>
+        <div class="col">{{item.mobile}}</div>
+        <div class="col">{{item.email}}</div>
+        <div class="col">
+            <ul *ngFor="let sk of item.skills" style="padding: 0px; margin: 0px;">
+                <li>{{sk.skillName + ', level: ' + sk.proficiency}} </li>
+            </ul>
+        </div>
+        
+        <div class="col" style="cursor: pointer">
             <button class="btn btn-sm btn-outline-secondary fa fa-pencil" 
                 (click)="editButtonClick(item.id)" ></button>  
             <button class="btn btn-sm btn-outline-secondary fa fa-trash" 

@@ -1,3 +1,5 @@
+import { IEmployeeAddress, ISkill } from './employee';
+
 export interface IUser {
   displayName: string;
   email: string;
@@ -6,16 +8,25 @@ export interface IUser {
 }
 
 export interface IEmployee {
+    id: number;
     displayName: string;
+    knownAs: string;
     gender: string;
     email: string;
+    aadharNo: string;
+    passportNo: string;
+    mobile: string;
     firstName: string;
+    secondName: string;
+    familyName: string;
     dateOfBirth: Date;
     dateOfJoining: Date;
     designation: string;
-    dept: string;
+    department: string;
     token: string;
     employeeId: number;
+    skills: ISkill[];
+    addresses: IEmployeeAddress[];
   }
 
 export interface ICompany {

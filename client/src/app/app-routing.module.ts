@@ -36,10 +36,11 @@ const routes: Routes = [
     .then(mod => mod.ProfessionModule), data: {breadcrumb: {skip: true}} },
   {path: 'profession-add', component: ProfessionAddComponent, data: {breadcrumb: 'add a category'}},
   {path: 'candidate-add', component: CandidateAddComponent, data: {breadcrumb: 'add a candidate'}},
+  {path: 'empCreate', component: EmpCreateComponent, data: {breadcrumb: 'add an employee'}},
+  {path: 'empEdit/:id', component: EmpCreateComponent, data: {breadcrumb: 'edit an employee'}},
   {path: 'candidate-create', component: CandidateCreateComponent, data: {breadcrumb: 'add a candidate'}},
   {path: 'candidateEdit/:id', component: CandidateCreateComponent, data: {breadcrumb: 'edit candidate'}},
   {path: 'employees', component: EmployeesComponent, data: {breadcrumb: 'edit candidate'}},
-  {path: 'empCreate', component: EmpCreateComponent, data: {breadcrumb: 'new employee'}},
   {path: 'users', loadChildren: () => import('./users/users.module')
     .then(mod => mod.UsersModule), data: {breadcrumb: {skip: true}} },
   {path: 'account', loadChildren: () => import('./account/account.module')

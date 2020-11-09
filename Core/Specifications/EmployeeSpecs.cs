@@ -28,6 +28,7 @@ namespace Core.Specifications
                 ))
         {
             AddInclude(x => x.Addresses);
+            AddInclude(x => x.Skills);
 
             ApplyPaging(eParam.PageSize * (eParam.PageIndex-1), eParam.PageSize);
 

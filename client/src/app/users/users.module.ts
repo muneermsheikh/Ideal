@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { CandidateComponent } from './candidate/candidate.component';
 import { ClientsComponent } from './clients/clients.component';
 import { AssociatesComponent } from './associates/associates.component';
-import { EmployeesComponent } from './employees/employees.component';
 import { UsersRoutingModule } from './users-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { CandidateAddComponent } from './candidate/candidate-add/candidate-add.component';
@@ -15,7 +14,8 @@ import { CandidateCreateComponent } from './candidate/candidate-create/candidate
 
 @NgModule({
   declarations: [CandidateComponent, ClientsComponent, AssociatesComponent,
-    EmployeesComponent, CandidateAddComponent, CandidateEditComponent, ClientAddComponent, ClientDetailComponent, CandidateCreateComponent],
+    CandidateAddComponent, CandidateEditComponent, ClientAddComponent,
+    ClientDetailComponent, CandidateCreateComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -25,7 +25,6 @@ import { CandidateCreateComponent } from './candidate/candidate-create/candidate
     AssociatesComponent,
     CandidateComponent,
     ClientsComponent,
-    EmployeesComponent,
     SharedModule
   ]
 })

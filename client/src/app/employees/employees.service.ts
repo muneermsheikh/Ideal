@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { IEmployee } from '../shared/models/employee';
@@ -21,7 +21,9 @@ export class EmployeesService {
 
   constructor(private http: HttpClient) { }
 
-  addEmployee(values: any): any {
+  addEmployee(values: IEmployee): any {
+    console.log('add');
+    console.log (values);
     return this.http.post(this.baseUrl + 'employees', values).pipe(
       map((emp: IEmployee) => {
         if (emp) {
@@ -49,7 +51,9 @@ export class EmployeesService {
   }
 */
 
-  updateCandidate(values: IEmployee): any {
+  updateEmployee(values: IEmployee): any {
+    console.log('update');
+    console.log(values);
     return this.http.put(this.baseUrl + 'employees', JSON.stringify(values)).pipe(
       map((emp: IEmployee) => {
         if (emp) {
@@ -65,6 +69,7 @@ export class EmployeesService {
   getEmployeeById(id: number): any {
     const emp = this.employees.find(p => p.id === id);
     if (emp) {
+      console.log(emp);
       return of(emp);
     }
     return this.http.get<IEmployee>(this.baseUrl + 'employees/' + id);

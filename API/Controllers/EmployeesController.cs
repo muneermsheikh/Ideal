@@ -41,17 +41,17 @@ namespace API.Controllers
 */
         [HttpGet("{EmployeeId}")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<EmployeeToReturnDto>> GetEmployeeById(int EmployeeId)
+        public async Task<ActionResult<Employee>> GetEmployeeById(int EmployeeId)
         {
             var emp = await _empService.GetEmployeeByIdAsync(EmployeeId);
             if (emp == null) return NotFound(new ApiResponse(404));
-            var empDto = _mapper.Map<Employee, EmployeeToReturnDto>(emp);
-            return empDto;
+            // var empDto = _mapper.Map<Employee, EmployeeToReturnDto>(emp);
+            return emp;
         }
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Pagination<IReadOnlyList<EmployeeToReturnDto>>>> GetEmployeeList(
+        public async Task<ActionResult<Pagination<IReadOnlyList<Employee>>>> GetEmployeeList(
             [FromQuery] EmployeeParam empParam)
         {
             var empRepo = _unitOfWork.Repository<Employee>();
@@ -63,37 +63,35 @@ namespace API.Controllers
             if (emps == null) return NotFound(new ApiResponse(404,
                 "No employees found matching the criteria"));
 
-            var data = _mapper
+    /*        var data = _mapper
                 .Map<IReadOnlyList<Employee>, IReadOnlyList<EmployeeToReturnDto>>(emps);
-
-            return Ok(new Pagination<EmployeeToReturnDto>
-                    (empParam.PageIndex, empParam.PageSize, totalItems, data));
+    */
+            return Ok(new Pagination<Employee>
+                    (empParam.PageIndex, empParam.PageSize, totalItems, emps));
+      
         }
+
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<EmployeeToReturnDto>> CreateNewEmployeeAsync(EmployeeToAddDto emp)
+        public async Task<ActionResult<Employee>> CreateNewEmployeeAsync(Employee emp)
         {
-        var empToAdd = await _empService.CreateNewEmployeeAsync(emp.Gender, emp.FirstName,
-                emp.SecondName, emp.FamilyName, emp.KnownAs, 
-        /*        emp.Address1, emp.Address2,
-                emp.City, emp.PIN, emp.District, emp.State, "India", 
-        */
-                emp.Mobile, emp.Email,
-                emp.AadharNo, emp.PassportNo, emp.Designation, emp.DateOfBirth, emp.DateOfJoining);
 
-            if (empToAdd == null) return BadRequest(new ApiResponse(400));
+            var empAdded = await _empService.CreateNewEmployeeAsync(emp);
+            if (empAdded == null) {
+                return BadRequest(new ApiResponse(400, "bad Request"));
+            }
 
-            var empAdded = _mapper.Map<Employee, EmployeeToReturnDto>(empToAdd);
-            return empAdded;
+            return Ok(empAdded);
         }
 
         [HttpPut("employee")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<EmployeeToReturnDto>> UpdateEmployeeAsync(Employee employee)
+        public async Task<ActionResult<Employee>> UpdateEmployeeAsync([FromBody] Employee employee)
         {
             var emp = await _empService.UpdateEmployeeAsync(employee);
-            return _mapper.Map<Employee, EmployeeToReturnDto>(emp);
+            return Ok(emp);
+        //    return _mapper.Map<Employee, EmployeeToReturnDto>(emp);
         }
 
         [HttpDelete]

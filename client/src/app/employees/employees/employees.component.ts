@@ -37,13 +37,15 @@ export class EmployeesComponent implements OnInit {
   }
 
   editButtonClick(employeeId: number): void {
-    this.router.navigate(['/employeeeEdit', employeeId]);
+    console.log('entered editButtonClick');
+    this.router.navigate(['/empEdit', employeeId]);
   }
 
   getEmployees(useCache = false): void {
 
       this.service.getEmployees(useCache).subscribe(response => {
         this.employees = response.data;
+        console.log(this.employees);
         this.totalCount = response.count;
         this.empParams.pageNumber = response.pageIndex;
         this.empParams.pageSize = response.pageSize;

@@ -1,4 +1,28 @@
-col6 {
-    width: 1200px;
+hr {
+    border: 1px solid silver;
+}
+tr, td {
+    padding: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+td, th {
+    padding: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
     font-size: smaller;
+}
+
+h4 {
+    background-color: lightblue;
+    color: yellow;
+    font-weight: bold;
+}
+
+.panelHeader {
+    background-color: silver;
+    color: darkblue;
+    font-weight: bold;
+    margin-top: 10px;
 }

@@ -22,6 +22,50 @@ namespace Infrastructure.Services
             _unitOfWork = unitOfWork;
         }
 
+
+        public async Task<Employee> CreateNewEmployeeAsync(Employee emp)
+        {
+  
+            var empSaved = await _unitOfWork.Repository<Employee>().AddAsync(emp);
+            // above saves related entities address ad skills also
+
+            /*
+            if (empSaved !=null) {
+                int empId = empSaved.Id;
+                
+                var newAdds = new List<EmployeeAddress>();
+                var adds = emp.Addresses;
+                foreach (var addr in adds) {
+                    if (addr != null) {
+                        addr.EmployeeId=empId;
+                        newAdds.Add(addr);
+                    }
+                }
+                if (newAdds !=null && newAdds.Count > 0) {
+                    var addsSaved = await _unitOfWork.Repository<EmployeeAddress>().AddListAsync(newAdds);
+                }
+
+                var newSkills = new List<Skill>();
+                var sk = emp.Skills;
+
+                if (sk != null) {
+                foreach (var s in sk) {
+                    if (s != null) {
+                        s.EmployeeId = empId;
+                        newSkills.Add(s);
+                    }
+                }
+                }
+
+                if (newSkills != null && newSkills.Count > 0) {
+                    var sks = await _unitOfWork.Repository<Skill>().AddListAsync(newSkills);
+                }
+            }
+            */ 
+            
+            return empSaved;
+        }
+
         public async Task<Employee> CreateNewEmployeeAsync(string gendr, string firstNm,
             string secondNm, string familyNm, string knownAs, 
         /*  string add1, string add2,
