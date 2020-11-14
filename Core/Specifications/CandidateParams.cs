@@ -11,14 +11,11 @@ namespace Core.Specifications
         public int? Id {get; set; }
         public int? ApplicationNo { get; set; }
         public DateTime? ApplicationDated { get; set; }
-        public DateTime? AddedOn {get; set; }
         public string Gender { get; set; }
         public string Name { get; set; }
         public string CategoryName { get; set; }
         public string PPNo { get; set; }
-        public bool includeAddress {get; set; }=false;
-        public bool includeCategories {get; set; }=false;
-        public enumCandidateStatus? CandidateStatus { get; set; } = enumCandidateStatus.Available;
+        public bool includeCategories {get; set; }=true;
 
         private const int MaxmPageSize = 50;
         

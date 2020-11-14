@@ -21,11 +21,11 @@ namespace API.Dtos
         public DateTime DOB { get; set; }
 
         // public int ProfessionId {get; set; }
-        public List<CandidateProfessionDto> FormArrayCat {get; set;}
+        public List<CandidateProfessionDto> FormArrayCategories {get; set;}
         public string MobileNo {get; set; }
         public string email {get; set; }
 
-        public List<CandidateAddressDto> FormArrayAdd {get; set;}
+        public List<CandidateAddressDto> FormArrayAddresses {get; set;}
       /*
         public string AddressType {get; set; }
         public string Address1 {get; set; }

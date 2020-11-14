@@ -15,7 +15,7 @@ namespace API.Helpers
 
         public string Resolve(CandidateCategory source, CandidateCategoryDto destination, string destMember, ResolutionContext context)
         {
-            var cat = _catService.CategoryByIdAsync(source.CatId).Result;
+            var cat = _catService.CategoryByIdAsync(source.CategoryId).Result;
             return cat.Name; throw new System.NotImplementedException();
         }
     }

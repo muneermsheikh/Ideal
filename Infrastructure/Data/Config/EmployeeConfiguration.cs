@@ -10,6 +10,8 @@ namespace Infrastructure.Data.Config
         {
             builder.Property(x => x.Designation).IsRequired();
             builder.Property("DateOfJoining").IsRequired();
+            builder.HasMany(o => o.Addresses).WithOne().OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(o => o.Skills).WithOne().OnDelete(DeleteBehavior.Cascade);
             // builder.OwnsOne(o => o.Person, a => {WIthOwner();});
         }
     }

@@ -1,9 +1,9 @@
 [
-    { "candId": 1, "catId": 2}, { "candId": 1, "catId": 3}, { "candId": 1, "catId": 5}, 
-    { "candId": 2, "catId": 5}, { "candId": 2, "catId": 6}, { "candId": 2, "catId": 7}, 
-    { "candId": 3, "catId": 7}, { "candId": 3, "catId": 8}, { "candId": 3, "catId": 9}, 
-    { "candId": 4, "catId": 9}, { "candId": 4, "catId": 10}, { "candId": 4, "catId": 5},
-    { "candId": 5, "catId": 9}, { "candId": 5, "catId": 10}, { "candId": 5, "catId": 5},
-    { "candId": 6, "catId": 9}, { "candId": 6, "catId": 10}, { "candId": 6, "catId": 5},
-    { "candId": 7, "catId": 9}, { "candId": 7, "catId": 10}, { "candId": 7, "catId": 5}
+    { "candidateId": 1, "categoryId": 2}, { "candidateId": 1, "categoryId": 3}, { "candidateId": 1, "categoryId": 5}, 
+    { "candidateId": 2, "categoryId": 5}, { "candidateId": 2, "categoryId": 6}, { "candidateId": 2, "categoryId": 7}, 
+    { "candidateId": 3, "categoryId": 7}, { "candidateId": 3, "categoryId": 8}, { "candidateId": 3, "categoryId": 9}, 
+    { "candidateId": 4, "categoryId": 9}, { "candidateId": 4, "categoryId": 10}, { "candidateId": 4, "categoryId": 5},
+    { "candidateId": 5, "categoryId": 9}, { "candidateId": 5, "categoryId": 10}, { "candidateId": 5, "categoryId": 5},
+    { "candidateId": 6, "categoryId": 9}, { "candidateId": 6, "categoryId": 10}, { "candidateId": 6, "categoryId": 5},
+    { "candidateId": 7, "categoryId": 9}, { "candidateId": 7, "categoryId": 10}, { "candidateId": 7, "categoryId": 5}
 ]

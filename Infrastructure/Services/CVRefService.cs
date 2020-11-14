@@ -250,8 +250,8 @@ namespace Infrastructure.Services
                 enqItemId = cid.enquiryItemId;
                 
                 var app = await _context.Candidates.Where(x => x.Id == id)
-                    .Select(x => new  { x.ApplicationNo, x.FullName, x.PPNo, x.Gender, 
-                    x.email, x.AadharNo}).FirstOrDefaultAsync();
+                    .Select(x => new  { x.ApplicationNo, x.FullName, x.PassportNo, x.Gender, 
+                    x.Email, x.AadharNo}).FirstOrDefaultAsync();
                 if(app==null) throw new Exception("invalid candidate Id");
                 
                 if (!await IsCandidateReferred(id, enqItemId))
@@ -341,7 +341,7 @@ namespace Infrastructure.Services
                 select new {customername=e.Customer.CustomerName, 
                     customercity=e.Customer.CityName, projmgrid=e.ProjectManagerId,
                     catref=e.EnquiryNo+"-"+i.SrNo+"-"+cat.Name, enquiryid=e.Id,
-                    orderdate=e.EnquiryDate, appno=c.ApplicationNo, ppno=c.PPNo,
+                    orderdate=e.EnquiryDate, appno=c.ApplicationNo, ppno=c.PassportNo,
                     candidatename=c.FullName, fwdon=fw.DateForwarded, 
                     enquiryitemid=i.Id}).ToListAsync();
 

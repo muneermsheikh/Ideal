@@ -15,8 +15,8 @@ namespace API.Helpers
 
         public string Resolve(CandidateCategory source, CandidateCategoryDto destination, string destMember, ResolutionContext context)
         {
-            if (source.CandId == 0) return string.Empty;
-            return _candService.GetCandidateName(source.CandId);
+            if (source.CandidateId == 0) return string.Empty;
+            return _candService.GetCandidateName(source.CandidateId);
         }
     }
 }

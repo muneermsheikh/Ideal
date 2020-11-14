@@ -78,6 +78,7 @@ namespace Core.Specifications
         public EmployeeSpecs(int employeeId) 
             : base(x => x.Id == employeeId)
         {
+            AddInclude(x => x.Skills);
             AddInclude(x => x.Addresses);
         }
     }

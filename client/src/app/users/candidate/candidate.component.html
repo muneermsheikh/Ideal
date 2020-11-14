@@ -14,7 +14,6 @@
             #search placeholder="Search" type="text" >
         <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
         <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
-        <!-- <button routerLink="/candidate-add" class="btn btn-outline-success ml-2">New Candidate</button> -->
         <button routerLink="/candidate-create" class="btn btn-outline-success ml-2">New Candidate</button>
     </div>
 </div>
@@ -23,13 +22,15 @@
 <div class="col-12, px-5; line-height: 8px;" *ngFor="let item of candidates" style="margin-top: 5px; margin-left: 10px; padding: 0px; font-size: small;">
     <div class="row" >      
         <div class="col-1">{{item.applicationNo}} </div>  
-        <div class="col-3" routerLink="/candidate/{{item.id}}">{{item.fullName}} </div>
-        <div class="col-1">{{item.ppNo}} </div>  
+        <div class="col-2" routerLink="/candidate/{{item.id}}">{{item.fullName}} </div>
+        <div class="col-1">{{item.passportNo}} </div>  
         <div class="col-1">{{item.aadharNo}}</div>
-        <div class="catWrap" style="display: block; " *ngFor="let prof of item.candidateProfessions; 
-            let i=index">{{prof.name}} </div>
+        <div class="col-2 catWrap" style="display: block; " *ngFor="let prof of item.candidateCategories; 
+            let i=index">
+           {{prof.name}} 
+        </div>
        
-        <div class="col"></div>
+        <div class="col-1"></div>
         <div class="col-2">{{item.mobileNo}}</div>
         <div class="col-1">{{item.email}}</div>
         <div class="col-1" style="cursor: pointer">
@@ -39,8 +40,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="d-flex justify-content-center my-3" *ngIf="this.totalCount > 0">
     <app-pager

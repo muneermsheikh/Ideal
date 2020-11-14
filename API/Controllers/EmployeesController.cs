@@ -44,6 +44,7 @@ namespace API.Controllers
         public async Task<ActionResult<Employee>> GetEmployeeById(int EmployeeId)
         {
             var emp = await _empService.GetEmployeeByIdAsync(EmployeeId);
+
             if (emp == null) return NotFound(new ApiResponse(404));
             // var empDto = _mapper.Map<Employee, EmployeeToReturnDto>(emp);
             return emp;

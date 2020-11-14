@@ -136,10 +136,10 @@ namespace API.Controllers
                     if (cnd==null)
                     {
                         var cn = await _context.Candidates.Where(x => x.Id == item.CandidateId)
-                            .Select( x => new {x.ApplicationNo, x.FullName, x.PPNo}).SingleOrDefaultAsync();
+                            .Select( x => new {x.ApplicationNo, x.FullName, x.PassportNo}).SingleOrDefaultAsync();
                         if (cn !=null)
                         {
-                            candDetails = cn.ApplicationNo + "-" + cn.FullName + ", PP No."+ cn.PPNo;
+                            candDetails = cn.ApplicationNo + "-" + cn.FullName + ", PP No."+ cn.PassportNo;
                         }
                         else
                         {
@@ -147,7 +147,7 @@ namespace API.Controllers
                         }
                     }
                     else {
-                        candDetails=cnd.ApplicationNo + "-" + cnd.FullName + ", PP No." + cnd.PPNo;
+                        candDetails=cnd.ApplicationNo + "-" + cnd.FullName + ", PP No." + cnd.PassportNo;
                     }
                     candidateRefList.Add(new CandidateRef(candDetails, "", processHist));
                 }
@@ -164,10 +164,10 @@ namespace API.Controllers
         private async Task<HistoryDto> MapCVRefToCandidateHistory(List<CVRef> cvrefs)
         {
             var Lst = new HistoryDto();
-            int candid =  cvrefs.Select(x => x.CandidateId).FirstOrDefault();
+            int cid =  cvrefs.Select(x => x.CandidateId).FirstOrDefault();
 
-            var cand = await _context.Candidates.Where(x => x.Id == candid).FirstOrDefaultAsync();
-            Lst.CandidateName = cand.ApplicationNo + "-" + cand.FullName + ", PP No. " + cand.PPNo;
+            var cand = await _context.Candidates.Where(x => x.Id == cid).FirstOrDefaultAsync();
+            Lst.CandidateName = cand.ApplicationNo + "-" + cand.FullName + ", PP No. " + cand.PassportNo;
 
             var refs = new List<HistoryReferred>();
             foreach(var c in cvrefs)

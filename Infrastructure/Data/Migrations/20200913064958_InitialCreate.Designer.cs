@@ -1263,20 +1263,17 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CandId")
+                    b.Property<int>("CandidateId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CandidateId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CatId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CandidateId");
 
-                    b.HasIndex("CatId", "CandId")
+                    b.HasIndex("CategoryId", "CandidateId")
                         .IsUnique();
 
                     b.ToTable("CandidateCategories");

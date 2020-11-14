@@ -17,7 +17,7 @@ namespace API.Helpers
 
         public string Resolve(CVRef source, ProcessDto destination, string destMember, ResolutionContext context)
         {
-            return _context.Candidates.Where(x => x.Id == source.CandidateId).Select(x => x.PPNo).FirstOrDefault();
+            return _context.Candidates.Where(x => x.Id == source.CandidateId).Select(x => x.PassportNo).FirstOrDefault();
         }
     }
 }

@@ -20,9 +20,9 @@ namespace API.Helpers
         public string Resolve(CVRef source, CVRefDto destination, string destMember, ResolutionContext context)
         {
             var cnd = _context.Candidates.Where(x => x.Id == source.CandidateId)
-                .Select(x => new{x.ApplicationNo, x.FullName, x.PPNo}).FirstOrDefault();
+                .Select(x => new{x.ApplicationNo, x.FullName, x.PassportNo}).FirstOrDefault();
             if (cnd==null) return "undefined";
-            return cnd.ApplicationNo + "-" + cnd.FullName + ", PP No." + cnd.PPNo;
+            return cnd.ApplicationNo + "-" + cnd.FullName + ", PP No." + cnd.PassportNo;
         }
     }
 }

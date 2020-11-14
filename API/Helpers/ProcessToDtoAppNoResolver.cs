@@ -19,7 +19,7 @@ namespace API.Helpers
             var v = (from rf in _context.CVRefs
                 join cnd in _context.Candidates on rf.CandidateId equals cnd.Id
                 where rf.Id == source.CVRefId
-                select new {nm = cnd.FullName, appno = cnd.ApplicationNo, ppno = cnd.PPNo}
+                select new {nm = cnd.FullName, appno = cnd.ApplicationNo, ppno = cnd.PassportNo}
                 ).SingleOrDefault();
                 
             if (v==null) return "invalid request";

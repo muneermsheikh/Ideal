@@ -5,8 +5,6 @@ import { ClientsComponent } from './clients/clients.component';
 import { AssociatesComponent } from './associates/associates.component';
 import { UsersRoutingModule } from './users-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { CandidateAddComponent } from './candidate/candidate-add/candidate-add.component';
-import { CandidateEditComponent } from './candidate/candidate-edit/candidate-edit.component';
 import { ClientAddComponent } from './clients/client-add/client-add.component';
 import { ClientDetailComponent } from './clients/client-detail/client-detail.component';
 import { CandidateCreateComponent } from './candidate/candidate-create/candidate-create.component';
@@ -14,7 +12,7 @@ import { CandidateCreateComponent } from './candidate/candidate-create/candidate
 
 @NgModule({
   declarations: [CandidateComponent, ClientsComponent, AssociatesComponent,
-    CandidateAddComponent, CandidateEditComponent, ClientAddComponent,
+    ClientAddComponent,
     ClientDetailComponent, CandidateCreateComponent],
   imports: [
     CommonModule,

@@ -1,4 +1,3 @@
-import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -51,6 +50,7 @@ export class EmpCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm = this.fb.group({
+      id: [0],
       gender: ['M', [Validators.required,
               Validators.maxLength(1),
               Validators.pattern('^(?:m|M|f|F)$')]],
@@ -109,7 +109,7 @@ export class EmpCreateComponent implements OnInit {
 
     blankOutTheFields(): void {
         this.employee = {
-          id: null,
+          id: 0,
           gender: 'M',
           firstName: '',
           secondName: '',
@@ -134,37 +134,37 @@ export class EmpCreateComponent implements OnInit {
         (employee: IEmployee) => {
           this.editEmployee(employee);
           this.employee = employee;
-          console.log(employee);
         },
         (error: any) => console.log(error)
       );
     }
 
     editEmployee(employee: IEmployee): any {
-    this.createForm.patchValue({
-        gender: employee.gender,
-        firstName: employee.firstName,
-        secondName: employee.secondName,
-        familyName: employee.familyName,
-        knownAs: employee.knownAs,
-        aadharNo: employee.aadharNo,
-        passportNo: employee.passportNo,
-        mobile: employee.mobile,
-        email: employee.email,
-        dateOfBirth: employee.dateOfBirth,
-        dateOfJoining: employee.dateOfJoining,
-        designation: employee.designation,
-        department: employee.department
-      });
+      this.createForm.patchValue(
+        {
+          id: employee.id,
+          gender: employee.gender,
+          firstName: employee.firstName,
+          secondName: employee.secondName,
+          familyName: employee.familyName,
+          knownAs: employee.knownAs,
+          aadharNo: employee.aadharNo,
+          passportNo: employee.passportNo,
+          mobile: employee.mobile,
+          email: employee.email,
+          dateOfBirth: employee.dateOfBirth,
+          dateOfJoining: employee.dateOfJoining,
+          designation: employee.designation,
+          department: employee.department
+        });
 
-    if (!employee.skills === null) {
-      console.log(employee.skills.length);
-      this.createForm.setControl('skills', this.setExistingSkills(employee.skills));
+      if (employee.skills !== null) {
+        this.createForm.setControl('skills', this.setExistingSkills(employee.skills));
+        }
+
+      if (employee.addresses !== null) {
+        this.createForm.setControl('addresses', this.setExistingAddresses(employee.addresses));
       }
-
-    if (!employee.addresses === null) {
-      this.createForm.setControl('addresses', this.setExistingAddresses(employee.addresses));
-    }
 
     }
 
@@ -178,7 +178,6 @@ export class EmpCreateComponent implements OnInit {
           proficiency: s.proficiency
         }));
       });
-
       return formArray;
     }
 
@@ -189,13 +188,13 @@ export class EmpCreateComponent implements OnInit {
 
     newSkill(): FormGroup{
       return this.fb.group({
-        skillName: '',
-        expInYears: '',
-        proficiency: '',
+        skillName: ['', Validators.required],
+        expInYears: ['', Validators.required],
+        proficiency: ['', Validators.required],
       });
     }
 
-    addSkill(): void {
+    pushNewSkill(): void {
       this.skills().push(this.newSkill());
     }
 
@@ -242,7 +241,7 @@ export class EmpCreateComponent implements OnInit {
       });
     }
 
-    addAddress(): void {
+    pushNewAddress(): void {
       this.addresses().push(this.newAddress());
     }
 
@@ -257,15 +256,16 @@ export class EmpCreateComponent implements OnInit {
     onSubmit(): any {
       // console.log(this.createForm.value);
       const empVal = this.mapFormValuesToEmployeeObject();
-      console.log(empVal);
-      if (this.employee.id !== null)    // INSERT mode
+      if (empVal.id === null || empVal.id === 0)    // INSERT mode
       {
-      this.empService.addEmployee(empVal).subscribe(() => {
+        console.log('insert mode');
+        this.empService.addEmployee(empVal).subscribe(() => {
           this.route.navigate(['employees']);
         }, error => {
           console.log(error);
         });
       } else {                          // EDIT mode
+        console.log('edit mode');
         this.empService.updateEmployee(empVal).subscribe(() => {
           this.route.navigate(['employees']);
       }, error => {

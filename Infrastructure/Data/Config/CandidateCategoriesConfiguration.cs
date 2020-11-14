@@ -9,7 +9,7 @@ namespace Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<CandidateCategory> builder)
         {
             //builder.HasMany(x => x.Assessment).WithOne().OnDelete(DeleteBehavior.Cascade);
-            builder.HasIndex("CatId", "CandId").IsUnique();
+            builder.HasIndex("CategoryId", "CandidateId").IsUnique();
         }
     }
 }

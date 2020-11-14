@@ -9,8 +9,8 @@ namespace API.Helpers
     {
         public int Resolve(Candidate source, CandidateDto destination, int destMember, ResolutionContext context)
         {
-            if(source.DOB == null) return 0;
-            return DateTime.Now.Year - source.DOB.Year;
+            if(source.DateOfBirth == null) return 0;
+            return DateTime.Now.Year - source.DateOfBirth.Year;
         }
     }
 }

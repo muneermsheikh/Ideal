@@ -590,9 +590,8 @@ namespace Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CandId = table.Column<int>(nullable: false),
-                    CatId = table.Column<int>(nullable: false),
-                    CandidateId = table.Column<int>(nullable: true)
+                    CandidateId = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1212,7 +1211,7 @@ namespace Infrastructure.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CandidateCategories_CatId_CandId",
                 table: "CandidateCategories",
-                columns: new[] { "CatId", "CandId" },
+                columns: new[] { "CategoryId", "CandidateId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

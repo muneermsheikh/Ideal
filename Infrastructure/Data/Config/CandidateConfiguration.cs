@@ -14,22 +14,22 @@ namespace Infrastructure.Data.Config
             builder.HasIndex(x => x.ApplicationNo).IsUnique();
 
             // Following returns the string value of the enumeration Type
-            builder.Property(s => s.CandidateStatus)
+        /*    builder.Property(s => s.CandidateStatus)
                 .HasConversion(
                     o => o.ToString(),
                     o => (enumCandidateStatus) Enum.Parse(typeof(enumCandidateStatus), o)
                 );
-
-            builder.OwnsOne(o => o.CandidateAddress, a => 
+        */
+        /*    builder.OwnsOne(o => o.CandidateAddresses, a => 
             {
                 a.WithOwner();
             });
-
+        */
             builder.Property(x => x.FirstName).IsRequired();
             builder.Property(x => x.FamilyName).IsRequired();
             builder.Property(x => x.Gender).IsRequired();
-            builder.Property(x => x.PPNo).IsRequired();      // TO DO - consider implementing this in stage 2, in order to have the candidate onboard first
-            builder.HasIndex(x => x.PPNo).IsUnique();
+            builder.Property(x => x.PassportNo).IsRequired();      // TO DO - consider implementing this in stage 2, in order to have the candidate onboard first
+            builder.HasIndex(x => x.PassportNo).IsUnique();
 
             // when candidate is deleted, it will delete all its many side entities
             //builder.HasMany(o => o.CandidateCategories).WithOne().OnDelete(DeleteBehavior.Cascade);

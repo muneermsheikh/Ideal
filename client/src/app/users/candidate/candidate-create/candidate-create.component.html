@@ -1,267 +1,89 @@
 <div class="container">
+    <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+        <table class="table table-bordered">
+            <tr class="panelHeader" colspan="5">{{pageTitle}}</tr>
+            <tr>
+                <td> <app-text-input formControlName="passportNo" [label]="'PP No'"></app-text-input> </td>
+                <td> <app-text-input formControlName="mobileNo" [label]="'mobileNo'"></app-text-input> </td>
+                <td> <app-text-input formControlName="email" [label]="'email'"></app-text-input> </td>
+                <td> <app-text-input formControlName="aadharNo" [label]="'Aadhar No'"></app-text-input> </td>
+                <td> <app-text-input formControlName="ecnr" [label]="'Emig Status'"></app-text-input> </td>   
+                <td></td> 
+            </tr>
+            <tr>
+                <td> <app-text-input formControlName="gender" [label]="'Gender'"></app-text-input> </td>        
+                <td> <app-text-input formControlName="firstName" [label]="'First Name'"></app-text-input> </td>
+                <td> <app-text-input formControlName="secondName" [label]="'Second Name'"></app-text-input> </td>
+                <td> <app-text-input formControlName="familyName" [label]="'Family Name'"></app-text-input> </td>
+                <td> <app-text-input formControlName="knownAs" [label]="'Known As'"></app-text-input> </td>
+                <td> <app-text-input formControlName="dateOfBirth" [label]="'Date of birth'"></app-text-input> </td>
+            </tr>
+            <tr>    
+                <td> 
+                    <div class="form-group">
+                        <label>Introduced by</label>
+                        <select class="form-control" 
+                            formControlName="referredById" placeholder="Referred by">
+                            <option *ngFor="let item of recruitmentAgents" [ngValue]=item.id>
+                                {{item.customerName}}
+                            </option>
+                        </select>
+                    </div>
+                </td>    
+                <td> 
+                    <div class="form-group">
+                        <label>Source</label>
+                        <select class="form-control" 
+                            formControlName="sourceId" placeholder="Source">
+                            <option *ngFor="let item of candidateSources" [ngValue]=item.id>
+                                {{item.name}}
+                            </option>
+                        </select>
+                    </div>
+                </td>    
+                <td> <app-text-input formControlName="applicationNo" [label]="'Application No'"></app-text-input> </td>
+                <td> <app-text-input formControlName="applicationDated" [label]="'App Dated'"></app-text-input> </td>
+                <td><app-text-input formControlName="id" [label]="'id'"></app-text-input></td>
+                <td></td>
+            </tr>
+      </table>
+      <table>
+        <tr >
+            <td> <app-text-input formControlName="address1" [label]="'Address'"></app-text-input> </td>
+            <td> <app-text-input formControlName="address2" [label]="'Street address'"></app-text-input> </td>
+            <td> <app-text-input formControlName="city" [label]="'City'"></app-text-input> </td>
+            <td> <app-text-input formControlName="pin" [label]="'PIN'"></app-text-input> </td>
+            <td> <app-text-input formControlName="state" [label]="'state'"></app-text-input> </td>
+            <td> <app-text-input formControlName="country" [label]="'country'"></app-text-input> </td>
+        </tr>
+    </table>
+        <table class="table table-bordered" formArrayName="candidateCategories" style="margin-top: 20px; width: 800px;">
+            <tr>
+                <th colspan="3" class="panelHeader">Categories</th>
+                <th width="125px"><button type="button" (click)="pushNewCategory()" 
+                    class="fa fa-plus" ></button></th>
+            </tr>
+            <tr *ngFor="let prof of candidateCategories().controls; let p=index" [formGroupName]="p">
+                <hr *ngIf="p>0">
+                <th style="margin: 0px; padding: 0px; line-height: 2.5em; width: 400px;">
+                    <select class="form-control" 
+                        formControlName="categoryId" placeholder="Profession">
+                        <option *ngFor="let item of candidateProfessions" [ngValue]=item.id>
+                            {{item.name}}
+                        </option>
+                    </select>
+                </th>
+                <th></th>
+                <th><button (click)="removeCategory(p)" class="fa fa-trash pull-right"></button></th>    
+            </tr>
+        </table>
 
-    <form [formGroup] = "form" (ngSubmit)="onSubmit()" class="form-horizontal px-4">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <div class="panel-title">add a new candidate</div>
-            </div>
-            
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-3 form-group">
-                        <label for="ppNo" class="col-4control-label">PP No</label>
-                        <div class="col-8">
-                            <input id="ppNo" formControlName="ppNo" type="text" class="form-control">
-                            <div *ngIf="form.get('ppNo').valid && form.get('ppNo').touched &&
-                                form.get('ppNo').status === 'PENDING'" 
-                                class="fa fa-spinner fa-spin loader">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3 form-group">
-                        <label for="email" class="col-4 control-label">email</label>
-                        <div  class="col-8">
-                            <input id="email" formControlName="email" type="text" class="form-control">
-                            <div *ngIf="form.get('email').valid && form.get('email').touched &&
-                                form.get('email').status === 'PENDING'" 
-                                class="fa fa-spinner fa-spin loader">
-                            </div>
-                            <span class="text-danger" *ngIf="form.get('email').invalid && 
-                                form.get('email').touched && form.get('email').errors['pattern']">
-                                invalid email
-                            </span>
-                            <span class="text-danger" *ngIf="form.get('email').invalid && 
-                                form.get('email').touched && form.get('email').errors['required']">
-                                email is required
-                            </span>
-                            <span class="text-danger" *ngIf="form.get('email').touched && 
-                                form.get('email').valid && form.get('email').errors['emailExists']">
-                                email is taken
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-3 form-group">
-                        <label for="eCNR" class="control-label">Emig Clearance</label>
-                            <input formControlName="eCNR" type="radio" [value]="true" 
-                                class="form-control col-2" > ECR
-                            <input formControlName="eCNR" type="radio" [value]="false" 
-                                class="form-control pull-right" > ECNR
-                    </div>
-                    <div class="col-3 form-group">
-                        <label for="aadharNo" class="col-4 control-label">Aadhar No</label>
-                        <div>
-                            <input id="aadharNo" formControlName="aadharNo" type="text" class="col-8 form-control">
-                            <div *ngIf="form.get('aadharNo').valid && form.get('aadharNo').touched &&
-                            form.get('aadharNo').status === 'PENDING'" 
-                            class="fa fa-spinner fa-spin loader">
-                        </div>
-                        <span class="text-danger" *ngIf="form.get('aadharNo').invalid && 
-                            form.get('aadharNo').touched && form.get('aadharNo').errors['pattern']">
-                            Aadhar Number should be 12 numerical digits without any spaces
-                        </span>
-                        <span class="text-danger" *ngIf="form.get('aadharNo').touched && 
-                            form.get('aadharNo').valid && form.get('email').errors['aadharNoExists']">
-                            email is taken
-                    </span>
+        <button [disabled]="createForm.invalid" type="submit" class="btn btn-success">Submit</button>
 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-3 form-group">
-                        <label for="gender" class="col-4 control-label">Gender</label>
-                        <div class="col-8">
-                            <input id="gender" formControlName="gender" type="text" class="form-control col-2">
-                            <span class="text-danger" *ngIf="form.get('gender').invalid && 
-                                form.get('gender').touched && form.get('gender').errors['required']">
-                                Gender is required
-                            </span>
-                            <span class="text-danger" *ngIf="form.get('gender').invalid && 
-                                form.get('gender').touched && form.get('gender').errors['maxLength']">
-                                max length can be 1 characters only
-                            </span>
-                            <span class="text-danger" *ngIf="form.get('gender').invalid && 
-                                form.get('gender').touched && form.get('gender').errors['pattern']">
-                                gender can be either M (for male) or F (for female)
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-3 form-group">
-                        <label for="firstName" class="col-4 control-label">First Name</label>
-                        <div class="col-8">
-                            <input id="firstName" formControlName="firstName" type="text" class="form-control">
-                        </div>
-                        <span class="text-danger" *ngIf="form.get('firstName').invalid && 
-                            form.get('firstName').touched && form.get('firstName').errors['required']">
-                            First Name is required
-                        </span>
-                        <span class="text-danger" *ngIf="form.get('firstName').invalid && 
-                            form.get('firstName').touched && form.get('firstName').errors['minLength']">
-                                first name should be min 5 char long
-                        </span>
-                    </div>
-                    <div class="col-3 form-group">
-                        <label for="secondName" class="col-8 control-label">Second Name</label>
-                        <div class="col-8">
-                            <input id="secondName" formControlName="secondName" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-3 form-group">
-                        <label for="familyName" class="col-8 control-label">Family Name</label>
-                        <div class="col-8">
-                            <input id="familyName" formControlName="familyName" type="text" class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-3 form-group">
-                        <label for="knownAs" class="col-4 control-label">Known As</label>
-                        <div class="col-8">
-                            <input id="knownAs" formControlName="knownAs" type="text" class="form-control">
-                            <span class="text-danger" *ngIf="form.get('knownAs').invalid 
-                                && form.get('knownAs').touched && form.get('knownAs').errors['required']">
-                                Known As value is required
-                            </span>
-                            <span class="text-danger" *ngIf="form.get('knownAs').invalid 
-                                && form.get('knownAs').touched && form.get('knownAs').errors['maxLength']">
-                                Known As should not exceed 15 char
-                            </span>
-                            <span class="text-danger" *ngIf="form.get('knownAs').invalid && 
-                                form.get('knownAs').touched && form.get('knownAs').errors['minLength']">
-                                Known As should be min 5 characters long
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-3 form-group">
-                        <label for="dOB" class="col-4 control-label">Date of birth</label>
-                        <div class="col-8">
-                            <input id="dOB" formControlName="dOB" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-3 form-group">
-                        <label for="mobileNo" class="col-4 control-label">Mobile No</label>
-                        <div class="col-8">
-                            <input id="mobileNo" formControlName="mobileNo" type="text" class="form-control">
-                        </div>
-                        <span class="text-danger" *ngIf="form.get('mobileNo').invalid && 
-                            form.get('mobileNo').touched && form.get('mobileNo').errors['required']">
-                            Mobile No is required
-                        </span>
-                        <span class="text-danger" *ngIf="form.get('mobileNo').invalid && 
-                            form.get('mobileNo').touched && (form.get('mobileNo').errors['maxLength'] 
-                            || form.get('mobileNo').errors['minLength'])">
-                            mobile number must be min 10 characters and max 15 characters long
-                        </span>
-                    </div>
-                    <div class="col-3"></div>
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-sm btn-primary fa fa-sm fa-plus col-3" 
-                        style="width: 100px;" (click)="addProfession()">Profession
-                    </button>
-                    <!-- <div formGroupName="formArrayCat"> -->
-                        <div class="form-group">
-                            <div class="col-9 container border" style="width: 850px;" formArrayName="formArrayCat" 
-                                *ngFor="let category of CategoryControls.controls; let i = index;">
-                                <div [formGroupName]="i">
-                                    <div class="row">
-                                        <b>Profession {{i + 1}}</b>
-                                        <div class="col-3">
-                                            <button type="button" class="btn btn-danger btn-sm fa fa-trash pull-right" 
-                                                (click)="removeProfession(i)">
-                                            </button>
-                                        </div>
-                                        <div class="col-9 form-group">
-                                            <select class="form-control" 
-                                                formControlName="professionId" placeholder="profession">
-                                                <option *ngFor="let item of professions" [ngValue]=item.id>
-                                                    {{item.name}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <!-- </div> -->
-                </div>
-              
-                <div class="form-group">
-                    <button type="button" class="btn btn-sm btn-primary fa fa-sm fa-plus" 
-                        style="width: 100px;" (click)="addAddress()">Addresses
-                    </button>
-                    <!-- <div formGroupName="formArrayAdd"> -->
-                        <section class="container border mb-4 p-3" formArrayName="formArrayAdd"
-                            *ngFor="let add of AddressControls.controls; let i = index;">
-                            <div [formGroupName]="i">
-                                <div class="row">
-                                    <div class="col"><b>Address {{i + 1}}</b> </div>
-                                    <div class="col">
-                                        <button type="button" class="btn btn-danger btn-sm fa fa-trash pull-right" 
-                                            (click)="removeProfession(i)">
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2 form-group">
-                                        <label class="col-4 control-label" for="addressType">Type</label>
-                                        <div class="col-8">
-                                            <input id="addressType" formControlName="addressType" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-4 form-group">
-                                        <label for="address1" class="col-4 control-label">Address</label>
-                                        <div class="col-8">
-                                            <input id="address1" formControlName="address1" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-3 form-group">
-                                        <label for="address2" class="col-8 control-label">Steet Address</label>
-                                        <div class="col-8">
-                                            <input id="address2" formConrolName="address2" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>    
-                                <div class="row">
-                                    <div class="col-3 form-group">
-                                        <label for="city" class="col-4 control-label">City</label>
-                                        <div class="col-8">
-                                            <input id="city" formControlName="city" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-3 form-group">
-                                        <label for="pin" class="col-4 control-label">PIN</label>
-                                        <div class="col-8">
-                                            <input id="pin" formControlName="pin" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-3 form-group">
-                                        <label for="State" class="col-4 control-label">State</label>
-                                        <div class="col-8">
-                                            <input id="state" formControlName="state" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-3 form-group">
-                                        <label for="country" class="col-4 control-label">Country</label>
-                                        <div class="col-8">
-                                            <input id="country" formControlName="country" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    <!-- </div> -->
-                <!-- </div> -->
-                </div>
-            </div>
-            <ul *ngFor="let error of errors">
-                <li>{{error}}</li>
-            </ul>
-            <div class="panel-footer">
-                <button [disabled]="form.invalid" class="btn btn-primary" type="submit" >Save</button>
-            </div>
-        </div>
     </form>
-</div> 
+    <div style="font-size: xx-small">
+        {{this.createForm.value | json}}
+        {{this.createForm.valid}}
+    </div>
+</div>
+  

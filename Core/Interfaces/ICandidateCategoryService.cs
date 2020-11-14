@@ -7,7 +7,7 @@ namespace Core.Interfaces
 {
     public interface ICandidateCategoryService
     {
-        Task<CandidateCategory> AddCandidateCategory(int CandidateId, int CategoryId);
+        Task<CandidateCategory> AddCandidateCategory(int CandidateId, int CategoryId, string categoryName);
         Task<IReadOnlyList<CandidateCategory>> AddCandidateCategories(IReadOnlyList<CandidateCategory> candidateCategoryList);
         Task<CandidateCategory> UpdateCandidateCategory(CandidateCategory candidateCategory);
         Task<int> UpdateCandidateCategories( List<CandidateCategory> candcategories);
@@ -16,6 +16,8 @@ namespace Core.Interfaces
         Task<List<CandidateCategory>> GetCandidateCategoryType(int candidateId);
 
         Task<IReadOnlyList<Candidate>> GetCandidatesWithMatchingCategories(IReadOnlyList<int> CategoryIds);
+
+        Task<List<Category>> GetCandididateCatsWithProf();
         
     }
 }

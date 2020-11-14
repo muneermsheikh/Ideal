@@ -22,24 +22,33 @@ namespace Core.Entities.HR
         [Required]
         public string KnownAs { get; set; }
         public string Gender { get; set; }
-        public string PPNo { get; set; }
-        public bool ECNR {get; set;}=false;
+        public DateTime DateOfBirth { get; set; }
+        public int ReferredById {get; set;}
+        public int? SourceId {get; set;}
+
+        public string PassportNo { get; set; }
+        [Required]
+        public string Ecnr {get; set;}="ECR";
         public string AadharNo { get; set; }
-        public DateTime DOB { get; set; }
-        
-        public int? ReferredById {get; set;}
-        public string email {get; set; }
+        public string MobileNo {get; set; }
+        public string Email {get; set; }
         public string ContactPreference {get; set;}
-        public virtual CandidateAddress CandidateAddress { get; set; }
-        public virtual List<EnquiryItem> ReferredToEnquiryItems { get; set; }
-        public enumCandidateStatus CandidateStatus { get; set; } = enumCandidateStatus.Available;
+        public string Address1 {get; set;}
+        public string Address2 {get; set;}
+        [Required]
+        public string City {get; set;}
+        public string Pin {get; set;}
+        public string District {get; set;}
+        public string Country {get; set;} 
+        public int CandidateStatus {get; set; }
+        public DateTime? LastStatusUpdatedOn { get; set; } = DateTime.Now.Date;
+
         public virtual Employee LastStatusUpdatedBy { get; set; }
-        
-        public DateTime LastStatusUpdatedOn { get; set; } = DateTime.Now.Date;
-        public DateTime AddedOn {get; set;} = DateTime.Now.Date;
-        public virtual List<Attachment> Attachments {get; set; }
 
         public virtual List<CandidateCategory> CandidateCategories {get; set; }
+        public virtual List<Attachment> Attachments {get; set; }
+        public virtual List<EnquiryItem> ReferredToEnquiryItems { get; set; }
+
         public string FullName {get {return FirstName + " " + FamilyName;} }
     }
 }

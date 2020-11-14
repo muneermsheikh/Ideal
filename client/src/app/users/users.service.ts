@@ -7,6 +7,7 @@ import { CandidateParams } from '../shared/models/CandidateParams';
 import { ISource } from '../shared/models/candidateSource';
 import { IClient } from '../shared/models/client';
 import { ICandidate } from '../shared/models/ICand';
+import { ICategoryWithProf } from '../shared/models/ICategoryWithProf';
 import { IPaginationCandidate, PaginationCandidate } from '../shared/models/paginationCand';
 import { IProfession } from '../shared/models/profession';
 
@@ -25,8 +26,6 @@ export class UsersService {
   constructor(private http: HttpClient) { }
 
   addCandidate(values: any): any {
-    console.log(values);
-    console.log(JSON.stringify(values));
     return this.http.post(this.baseUrl + 'HR/registercandidate', values).pipe(
       map((cand: ICandidate) => {
         if (cand) {
@@ -55,10 +54,11 @@ export class UsersService {
 */
 
   updateCandidate(values: ICandidate): any {
-    return this.http.put(this.baseUrl + 'HR/candidate', JSON.stringify(values)).pipe(
-      map((prof: IProfession) => {
-        if (prof) {
-          console.log('profession ' + prof.name + ' updated'); }
+    console.log(values);
+    return this.http.put(this.baseUrl + 'HR/candidate', values).pipe(
+      map((cand: ICandidate) => {
+        if (cand) {
+          console.log('candidate ' + cand.fullName + ' updated'); }
         }, error => {
           console.log(error);
         }
@@ -79,6 +79,10 @@ export class UsersService {
 
   getProfessions(): any {
     return this.http.get<IProfession[]>(this.baseUrl + 'Category/categories');
+  }
+
+  getCandCatsWithProf(): any {
+    return this.http.get<ICategoryWithProf[]>(this.baseUrl + 'HR/CandCatWithProf');
   }
 
   getCandidateSources(): any {

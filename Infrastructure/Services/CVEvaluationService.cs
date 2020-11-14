@@ -62,7 +62,7 @@ namespace Infrastructure.Services
         public async Task<CVEvaluation> CVSubmitToSup(int CandidateId, int EnquiryItemId, int UserId)
         {
             var cand = await _context.Candidates.Where(x => x.Id == CandidateId)
-                .Select(x => new {x.ApplicationNo, x.FullName, x.PPNo, x.AadharNo}).FirstOrDefaultAsync();
+                .Select(x => new {x.ApplicationNo, x.FullName, x.PassportNo, x.AadharNo}).FirstOrDefaultAsync();
             if (cand == null) throw new Exception("failed to retrieve candidate with given Id");
 
             var validated = await ValidateCVSubmissionToSup(EnquiryItemId, CandidateId, UserId);
@@ -85,7 +85,7 @@ namespace Infrastructure.Services
 
             //create task in the name of Sup to evaluate the CV
             var taskForSup = new ToDo (UserId, validated.supId, DateTime.Now, DateTime.Now.AddHours(4), 
-                "Application " + cand.ApplicationNo + "-" + cand.FullName + cand.PPNo + 
+                "Application " + cand.ApplicationNo + "-" + cand.FullName + cand.PassportNo + 
                 " is submitted by " + empOwner.KnownAs + " for your review for the position of " +
                 enq.EnquiryNo + "-" + enqItem.SrNo + categoryName, enumTaskType.HRDeptHeadAssignment,
                 enqItem.EnquiryId, EnquiryItemId);
@@ -291,8 +291,8 @@ namespace Infrastructure.Services
             // TO do *** if application setting REQUIRES HR ASSIGNMENT=false, return true
 
             // check if the enquiryitemId category is contained in candidate.categories.
-             var catExist = await _context.CandidateCategories.Where(x => x.CandId==CandidateId)
-                .Select(x => new { catid =   _context.EnquiryItems
+             var catExist = await _context.CandidateCategories.Where(x => x.CandidateId==CandidateId)
+                .Select(x => new { catid =  _context.EnquiryItems
                 .Where(x => x.Id == EnquiryItemId)
                 .Select(x => x.CategoryItemId).Take(1).SingleOrDefault(),
                  }).ToListAsync();
@@ -423,7 +423,7 @@ namespace Infrastructure.Services
             var enquiry = await _context.Enquiries.Where(x => x.Id == enquiryId)
                 .Select(x => new {x.EnquiryNo, x.EnquiryDate, x.Customer.CustomerName}).FirstOrDefaultAsync();
             var candidate = await _context.Candidates.Where(x => x.Id == candidateId)
-                .Select(x => new{x.FullName, x.Gender, x.ApplicationNo, x.PPNo, x.AadharNo}).FirstOrDefaultAsync();
+                .Select(x => new{x.FullName, x.Gender, x.ApplicationNo, x.PassportNo, x.AadharNo}).FirstOrDefaultAsync();
             // create task for Doc Controller - Admin
             var taskForDocControllerAdmin = new ToDo(ownerId, assignedToId, DateTime.Now,
                 DateTime.Now.AddDays(1), owner.KnownAs + " has forwarded Application " +

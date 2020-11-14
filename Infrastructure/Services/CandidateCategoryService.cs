@@ -21,10 +21,15 @@ namespace Infrastructure.Services
             _candCatRepo = candCatRepo;
         }
 
-        public async Task<CandidateCategory> AddCandidateCategory(int candidateId, int categoryId)
+        public async Task<CandidateCategory> AddCandidateCategory(int candidateId, int categoryId, string categoryName)
         {
+            if (string.IsNullOrEmpty(categoryName))
+            {
+                categoryName = await _context.Categories.Where(x => x.Id == categoryId)
+                    .Select(x => x.Name).SingleOrDefaultAsync();
+            }
             return await _candCatRepo.AddAsync(
-                new CandidateCategory(candidateId, categoryId));
+                new CandidateCategory(candidateId, categoryId, categoryName));
         }
 
 
@@ -43,8 +48,8 @@ namespace Infrastructure.Services
             IReadOnlyList<int> CategoryIntIds)
         {
             var candidateIds = await _context.CandidateCategories
-                .Where(p => CategoryIntIds.Contains(p.CatId))
-                .Select(x => x.CandId).ToListAsync();
+                .Where(p => CategoryIntIds.Contains(p.CategoryId))
+                .Select(x => x.CandidateId).ToListAsync();
         
             if (candidateIds == null) return null;
 
@@ -63,7 +68,7 @@ namespace Infrastructure.Services
         public async Task<List<Category>> GetCandidateCategories(int candidateId)
         {
             var cats = await _context.CandidateCategories
-                .Where(x => x.CandId == candidateId).Select(x => x.CatId).ToListAsync();
+                .Where(x => x.CandidateId == candidateId).Select(x => x.CategoryId).ToListAsync();
             if (cats==null || cats.Count == 0) return null;
 
             var candCats = await _context.Categories .Where(x => cats.Contains(x.Id))
@@ -75,8 +80,13 @@ namespace Infrastructure.Services
         public async Task<List<CandidateCategory>> GetCandidateCategoryType(int candidateId)
         {
             var cats = await _context.CandidateCategories
-                .Where(x => x.CandId == candidateId).ToListAsync();
+                .Where(x => x.CandidateId == candidateId).ToListAsync();
             return cats;
+        }
+
+        public async Task<List<Category>> GetCandididateCatsWithProf()
+        {
+            return await _context.Categories.OrderBy(x => x.Name).ToListAsync();
         }
     }
 }

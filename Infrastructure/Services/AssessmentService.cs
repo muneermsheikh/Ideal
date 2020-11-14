@@ -227,8 +227,8 @@ namespace Infrastructure.Services
             //- check if candidatecategories.catId==enquriyitem.categoryid
             var qry = await (from e in _context.CandidateCategories 
                         join i in _context.EnquiryItems
-                        on e.CatId equals i.CategoryItemId 
-                        where i.Id == assessment.EnquiryItemId && e.CandId==assessment.CandidateId
+                        on e.CategoryId equals i.CategoryItemId 
+                        where i.Id == assessment.EnquiryItemId && e.CandidateId==assessment.CandidateId
                         select e.Id ).FirstOrDefaultAsync();
             
             if (qry==0) throw new Exception("Candidate category skills are not shared with the " +

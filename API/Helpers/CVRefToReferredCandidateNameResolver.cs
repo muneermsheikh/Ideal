@@ -19,8 +19,8 @@ namespace API.Helpers
         public string Resolve(CVRef source, HistoryDto destination, string destMember, ResolutionContext context)
         {
             var txt = _context.Candidates.Where(x => x.Id == source.CandidateId)
-                .Select(x => new {x.FullName, x.ApplicationNo, x.PPNo}).FirstOrDefault();
-            return txt.ApplicationNo + "-" + txt.FullName + " - PP No.:" + txt.PPNo;
+                .Select(x => new {x.FullName, x.ApplicationNo, x.PassportNo}).FirstOrDefault();
+            return txt.ApplicationNo + "-" + txt.FullName + " - PP No.:" + txt.PassportNo;
         }
     }
 }

@@ -22,8 +22,6 @@ export class EmployeesService {
   constructor(private http: HttpClient) { }
 
   addEmployee(values: IEmployee): any {
-    console.log('add');
-    console.log (values);
     return this.http.post(this.baseUrl + 'employees', values).pipe(
       map((emp: IEmployee) => {
         if (emp) {
@@ -52,9 +50,7 @@ export class EmployeesService {
 */
 
   updateEmployee(values: IEmployee): any {
-    console.log('update');
-    console.log(values);
-    return this.http.put(this.baseUrl + 'employees', JSON.stringify(values)).pipe(
+    return this.http.put(this.baseUrl + 'employees/employee', values).pipe(
       map((emp: IEmployee) => {
         if (emp) {
           console.log('emp updated'); }
@@ -68,8 +64,8 @@ export class EmployeesService {
 
   getEmployeeById(id: number): any {
     const emp = this.employees.find(p => p.id === id);
+
     if (emp) {
-      console.log(emp);
       return of(emp);
     }
     return this.http.get<IEmployee>(this.baseUrl + 'employees/' + id);

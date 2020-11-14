@@ -24,6 +24,8 @@ namespace Core.Interfaces
 
     //sources
         Task<IReadOnlyList<Source>> GetSources();
+
+        Task<List<Category>> GetCandCatsWithProf();
         
     }
 }

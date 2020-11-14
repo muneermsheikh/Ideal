@@ -8,14 +8,16 @@ namespace Core.Entities.HR
         {
         }
 
-        public CandidateCategory(int candidateId, int categoryId)
+        public CandidateCategory(int candidateId, int categoryId, string catName)
         {
-            CandId = candidateId;
-            CatId = categoryId;
+            CandidateId = candidateId;
+            CategoryId = categoryId;
+            Name = catName;
         }
 
-        public int CandId  {get; set; }
-        public int CatId {get; set; }
+        public int CandidateId  {get; set; }
+        public int CategoryId {get; set; }
+        public string Name {get; set;}
         //public Candidate Candidate {get; set; }
         //public Category Category {get; set; }
     }

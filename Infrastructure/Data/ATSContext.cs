@@ -24,6 +24,7 @@ namespace Infrastructure.Data
         public DbSet<AssessmentQBank> AssessmentQsBank {get; set;}
         public DbSet<Category> Categories {get; set; }
         public DbSet<Candidate> Candidates {get; set; }
+        // public DbSet<CandidateAddress> CandidateAddresses {get; set; }
         public DbSet<CandidateCategory> CandidateCategories {get; set; }
         public DbSet<ContractReviewItem> ContractReviewItems {get; set; }
         public DbSet<CustomerAddress> CustomerAddresses {get; set; }
@@ -37,6 +38,7 @@ namespace Infrastructure.Data
         public DbSet<DeliveryMethod> DeliveryMethods {get; set; }
         public DbSet<DLForwardToHR> DLForwardToHR {get; set; }
         public DbSet<Employee> Employees {get; set; }
+        public DbSet<EmployeeAddress> EmployeeAddresses {get; set;}
         public DbSet<Emolument> Emoluments{get; set;}
         public DbSet<EnquiryForwarded> EnquiryForwards {get; set; }
         public DbSet<Enquiry> Enquiries {get; set; }

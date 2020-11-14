@@ -16,12 +16,16 @@ namespace Infrastructure.Services
         private readonly IGenericRepository<Candidate> _candidateRepo;
         private readonly ATSContext _context;
         private readonly ICandidateCategoryService _candidateCategoryService;
+        private readonly IGenericRepository<CandidateCategory> _candCatRepo;
         public CandidateService(IGenericRepository<Candidate> candidateRepo, 
-            ICandidateCategoryService candidateCategoryService, ATSContext context)
+                                IGenericRepository<CandidateCategory> candCatRepo,   
+                                ICandidateCategoryService candidateCategoryService, 
+                                ATSContext context)
         {
             _candidateCategoryService = candidateCategoryService;
             _context = context;
             _candidateRepo = candidateRepo;
+            _candCatRepo = candCatRepo;
         }
 
         public Task<bool> DeleteCandidate(Candidate candidate)
@@ -90,7 +94,10 @@ namespace Infrastructure.Services
             {
                 foreach (var cand in candidatecategories)
                 {   
-                    candidatecatsNew.Add(new CandidateCategory(candidateAdded.Id, cand.CatId));
+                    // ** use cache here, instead of accessing DB
+                    string catName = await _context.Categories
+                        .Where(x => x.Id == cand.CategoryId).Select(x => x.Name).SingleOrDefaultAsync();
+                    candidatecatsNew.Add(new CandidateCategory(candidateAdded.Id, cand.CategoryId, catName));
                 }
                 var candidatecatsAdded = await _candidateCategoryService.AddCandidateCategories(candidatecatsNew);
             }
@@ -103,14 +110,43 @@ namespace Infrastructure.Services
             return await _candidateRepo.AddListAsync(candidates);
         }
 
-        public Task<Candidate> UpdateCandidate(Candidate candidateToUpdateDto)
+        public async Task<Candidate> UpdateCandidate(Candidate cv)
         {
-            throw new System.NotImplementedException();
+          
+            var CandCats = await _context.CandidateCategories.Where(x => x.CandidateId == cv.Id).ToListAsync();
+            if (CandCats != null) {
+                await _candCatRepo.DeleteListAsync(CandCats);
+            }
+
+            await _candidateRepo.UpdateAsync(cv);
+
+            // finally, update all entities
+            await _context.SaveChangesAsync();
+
+            return await _context.Candidates.Where(x => x.Id == cv.Id)
+                .Include(x => x.CandidateCategories).SingleOrDefaultAsync();
+            /*
+            var cats = cv.CandidateCategories;
+            if (cats == null || cats.Count ==0) {
+                return null;
+            }
+            foreach(var c in cats)
+            {
+                if (c.CandId == 0) {
+                    c.CandId = cv.Id;
+                if (string.IsNullOrEmpty(c.Name)) {
+                    c.Name = await _context.Categories.Where(x => x.Id == c.CatId).Select(x => x.Name).SingleOrDefaultAsync();
+                }
+                }
+            }
+
+            return await _candidateRepo.UpdateAsync(cv);
+        */
         }
 
         public async Task<bool> ValidateCandidateToAdd(Candidate candidate)
         {
-            if (string.IsNullOrEmpty(candidate.PPNo) && string.IsNullOrEmpty(candidate.AadharNo))
+            if (string.IsNullOrEmpty(candidate.PassportNo) && string.IsNullOrEmpty(candidate.AadharNo))
                 throw new Exception("Either PP number or Aadhar Card No must be provided"); 
 
             /*
@@ -127,7 +163,7 @@ namespace Infrastructure.Services
         public async Task<Candidate> PPNumberExists(string ppnumber)
         {
             var app = await _context.Candidates
-                .Where(x => x.PPNo == ppnumber)
+                .Where(x => x.PassportNo == ppnumber)
                 .FirstOrDefaultAsync();
             
             return app;
@@ -145,12 +181,12 @@ namespace Infrastructure.Services
         public async Task<Candidate> CandidateAppNoOrPPNoOrAadharNoOrEmailExist(int appno, string ppno, string aadharno, string email)
         {
             var cv = await _context.Candidates.AsNoTracking()
-                .Include(x => x.CandidateAddress)
+                .Include(x => x.CandidateCategories)
                 .Where
                 (x => x.ApplicationNo == appno && appno != 0 ||
-                (!string.IsNullOrEmpty(ppno) && x.PPNo == ppno) ||
+                (!string.IsNullOrEmpty(ppno) && x.PassportNo == ppno) ||
                 (!string.IsNullOrEmpty(aadharno) && x.AadharNo == aadharno) ||
-                (!string.IsNullOrEmpty(email) && x.email == email))
+                (!string.IsNullOrEmpty(email) && x.Email == email))
                 .FirstOrDefaultAsync();
             return cv;
         }
@@ -161,9 +197,9 @@ namespace Infrastructure.Services
             var appNo = await _context.Candidates.AsNoTracking().Where
                 (x => x.ApplicationNo == candidate.ApplicationNo &&
                     candidate.ApplicationNo != 0 ||
-                (!string.IsNullOrEmpty(candidate.PPNo) && x.PPNo == candidate.PPNo) ||
+                (!string.IsNullOrEmpty(candidate.PassportNo) && x.PassportNo == candidate.PassportNo) ||
                 (!string.IsNullOrEmpty(candidate.AadharNo) && x.AadharNo == candidate.AadharNo) ||
-                (!string.IsNullOrEmpty(candidate.email) && x.email == candidate.email))
+                (!string.IsNullOrEmpty(candidate.Email) && x.Email == candidate.Email))
                 .Select(x=>x.ApplicationNo).FirstOrDefaultAsync();
             return appNo;
         }
@@ -194,6 +230,12 @@ namespace Infrastructure.Services
         public async Task<IReadOnlyList<Source>> GetSources()
         {
             return await _context.Sources.OrderBy(x => x.Name).ToListAsync();
+        }
+
+    // candCat with Prof
+        public async Task<List<Category>> GetCandCatsWithProf()
+        {
+            return await _candidateCategoryService.GetCandididateCatsWithProf();
         }
     }
 }

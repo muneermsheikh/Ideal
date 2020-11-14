@@ -8,8 +8,7 @@ namespace API.Helpers
     {
         public string Resolve(Candidate source, CandidateDto destination, string destMember, ResolutionContext context)
         {
-            if (source.CandidateAddress == null) return null;
-            return source.CandidateAddress.City;
+            return source.City;
         }
     }
 }

@@ -2,39 +2,48 @@ export interface ICandidate {
   id: number;
   applicationNo: number;
   applicationDated: string;
-  addedOn: string;
+  // addedOn: string;
   gender: string;
   firstName: string;
   secondName: string;
   familyName: string;
   knownAs: string;
   fullName: string;
-  categoryName: string;
-  professionId: number;
-  ppNo: string;
+  passportNo: string;
   referredById: number;
   sourceId: number;
-  eCNR: boolean;
-  dOB: string;
+  ecnr: string;
+  dateOfBirth: string;
   aadharNo: string;
   mobileNo: string;
   email: string;
   contactPreference: string;
-  candidateAddresses: CandidateAddress[];
-  candidateProfessions: Profession[];
+  address1: string;
+  address2: string;
+  city: string;
+  pin: string;
+  state: string;
+  country: string;
+  candidateCategories: ICandidateCategory[];  // IProfession[];
 }
 
-export class Profession {
+export interface IProfession {
   id: number;
+  name: string;
+  industryTypeId: number;
+  skillLevelId: number;
+  industryType: string;
+  skillLevel: string;
+}
+
+export interface ICandidateCategory {
+  candidateId: number;
+  categoryId: number;
   name: string;
 }
 
-export class CandidateCategory {
-  candId: number;
-  catId: number;
-}
-
-export interface CandidateAddress {
+export interface ICandidateAddress {
+    id: number;
     candidateId: number;
     addressType: string;
     address1: string;

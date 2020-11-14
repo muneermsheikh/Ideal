@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CandidateParams } from 'src/app/shared/models/CandidateParams';
 import { ICandidate } from 'src/app/shared/models/ICand';
+import { ICategoryWithProf } from 'src/app/shared/models/ICategoryWithProf';
 import { IProfession } from 'src/app/shared/models/profession';
 import { UsersService } from '../users.service';
 
@@ -16,6 +17,7 @@ export class CandidateComponent implements OnInit {
   @ViewChild('search', {static: false}) searchTerm: ElementRef;
   candidates: ICandidate[];
   professions: IProfession[];
+  candProfessions: ICategoryWithProf[];
   form: FormGroup;
   errors: string[];
 
@@ -36,6 +38,7 @@ export class CandidateComponent implements OnInit {
     // this.createForm();
     this.getProfessions();
     this.getCandidates();
+    console.log(this.candidates);
   }
 
   editButtonClick(candidateId: number): void {
@@ -47,6 +50,14 @@ export class CandidateComponent implements OnInit {
       { this.professions = response; }
       , error => {
         console.log(error); });
+  }
+
+  getCandidateProfessions(): any {
+    this.cvService.getCandCatsWithProf().subscribe(response => {
+      this.candProfessions = response;
+    }, error => {
+      console.log(error);
+    });
   }
 
 
@@ -64,16 +75,17 @@ export class CandidateComponent implements OnInit {
 
   createForm(): void {
     this.form = this.fb.group({
-      applicationNo: [null, [Validators.required]],
-      applicationDated: [null, [Validators.required]],
-      gender: ['M', [Validators.required]],
-      addedOn: [Date.now, [Validators.required]],
-      name: [null, [Validators.required]],
-      categoryName: [null, [Validators.required]],
-      ppNo: [null, [Validators.required]],
+      applicationNo: [null],
+      applicationDated: [null],
+      gender: [''],
+      fullName: [''],
+      // addedOn: [''],
+      name: [null],
+      categoryName: [null],
+      passportNo: [null],
       aadharNo: [null],
-      mobileNo: [null, [Validators.required]],
-      emailId: [null]
+      mobileNo: [null],
+      email: [null]
     });
   }
 

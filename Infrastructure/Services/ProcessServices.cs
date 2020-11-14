@@ -259,10 +259,10 @@ namespace Infrastructure.Services
             if (currentStatus == enumProcessingStatus.VisaReceivedEndorsed)
             {
                 //check if candidate is ECNR
-                var candid = _context.CVRefs.Where(x => x.Id == cvrefid).Select(x => x.CandidateId).SingleOrDefault();
+                var cid = _context.CVRefs.Where(x => x.Id == cvrefid).Select(x => x.CandidateId).SingleOrDefault();
 
-                var ecnr = _context.Candidates.Where(x => x.Id == candid).Select(x => x.ECNR).SingleOrDefault();
-                nextstatus = ecnr ? enumProcessingStatus.TravelBooked : enumProcessingStatus.EmigrationDocumentsSubmitted;
+                var ecnr = _context.Candidates.Where(x => x.Id == cid).Select(x => x.Ecnr).SingleOrDefault();
+                nextstatus = ecnr.ToUpper() == "ECNR" ? enumProcessingStatus.TravelBooked : enumProcessingStatus.EmigrationDocumentsSubmitted;
             }
             else
             {
