@@ -13,7 +13,7 @@ namespace Core.Entities.EnquiryAggregate
         {
         }
 
-        public Enquiry(int customerId, int enquiryNo, int projectManagerId, string enqRef, string basketId, 
+        public Enquiry(int customerId, string enquiryNo, int projectManagerId, string enqRef, string basketId, 
             int hrexecutiveId, int logisticsExecutiveId, List<EnquiryItem> enqItems)
         {
             EnquiryNo = enquiryNo;
@@ -33,14 +33,14 @@ namespace Core.Entities.EnquiryAggregate
         }
     */
         public int CustomerId {get; set; }
-        public int EnquiryNo { get; set; }
+        public string EnquiryNo { get; set; }
         public string BasketId {get; set;}
         public DateTime EnquiryDate { get; set; } = DateTime.Now;
         //public virtual SiteAddress ShipToAddress { get; set; }
         
-        public bool ReadyToReview {get; set; } = false;         // this is set to true when all enquiryitems are reviewed
-        public enumEnquiryStatus EnquiryStatus { get; set; }=enumEnquiryStatus.NotInitiated;
-        public virtual Employee ProjectManager { get; set; }
+        public string ReadyToReview {get; set; } = "f";         // this is set to true when all enquiryitems are reviewed
+        public string EnquiryStatus { get; set; }="NotActive";
+        
         public int ProjectManagerId {get; set; }
         public int? AccountExecutiveId {get; set; }
         public int? HRExecutiveId {get; set; }
@@ -49,16 +49,17 @@ namespace Core.Entities.EnquiryAggregate
         public DateTime? CompleteBy { get; set; }
 
         public int? ReviewedById {get; set; }
-        public enumEnquiryReviewStatus? EnquiryReviewStatusId {get; set;}
+        public string ReviewStatus {get; set;}
         public DateTime? ReviewedOn { get; set; }
         public string Remarks { get; set; }
 
         public List<EnquiryItem> EnquiryItems { get; set; }
+        public virtual Employee ProjectManager { get; set; }
         public virtual Employee ReviewedBy { get; set; }
-        public virtual CustomerOfficial HRExecutive { get; set; }
 
-        public virtual CustomerOfficial LogisticsExecutive { get; set; }
         public Customer Customer {get; set; }
+        public virtual CustomerOfficial HRExecutive { get; set; }
+        public virtual CustomerOfficial LogisticsExecutive { get; set; }
         public virtual CustomerOfficial AccountExecutive { get; set; }
 
         

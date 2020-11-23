@@ -50,16 +50,16 @@ namespace API.Controllers
                 var jobDescInBrief = "";
                 var sAttach = "";
                 var salaryCurrency = "";
-                bool salaryNegotiable=false;
+                string salaryNegotiable="f";
                 int salaryRangeFrom = random.Next(800, 2000);
                 int salaryRangeUpto = random.Next(1000, 2500);
                 int intAddDays = random.Next(2, 10);
 
-                enumProvision provFood;
+                string provFood;
                 int foodAllowance=0;
-                enumProvision provHousing;
+                string provHousing;
                 int housingAllowance=0;
-                enumProvision provTransport;
+                string provTransport;
                 int transportAllowance=0;
                 int otherAllowance=0;
                 int leavePerYear=15;
@@ -68,18 +68,18 @@ namespace API.Controllers
                 switch (random.Next(0, 2))
                 {
                     case 0:
-                        provFood = enumProvision.NotProvided;
-                        provHousing = enumProvision.ProvidedFree;
-                        provTransport = enumProvision.NotProvided;
+                        provFood = "NotProvided";
+                        provHousing = "ProvidedFree";
+                        provTransport = "NotProvided";
                         break;
                     default:
-                        provFood = enumProvision.NotProvided;
-                        provHousing = enumProvision.ProvidedFree;
-                        provTransport = enumProvision.NotProvided;
+                        provFood = "NotProvided";
+                        provHousing = "ProvidedFree";
+                        provTransport = "NotProvided";
                         break;
                 }
 
-                var item = new BasketItem( catId, categoryName, false, qnty, expDesiredInYrsMin,
+                var item = new BasketItem( catId, categoryName, "f", qnty, expDesiredInYrsMin,
                     expDesiredInYrsMax, jobDescInBrief, sAttach, salaryCurrency, salaryNegotiable, 
                     salaryRangeFrom, salaryRangeUpto, 24, leaveAfterMonths, leavePerYear, provFood, 
                     foodAllowance, provHousing, housingAllowance, provTransport, 

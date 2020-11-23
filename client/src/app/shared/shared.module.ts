@@ -23,7 +23,6 @@ import { ProfessionComponent } from '../profession/profession.component';
     ReactiveFormsModule,
     FormsModule,
     RouterModule
-
   ],
   exports: [
     PaginationModule,
@@ -36,7 +35,6 @@ import { ProfessionComponent } from '../profession/profession.component';
     BsDropdownModule,
     TextInputComponent,
     BasketSummaryComponent
-
   ]
 })
 export class SharedModule { }

@@ -35,10 +35,8 @@ export class CandidateComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
-    // this.createForm();
     this.getProfessions();
     this.getCandidates();
-    console.log(this.candidates);
   }
 
   editButtonClick(candidateId: number): void {
@@ -62,7 +60,6 @@ export class CandidateComponent implements OnInit {
 
 
   getCandidates(useCache = false): void {
-      console.log('candParams = ' + this.candParams.pageNumber + ' ' + this.candParams.pageSize);
       this.cvService.getCandidates(useCache).subscribe(response => {
       this.candidates = response.data;
       this.totalCount = response.count;
@@ -72,7 +69,7 @@ export class CandidateComponent implements OnInit {
       console.log(error);
     });
   }
-
+/*
   createForm(): void {
     this.form = this.fb.group({
       applicationNo: [null],
@@ -88,7 +85,7 @@ export class CandidateComponent implements OnInit {
       email: [null]
     });
   }
-
+*/
   onPageChanged(event: any): void {
     const params = this.cvService.getCandParams();
     if (params.pageNumber !== event) {

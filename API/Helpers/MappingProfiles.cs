@@ -49,25 +49,32 @@ namespace API.Helpers
             CreateMap<BasketItem, EnquiryItem>();
             CreateMap<CustomerBasketDto, CustomerBasket>();
             CreateMap<BasketItemDto, BasketItem>();
-            CreateMap<CustomerAddress, CustomerAddressDto>();
+
+            CreateMap<Enquiry, EnquiryWithAllStatusDto>()
+                .ForMember(x => x.CustomerName, o => o.MapFrom<EnquiryCustomerNameResolver>())
+                .ForMember(d => d.ProjectManager, o => o.MapFrom<EnquiryProjectManagerResolver>())
+                .ForMember(d => d.NoOfCategories, o => o.MapFrom<EnquiryQuantitySumResolver>())
+                .ForMember(d => d.SumOfQuantities, o => o.MapFrom<EnquiryTotalItemsResolver>());
+
+           // CreateMap<CustomerAddress, CustomerAddressDto>();
 
 //enquiry
-            CreateMap<Enquiry, EnquiryToReturnDto>()
-                .ForMember(x => x.EnquiryStatus, o => o.MapFrom(
+           // CreateMap<Enquiry, EnquiryToReturnDto>();
+/*                .ForMember(x => x.EnquiryStatus, o => o.MapFrom(
                     s => Enum.GetName(typeof(enumEnquiryStatus), s.EnquiryStatus)));
-                 
+*/     /*      
             CreateMap<EnquiryItem, EnquiryItemToReturnDto>()
                 .ForMember(d => d.AssessingSup, o => o.MapFrom<EnquiryItemSupNameResolver>())
                 .ForMember(d => d.AssessingHRM, o => o.MapFrom<EnquiryItemHRMNameResolver>())
                 .ForMember(d => d.Category, o => o.MapFrom<EnquiryItemCategoryResolver>());
             CreateMap<EnquiryItemToReturnDto, EnquiryItem>();
             CreateMap<EnquiryItem, EnquiryItemToEditDto>().ReverseMap();
-            
+       */     
             CreateMap<ContractReviewItem, ReviewItemDto>()
                 .ForMember(d => d.CustomerName, o => o.MapFrom<ReviewItemCustomerNameResolver>())
                 .ForMember(d => d.CategoryName, o => o.MapFrom<ReviewItemCategoryNameResolver>())
                 .ForMember(d => d.EnquiryNoAndDate, o => o.MapFrom<ReviewItemEnquiryNoDateResolver>())
-                .ForMember(d => d.StatusString, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.Status)))
+               // .ForMember(d => d.StatusString, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.Status)))
                 .ForMember(d => d.ReviewedByName, o => o.MapFrom<ReviewItemReviewedByResolver>());
 
 
@@ -78,9 +85,9 @@ namespace API.Helpers
                 .ForMember(d => d.FullName, o => o.MapFrom<CVEvalCandidateNameResolver>())
                 .ForMember(d => d.HRExecutive, o => o.MapFrom<CVEvalHRExecNameResolver>())
                 .ForMember(d => d.HRManager, o => o.MapFrom<CVEvalHRManagerNameResolver>())
-                .ForMember(d => d.HRSupervisor, o => o.MapFrom<CVEvalHRSupNameResolver>())
-                .ForMember(d => d.HRMReviewResult, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.HRMReviewResult)))
-                .ForMember(d => d.HRSupReviewResult, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.HRSupReviewResult)));
+                .ForMember(d => d.HRSupervisor, o => o.MapFrom<CVEvalHRSupNameResolver>());
+              //  .ForMember(d => d.HRMReviewResult, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.HRMReviewResult)))
+              //  .ForMember(d => d.HRSupReviewResult, o => o.MapFrom(s => Enum.GetName(typeof(enumItemReviewStatus), s.HRSupReviewResult)));
 
     // for DLForwardedToHRDto
             CreateMap<Customer, CustomerToReturnInBriefDto>();

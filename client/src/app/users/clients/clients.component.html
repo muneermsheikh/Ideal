@@ -1,1 +1,68 @@
-<p>clients works!</p>
+<div *ngIf="!clients">
+    no clients on record
+</div>
+
+<div class="d-flex align-items-center justify-content-center" style="margin-left: 10px;">
+    <app-paging-header
+        [totalCount]="totalCount"
+        [pageSize]="this.clientParams.pageSize"
+        [pageNumber]="this.clientParams.pageNumber">
+    </app-paging-header>
+    <div class="form-inline" *ngIf="clients" >
+        <input (keyup.enter)="onSearch()" class="form-control" 
+            #search placeholder="Search" type="text" >
+        <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
+        <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
+        <button routerLink="/clientCreate" class="btn btn-outline-success ml-2">New Client</button>
+    </div>
+</div>
+
+<div class="container" style="margin-top: 0px; margin-left: 15px; font-size: smaller; font-weight: normal; 
+    padding: 0px; border: 1px; border-color: silver;">
+    <div class="row">
+        <div>customer type</div>
+        <div>Name</div>
+        <div>Known As</div>
+        <div>city</div>
+        <div>email</div>
+        <div>Industry Types</div>
+        <div>Officials</div>
+        <div>Current Status</div>
+        <div>action</div>
+    </div>
+    <div *ngFor="let clt of clients">
+        <div class="row" style="display: inline-block;">
+            <div class="col">{{clt.customerType}}</div>
+            <div class="col">{{clt.customerName}}</div>
+            <div class="col">{{clt.knownAs}}</div>
+            <div class="col">{{clt.city}}</div>
+            <div class="col">{{clt.email}}</div>
+            <div class="col" *ngFor="let ind of clt.customerIndustryTypes">
+                {{ind.name}}
+            </div>
+            <div class="col" *ngFor="let item of clt.customerOfficials">
+                {{item.name}}
+            </div>
+            <div class="col" [ngClass]="clt.customerStatus === 'active' ? 'inactive' : 'active'">
+                {{clt.customerStatus}}
+            </div>
+            <div style="cursor: pointer" class="col">
+                <button class="btn btn-sm btn-outline-secondary fa fa-pencil" (click)="editButtonClick(clt.id)" ></button>  
+                <button class="btn btn-sm btn-outline-secondary fa fa-trash" routerLink="/clients/{{clt.id}}"></button>  
+            </div>
+        </div>
+    
+    </div>
+</div>
+
+<div class="d-flex justify-content-center my-3" *ngIf="this.totalCount > 0">
+    <app-pager
+        [pageSize]="clientParams.pageSize"
+        [pageNumber]="clientParams.pageNumber"
+        [totalCount]="totalCount"
+        (pageChanged)="onPageChanged($event)"
+        >
+    </app-pager>
+</div>
+
+

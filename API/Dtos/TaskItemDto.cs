@@ -14,6 +14,6 @@ namespace API.Dtos
         public string TransactionDetail { get; set; }
         public bool? CreateEmailMessage { get; set; }
         public DateTime? RemindOn { get; set; }
-        public enumTaskItemStatus? ItemStatus {get; set;}
+        public string ItemStatus {get; set;}
     }
 }

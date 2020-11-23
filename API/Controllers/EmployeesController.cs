@@ -69,9 +69,14 @@ namespace API.Controllers
     */
             return Ok(new Pagination<Employee>
                     (empParam.PageIndex, empParam.PageSize, totalItems, emps));
-      
         }
 
+        [HttpGet("employeesflat")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IReadOnlyList<Employee>>> GetEmployeeListFlat()
+        {
+            return Ok(await _empService.GetEmployeeListFlat());
+        }
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]

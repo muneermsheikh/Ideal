@@ -11,7 +11,7 @@ namespace Core.Interfaces
         Task<ToDo> CreateATaskAsync (int ownerId, int assignedToId, DateTime taskDate, 
             DateTime completeBy, DateTime remindOn, string taskDescription, 
             string senderEmail,string addresseeEmail, int? enquiryId, int? enquiryItemId, 
-            enumTaskType? taskType, bool? sendMail, enumTaskStatus? taskStatus);
+            string taskType, bool? sendMail, string taskStatus);
         
         Task<ToDo> GetTaskByIdAsync(int taskId);
         Task<IReadOnlyList<ToDo>> GetTaskListWithItemsOfAnOwnerAsync(int taskOwnerId);
@@ -22,7 +22,7 @@ namespace Core.Interfaces
 
         Task<TaskItem> AppendTaskItemAsync(int taskId, DateTime transDate, 
             string transationDetail, DateTime? remindOn, int? qntyConcluded, 
-            bool? createEmailMessage, enumTaskItemStatus? itemStatus);
+            bool? createEmailMessage, string itemStatus);
         Task<IReadOnlyList<TaskItem>> GetTaskItemsByTaskIdAsync(int taskId);
         Task<int> UpdateTaskItemAsync(TaskItem taskItem);
         Task<int> DeleteTaskItemAsync(TaskItem taskItem);

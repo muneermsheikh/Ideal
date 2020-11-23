@@ -7,17 +7,17 @@ namespace Core.Specifications
     {
         public int? EnquiryId { get; set; }
         public int? EnquiryItemId { get; set; }
-        public bool? TechnicallyFeasible { get; set; }=false;
-        public bool? CommerciallyFeasible { get; set; }=false;
-        public bool? LogisticallyFeasible { get; set; }=false;
-        public bool? VisaAvailable { get; set; }=false;
-        public bool? DocumentationWillBeAvailable { get; set; }=false;
-        public bool? HistoricalStatusAvailable { get; set; }=false;
-        public bool? SalaryOfferedFeasible { get; set; }=false;
+        public string TechnicallyFeasible { get; set; }="f";
+        public string CommerciallyFeasible { get; set; }="f";
+        public string LogisticallyFeasible { get; set; }="f";
+        public string VisaAvailable { get; set; }="f";
+        public string DocumentationWillBeAvailable { get; set; }="f";
+        public string HistoricalStatusAvailable { get; set; }="f";
+        public string SalaryOfferedFeasible { get; set; }="f";
         public string ServiceChargesInINR { get; set; }
         public string FeeFromClientCurrency { get; set; }
         public int? FeeFromClient { get; set; } 
-        public enumItemReviewStatus? Status { get; set; }
+        public string Status { get; set; }
         public DateTime? ReviewedOn { get; set; } 
         public int? ReviewedBy { get; set; }
 

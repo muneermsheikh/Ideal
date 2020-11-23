@@ -19,11 +19,11 @@ namespace API.Dtos
         public int AssignedToId { get; set; }   
         public DateTime TaskDate { get; set; } = DateTime.Now;
         public DateTime CompleteBy { get; set; }
-        public enumTaskType TaskType { get; set; } = enumTaskType.Administrative;
+        public string TaskType { get; set; } = "Administrative";
         [Required (ErrorMessage="Description cannot be blank"), MaxLength(250)]
         public string TaskDescription { get; set; }
         [Required (ErrorMessage="Task status cannot be blank")]
-        public enumTaskStatus TaskStatus { get; set; }=enumTaskStatus.NotStarted;
+        public string TaskStatus { get; set; }="NotStarted";
         public virtual IReadOnlyList<TaskItem> TaskItems { get; set; }
     }
 }

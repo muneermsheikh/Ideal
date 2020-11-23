@@ -22,8 +22,8 @@ namespace API.Helpers
         {
             var enqid = _context.EnquiryItems.Where(x=>x.Id==source.EnquiryItemId).Select(x=>x.EnquiryId).SingleOrDefault();
             var cust = _context.Enquiries.Where(x=>x.Id==enqid)
-                .Select(x=> new {x.Customer.CustomerName, x.Customer.CityName}).SingleOrDefault();
-            return cust.CustomerName + ", " + cust.CityName;
+                .Select(x=> new {x.Customer.CustomerName, x.Customer.City}).SingleOrDefault();
+            return cust.CustomerName + ", " + cust.City;
         }
     }
 }

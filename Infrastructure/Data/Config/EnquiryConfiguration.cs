@@ -10,12 +10,6 @@ namespace Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Enquiry> builder)
         {
-            //builder.OwnsOne( o => o.ShipToAddress, a => {a.WithOwner();});
-
-            builder.Property(x => x.EnquiryStatus).HasConversion(
-                o => o.ToString(),
-                o => (enumEnquiryStatus) Enum.Parse(typeof(enumEnquiryStatus), o)
-            );
             
             // use seqence object in database
             // builder.Property(x => x.EnquiryNo).ValueGeneratedOnAdd();

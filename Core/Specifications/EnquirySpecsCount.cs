@@ -8,14 +8,13 @@ namespace Core.Specifications
     {
         public EnquirySpecsCount(EnquiryParams eParam) 
              :base ( x => (
-                (string.IsNullOrEmpty(eParam.CustomerName) || 
-                        x.Customer.CustomerName.ToLower().Contains(eParam.CustomerName)) &&
-                    (!eParam.Id.HasValue || x.Id == eParam.Id) &&
-                    (!eParam.EnquiryNo.HasValue || x.EnquiryNo == eParam.EnquiryNo) &&
-                    (!eParam.EnquiryDate.HasValue || DateTime.Compare(
-                        x.EnquiryDate.Date, eParam.EnquiryDate.Value.Date)==0) &&
-                    (!eParam.status.HasValue || x.EnquiryReviewStatusId  == eParam.status))
-            )
+                (!eParam.Id.HasValue || x.Id == eParam.Id) &&
+                (!eParam.EnquiryDate.HasValue || DateTime.Compare(
+                    x.EnquiryDate.Date, eParam.EnquiryDate.Value.Date)==0) &&
+                (!string.IsNullOrEmpty(eParam.EnquiryNo) || x.EnquiryNo == eParam.EnquiryNo) &&
+                (!string.IsNullOrEmpty(eParam.EnquiryStatus) || x.EnquiryStatus == eParam.EnquiryStatus) &&
+                (!string.IsNullOrEmpty(eParam.ReviewStatus) || x.ReviewStatus == eParam.ReviewStatus))
+             )
         {
         }
 

@@ -12,15 +12,17 @@ namespace Core.Specifications
                 (string.IsNullOrEmpty(custParams.Search) || 
                     x.CustomerName.ToLower().Contains(custParams.Search)) &&
                 (string.IsNullOrEmpty(custParams.City) || 
-                    x.CityName.ToLower().Contains(custParams.City)) &&
+                    x.City.ToLower().Contains(custParams.City)) &&
                 (string.IsNullOrEmpty(custParams.Email) || 
                     x.CustomerName.ToLower().Contains(custParams.Email)) &&
-                (!custParams.CustomerType.HasValue || x.CustomerType == custParams.CustomerType) &&
-                (!custParams.CustomerStatus.HasValue || x.CustomerStatus == custParams.CustomerStatus)) &&
-                (!custParams.CustomerId.HasValue || x.Id == custParams.CustomerId))
+                (string.IsNullOrEmpty(custParams.CustomerType) || 
+                    x.CustomerType.ToLower() == custParams.CustomerType) &&
+                (string.IsNullOrEmpty(custParams.CustomerStatus) || 
+                    x.CustomerStatus.ToLower() == custParams.CustomerStatus) &&
+                (!custParams.CustomerId.HasValue || x.Id == custParams.CustomerId)))
         {
             if (custParams.IncludeOfficial) AddInclude(x => x.CustomerOfficials);
-            if (custParams.IncludeAddress) AddInclude(x => x.CustomerAddress);
+            if (custParams.IncludeIndustryTypes) AddInclude(x => x.CustomerIndustryTypes);
 
             ApplyPaging(custParams.PageSize * (custParams.PageIndex-1), custParams.PageSize);
 
@@ -35,10 +37,10 @@ namespace Core.Specifications
                             AddOrderByDescending(x => x.CustomerName);
                             break;
                         case "city":
-                            AddOrderBy(x => x.CityName);
+                            AddOrderBy(x => x.City);
                             break;
                         case "citydesc":
-                            AddOrderByDescending(x => x.CityName);
+                            AddOrderByDescending(x => x.City);
                             break;
                         case "customerstatus":
                             AddOrderBy(x => x.CustomerStatus);

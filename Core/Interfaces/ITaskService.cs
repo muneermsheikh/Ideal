@@ -11,18 +11,18 @@ namespace Core.Interfaces
 // tOdO
         Task<ToDo> CreateTaskAsync (ToDo todo);
         Task<IReadOnlyList<ToDo>> GetTasksAsync(TaskSpecParams taskSpecParams);
-        Task<ToDo> GetTaskAsync(int enquiryItemId, enumTaskType taskType, 
-            enumTaskStatus taskStatus, bool onlyHeaders, int assignedToId);
+        Task<ToDo> GetTaskAsync(int enquiryItemId, string taskType, 
+            string taskStatus, bool onlyHeaders, int assignedToId);
         Task<ToDo> GetTaskEnquiryitemIdAssignedToIdTaskTypeAsync(
-            int enquiryItemId, int assignedToId, enumTaskType taskType);
+            int enquiryItemId, int assignedToId, string taskType);
             
-        Task<IReadOnlyList<ToDo>> GetTaskListAsync(enumTaskType taskType, 
+        Task<IReadOnlyList<ToDo>> GetTaskListAsync(string taskType, 
             bool onlyHeaders, int userId);
-        Task<IReadOnlyList<ToDo>> GetTaskListAsync (int enquiryItemId, enumTaskType taskType, 
-            enumTaskStatus taskStatus, bool onlyHeaders, int ownerId);
+        Task<IReadOnlyList<ToDo>> GetTaskListAsync (int enquiryItemId, string taskType, 
+            string taskStatus, int ownerId, bool onlyHeaders);
         
-        Task<IReadOnlyList<ToDo>> GetOwnerTaskListAsync(int ownerId, enumTaskStatus taskStatus);
-        Task<IReadOnlyList<ToDo>> GetAssignedToTaskListAsync(int assignedToId, enumTaskStatus taskStatus);
+        Task<IReadOnlyList<ToDo>> GetOwnerTaskListAsync(int ownerId, string taskStatus);
+        Task<IReadOnlyList<ToDo>> GetAssignedToTaskListAsync(int assignedToId, string taskStatus);
         
         Task<ToDo> UpdateTaskAsync(ToDo toDo);
         Task<bool> DeleteTaskAsync(ToDo toDo);

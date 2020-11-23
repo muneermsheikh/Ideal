@@ -221,7 +221,7 @@ namespace API.Controllers
                 where i.Id == assessment.EnquiryItemId 
                 select new { enquiryno = e.EnquiryNo, enquirydate=e.EnquiryDate,
                     srno=i.SrNo, cat = c.Name, customername=e.Customer.CustomerName,
-                    city=e.Customer.CityName})
+                    city=e.Customer.City})
                 .FirstOrDefaultAsync();
             var cnd = await _context.Candidates.Where(x=>x.Id==assessment.CandidateId)
                 .Select(x => new {appno = x.ApplicationNo, name=x.FullName}).FirstOrDefaultAsync();

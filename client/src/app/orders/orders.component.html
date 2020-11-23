@@ -1,0 +1,43 @@
+
+<div class="d-flex align-items-center justify-content-center" style="margin-left: 10px;">
+    <app-paging-header
+        [totalCount]="totalCount"
+        [pageSize]="this.enquiryParams.pageSize"
+        [pageNumber]="this.enquiryParams.pageNumber">
+    </app-paging-header>
+    
+    <div class="form-inline" *ngIf="enquiries" >
+        <input (keyup.enter)="onSearch()" class="form-control" 
+            #search placeholder="Search" type="text" >
+        <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
+        <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
+        <button routerLink="/enquiryCreate" class="btn btn-outline-success ml-2">New Enquiry</button>
+    </div>
+</div>
+
+
+<div class="col-12, px-5; line-height: 8px;" *ngFor="let item of enquiries" style="margin-top: 5px; margin-left: 10px; padding: 0px; font-size: small;">
+    <div class="row" >      
+        <div class="col-1" routerLink="/enquiryEdit">{{item.enquiryNo}} </div>  
+        <div class="col-2">{{item.enquiryDate | date}}</div>
+        <div class="col-1">{{item.customerId}}</div>
+        <div class="col-1">{{item.reviewedOn | date}}</div>
+        <div class="col-1">{{item.enquiryStatus}}</div>
+        <div class="col-1" style="cursor: pointer">
+            <button class="btn btn-sm btn-outline-secondary fa fa-pencil" (click)="editButtonClick(item.id)" ></button>  
+            <button class="btn btn-sm btn-outline-secondary fa fa-trash" routerLink="/enquiry/{{item.id}}"></button>  
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center my-3" *ngIf="this.totalCount > 0">
+    <app-pager
+        [pageSize]="enquiryParams.pageSize"
+        [pageNumber]="enquiryParams.pageNumber"
+        [totalCount]="totalCount"
+        (pageChanged)="onPageChanged($event)"
+        >
+    </app-pager>
+</div>
+
+

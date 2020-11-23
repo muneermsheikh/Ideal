@@ -7,8 +7,8 @@ namespace Core.Specifications
 {
     public class EnquiryItemSpecsCount : BaseSpecification<EnquiryItem>
     {
-        public EnquiryItemSpecsCount(int enquiryId, enumItemReviewStatus reviewStatus) 
-            : base(x => x.EnquiryId == enquiryId &&  x.Status == reviewStatus)
+        public EnquiryItemSpecsCount(int enquiryId, string reviewStatus) 
+            : base(x => x.EnquiryId == enquiryId &&  x.ReviewStatus == reviewStatus)
         {
         }
     }

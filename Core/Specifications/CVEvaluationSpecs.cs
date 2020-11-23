@@ -39,10 +39,8 @@ namespace Core.Specifications
                     x.ReviewedByHRSupOn.Value.Date, (DateTime)cvParam.ReviewedByHRSupOn) == 0) &&
                 (!cvParam.ReviewedByHRMOn.HasValue || DateTime.Compare(
                     x.ReviewedByHRMOn.Value.Date, (DateTime)cvParam.ReviewedByHRMOn) == 0) &&
-                (!cvParam.HRSupReviewResult.HasValue || 
-                    x.HRSupReviewResult == cvParam.HRSupReviewResult) &&
-                (!cvParam.HRMReviewResult.HasValue || 
-                    x.HRMReviewResult == cvParam.HRMReviewResult) 
+                (x.HRSupReviewResult.ToLower() == cvParam.HRSupReviewResult.ToLower()) &&
+                (x.HRMReviewResult.ToLower() == cvParam.HRMReviewResult.ToLower()) 
                 )
             )
         {

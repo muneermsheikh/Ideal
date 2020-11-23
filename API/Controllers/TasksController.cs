@@ -59,7 +59,7 @@ namespace API.Controllers
 
         [HttpPut("updateTaskStatus")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TaskToReturnDto>> UpdateTask(ToDo todo, enumTaskStatus taskStatus)
+        public async Task<ActionResult<TaskToReturnDto>> UpdateTask(ToDo todo, string taskStatus)
         {
             todo.TaskStatus = taskStatus;
             var t = await _taskService.UpdateTaskAsync(todo);

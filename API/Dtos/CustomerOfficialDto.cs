@@ -15,7 +15,7 @@ namespace API.Dtos
         public string Mobile2 { get; set; }
         public string email { get; set; }
         public string PersonalEmail { get; set; }
-        public bool IsValid { get; set; } 
+        public string IsValid { get; set; } 
         public DateTime AddedOn { get; set; }
     }
 }

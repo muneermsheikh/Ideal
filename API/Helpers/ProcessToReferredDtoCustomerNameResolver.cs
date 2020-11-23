@@ -23,7 +23,7 @@ namespace API.Helpers
             
             var enqid = _context.EnquiryItems.Where(x=>x.Id==enquiryitemid).Select(x=>x.EnquiryId).SingleOrDefault();
             var custname = _context.Enquiries.Where(x=>x.Id==enqid)
-                .Select(x=>x.Customer.CustomerName + " " + x.Customer.CityName).SingleOrDefault();
+                .Select(x=>x.Customer.CustomerName + " " + x.Customer.City).SingleOrDefault();
             return custname;
         }
     }

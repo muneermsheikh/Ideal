@@ -137,6 +137,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CandidateId");
+
                     b.HasIndex("EnquiryItemId");
 
                     b.ToTable("CVRefs");
@@ -211,7 +213,13 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("AddedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CityName")
+                    b.Property<string>("Address1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Address2")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
@@ -219,26 +227,18 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("CompanyUrl")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("CustomerAddressId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("CustomerAddressId1")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Country")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<int?>("CustomerOfficialId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("CustomerStatus")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CustomerType")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -255,61 +255,21 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(15);
 
-                    b.Property<string>("Mobile")
+                    b.Property<string>("Phone1")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone2")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerAddressId1");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("Core.Entities.Admin.CustomerAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("AddedOn")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Address1")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Address2")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("AddressType")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("City")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("District")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PIN")
+                    b.Property<string>("Pin")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("State")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Valid")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerAddresses");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Core.Entities.Admin.CustomerOfficial", b =>
@@ -324,14 +284,21 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("CustomerId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Designation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Gender")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsValid")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("IsValid")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Mobile")
                         .HasColumnType("TEXT");
@@ -345,19 +312,20 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("PersonalEmail")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PersonalMobile")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Phone")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("email")
-                        .IsRequired()
+                    b.Property<string>("Scope")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("scope")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("CustomerId1");
 
                     b.ToTable("CustomerOfficials");
                 });
@@ -1188,7 +1156,10 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("AadharNo")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("AddedOn")
+                    b.Property<string>("Address1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Address2")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ApplicationDated")
@@ -1197,15 +1168,31 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("ApplicationNo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CandidateStatus")
+                    b.Property<int>("CandidateStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DOB")
+                    b.Property<string>("ContactPreference")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("ECNR")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Country")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("District")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Ecnr")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FamilyName")
                         .IsRequired()
@@ -1226,21 +1213,27 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("LastStatusUpdatedById")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LastStatusUpdatedOn")
+                    b.Property<DateTime?>("LastStatusUpdatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PPNo")
+                    b.Property<string>("MobileNo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PassportNo")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ReferredById")
+                    b.Property<string>("Pin")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ReferredById")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecondName")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("email")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("SourceId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -1249,7 +1242,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("LastStatusUpdatedById");
 
-                    b.HasIndex("PPNo")
+                    b.HasIndex("PassportNo")
                         .IsUnique();
 
                     b.ToTable("Candidates");
@@ -1267,7 +1260,12 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
 
                     b.HasIndex("CategoryId", "CandidateId")
                         .IsUnique();
@@ -1466,6 +1464,34 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Core.Entities.Masters.CustomerIndustryType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CustomerId1")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IndustryTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId1");
+
+                    b.HasIndex("CustomerId", "IndustryTypeId")
+                        .IsUnique();
+
+                    b.ToTable("CustomerIndustryTypes");
+                });
+
             modelBuilder.Entity("Core.Entities.Masters.DomainSub", b =>
                 {
                     b.Property<int>("Id")
@@ -1498,6 +1524,9 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateOfJoining")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Department")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Designation")
@@ -1569,7 +1598,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("District")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("EmployeeId")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PIN")
@@ -1585,7 +1614,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("EmployeeAddress");
+                    b.ToTable("EmployeeAddresses");
                 });
 
             modelBuilder.Entity("Core.Entities.Masters.Grade", b =>
@@ -1605,9 +1634,6 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
-
                     b.ToTable("Grades");
                 });
 
@@ -1617,16 +1643,11 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -1657,6 +1678,31 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("Core.Entities.Masters.Skill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ExpInYears")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Proficiency")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SkillName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Skills");
+                });
+
             modelBuilder.Entity("Core.Entities.Masters.SkillLevel", b =>
                 {
                     b.Property<int>("Id")
@@ -1683,6 +1729,9 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceGroup")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SourceGroupId")
@@ -1736,6 +1785,9 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("attachmentUrl")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CVRefId");
@@ -1772,6 +1824,50 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("ProcessStatuses");
                 });
 
+            modelBuilder.Entity("Core.Entities.Processing.Travel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Airline")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BoardingAirport")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("BookedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CVRefId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DestinationAirport")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ETA")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ETD")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FlightNo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PNR")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProcessId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessId")
+                        .IsUnique();
+
+                    b.ToTable("Travels");
+                });
+
             modelBuilder.Entity("Core.Entities.Admin.CVForward", b =>
                 {
                     b.HasOne("Core.Entities.Admin.Customer", "Customer")
@@ -1792,18 +1888,17 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Admin.CVRef", b =>
                 {
+                    b.HasOne("Core.Entities.HR.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Core.Entities.EnquiryAggregate.EnquiryItem", "EnquiryItem")
                         .WithMany("CVsReferred")
                         .HasForeignKey("EnquiryItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Core.Entities.Admin.Customer", b =>
-                {
-                    b.HasOne("Core.Entities.Admin.CustomerAddress", "CustomerAddress")
-                        .WithMany()
-                        .HasForeignKey("CustomerAddressId1");
                 });
 
             modelBuilder.Entity("Core.Entities.Admin.CustomerOfficial", b =>
@@ -1813,6 +1908,10 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Core.Entities.Admin.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId1");
                 });
 
             modelBuilder.Entity("Core.Entities.Admin.DLForwardToHR", b =>
@@ -2032,53 +2131,15 @@ namespace Infrastructure.Data.Migrations
                     b.HasOne("Core.Entities.Masters.Employee", "LastStatusUpdatedBy")
                         .WithMany()
                         .HasForeignKey("LastStatusUpdatedById");
-
-                    b.OwnsOne("Core.Entities.HR.CandidateAddress", "CandidateAddress", b1 =>
-                        {
-                            b1.Property<int>("CandidateId")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<string>("Address1")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("Address2")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("AddressType")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("City")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("Country")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("District")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("PIN")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("State")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<bool>("Valid")
-                                .HasColumnType("INTEGER");
-
-                            b1.HasKey("CandidateId");
-
-                            b1.ToTable("Candidates");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CandidateId");
-                        });
                 });
 
             modelBuilder.Entity("Core.Entities.HR.CandidateCategory", b =>
                 {
                     b.HasOne("Core.Entities.HR.Candidate", null)
                         .WithMany("CandidateCategories")
-                        .HasForeignKey("CandidateId");
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Core.Entities.HR.EnquiryItemAssessmentQ", b =>
@@ -2124,27 +2185,26 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Core.Entities.Masters.CustomerIndustryType", b =>
+                {
+                    b.HasOne("Core.Entities.Admin.Customer", null)
+                        .WithMany("CustomerIndustryTypes")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Admin.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId1");
+                });
+
             modelBuilder.Entity("Core.Entities.Masters.EmployeeAddress", b =>
                 {
                     b.HasOne("Core.Entities.Masters.Employee", null)
                         .WithMany("Addresses")
-                        .HasForeignKey("EmployeeId");
-                });
-
-            modelBuilder.Entity("Core.Entities.Masters.Grade", b =>
-                {
-                    b.HasOne("Core.Entities.Admin.Customer", null)
-                        .WithOne("Grade")
-                        .HasForeignKey("Core.Entities.Masters.Grade", "CustomerId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Core.Entities.Masters.IndustryType", b =>
-                {
-                    b.HasOne("Core.Entities.Admin.Customer", null)
-                        .WithMany("IndustryTypes")
-                        .HasForeignKey("CustomerId");
                 });
 
             modelBuilder.Entity("Core.Entities.Masters.Role", b =>
@@ -2154,11 +2214,29 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("EmployeeId");
                 });
 
+            modelBuilder.Entity("Core.Entities.Masters.Skill", b =>
+                {
+                    b.HasOne("Core.Entities.Masters.Employee", null)
+                        .WithMany("Skills")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Core.Entities.Processing.Process", b =>
                 {
                     b.HasOne("Core.Entities.Admin.CVRef", null)
                         .WithMany("ProcessTransactions")
                         .HasForeignKey("CVRefId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Entities.Processing.Travel", b =>
+                {
+                    b.HasOne("Core.Entities.Processing.Process", null)
+                        .WithOne("Travel")
+                        .HasForeignKey("Core.Entities.Processing.Travel", "ProcessId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

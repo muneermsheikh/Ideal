@@ -49,10 +49,10 @@ namespace Infrastructure.Services
         }
 
         public async Task<IReadOnlyList<ToDo>> GetTaskListAsync(int enquiryItemId,
-            enumTaskType taskType, enumTaskStatus taskStatus, int userId, bool includeItems)
+            string taskType, string taskStatus, int userId, bool includeItems)
         {
             return await _taskRepo.GetEntityListWithSpec(
-                new TaskSpecs(enquiryItemId, taskType, enumTaskStatus.NotStarted,
+                new TaskSpecs(enquiryItemId, taskType, "NotStarted",
                 includeItems, userId));
         }
 
@@ -72,47 +72,47 @@ namespace Infrastructure.Services
         }
 
         public async Task<IReadOnlyList<ToDo>> GetTaskAsync(
-            enumTaskType taskType, bool onlyHeaders, int userId)
+            string taskType, bool onlyHeaders, int userId)
         {
             return await _taskRepo.GetEntityListWithSpec(
                 new TaskSpecs(taskType, userId, onlyHeaders));
         }
-        public async Task<ToDo> GetTaskAsync(int enquiryItemId, enumTaskType taskType, 
-            enumTaskStatus taskStatus, bool onlyHeaders, int assignedToId)
+        public async Task<ToDo> GetTaskAsync(int enquiryItemId, string taskType, 
+            string taskStatus, bool onlyHeaders, int assignedToId)
         {
             return await _taskRepo.GetEntityWithSpec(new TaskSpecs(
                 enquiryItemId, assignedToId, taskType, taskStatus));
         }
         
         public async Task<IReadOnlyList<ToDo>> GetTaskListAsync(
-            enumTaskType taskType, bool onlyHeaders, int userId)
+            string taskType, bool onlyHeaders, int userId)
         {
             return await _taskRepo.GetEntityListWithSpec(
                 new TaskSpecs(taskType, userId, onlyHeaders));
         }
 
         public async Task<IReadOnlyList<ToDo>> GetTaskListAsync(int enquiryItemId,
-            enumTaskType taskType, enumTaskStatus taskStatus, bool onlyHeaders, int ownerId)
+            string taskType, string taskStatus, bool onlyHeaders, int ownerId)
         {
             return await _taskRepo.GetEntityListWithSpec(
                 new TaskSpecs(enquiryItemId, taskType, taskStatus, onlyHeaders, ownerId));
         }
 
         public async Task<ToDo> GetTaskEnquiryitemIdAssignedToIdTaskTypeAsync(
-            int enquiryItemId, int assignedToId, enumTaskType taskType)
+            int enquiryItemId, int assignedToId, string taskType)
         {
             return await _taskRepo.GetEntityWithSpec(
                 new TaskSpecs(enquiryItemId, assignedToId, taskType));
         }
 
         public async Task<IReadOnlyList<ToDo>> GetOwnerTaskListAsync(
-            int ownerId, enumTaskStatus taskStatus)
+            int ownerId, string taskStatus)
         {
             return await _taskRepo.GetEntityListWithSpec(new TaskSpecs(ownerId, taskStatus));
         }
 
         public async Task<IReadOnlyList<ToDo>> GetAssignedToTaskListAsync(
-            int assignedToId, enumTaskStatus taskStatus)
+            int assignedToId, string taskStatus)
         {
             return await _taskRepo.GetEntityListWithSpec(new TaskSpecs(taskStatus, assignedToId));
         }

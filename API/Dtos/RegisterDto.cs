@@ -7,7 +7,7 @@ namespace API.Dtos
     {
         //public CustomerAddress customerAddress{get; set; }
         
-        public enumCustomerType CustomerType { get; set; } = enumCustomerType.Candidate;
+        public string CustomerType { get; set; } = "candidate";
         public int CustomerId { get; set; }
         public string AddressType { get; set; }
         public string Address1 { get; set; }

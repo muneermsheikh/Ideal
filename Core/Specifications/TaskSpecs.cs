@@ -8,54 +8,55 @@ namespace Core.Specifications
     public class TaskSpecs : BaseSpecification<ToDo>
     {
         
-        public TaskSpecs(int ownerId, enumTaskStatus taskStatus)
-            : base(x => x.OwnerId == ownerId && x.TaskStatus == taskStatus)
+        public TaskSpecs(int ownerId, string taskStatus)
+            : base(x => x.OwnerId == ownerId && x.TaskStatus.ToLower() == taskStatus.ToLower())
         {
             AddOrderByDescending(x => x.TaskDate);
         }
 
-        public TaskSpecs(enumTaskStatus taskStatus, int assignedToId)
-            : base(x => x.AssignedToId == assignedToId && x.TaskStatus == taskStatus)
+        public TaskSpecs(string taskStatus, int assignedToId)
+            : base(x => x.AssignedToId == assignedToId && x.TaskStatus.ToLower() == taskStatus.ToLower())
         {
             AddOrderByDescending(x => x.TaskDate);
         }
 
-        public TaskSpecs(enumTaskType taskType, int ownerId, bool onlyHeaders)
-            : base(x => x.OwnerId == ownerId && x.TaskType == taskType)
+        public TaskSpecs(string taskType, int ownerId, bool onlyHeaders)
+            : base(x => x.OwnerId == ownerId && x.TaskType.ToLower() == taskType.ToLower())
         {
             if (!onlyHeaders) AddInclude(x => x.TaskItems);
             AddOrderByDescending(x => x.TaskDate);
         }
 
-        public TaskSpecs(enumTaskType taskType, enumTaskStatus taskStatus, int ownerId)
-            : base(x => x.OwnerId == ownerId && x.TaskStatus == taskStatus)
+        public TaskSpecs(string taskType, string taskStatus, int ownerId)
+            : base(x => x.OwnerId == ownerId && x.TaskStatus.ToLower() == taskStatus.ToLower())
         {
             AddOrderByDescending(x => x.TaskDate);
         }
 
 
-        public TaskSpecs(int enquiryItemId, enumTaskType taskType, 
-            enumTaskStatus taskStatus, bool onlyHeaders, int ownerId)
-            : base(x => x.OwnerId == ownerId && x.TaskStatus == taskStatus && 
+        public TaskSpecs(int enquiryItemId, string taskType, 
+            string taskStatus, bool onlyHeaders, int ownerId)
+            : base(x => x.OwnerId == ownerId && x.TaskStatus.ToLower() == taskStatus.ToLower() && 
             x.EnquiryItemId == enquiryItemId)
         {
             if (!onlyHeaders) AddInclude(x => x.TaskItems);
         }
 
-        public TaskSpecs(enumTaskType taskType, enumTaskStatus taskStatus)
-            : base(x => x.TaskType == taskType && x.TaskStatus == taskStatus)
+        public TaskSpecs(string taskType, string taskStatus)
+            : base(x => x.TaskType.ToLower() == taskType.ToLower() && 
+                x.TaskStatus.ToLower() == taskStatus.ToLower())
         {
             AddOrderByDescending(x => x.TaskDate);
         }
 
-        public TaskSpecs(enumTaskType taskType)
-            : base(x => x.TaskType == taskType)
+        public TaskSpecs(string taskType)
+            : base(x => x.TaskType.ToLower() == taskType.ToLower())
         {
             AddOrderByDescending(x => x.TaskDate);
         }
 
-        public TaskSpecs(enumTaskStatus taskStatus)
-            : base(x => x.TaskStatus == taskStatus)
+        public TaskSpecs(string taskStatus, string dummy, string dummy2)
+            : base(x => x.TaskStatus.ToLower() == taskStatus.ToLower())
         {
             AddOrderByDescending(x => x.TaskDate);
         }
@@ -66,8 +67,8 @@ namespace Core.Specifications
                     x.Owner.FullName.ToLower().Contains(tParams.Search)) &&
                 (!tParams.OwnerId.HasValue || x.OwnerId == tParams.OwnerId) &&
                 (!tParams.AssignedToId.HasValue || x.AssignedToId == tParams.AssignedToId) &&
-                (!tParams.TaskType.HasValue || x.TaskType == tParams.TaskType) &&
-                (!tParams.TaskStatus.HasValue || x.TaskStatus == tParams.TaskStatus)) &&
+                (x.TaskType.ToLower() == tParams.TaskType.ToLower()) &&
+                (x.TaskStatus.ToLower() == tParams.TaskStatus.ToLower())) &&
                 ((!tParams.DateRangeFrom.HasValue && !tParams.DateRangeUpto.HasValue) ||
                     x.TaskDate >= tParams.DateRangeFrom && x.TaskDate <= tParams.DateRangeUpto)
             )
@@ -119,18 +120,18 @@ namespace Core.Specifications
                 }
             }
         }
-        public TaskSpecs(int enquiryItemId, int assignedToId, enumTaskType taskType)
+        public TaskSpecs(int enquiryItemId, int assignedToId, string taskType)
             : base(x => (x.EnquiryItemId==enquiryItemId && 
                         x.AssignedToId==assignedToId &&
-                        x.TaskType==taskType))
+                        x.TaskType.ToLower()==taskType.ToLower()))
         {
         }
         
-        public TaskSpecs(int enquiryItemId, int assignedToId, enumTaskType taskType, 
-            enumTaskStatus taskStatus)
+        public TaskSpecs(int enquiryItemId, int assignedToId, string taskType, 
+            string taskStatus)
             : base(x => (x.EnquiryItemId==enquiryItemId && 
                         x.AssignedToId==assignedToId &&
-                        x.TaskType==taskType && x.TaskStatus==taskStatus))
+                        x.TaskType.ToLower()==taskType.ToLower() && x.TaskStatus.ToLower()==taskStatus.ToLower()))
         {
         }
     }

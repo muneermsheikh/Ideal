@@ -28,9 +28,15 @@ namespace Infrastructure.Services
             _candCatRepo = candCatRepo;
         }
 
-        public Task<bool> DeleteCandidate(Candidate candidate)
+        public async Task<int> DeleteCandidate(int id)
         {
-            throw new System.NotImplementedException();
+            var cand = new Candidate{Id = id};
+            if (cand != null) 
+            {
+                var deleted = await _candidateRepo.DeleteAsync(cand);
+                return deleted;                
+            }
+            return 0;
         }
 
         public Task<Candidate> GetCandidate(CandidateParams candidateParams)

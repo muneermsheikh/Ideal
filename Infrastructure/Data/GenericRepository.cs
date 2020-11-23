@@ -34,7 +34,7 @@ namespace Infrastructure.Data
         {
             bool hasRecords = await _context.Enquiries.AnyAsync();
             if (!hasRecords) return 1050;
-            return await _context.Set<Enquiry>().MaxAsync(x=>x.EnquiryNo);
+            return await _context.Set<Enquiry>().MaxAsync(x => Convert.ToInt32(x.EnquiryNo));
         }
         public async Task<IReadOnlyList<T>> ListWithSpecAsync(ISpecification<T> spec)
         {

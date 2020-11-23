@@ -13,13 +13,18 @@ namespace Core.Interfaces
     public interface IEnquiryService
     {
         Task<Enquiry> CreateEnquiryAsync (string basketId);
+        Task<Enquiry> AddEnquiryAsync (Enquiry enq);
+        Task<Enquiry> UpdateDLAsync (Enquiry enq);
+        Task<int> DeleteEnquiryAsync (int Id);
         Task<IReadOnlyList<Enquiry>> GetUserEnquiriesAsync (int CustomerId);
         Task<IReadOnlyList<Enquiry>> GetEntityListWithSpec(EnquiryParams enqParam);
+        Task<IReadOnlyList<Enquiry>> GetEnquiryList500WithAllStatus();
         Task<Enquiry> GetEnquiryWithSpecByIdAsync(int enquiryId);
         Task<Enquiry> GetEnquiryByIdAsync(int enquiryId);
         Task<Enquiry> GetEnquiryByEnquiryItemIdAsync(int enquiryItemId);
         Task<EnquiryItem> GetEnquiryItemByIdAsync(int enquiryItemId);
         Task<int> GetEnquiryItemsCountNotReviewed(int enquiryId);
+
         // Task<IReadOnlyList<Enquiry>> DLIndexTop500 ();
 
     //employee

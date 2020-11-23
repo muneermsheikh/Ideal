@@ -23,11 +23,12 @@ namespace Infrastructure.Data.Config
 
             builder.HasIndex(x => x.EnquiryItemId).IsUnique();
 
-            builder.Property(s => s.Status)
+          /*  builder.Property(s => s.Status)
                 .HasConversion(
                     o => o.ToString(),
                     o => (enumItemReviewStatus) Enum.Parse(typeof(enumItemReviewStatus), o)
                 );
+            */
         }
     }
 }

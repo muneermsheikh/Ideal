@@ -17,12 +17,12 @@ namespace Core.Specifications
         }
 
         public int? CustomerId {get; set; }
-        public enumCustomerType? CustomerType {get; set; }
-        public enumCustomerStatus? CustomerStatus {get; set; }
+        public string CustomerType {get; set; }
+        public string CustomerStatus {get; set; }
         public string City {get; set; }
         public string Email {get; set; }
-        public bool IncludeOfficial {get; set;}=false;
-        public bool IncludeAddress {get; set; }=false;
+        public bool IncludeOfficial {get; set;}=true;
+        public bool IncludeIndustryTypes {get; set;}=true;
         public string Sort { get; set; }
 
         private string _search;

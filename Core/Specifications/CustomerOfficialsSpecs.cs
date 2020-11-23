@@ -12,7 +12,7 @@ namespace Core.Specifications
             : base(x => (
                  (string.IsNullOrEmpty(officialName) || 
                         x.Name.ToLower().Contains(officialName) &&
-                        x.IsValid == true &&
+                        x.IsValid.ToLower() == "t" &&
                         x.CustomerId == customerId)
             ))
         {
@@ -22,8 +22,8 @@ namespace Core.Specifications
         {
         }
 
-        public CustomerOfficialsSpecs(IReadOnlyList<IdInt> officialIds, bool isValid) 
-            :base( x => officialIds.Select(x => x.Id).Contains(x.Id) && x.IsValid==isValid)
+        public CustomerOfficialsSpecs(IReadOnlyList<IdInt> officialIds, string isValid) 
+            :base( x => officialIds.Select(x => x.Id).Contains(x.Id) && x.IsValid.ToLower()==isValid.ToLower())
         {
         }
         

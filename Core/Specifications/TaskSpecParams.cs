@@ -21,8 +21,8 @@ namespace Core.Specifications
         public int? TaskItemId { get; set; }
         public int? OwnerId {get; set; }
         public int? AssignedToId {get; set; }
-        public enumTaskStatus? TaskStatus {get; set; }
-        public enumTaskType? TaskType {get; set; }
+        public string TaskStatus {get; set; }
+        public string TaskType {get; set; }
         public DateTime? DateRangeFrom {get; set; }
         public DateTime? DateRangeUpto {get; set; }
         public bool IncludeItems {get; set; } = false;

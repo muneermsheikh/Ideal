@@ -103,7 +103,7 @@ namespace API.Controllers
             var totalItems = await _unitOfWork.Repository<Candidate>().CountWithSpecAsync(
                 new CandidateSpecForCount(candidateParams));
 
-            if (totalItems == 0) return NotFound(new ApiResponse(400, "Your search conditions did not return any candidate"));
+            if (totalItems == 0) return NotFound(new ApiResponse(404, "Your search conditions did not return any candidate"));
 
             var cvs = await _candidateService.GetCandidatesBySpecs(candidateParams);
 
@@ -176,10 +176,10 @@ namespace API.Controllers
             return await _candidateService.UpdateCandidate(candidate);
         }
 
-        [HttpDelete("candidate")]
-        public async Task<int> DeleteCandidate(Candidate candidate)
+        [HttpDelete("candidate/{id}")]
+        public async Task<int> DeleteCandidate(int id)
         {
-            return await _unitOfWork.Repository<Candidate>().DeleteAsync(candidate);
+            return await _candidateService.DeleteCandidate(id);
         }
 
 //candidate categories

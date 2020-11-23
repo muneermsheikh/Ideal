@@ -10,7 +10,7 @@ namespace Core.Entities.Admin
         {
         }
 
-        public Email(enumTaskType emailType, int customerOrCandidateId, string emailFrom, 
+        public Email(string emailType, int customerOrCandidateId, string emailFrom, 
             List<string> emailToList, List<string> emailCCList, List<string> emailBCCList, 
             string mailSubject, string mailBody, bool isHTML)
         {
@@ -25,7 +25,7 @@ namespace Core.Entities.Admin
             IsHTML = isHTML;
         }
 
-        public enumTaskType EmailType {get; set;}
+        public string EmailType {get; set;}
         public int CustomerOrCandidateId {get; set;}
         public string EmailFrom { get; set; }
         public List<string> EmailToList {get; set;}

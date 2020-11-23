@@ -87,7 +87,7 @@ namespace Infrastructure.Services
             var taskForSup = new ToDo (UserId, validated.supId, DateTime.Now, DateTime.Now.AddHours(4), 
                 "Application " + cand.ApplicationNo + "-" + cand.FullName + cand.PassportNo + 
                 " is submitted by " + empOwner.KnownAs + " for your review for the position of " +
-                enq.EnquiryNo + "-" + enqItem.SrNo + categoryName, enumTaskType.HRDeptHeadAssignment,
+                enq.EnquiryNo + "-" + enqItem.SrNo + categoryName, "HRDeptHeadAssignment",
                 enqItem.EnquiryId, EnquiryItemId);
             await _taskService.CreateTaskAsync(taskForSup);
             return eval;
@@ -98,7 +98,7 @@ namespace Infrastructure.Services
             if (eval.ReviewedByHRSup == true || eval.ReviewedByHRM == true) return 0;
             return await _unitOfWork.Repository<CVEvaluation>().DeleteAsync(eval);
         }
-        public async Task<CVEvaluation> CVEvalBySup(int cvEvalId, enumItemReviewStatus status, int supervisorId)
+        public async Task<CVEvaluation> CVEvalBySup(int cvEvalId, string status, int supervisorId)
         {
              var cvEval = await _repoEval.GetByIdAsync(cvEvalId);
              if (cvEval==null) throw new Exception("No Evaluation data found matching the id");
@@ -107,29 +107,29 @@ namespace Infrastructure.Services
             cvEval.HRSupervisorId=supervisorId;
             cvEval.ReviewedByHRSup = true;
             cvEval.ReviewedByHRSupOn = DateTime.Now;
-            cvEval.HRSupReviewResult=status;
+            cvEval.HRSupReviewResult= status;
 
             var cvEvalUpdated = await _unitOfWork.Repository<CVEvaluation>().UpdateAsync(cvEval);
 
             // update HRSup task
             var taskHRSup = await _taskService.GetTaskEnquiryitemIdAssignedToIdTaskTypeAsync(
-                cvEval.EnquiryItemId, (int)cvEval.HRSupervisorId, enumTaskType.HRSupervisorAssignment);
+                cvEval.EnquiryItemId, (int)cvEval.HRSupervisorId, "HRSupervisorAssignment");
             if (taskHRSup != null) 
             {
                 string result = "Application " + cvEval.Candidate.ApplicationNo;
-                result += cvEval.HRMReviewResult==enumItemReviewStatus.Accepted ? " approved by HR Manager, " +
+                result += cvEval.HRMReviewResult=="Accepted" ? " approved by HR Manager, " +
                     "and submitted for HRM review" : " rejected by HR Manager with the reason: " + 
-                    Enum.GetName(typeof(enumItemReviewStatus), cvEval.HRMReviewResult);
+                    cvEval.HRMReviewResult;
 
                 var taskItem = new TaskItem(taskHRSup.Id, DateTime.Now, cvEval.HRMReviewResult
-                    == enumItemReviewStatus.Accepted ? 1: 0, result, true, null);
+                    == "Accepted" ? 1: 0, result, true, null);
         
                 await _taskService.AppendTaskItemAsync(taskHRSup.Id, taskItem);
-                taskHRSup.TaskStatus = enumTaskStatus.Completed;
+                taskHRSup.TaskStatus = "Completed";
                 await _taskService.UpdateTaskAsync(taskHRSup);
             }
 
-            if (cvEval.HRMReviewResult == enumItemReviewStatus.Accepted)
+            if (cvEval.HRMReviewResult == "Accepted")
             {   // create task for Doc Controller - Admin
                 if (await CreateTaskForDocControllerToSendCV((int)cvEval.HRManagerId, (int)cvEval.HRSupervisorId, cvEval.CandidateId,
                 cvEval.EnquiryItem.EnquiryId, cvEval.EnquiryItem.Id)==false) return null;
@@ -139,7 +139,7 @@ namespace Infrastructure.Services
             return cvEval;
         }
 
-        public async Task<CVEvaluation> CVEvalByHRM(int cvEvalId, enumItemReviewStatus status, int hrmanagerId)
+        public async Task<CVEvaluation> CVEvalByHRM(int cvEvalId, string status, int hrmanagerId)
         {
             var cvEval = await _repoEval.GetByIdAsync(cvEvalId);
             
@@ -150,23 +150,23 @@ namespace Infrastructure.Services
 
             // update HRSup task
             var taskHRSup = await _taskService.GetTaskEnquiryitemIdAssignedToIdTaskTypeAsync(
-                cvEval.EnquiryItemId, (int)cvEval.HRSupervisorId, enumTaskType.HRSupervisorAssignment);
+                cvEval.EnquiryItemId, (int)cvEval.HRSupervisorId, "HRSupervisorAssignment");
             if (taskHRSup != null) 
             {
                 string result = "Application " + cvEval.Candidate.ApplicationNo;
-                result += cvEval.HRMReviewResult==enumItemReviewStatus.Accepted ? " approved by HR Manager, " +
+                result += cvEval.HRMReviewResult=="Accepted" ? " approved by HR Manager, " +
                     "and submitted for HRM review" : " rejected by HR Manager with the reason: " + 
-                    Enum.GetName(typeof(enumItemReviewStatus), cvEval.HRMReviewResult);
+                    cvEval.HRMReviewResult;
 
                 var taskItem = new TaskItem(taskHRSup.Id, DateTime.Now, cvEval.HRMReviewResult
-                    == enumItemReviewStatus.Accepted ? 1: 0, result, true, null);
+                    == "Accepted" ? 1: 0, result, true, null);
         
                 await _taskService.AppendTaskItemAsync(taskHRSup.Id, taskItem);
-                taskHRSup.TaskStatus = enumTaskStatus.Completed;
+                taskHRSup.TaskStatus = "Completed";
                 await _taskService.UpdateTaskAsync(taskHRSup);
             }
 
-            if (cvEval.HRMReviewResult == enumItemReviewStatus.Accepted)
+            if (cvEval.HRMReviewResult == "Accepted")
             {   // create task for Doc Controller - Admin
                 if (await CreateTaskForDocControllerToSendCV((int)cvEval.HRManagerId, (int)cvEval.HRSupervisorId, cvEval.CandidateId,
                 cvEval.EnquiryItem.EnquiryId, cvEval.EnquiryItem.Id)==false) return null;
@@ -320,8 +320,8 @@ namespace Infrastructure.Services
             // check if the User is tasked with the HR taskd
             if(!anyOneCanEvaluateCV)
             {
-                var t = await _taskService.GetTaskAsync(EnquiryItemId, enumTaskType.HRExecutiveAssignment,
-                    enumTaskStatus.NotStarted, true, UserId);
+                var t = await _taskService.GetTaskAsync(EnquiryItemId, "HRExecutiveAssignment",
+                    "NotStarted", true, UserId);
                 if (t == null)
                 {
                     cvEval.Validated = false;
@@ -355,7 +355,7 @@ namespace Infrastructure.Services
             }
 
             //check if assessment mandatory, if so, is the CV assessed
-            if (enqItem.AssessmentReqd)
+            if (enqItem.AssessmentReqd.ToLower()=="f")
             {
                 // is CV assessed
                 var resultList = new List<enumAssessmentResult>();
@@ -388,7 +388,7 @@ namespace Infrastructure.Services
             var cvValidity = new CVEvaluationValidity();
 
             if (cvEval.ReviewedByHRSup != true ||
-                cvEval.HRSupReviewResult != enumItemReviewStatus.Accepted) 
+                cvEval.HRSupReviewResult != "Accepted") 
             {
                 cvValidity.Validated=false;
                 cvValidity.ErrorMessage="Supervisor has not approved the evaluation";
@@ -430,7 +430,7 @@ namespace Infrastructure.Services
                 candidate.ApplicationNo + "-" + candidate.FullName +
                 "for forwarding to client " + enquiry.CustomerName + " for requirement ref " +
                 enquiry.EnquiryNo + "-" + enquiryItem.SrNo + "-" + enquiryItem.CategoryName,
-                enumTaskType.HRSupervisorAssignment, enquiryId, enquiryItemId);
+                "HRSupervisorAssignment", enquiryId, enquiryItemId);
 
             var tasked = await _taskService.CreateTaskAsync(taskForDocControllerAdmin);
             

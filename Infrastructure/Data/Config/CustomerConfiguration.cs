@@ -12,26 +12,12 @@ namespace Infrastructure.Data.Config
         {
             
             builder.Property(x => x.CustomerName).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.CityName).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.City).IsRequired().HasMaxLength(50);
             builder.Property(x => x.KnownAs).IsRequired().HasMaxLength(15);
-
-            builder.Property(s => s.CustomerType)
-                .HasConversion(
-                    o => o.ToString(),
-                    o => (enumCustomerType) Enum.Parse(typeof(enumCustomerType), o)
-                );
-
-            builder.Property(s => s.CustomerStatus)
-                .HasConversion(
-                    o => o.ToString(),
-                    o => (enumCustomerStatus) Enum.Parse(typeof(enumCustomerStatus), o)
-                );
-            
-            //builder.HasOne(x => x.CustomerAddress).WithOne()
-              //  .HasForeignKey(x => x.CustomerAddressId).OnDelete(DeleteBehavior.Cascade);
-            
             builder.HasMany(o => o.CustomerOfficials).WithOne()
                 .HasForeignKey(o => o.CustomerId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany( o => o.CustomerIndustryTypes).WithOne()
+                .HasForeignKey( o => o.CustomerId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

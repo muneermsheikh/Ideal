@@ -1,16 +1,25 @@
+
 export interface IClient{
     id: number;
+    customerType: string;
     customerName: string;
     knownAs: string;
-    cityName: string;
-    introducedBy: number;
+    address1: string;
+    address2: string;
+    city: string;
+    pin: string;
+    state: string;
+    country: string;
+    introducedBy: string;
     email: string;
     mobile: string;
     phone: string;
     companyUrl: string;
     description: string;
-    customerAddressId: number;
+    customerStatus: string;
     addedOn: string;
+    customerOfficials: IClientOfficial[];
+    customerIndustryTypes: ICustomerIndustryType[];
   }
 
 export interface IClientOfficial {
@@ -24,6 +33,14 @@ export interface IClientOfficial {
         mobile2: string;
         email: string;
         personalEmail: string;
-        isValid: boolean;
-        addedOn: string;
+        personalMobile: string;
+        // isValid: string;
+        addedOn: [string, null];
     }
+
+export interface ICustomerIndustryType {
+    id: number;
+    customerId: number;
+    industryTypeId: number;
+    name: string;
+}

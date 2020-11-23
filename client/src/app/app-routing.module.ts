@@ -7,11 +7,16 @@ import { TestErrorComponent } from './core/test-error/test-error.component';
 import { EmpCreateComponent } from './employees/emp-create/emp-create.component';
 import { EmployeesComponent } from './employees/employees/employees.component';
 import { HomeComponent } from './home/home.component';
+import { OrderCreateComponent } from './orders/order-create/order-create.component';
+import { OrdersComponent } from './orders/orders.component';
 import { ProfessionAddComponent } from './profession/profession-add/profession-add.component';
 import { ProfessionDetailComponent } from './profession/profession-detail/profession-detail.component';
 import { ProfessionComponent } from './profession/profession.component';
 import { CandidateCreateComponent } from './users/candidate/candidate-create/candidate-create.component';
 import { CandidateComponent } from './users/candidate/candidate.component';
+
+
+
 /*
 import { CategoryDetailsComponent } from './shop/category-details/category-details.component';
 import { ShopComponent } from './shop/shop.component';
@@ -45,6 +50,9 @@ const routes: Routes = [
     .then(mod => mod.UsersModule), data: {breadcrumb: {skip: true}} },
   {path: 'account', loadChildren: () => import('./account/account.module')
     .then(mod => mod.AccountModule), data: {breadcrumb: {skip: true}} },
+  {path: 'enquiry', component: OrdersComponent, data: {breadcrumb: 'Enquiries'}},
+  {path: 'enquiryCreate', component: OrderCreateComponent, data: {breadcrumb: 'Enquiry Create'}},
+  {path: 'enquiryEdit/:id', component: OrderCreateComponent, data: {breadcrumb: 'edit Enquiry'}},
   {path: '**', redirectTo: 'not-found', pathMatch: 'full'}
 ];
 

@@ -12,8 +12,8 @@ namespace Core.Interfaces
         Task<CVEvaluation> GetCVEvaluationByIdAsync(int Id);
         Task<CVEvaluation> GetCVEvaluation(int CandidateId, int EnquiryItemId);
         Task<CVEvaluation> CVSubmitToSup(int CandidateId, int EnquiryItemId, int UserId);
-        Task<CVEvaluation> CVEvalBySup(int cvEvalId, enumItemReviewStatus status, int supervisorId);
-        Task<CVEvaluation> CVEvalByHRM(int cvEvalId, enumItemReviewStatus status, int hrmanagerId);
+        Task<CVEvaluation> CVEvalBySup(int cvEvalId, string status, int supervisorId);
+        Task<CVEvaluation> CVEvalByHRM(int cvEvalId, string status, int hrmanagerId);
         Task<int> CVSubmitToSupDelete(CVEvaluation eval);
        
         Task<IReadOnlyList<CVEvaluation>> CVEvaluations(CVEvaluationParam cvEvalParam);

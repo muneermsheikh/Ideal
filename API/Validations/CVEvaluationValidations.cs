@@ -21,13 +21,13 @@ namespace API.Validations
             int CandidateId, int UserId)
         {
             // check if the category item is approved + requires evaluation by HR Supervisor
-            var spec = new EnquiryItemsSpecs(EnquiryItemId, enumItemReviewStatus.Accepted, true);
+            var spec = new EnquiryItemsSpecs(EnquiryItemId, "Accepted", true);
             var enqItem = await _unitOfWork.Repository<EnquiryItem>().GetEntityWithSpec(spec);
             if (enqItem == null) return false;
             
             // check if the User is tasked with the HR task
-            var t = await _taskService.GetTaskListAsync(EnquiryItemId, enumTaskType.HRExecutiveAssignment,
-                enumTaskStatus.NotStarted, true, UserId);
+            var t = await _taskService.GetTaskListAsync(EnquiryItemId, "HRExecutiveAssignment",
+                "NotStarted", UserId, true);
             
             if ( t == null) return false;       // not tasked
 

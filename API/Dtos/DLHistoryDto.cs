@@ -10,7 +10,7 @@ namespace API.Dtos
         {
         }
 
-        public int EnquiryNo {get; set;}
+        public string EnquiryNo {get; set;}
         public string EnquiryDated {get; set;}
         public string ProjectManager {get; set;}
         public List<DLCategory> DLCategories {get; set;}

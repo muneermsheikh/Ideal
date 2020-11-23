@@ -40,11 +40,11 @@ namespace Infrastructure.Services
             foreach (var enqId in enquiryIds)
             {
                 var enq = await _unitOfWork.Repository<Enquiry>()
-                    .GetEntityWithSpec(new EnquirySpecs(enqId.Id, enumEnquiryReviewStatus .Accepted, false, false));
+                    .GetEntityWithSpec(new EnquirySpecs(enqId.Id, "Accepted", false, false));
                 if (enq == null) continue;
 
                 var enqItems = await _unitOfWork.Repository<EnquiryItem>().GetEntityListWithSpec(
-                    new EnquiryItemsSpecs(enqId.Id, enumItemReviewStatus.Accepted));
+                    new EnquiryItemsSpecs(enqId.Id, "Accepted"));
                 if (enqItems.Count == 0) continue;
                 enq.EnquiryItems =(List<EnquiryItem>)enqItems;
                 if (enq.Customer == null) enq.Customer = await _repoCust.GetByIdAsync(enq.CustomerId);
@@ -63,7 +63,7 @@ namespace Infrastructure.Services
                 enqs.Add(enq);
 
                 var toDo = new ToDo(projectManagerId, iHRManagerId, dtForwarded, dtForwarded.AddDays(7),
-                    sTaskDescription, enumTaskType.HRDeptHeadAssignment, enqId.Id);
+                    sTaskDescription, "HRDeptHeadAssignment", enqId.Id);
 
                 await _unitOfWork.Repository<ToDo>().AddAsync(toDo);
 
@@ -117,12 +117,12 @@ namespace Infrastructure.Services
             if (officialIds == null) return null;
 
             var officials = await _unitOfWork.Repository<CustomerOfficial>().
-                GetEntityListWithSpec(new CustomerOfficialsSpecs(officialIds, true));
+                GetEntityListWithSpec(new CustomerOfficialsSpecs(officialIds, "t"));
 
             var forwardedList = new List<EnquiryForwarded>();
 
             Enquiry enq = await _unitOfWork.Repository<Enquiry>()
-                .GetEntityWithSpec(new EnquirySpecs(enqId, enumEnquiryReviewStatus.Accepted, false, false));
+                .GetEntityWithSpec(new EnquirySpecs(enqId, "Accepted", false, false));
 
             var enqForwardedItemsList = new List<EnquiryItemForwarded>();   //to write to child table
                                                                             //EnquiryItemForwarded, for each parent Id of EnquiryForwarded (EnquiryForwrds in db)
@@ -135,7 +135,7 @@ namespace Infrastructure.Services
             {
                 enqItems = await _unitOfWork.Repository<EnquiryItem>()
                     .GetEntityListWithSpec(new EnquiryItemsSpecs(
-                        enqId, enumItemReviewStatus.Accepted));
+                        enqId, "Accepted"));
                 if (enqItems == null || enqItems.Count == 0) return null;
 
                 foreach (var item in enqItems)
@@ -152,7 +152,7 @@ namespace Infrastructure.Services
                 // will be excluded
                 enqItems = await _unitOfWork.Repository<EnquiryItem>()
                 .GetEntityListWithSpec(new EnquiryItemsSpecs(enqItemIds,
-                    enqId, enumItemReviewStatus.Accepted, false));
+                    enqId, "Accepted", false));
                 if (enqItems == null || enqItems.Count == 0) return null;
 
                 foreach (var i in enqItemIds)
@@ -164,7 +164,7 @@ namespace Infrastructure.Services
 
             foreach (var off in officials)
             {
-                var add = forwardedByMode == "mail" ? off.email : forwardedByMode == "sms" ? off.Mobile : off.Mobile2;
+                var add = forwardedByMode == "mail" ? off.Email : forwardedByMode == "sms" ? off.Mobile : off.Mobile2;
 
                 var fwd = new EnquiryForwarded(dtForwarded, off.CustomerId, off.Id,
                     enqId, forwardedByMode, add, enqForwardedItemsList);
@@ -194,7 +194,7 @@ namespace Infrastructure.Services
             var enqNumber = enq.EnquiryNo;
             var enqDate = enq.EnquiryDate.Date;
             var CustomerName = enq.Customer.CustomerName;
-            var CustomerCity = enq.Customer.CityName;
+            var CustomerCity = enq.Customer.City;
 
             var assignedToId = emp.Id;
             var assignedToNameAndDesignation =
@@ -236,7 +236,7 @@ namespace Infrastructure.Services
             var enqNumber = enq.EnquiryNo;
             var enqDate = enq.EnquiryDate.Date;
             var CustomerName = cust.CustomerName;
-            var CustomerCity = cust.CityName;
+            var CustomerCity = cust.City;
             var ownerId = ProjectManager.Id;
             var ownerNameAndDesignation = ProjectManager.Gender == "M" ? "Mr." : "Ms." +
                 ProjectManager.FullName + ", " + Environment.NewLine + ProjectManager.Designation;
@@ -252,7 +252,7 @@ namespace Infrastructure.Services
                 var assignedToNameAndDesignation =
                     off.Gender == "M" ? "Mr." : "Ms." + off.Name + ", " +
                     Environment.NewLine + off.Designation;
-                assignedToEmailId.Add(off.email);
+                assignedToEmailId.Add(off.Email);
                 var assignedToMobile = off.Mobile;
 
                 var sTaskDescription = "To:" + Environment.NewLine + assignedToNameAndDesignation +

@@ -9,7 +9,8 @@ namespace Core.Specifications
             : base(x => 
             (
                 (string.IsNullOrEmpty(cParams.Search) || 
-                    x.FullName.ToLower().Contains(cParams.Search)) &&
+                    x.FullName.ToLower().Contains(cParams.Search) || 
+                    x.City.ToLower().Contains(cParams.Search)) &&
                 (!cParams.ApplicationNo.HasValue || x.ApplicationNo == cParams.ApplicationNo ) &&
                 (!cParams.ApplicationDated.HasValue || DateTime.Compare(
                     x.ApplicationDated.Date, cParams.ApplicationDated.Value.Date) == 0) &&

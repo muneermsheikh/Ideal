@@ -14,7 +14,7 @@ namespace Core.Entities.Admin
         }
 
         public ToDo(int ownerId, int assignedToId, DateTime taskDate, DateTime completeBy, 
-            string taskDescription,  enumTaskType? taskType, int? enquiryId, int? enquiryItemId)
+            string taskDescription,  string taskType, int? enquiryId, int? enquiryItemId)
         {
             EnquiryId = enquiryId;
             OwnerId = ownerId;
@@ -27,7 +27,7 @@ namespace Core.Entities.Admin
         }
 
         public ToDo(int ownerId, int assignedToId, DateTime taskDate, DateTime completeBy, 
-            string taskDescription,  enumTaskType? taskType, int? enquiryId, int? enquiryItemId,
+            string taskDescription,  string taskType, int? enquiryId, int? enquiryItemId,
             List<TaskItem> taskItems)
         {
             EnquiryId = enquiryId;
@@ -42,7 +42,7 @@ namespace Core.Entities.Admin
         }
 
         public ToDo(int ownerId, int assignedToId, DateTime taskDate, DateTime completeBy, 
-            string taskDescription,  enumTaskType? taskType, int? enquiryId)
+            string taskDescription,  string taskType, int? enquiryId)
         {
             EnquiryId = enquiryId;
             OwnerId = ownerId;
@@ -65,10 +65,10 @@ namespace Core.Entities.Admin
         [Required]
         public DateTime TaskDate { get; set; } = DateTime.Now;
         public DateTime CompleteBy { get; set; }
-        public enumTaskType? TaskType { get; set; } = enumTaskType.Administrative;
+        public string TaskType { get; set; } = "Administrative";
         [Required]
         public string TaskDescription { get; set; }
-        public enumTaskStatus TaskStatus { get; set; }=enumTaskStatus.NotStarted;
+        public string TaskStatus { get; set; }="NotStarted";
         public virtual List<TaskItem> TaskItems { get; set; }
     }
 }

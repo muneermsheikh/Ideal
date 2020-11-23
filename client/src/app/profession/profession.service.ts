@@ -27,8 +27,7 @@ export class ProfessionService {
 
   constructor(private http: HttpClient) { }
 
-  getProfession(id: number) {
-    console.log('enered profservice.getProfession');
+  getProfession(id: number): any {
 
     const profession = this.professions.find(p => p.id === id);
 
@@ -39,7 +38,7 @@ export class ProfessionService {
     return this.http.get<IProfession>(this.baseUrl + 'category/' + id);
   }
 
-  getProfessions(useCache: boolean) {
+  getProfessions(useCache: boolean): any {
     if (useCache === false) {
       this.professions = [];
     }
@@ -87,7 +86,7 @@ export class ProfessionService {
       );
   }
 
-  addProfession(values: any) {
+  addProfession(values: any): any {
     return this.http.post(this.baseUrl + 'category', values
        , {headers: {'Content-Type': 'application/json'}}
       ).pipe(
@@ -101,7 +100,7 @@ export class ProfessionService {
     );
   }
 
-  deleteProfession(values: IProfession) {
+  deleteProfession(values: IProfession): any {
     return this.http.put(this.baseUrl + 'category', values).pipe(
       map((prof: IProfession) => {
         if (prof) {
@@ -113,7 +112,7 @@ export class ProfessionService {
     );
   }
 
-  updateProfession(values: IProfession) {
+  updateProfession(values: IProfession): any {
     return this.http.put(this.baseUrl + 'category', values).pipe(
       map((prof: IProfession) => {
         if (prof) {
@@ -133,7 +132,7 @@ export class ProfessionService {
     this.profParams = params;
   }
 
-  checkRecordExists(prof: string, indId: number, skillId: number) {
+  checkRecordExists(prof: string, indId: number, skillId: number): any {
     const exists =  this.http.get(this.baseUrl +
       'category/exists?cat=' + prof + '&industryTypeId=' + indId + '&skillLevelId=' + skillId);
     return exists === null ? false : true;

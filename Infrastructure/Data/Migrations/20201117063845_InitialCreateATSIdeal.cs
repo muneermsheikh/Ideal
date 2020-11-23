@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialCreateATSIdeal : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -54,26 +54,32 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomerAddresses",
+                name: "Customers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CustomerId = table.Column<int>(nullable: false),
-                    AddressType = table.Column<string>(nullable: true),
+                    CustomerType = table.Column<string>(nullable: true),
+                    CustomerName = table.Column<string>(maxLength: 100, nullable: false),
+                    KnownAs = table.Column<string>(maxLength: 15, nullable: false),
+                    IntroducedBy = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Phone1 = table.Column<string>(nullable: true),
+                    Phone2 = table.Column<string>(nullable: true),
+                    CompanyUrl = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     Address1 = table.Column<string>(nullable: true),
                     Address2 = table.Column<string>(nullable: true),
-                    City = table.Column<string>(nullable: true),
-                    PIN = table.Column<string>(nullable: true),
+                    City = table.Column<string>(maxLength: 50, nullable: false),
+                    Pin = table.Column<string>(nullable: true),
                     State = table.Column<string>(nullable: true),
-                    District = table.Column<string>(nullable: true),
                     Country = table.Column<string>(nullable: true),
-                    Valid = table.Column<bool>(nullable: false),
+                    CustomerStatus = table.Column<string>(nullable: true),
                     AddedOn = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomerAddresses", x => x.Id);
+                    table.PrimaryKey("PK_Customers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -152,10 +158,11 @@ namespace Infrastructure.Data.Migrations
                     FamilyName = table.Column<string>(nullable: true),
                     KnownAs = table.Column<string>(nullable: true),
                     Gender = table.Column<string>(nullable: true),
-                    PPNo = table.Column<string>(nullable: true),
-                    adharNo = table.Column<string>(nullable: true),
+                    PassportNo = table.Column<string>(nullable: true),
+                    AadharNo = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: true),
                     Designation = table.Column<string>(nullable: false),
+                    Department = table.Column<string>(nullable: true),
                     DateOfJoining = table.Column<DateTime>(nullable: false),
                     Email = table.Column<string>(nullable: true),
                     Mobile = table.Column<string>(nullable: true),
@@ -167,6 +174,34 @@ namespace Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Grades",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CustomerId = table.Column<int>(nullable: false),
+                    CurrentGrade = table.Column<int>(nullable: false),
+                    Remarks = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Grades", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IndustryTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IndustryTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -244,6 +279,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    SourceGroup = table.Column<string>(nullable: true),
                     SourceGroupId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false)
                 },
@@ -253,188 +289,31 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customers",
+                name: "CustomerIndustryTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CustomerType = table.Column<string>(nullable: false),
-                    CustomerName = table.Column<string>(maxLength: 100, nullable: false),
-                    KnownAs = table.Column<string>(maxLength: 15, nullable: false),
-                    CityName = table.Column<string>(maxLength: 50, nullable: false),
-                    IntroducedBy = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Mobile = table.Column<string>(nullable: true),
-                    Phone2 = table.Column<string>(nullable: true),
-                    CompanyUrl = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    CustomerStatus = table.Column<string>(nullable: false),
-                    CustomerAddressId1 = table.Column<int>(nullable: true),
-                    CustomerAddressId = table.Column<int>(nullable: true),
-                    CustomerOfficialId = table.Column<int>(nullable: true),
-                    AddedOn = table.Column<DateTime>(nullable: false)
+                    CustomerId = table.Column<int>(nullable: false),
+                    IndustryTypeId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    CustomerId1 = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_CustomerIndustryTypes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Customers_CustomerAddresses_CustomerAddressId1",
-                        column: x => x.CustomerAddressId1,
-                        principalTable: "CustomerAddresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EnquiryItemAssessmentQs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    EnquiryItemId = table.Column<int>(nullable: false),
-                    SrNo = table.Column<int>(nullable: false),
-                    DomainSubjectId = table.Column<int>(nullable: false),
-                    DomainSubId = table.Column<int>(nullable: true),
-                    AssessmentParameter = table.Column<string>(nullable: true),
-                    Question = table.Column<string>(nullable: true),
-                    Mandatory = table.Column<bool>(nullable: false),
-                    MaxPoints = table.Column<int>(nullable: false),
-                    Remarks = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EnquiryItemAssessmentQs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EnquiryItemAssessmentQs_DomainSub_DomainSubId",
-                        column: x => x.DomainSubId,
-                        principalTable: "DomainSub",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Candidates",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ApplicationNo = table.Column<int>(nullable: false),
-                    ApplicationDated = table.Column<DateTime>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    SecondName = table.Column<string>(nullable: true),
-                    FamilyName = table.Column<string>(nullable: false),
-                    KnownAs = table.Column<string>(nullable: false),
-                    Gender = table.Column<string>(nullable: false),
-                    PPNo = table.Column<string>(nullable: false),
-                    ECNR = table.Column<bool>(nullable: false),
-                    AadharNo = table.Column<string>(nullable: true),
-                    DOB = table.Column<DateTime>(nullable: false),
-                    ReferredById = table.Column<int>(nullable: true),
-                    email = table.Column<string>(nullable: true),
-                    CandidateAddress_AddressType = table.Column<string>(nullable: true),
-                    CandidateAddress_Address1 = table.Column<string>(nullable: true),
-                    CandidateAddress_Address2 = table.Column<string>(nullable: true),
-                    CandidateAddress_City = table.Column<string>(nullable: true),
-                    CandidateAddress_PIN = table.Column<string>(nullable: true),
-                    CandidateAddress_State = table.Column<string>(nullable: true),
-                    CandidateAddress_District = table.Column<string>(nullable: true),
-                    CandidateAddress_Country = table.Column<string>(nullable: true),
-                    CandidateAddress_Valid = table.Column<bool>(nullable: true),
-                    CandidateStatus = table.Column<string>(nullable: false),
-                    LastStatusUpdatedById = table.Column<int>(nullable: true),
-                    LastStatusUpdatedOn = table.Column<DateTime>(nullable: false),
-                    AddedOn = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Candidates", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Candidates_Employees_LastStatusUpdatedById",
-                        column: x => x.LastStatusUpdatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EmployeeAddress",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AddressType = table.Column<string>(nullable: true),
-                    Address1 = table.Column<string>(nullable: true),
-                    Address2 = table.Column<string>(nullable: true),
-                    City = table.Column<string>(nullable: true),
-                    PIN = table.Column<string>(nullable: true),
-                    State = table.Column<string>(nullable: true),
-                    District = table.Column<string>(nullable: true),
-                    Country = table.Column<string>(nullable: true),
-                    Valid = table.Column<bool>(nullable: false),
-                    EmployeeId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmployeeAddress", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EmployeeAddress_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: false),
-                    EmployeeId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Roles_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ToDos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    EnquiryId = table.Column<int>(nullable: true),
-                    EnquiryItemId = table.Column<int>(nullable: true),
-                    OwnerId = table.Column<int>(nullable: false),
-                    AssignedToId = table.Column<int>(nullable: false),
-                    TaskDate = table.Column<DateTime>(nullable: false),
-                    CompleteBy = table.Column<DateTime>(nullable: false),
-                    TaskType = table.Column<string>(nullable: false, defaultValue: "Administrative"),
-                    TaskDescription = table.Column<string>(maxLength: 250, nullable: false),
-                    TaskStatus = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ToDos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ToDos_Employees_AssignedToId",
-                        column: x => x.AssignedToId,
-                        principalTable: "Employees",
+                        name: "FK_CustomerIndustryTypes_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ToDos_Employees_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Employees",
+                        name: "FK_CustomerIndustryTypes_Customers_CustomerId1",
+                        column: x => x.CustomerId1,
+                        principalTable: "Customers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -450,11 +329,13 @@ namespace Infrastructure.Data.Migrations
                     Phone = table.Column<string>(nullable: true),
                     Mobile = table.Column<string>(nullable: true),
                     Mobile2 = table.Column<string>(nullable: true),
-                    email = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
                     PersonalEmail = table.Column<string>(nullable: true),
-                    IsValid = table.Column<bool>(nullable: false),
-                    scope = table.Column<int>(nullable: false),
-                    AddedOn = table.Column<DateTime>(nullable: false)
+                    PersonalMobile = table.Column<string>(nullable: true),
+                    IsValid = table.Column<string>(nullable: true),
+                    Scope = table.Column<string>(nullable: true),
+                    AddedOn = table.Column<DateTime>(nullable: false),
+                    CustomerId1 = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -465,6 +346,12 @@ namespace Infrastructure.Data.Migrations
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CustomerOfficials_Customers_CustomerId1",
+                        column: x => x.CustomerId1,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -521,111 +408,235 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Grades",
+                name: "EnquiryItemAssessmentQs",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CustomerId = table.Column<int>(nullable: false),
-                    CurrentGrade = table.Column<int>(nullable: false),
+                    EnquiryItemId = table.Column<int>(nullable: false),
+                    SrNo = table.Column<int>(nullable: false),
+                    DomainSubjectId = table.Column<int>(nullable: false),
+                    DomainSubId = table.Column<int>(nullable: true),
+                    AssessmentParameter = table.Column<string>(nullable: true),
+                    Question = table.Column<string>(nullable: true),
+                    Mandatory = table.Column<bool>(nullable: false),
+                    MaxPoints = table.Column<int>(nullable: false),
                     Remarks = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Grades", x => x.Id);
+                    table.PrimaryKey("PK_EnquiryItemAssessmentQs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Grades_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
+                        name: "FK_EnquiryItemAssessmentQs_DomainSub_DomainSubId",
+                        column: x => x.DomainSubId,
+                        principalTable: "DomainSub",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Candidates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ApplicationNo = table.Column<int>(nullable: false),
+                    ApplicationDated = table.Column<DateTime>(nullable: false),
+                    FirstName = table.Column<string>(nullable: false),
+                    SecondName = table.Column<string>(nullable: true),
+                    FamilyName = table.Column<string>(nullable: false),
+                    KnownAs = table.Column<string>(nullable: false),
+                    Gender = table.Column<string>(nullable: false),
+                    DateOfBirth = table.Column<DateTime>(nullable: false),
+                    ReferredById = table.Column<int>(nullable: false),
+                    SourceId = table.Column<int>(nullable: true),
+                    PassportNo = table.Column<string>(nullable: false),
+                    Ecnr = table.Column<string>(nullable: false),
+                    AadharNo = table.Column<string>(nullable: true),
+                    MobileNo = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    ContactPreference = table.Column<string>(nullable: true),
+                    Address1 = table.Column<string>(nullable: true),
+                    Address2 = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: false),
+                    Pin = table.Column<string>(nullable: true),
+                    District = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true),
+                    CandidateStatus = table.Column<int>(nullable: false),
+                    LastStatusUpdatedOn = table.Column<DateTime>(nullable: true),
+                    LastStatusUpdatedById = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Candidates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Candidates_Employees_LastStatusUpdatedById",
+                        column: x => x.LastStatusUpdatedById,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeeAddresses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    EmployeeId = table.Column<int>(nullable: false),
+                    AddressType = table.Column<string>(nullable: true),
+                    Address1 = table.Column<string>(nullable: true),
+                    Address2 = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    PIN = table.Column<string>(nullable: true),
+                    State = table.Column<string>(nullable: true),
+                    District = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true),
+                    Valid = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeAddresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployeeAddresses_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "IndustryTypes",
+                name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
-                    CustomerId = table.Column<int>(nullable: true)
+                    EmployeeId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IndustryTypes", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_IndustryTypes_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
+                        name: "FK_Roles_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attachments",
+                name: "Skills",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CandidateId = table.Column<int>(nullable: false),
-                    AttachmentType = table.Column<string>(nullable: true),
-                    AttachmentDescription = table.Column<string>(nullable: true),
-                    AttachmentUrl = table.Column<string>(nullable: true),
-                    UploadedOn = table.Column<DateTime>(nullable: false)
+                    EmployeeId = table.Column<int>(nullable: false),
+                    SkillName = table.Column<string>(nullable: true),
+                    ExpInYears = table.Column<string>(nullable: true),
+                    Proficiency = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attachments", x => x.Id);
+                    table.PrimaryKey("PK_Skills", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Attachments_Candidates_CandidateId",
-                        column: x => x.CandidateId,
-                        principalTable: "Candidates",
+                        name: "FK_Skills_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CandidateCategories",
+                name: "ToDos",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CandidateId = table.Column<int>(nullable: false),
-                    CategoryId = table.Column<int>(nullable: false)
+                    EnquiryId = table.Column<int>(nullable: true),
+                    EnquiryItemId = table.Column<int>(nullable: true),
+                    OwnerId = table.Column<int>(nullable: false),
+                    AssignedToId = table.Column<int>(nullable: false),
+                    TaskDate = table.Column<DateTime>(nullable: false),
+                    CompleteBy = table.Column<DateTime>(nullable: false),
+                    TaskType = table.Column<string>(nullable: false, defaultValue: "Administrative"),
+                    TaskDescription = table.Column<string>(maxLength: 250, nullable: false),
+                    TaskStatus = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CandidateCategories", x => x.Id);
+                    table.PrimaryKey("PK_ToDos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CandidateCategories_Candidates_CandidateId",
-                        column: x => x.CandidateId,
-                        principalTable: "Candidates",
+                        name: "FK_ToDos_Employees_AssignedToId",
+                        column: x => x.AssignedToId,
+                        principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ToDos_Employees_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TaskItems",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    TaskId = table.Column<int>(nullable: false),
-                    TransDate = table.Column<DateTime>(nullable: false),
-                    QntyConcluded = table.Column<int>(nullable: true),
-                    TransactionDetail = table.Column<string>(maxLength: 250, nullable: false),
-                    CreateEmailMessage = table.Column<bool>(nullable: false),
-                    RemindOn = table.Column<DateTime>(nullable: true),
-                    ItemStatus = table.Column<int>(nullable: true),
-                    ToDoId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(maxLength: 75, nullable: false),
+                    IndustryTypeId = table.Column<int>(nullable: false),
+                    SkillLevelId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TaskItems", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TaskItems_ToDos_ToDoId",
-                        column: x => x.ToDoId,
-                        principalTable: "ToDos",
+                        name: "FK_Categories_IndustryTypes_IndustryTypeId",
+                        column: x => x.IndustryTypeId,
+                        principalTable: "IndustryTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Categories_SkillLevels_SkillLevelId",
+                        column: x => x.SkillLevelId,
+                        principalTable: "SkillLevels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HRSkillClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    EmployeeId = table.Column<int>(nullable: false),
+                    IndustryTypeId = table.Column<int>(nullable: false),
+                    SkillLevelId = table.Column<int>(nullable: false),
+                    CategoryName = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HRSkillClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HRSkillClaims_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HRSkillClaims_IndustryTypes_IndustryTypeId",
+                        column: x => x.IndustryTypeId,
+                        principalTable: "IndustryTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HRSkillClaims_SkillLevels_SkillLevelId",
+                        column: x => x.SkillLevelId,
+                        principalTable: "SkillLevels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -740,62 +751,71 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Attachments",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(maxLength: 75, nullable: false),
-                    IndustryTypeId = table.Column<int>(nullable: false),
-                    SkillLevelId = table.Column<int>(nullable: false)
+                    CandidateId = table.Column<int>(nullable: false),
+                    AttachmentType = table.Column<string>(nullable: true),
+                    AttachmentDescription = table.Column<string>(nullable: true),
+                    AttachmentUrl = table.Column<string>(nullable: true),
+                    UploadedOn = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Attachments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_IndustryTypes_IndustryTypeId",
-                        column: x => x.IndustryTypeId,
-                        principalTable: "IndustryTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Categories_SkillLevels_SkillLevelId",
-                        column: x => x.SkillLevelId,
-                        principalTable: "SkillLevels",
+                        name: "FK_Attachments_Candidates_CandidateId",
+                        column: x => x.CandidateId,
+                        principalTable: "Candidates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "HRSkillClaims",
+                name: "CandidateCategories",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    EmployeeId = table.Column<int>(nullable: false),
-                    IndustryTypeId = table.Column<int>(nullable: false),
-                    SkillLevelId = table.Column<int>(nullable: false),
-                    CategoryName = table.Column<string>(nullable: false)
+                    CandidateId = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HRSkillClaims", x => x.Id);
+                    table.PrimaryKey("PK_CandidateCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HRSkillClaims_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_CandidateCategories_Candidates_CandidateId",
+                        column: x => x.CandidateId,
+                        principalTable: "Candidates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TaskItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TaskId = table.Column<int>(nullable: false),
+                    TransDate = table.Column<DateTime>(nullable: false),
+                    QntyConcluded = table.Column<int>(nullable: true),
+                    TransactionDetail = table.Column<string>(maxLength: 250, nullable: false),
+                    CreateEmailMessage = table.Column<bool>(nullable: false),
+                    RemindOn = table.Column<DateTime>(nullable: true),
+                    ItemStatus = table.Column<int>(nullable: true),
+                    ToDoId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HRSkillClaims_IndustryTypes_IndustryTypeId",
-                        column: x => x.IndustryTypeId,
-                        principalTable: "IndustryTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_HRSkillClaims_SkillLevels_SkillLevelId",
-                        column: x => x.SkillLevelId,
-                        principalTable: "SkillLevels",
+                        name: "FK_TaskItems_ToDos_ToDoId",
+                        column: x => x.ToDoId,
+                        principalTable: "ToDos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1013,6 +1033,12 @@ namespace Infrastructure.Data.Migrations
                 {
                     table.PrimaryKey("PK_CVRefs", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_CVRefs_Candidates_CandidateId",
+                        column: x => x.CandidateId,
+                        principalTable: "Candidates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_CVRefs_EnquiryItems_EnquiryItemId",
                         column: x => x.EnquiryItemId,
                         principalTable: "EnquiryItems",
@@ -1121,6 +1147,7 @@ namespace Infrastructure.Data.Migrations
                     ProcessingDate = table.Column<DateTime>(nullable: false),
                     Status = table.Column<string>(nullable: false),
                     NextProcessingId = table.Column<int>(nullable: true),
+                    attachmentUrl = table.Column<string>(nullable: true),
                     Remarks = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -1157,6 +1184,34 @@ namespace Infrastructure.Data.Migrations
                         name: "FK_SelDecisions_CVRefs_CVRefID",
                         column: x => x.CVRefID,
                         principalTable: "CVRefs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Travels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProcessId = table.Column<int>(nullable: false),
+                    CVRefId = table.Column<int>(nullable: false),
+                    BoardingAirport = table.Column<string>(nullable: true),
+                    DestinationAirport = table.Column<string>(nullable: true),
+                    Airline = table.Column<string>(nullable: true),
+                    FlightNo = table.Column<string>(nullable: true),
+                    ETD = table.Column<DateTime>(nullable: false),
+                    ETA = table.Column<DateTime>(nullable: false),
+                    BookedOn = table.Column<DateTime>(nullable: false),
+                    PNR = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Travels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Travels_Processes_ProcessId",
+                        column: x => x.ProcessId,
+                        principalTable: "Processes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1209,7 +1264,7 @@ namespace Infrastructure.Data.Migrations
                 column: "CandidateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CandidateCategories_CatId_CandId",
+                name: "IX_CandidateCategories_CategoryId_CandidateId",
                 table: "CandidateCategories",
                 columns: new[] { "CategoryId", "CandidateId" },
                 unique: true);
@@ -1226,9 +1281,9 @@ namespace Infrastructure.Data.Migrations
                 column: "LastStatusUpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Candidates_PPNo",
+                name: "IX_Candidates_PassportNo",
                 table: "Candidates",
-                column: "PPNo",
+                column: "PassportNo",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1254,14 +1309,25 @@ namespace Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CustomerIndustryTypes_CustomerId1",
+                table: "CustomerIndustryTypes",
+                column: "CustomerId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerIndustryTypes_CustomerId_IndustryTypeId",
+                table: "CustomerIndustryTypes",
+                columns: new[] { "CustomerId", "IndustryTypeId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CustomerOfficials_CustomerId",
                 table: "CustomerOfficials",
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_CustomerAddressId1",
-                table: "Customers",
-                column: "CustomerAddressId1");
+                name: "IX_CustomerOfficials_CustomerId1",
+                table: "CustomerOfficials",
+                column: "CustomerId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CVEvaluations_CandidateId",
@@ -1282,6 +1348,11 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_CVForwards_CustomerId",
                 table: "CVForwards",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CVRefs_CandidateId",
+                table: "CVRefs",
+                column: "CandidateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CVRefs_EnquiryItemId",
@@ -1311,8 +1382,8 @@ namespace Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeAddress_EmployeeId",
-                table: "EmployeeAddress",
+                name: "IX_EmployeeAddresses_EmployeeId",
+                table: "EmployeeAddresses",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
@@ -1392,12 +1463,6 @@ namespace Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Grades_CustomerId",
-                table: "Grades",
-                column: "CustomerId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_HRSkillClaims_EmployeeId",
                 table: "HRSkillClaims",
                 column: "EmployeeId");
@@ -1411,11 +1476,6 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_HRSkillClaims_SkillLevelId",
                 table: "HRSkillClaims",
                 column: "SkillLevelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IndustryTypes_CustomerId",
-                table: "IndustryTypes",
-                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IndustryTypes_Name",
@@ -1476,6 +1536,11 @@ namespace Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Skills_EmployeeId",
+                table: "Skills",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SourceGroups_Name",
                 table: "SourceGroups",
                 column: "Name",
@@ -1511,6 +1576,12 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_ToDos_TaskType",
                 table: "ToDos",
                 column: "TaskType");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Travels_ProcessId",
+                table: "Travels",
+                column: "ProcessId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1537,6 +1608,9 @@ namespace Infrastructure.Data.Migrations
                 name: "ContractReviewItems");
 
             migrationBuilder.DropTable(
+                name: "CustomerIndustryTypes");
+
+            migrationBuilder.DropTable(
                 name: "CVEvaluations");
 
             migrationBuilder.DropTable(
@@ -1552,7 +1626,7 @@ namespace Infrastructure.Data.Migrations
                 name: "Emoluments");
 
             migrationBuilder.DropTable(
-                name: "EmployeeAddress");
+                name: "EmployeeAddresses");
 
             migrationBuilder.DropTable(
                 name: "EnquiryItemAssessmentQs");
@@ -1573,9 +1647,6 @@ namespace Infrastructure.Data.Migrations
                 name: "JobDescriptions");
 
             migrationBuilder.DropTable(
-                name: "Processes");
-
-            migrationBuilder.DropTable(
                 name: "ProcessStatuses");
 
             migrationBuilder.DropTable(
@@ -1588,6 +1659,9 @@ namespace Infrastructure.Data.Migrations
                 name: "SelDecisions");
 
             migrationBuilder.DropTable(
+                name: "Skills");
+
+            migrationBuilder.DropTable(
                 name: "SourceGroups");
 
             migrationBuilder.DropTable(
@@ -1595,6 +1669,9 @@ namespace Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "TaskItems");
+
+            migrationBuilder.DropTable(
+                name: "Travels");
 
             migrationBuilder.DropTable(
                 name: "Assessments");
@@ -1615,10 +1692,13 @@ namespace Infrastructure.Data.Migrations
                 name: "SkillLevels");
 
             migrationBuilder.DropTable(
-                name: "CVRefs");
+                name: "ToDos");
 
             migrationBuilder.DropTable(
-                name: "ToDos");
+                name: "Processes");
+
+            migrationBuilder.DropTable(
+                name: "CVRefs");
 
             migrationBuilder.DropTable(
                 name: "EnquiryItems");
@@ -1637,9 +1717,6 @@ namespace Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customers");
-
-            migrationBuilder.DropTable(
-                name: "CustomerAddresses");
         }
     }
 }

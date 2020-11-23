@@ -19,7 +19,7 @@ namespace Infrastructure.Data.Config
            */ builder.Property( x => x.LeaveEntitlementPerYear).IsRequired();
             builder.HasIndex(x => x.EnquiryItemId).IsUnique();
 
-            builder.Property(s => s.Housing)
+        /*    builder.Property(s => s.Housing)
                 .HasConversion(
                     o => o.ToString(),
                     o => (enumProvision) Enum.Parse(typeof(enumProvision), o)
@@ -35,7 +35,8 @@ namespace Infrastructure.Data.Config
                     o => o.ToString(),
                     o => (enumProvision) Enum.Parse(typeof(enumProvision), o)
                 );
-            
+        */
+         
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Infrastructure.Data.Config
             builder.Property(x => x.CandidateId).IsRequired();
             builder.Property(x => x.EnquiryItemId).IsRequired();
             builder.Property(x => x.HRExecutiveId).IsRequired();
-
+    /*
             builder.Property(s => s.HRSupReviewResult)
                 .HasConversion(
                     o => o.ToString(),
@@ -24,6 +24,7 @@ namespace Infrastructure.Data.Config
                     o => o.ToString(),
                     o => (enumItemReviewStatus) Enum.Parse(typeof(enumItemReviewStatus), o)
                 );
+    */
         }
     }
 }

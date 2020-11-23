@@ -7,16 +7,20 @@ namespace Core.Interfaces
 {
     public interface ICustomerService
     {
-        Task<Customer> CreateCustomerAsync (Customer customerDto);
+        Task<Customer> AddCustomerAsync(Customer customer);
         Task<clsString> GetCustomerFromEnquiryItemId(int EnquiryItemId);
         Task<IReadOnlyList<Customer>> CustomerListAsync (CustomerSpecParams custParams);
 
         Task<Customer> CustomerByIdAsync(int customerId);
         Task<int> DeleteCustomerByIdAsync(int customerId);
-        Task<int> UpdateCustomerByIdAsync(Customer customer);
+        Task<Customer> UpdateCustomer(Customer customer);
         Task<int> GetCustomerIdFromEmail(CustomerSpecParams custParams);
+        Task<string> CustomerCountryCurrency(int customerId);
+        Task<IReadOnlyList<Customer>> GetCustomerListFlat(string customerType);
+        
 //officials
         Task<IReadOnlyList<CustomerOfficial>> GetCustomerOfficialList(int CustomerId);
+        Task<IReadOnlyList<CustomerOfficial>> GetAllOfficialList();
         Task<IReadOnlyList<CustomerOfficial>> InsertOfficials(List<CustomerOfficial> officials);
         Task<int> UpdateOfficials(List<CustomerOfficial> officials);
     

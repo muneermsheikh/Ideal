@@ -11,7 +11,7 @@ namespace Core.Interfaces
          Task<Candidate> RegisterCandidate(Candidate candidate);
          Task<IReadOnlyList<Candidate>> RegisterCandidates(IReadOnlyList<Candidate> candidate);
          Task<Candidate> UpdateCandidate (Candidate candidateToUpdateDto);
-         Task<bool> DeleteCandidate(Candidate candidate);
+         Task<int> DeleteCandidate(int id);
          Task<Candidate> GetCandidateBySpec(CandidateParams candidateParams);
          Task<Candidate> GetCandidateById(int candidateId);
          Task<Candidate> GetCandidateByApplicationNo(int ApplicationNo);

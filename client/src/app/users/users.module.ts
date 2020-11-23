@@ -5,15 +5,15 @@ import { ClientsComponent } from './clients/clients.component';
 import { AssociatesComponent } from './associates/associates.component';
 import { UsersRoutingModule } from './users-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { ClientAddComponent } from './clients/client-add/client-add.component';
-import { ClientDetailComponent } from './clients/client-detail/client-detail.component';
 import { CandidateCreateComponent } from './candidate/candidate-create/candidate-create.component';
+import { ClientCreateComponent } from './clients/client-create/client-create.component';
 
 
 @NgModule({
   declarations: [CandidateComponent, ClientsComponent, AssociatesComponent,
-    ClientAddComponent,
-    ClientDetailComponent, CandidateCreateComponent],
+    CandidateCreateComponent,
+    ClientCreateComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,

@@ -20,7 +20,7 @@ namespace API.Dtos
         public string BasketId {get; set;}
         public DateTime CompleteBy { get; set; }
         
-        public bool ReadyToReview {get; set; }
+        public string ReadyToReview {get; set; }
         public string EnquiryStatus { get; set; }
         
         public string Remarks { get; set; }

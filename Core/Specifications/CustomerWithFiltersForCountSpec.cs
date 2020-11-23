@@ -8,15 +8,17 @@ namespace Core.Specifications
     {
         public CustomerWithFiltersForCountSpec(CustomerSpecParams custParams)
             :  base( x => (
-                (string.IsNullOrEmpty(custParams.Search) || 
+                 (string.IsNullOrEmpty(custParams.Search) || 
                     x.CustomerName.ToLower().Contains(custParams.Search)) &&
                 (string.IsNullOrEmpty(custParams.City) || 
-                    x.CityName.ToLower().Contains(custParams.City)) &&
+                    x.City.ToLower().Contains(custParams.City)) &&
                 (string.IsNullOrEmpty(custParams.Email) || 
                     x.CustomerName.ToLower().Contains(custParams.Email)) &&
-                (!custParams.CustomerType.HasValue || x.CustomerType == custParams.CustomerType) &&
-                (!custParams.CustomerStatus.HasValue || x.CustomerStatus == custParams.CustomerStatus)) &&
-                (!custParams.CustomerId.HasValue || x.Id == custParams.CustomerId))
+                (string.IsNullOrEmpty(custParams.CustomerType) || 
+                    x.CustomerType.ToLower() == custParams.CustomerType) &&
+                (string.IsNullOrEmpty(custParams.CustomerStatus) || 
+                    x.CustomerStatus.ToLower() == custParams.CustomerStatus) &&
+                (!custParams.CustomerId.HasValue || x.Id == custParams.CustomerId)))
         {
         }
     }

@@ -229,7 +229,7 @@ namespace Infrastructure.Services
 
             // get the customer official id
             var offIds = await _context.CustomerOfficials
-                .Where(x=>x.CustomerId==customerId && x.IsValid).OrderBy(x=>x.scope)
+                .Where(x=>x.CustomerId==customerId && x.IsValid.ToLower()=="t").OrderBy(x=>x.Scope)
                 .Select(x=>x.Id).ToListAsync();
             if (offIds==null) throw new Exception("Oficials of the customer not defined");
             if (!offIds.Contains(cvrefdto.CustomerOfficialId))
@@ -339,7 +339,7 @@ namespace Infrastructure.Services
                 join cat in _context.Categories on i.CategoryItemId equals cat.Id
                 where fw.Id==CVForwardId
                 select new {customername=e.Customer.CustomerName, 
-                    customercity=e.Customer.CityName, projmgrid=e.ProjectManagerId,
+                    customercity=e.Customer.City, projmgrid=e.ProjectManagerId,
                     catref=e.EnquiryNo+"-"+i.SrNo+"-"+cat.Name, enquiryid=e.Id,
                     orderdate=e.EnquiryDate, appno=c.ApplicationNo, ppno=c.PassportNo,
                     candidatename=c.FullName, fwdon=fw.DateForwarded, 
@@ -356,7 +356,7 @@ namespace Infrastructure.Services
 
                 tasks.Add(new ToDo
                 (_docControllerId, item.projmgrid, dateNow,
-                    dateNow.AddDays(4), description, enumTaskType.Administrative, 
+                    dateNow.AddDays(4), description, "Administrative", 
                     item.enquiryid, item.enquiryitemid
                 ));
             }

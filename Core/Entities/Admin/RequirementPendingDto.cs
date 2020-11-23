@@ -10,7 +10,7 @@ namespace Core.Entities.Admin
         {
         }
 
-        public RequirementPendingDto(int enquiryno, string enqdated, string customerName, string categoryRef, int quantity, 
+        public RequirementPendingDto(string enquiryno, string enqdated, string customerName, string categoryRef, int quantity, 
         int totalReferred, int totalSelected, int totalRejected, int totalUnderClientReview, int totalDeployed,
         int totalToSendToClient, string completeBy, string status)
         {
@@ -30,7 +30,7 @@ namespace Core.Entities.Admin
         }
 
         public string CustomerName {get; set; }
-        public int EnquiryNo {get; set;}
+        public string EnquiryNo {get; set;}
         public string EnquiryDated {get; set;}
         public string CategoryRef { get; set; }
         public int Quantity { get; set; }

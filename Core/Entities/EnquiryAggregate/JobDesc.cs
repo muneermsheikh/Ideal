@@ -14,6 +14,13 @@ namespace Core.Entities.EnquiryAggregate
             EnquiryItemId = enquiryItemId;
         }
 
+        
+        public JobDesc(string jobDescription, string jobProfileUrl) 
+        {
+            JobDescription = jobDescription;
+            JobProfileUrl = jobProfileUrl;
+        }
+
         public JobDesc(int enquiryId, int enquiryItemId, string jobDescription, 
             string jobProfileUrl) 
         {

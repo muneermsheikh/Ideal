@@ -13,11 +13,6 @@ namespace Infrastructure.Data.Config
             builder.OwnsOne(i => i.ItemOrdered, io => {io.WithOwner();});
         
             builder.HasIndex("EnquiryId", "CategoryItemId").IsUnique();
-            
-            builder.Property(x => x.Status).HasConversion(
-                o => o.ToString(),
-                o => (enumItemReviewStatus) Enum.Parse(typeof(enumItemReviewStatus), o)
-            );
         
         }
     }

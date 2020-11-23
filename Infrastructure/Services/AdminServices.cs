@@ -47,7 +47,7 @@ namespace Infrastructure.Services
                 join cat in _context.Categories on i.CategoryItemId equals cat.Id
                 join r in _context.CVRefs on i.Id equals r.EnquiryItemId 
 
-                where i.EnquiryStatus != enumEnquiryStatus.Concluded
+                where i.EnquiryStatus != "Concluded"
                 
                 group new {i.Id, r.RefStatus}
                 by new 
@@ -99,7 +99,7 @@ namespace Infrastructure.Services
                 join cat in _context.Categories on i.CategoryItemId equals cat.Id
                 join r in _context.CVRefs on i.Id equals r.EnquiryItemId 
 
-                where enquiryIds.Contains(e.Id) && i.EnquiryStatus != enumEnquiryStatus.Concluded
+                where enquiryIds.Contains(e.Id) && i.EnquiryStatus != "Concluded"
                 
                 group new {i.Id, r.RefStatus}
                 by new 

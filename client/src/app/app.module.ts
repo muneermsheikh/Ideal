@@ -12,11 +12,11 @@ import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptors';
 import { ProfessionModule } from './profession/profession.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UsersModule } from './users/users.module';
 import { EmployeesComponent } from './employees/employees/employees.component';
 import { EmpCreateComponent } from './employees/emp-create/emp-create.component';
-
+import { OrdersModule } from './orders/orders.module';
 
 
 @NgModule({
@@ -36,7 +36,9 @@ import { EmpCreateComponent } from './employees/emp-create/emp-create.component'
     NgxSpinnerModule,
     ProfessionModule,
     ReactiveFormsModule,
-    UsersModule
+    FormsModule,
+    UsersModule,
+    OrdersModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

@@ -71,6 +71,10 @@ export class EmployeesService {
     return this.http.get<IEmployee>(this.baseUrl + 'employees/' + id);
   }
 
+  getEmployeesData(): any {
+    return this.http.get<IEmployee[]>(this.baseUrl + 'employees/employeesflat');
+  }
+
   getEmployees(useCache: boolean): any {
 
     if (useCache === false) {
@@ -113,7 +117,6 @@ export class EmployeesService {
       .pipe(
         map(response => {
           this.employees = [...this.employees, ...response.body.data];
-          console.log(this.employees);
           this.paginationEmployee = response.body;
           // console.log('getCandidates returned ' + response.body.count);
           return this.paginationEmployee;

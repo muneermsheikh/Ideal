@@ -2,8 +2,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ProfessionService } from 'src/app/profession/profession.service';
 import { IClient } from 'src/app/shared/models/client';
 import { ClientParams } from 'src/app/shared/models/clientParams';
+import { IIndustryType } from 'src/app/shared/models/industryType';
 import { IPaginationClient, PaginationClient } from 'src/app/shared/models/paginationClient';
 import { environment } from 'src/environments/environment';
 
@@ -15,6 +17,7 @@ export class ClientsService {
   private baseUrl = environment.apiUrl;
   clients: IClient[] = [];
   client: IClient;
+  indTypes: IIndustryType[];
   pagination = new PaginationClient();
 
   params = new ClientParams();
@@ -30,10 +33,11 @@ export class ClientsService {
   ];
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private profService: ProfessionService) { }
 
-  addClient(values: any) {
-    return this.http.post(this.baseUrl + 'Customer', values).pipe(
+  addClient(values: any): any {
+    return this.http.post(this.baseUrl + 'Customers', values).pipe(
       map((cand: IClient) => {
         if (cand) {
           console.log(cand);
@@ -45,23 +49,8 @@ export class ClientsService {
   }
 
 
-  /* delete returns integer - correct flg
-  
-  deleteCandidate(values: ICandidate) {
-    return this.http.delete(this.baseUrl + 'HR/candidate', values).pipe(
-      map((cand: number) => {
-        if (cand !== 0) {
-          console.log('candidate deleted'); }
-        }, error => {
-          console.log(error);
-        }
-      )
-    );
-  }
-*/
-
-  updateClient(values: IClient) {
-    return this.http.put(this.baseUrl + 'Customer', values).pipe(
+  updateClient(values: IClient): any {
+    return this.http.put(this.baseUrl + 'Customers', values).pipe(
       map((client: IClient) => {
         if (client) {
           console.log('client ' + client.customerName + ' updated'); }
@@ -73,19 +62,18 @@ export class ClientsService {
   }
 
 
-  getClient(id: number) {
+  getClient(id: number): any {
     const client = this.clients.find(p => p.id === id);
 
     if (client) {
+      // console.log('clients.service.ts - found client in list of clients - id =' + client.city);
       return of(client);
     }
-    console.log(id);
-    return this.http.get<IClient>(this.baseUrl + 'Customer/' + id);
+    // console.log('getting from api - id =' + id);
+    return this.http.get<IClient>(this.baseUrl + 'Customers/getcustomer/' + id);
   }
 
-  getClients(useCache: boolean) {
-
-    // console.log('entered userService.getCandidates');
+  getClients(useCache: boolean): any {
 
     if (useCache === false) {
       this.clients = [];
@@ -122,13 +110,13 @@ export class ClientsService {
 
     params = params.append('pageIndex', this.params.pageNumber.toString());
     params = params.append('pageSize', this.params.pageSize.toString());
-    console.log(params);
+    // console.log(params);
 
     return this.http.get<IPaginationClient>(this.baseUrl + 'Customers', { observe: 'response', params })
       .pipe(
         map(response => {
           this.clients = [...this.clients, ...response.body.data];
-          console.log(this.clients);
+          // console.log(this.clients);
           this.pagination = response.body;
           return this.pagination;
         }, error => {
@@ -137,12 +125,16 @@ export class ClientsService {
       );
   }
 
-  getParams(): ClientParams {
+  getClientParams(): ClientParams {
     return this.params;
   }
 
-  setCandParams(params: ClientParams): void {
+  setClientParams(params: ClientParams): void {
     this.params = params;
+  }
+
+  getIndustryTypes(): any {
+    return this.http.get<IIndustryType[]>(this.baseUrl + 'Category/IndustryTypesWoPagination');
   }
 
 }

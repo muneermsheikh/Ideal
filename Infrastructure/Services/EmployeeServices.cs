@@ -203,13 +203,11 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Employee>().GetEntityListWithSpec(spec);
         }
 
+
     /* this is repeated above
         public async Task<Employee> UpdateEmployeeAsync(Employee employee)
         {
-
-            
-       
-            //return await _unitOfWork.Repository<Employee>().UpdateAsync(employee);
+      //return await _unitOfWork.Repository<Employee>().UpdateAsync(employee);
             var lstSkills = await _context.Skills.Where(x => x.EmployeeId == employee.Id).ToListAsync();
 
             if (lstSkills != null || lstSkills.Count > 0) {
@@ -274,5 +272,9 @@ namespace Infrastructure.Services
             return _context.Employees.Where(x=>x.Id==employeeId).Select(x=>x.FullName).FirstOrDefault();
         }
 
+        public async Task<IReadOnlyList<Employee>> GetEmployeeListFlat()
+        {
+            return await _context.Employees.Where(x => x.IsInEmployment == true).OrderBy(x => x.FirstName).ToListAsync();
+        }
     }
 }

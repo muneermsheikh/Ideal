@@ -1,63 +1,78 @@
 [
     {   "ApplicationNo": 1000, "ApplicationDated": "2020-01-02",  "FirstName": "Subhash Rajaram","FamilyName": "Kulkarni", 
-        "KnownAs": "Subhash", "Gender": "M", "PPNo": "A1234034", "AadharNo": "123456533", "DOB": "1985-12-10T12:32:10",
-        "candidateCategories":[{"catId": 3}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+        "KnownAs": "Subhash", "Gender": "M", "PassportNo": "A1234034", "AadharNo": "123456533", "DateOfBirth": "1985-12-10T12:32:10", 
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 3}, {"CategoryId": 2}, {"CategoryId": 5}, {"CategoryId": 4}]
     },
     {   "ApplicationNo": 1001, "ApplicationDated": "2010-01-01", "FirstName": "Rajesh Jamadar", "FamilyName": "Kulkarni", 
-        "KnownAs": "Rajesh", "Gender": "M", "PPNo": "A1234566", "AadharNo": "1233434893",  "DOB": "1991-12-10T12:32:10",
-        "candidateCategories":[{"catId": 4}, {"catId": 2}, {"catId": 7}, {"catId": 8}]
+        "KnownAs": "Rajesh", "Gender": "M", "PassportNo": "A1234566", "AadharNo": "1233434893",  "DateOfBirth": "1991-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 4}, {"CategoryId": 2}, {"CategoryId": 7}, {"CategoryId": 8}]
     },
     {   "ApplicationNo": 1002, "ApplicationDated": "2015-01-02", "FirstName": "Rajeesh Haalaram", "FamilyName": "Haldankar", 
-        "KnownAs": "Rajesh", "Gender": "M", "PPNo": "A1333422623", "AadharNo": "123790131", "DOB": "1980-12-10T12:32:10",
-        "candidateCategories":[{"catId": 5}, {"catId": 3}, {"catId": 11}, {"catId": 10}]
+        "KnownAs": "Rajesh", "Gender": "M", "PassportNo": "A1333422623", "AadharNo": "123790131", "DateOfBirth": "1980-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 5}, {"CategoryId": 3}, {"CategoryId": 11}, {"CategoryId": 10}]
     },   
     {   "ApplicationNo": 1003, "ApplicationDated": "2020-01-01",  "FirstName": "James", "FamilyName": "Butt",  
-        "KnownAs": "James", "Gender": "M", "PPNo": "U12343312", "AadharNo": "1904562412", "DOB": "1991-12-10T12:32:10",
-        "candidateCategories":[{"catId": 6}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+        "KnownAs": "James", "Gender": "M", "PassportNo": "U12343312", "AadharNo": "1904562412", "DateOfBirth": "1991-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 6}, {"CategoryId": 2}, {"CategoryId": 5}, {"CategoryId": 4}]
     },
     {   "ApplicationNo": 1004, "ApplicationDated": "2020-01-02",  "FirstName": "Josephine","FamilyName": "Darakjy", 
-        "KnownAs": "Josephine", "Gender": "F", "PPNo": "B15544655", "AadharNo": "204564533", "DOB": "1985-12-10T12:32:10",
-        "candidateCategories":[{"catId": 7}, {"catId": 10}, {"catId": 9}, {"catId": 8}]
+        "KnownAs": "Josephine", "Gender": "F", "PassportNo": "B15544655", "AadharNo": "204564533", "DateOfBirth": "1985-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 7}, {"CategoryId": 10}, {"CategoryId": 9}, {"CategoryId": 8}]
     },
     {   "ApplicationNo": 1005, "ApplicationDated": "2010-01-01", "FirstName": "Donnett", "FamilyName": "Foller", 
-        "KnownAs": "Donnet", "Gender": "F", "PPNo": "M023546", "AadharNo": "123347783",  "DOB": "1991-12-10T12:32:10",
-        "candidateCategories":[{"catId": 8}, {"catId": 12}, {"catId": 13}, {"catId": 14}]
+        "KnownAs": "Donnet", "Gender": "F", "PassportNo": "M023546", "AadharNo": "123347783",  "DateOfBirth": "1991-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 8}, {"CategoryId": 12}, {"CategoryId": 13}, {"CategoryId": 14}]
     },
     {   "ApplicationNo": 1006, "ApplicationDated": "2015-01-02", "FirstName": "Simon", "FamilyName": "Morasca", 
-        "KnownAs": "Simon", "Gender": "M", "PPNo": "A133343223", "AadharNo": "123890131", "DOB": "1980-12-10T12:32:10",
-        "candidateCategories":[{"catId": 9}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+        "KnownAs": "Simon", "Gender": "M", "PassportNo": "A133343223", "AadharNo": "123890131", "DateOfBirth": "1980-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 9}, {"CategoryId": 2}, {"CategoryId": 5}, {"CategoryId": 4}]
     },
     {   "ApplicationNo": 1007, "ApplicationDated": "2020-01-01",  "FirstName": "Gladys", "FamilyName": "Rim",  
-        "KnownAs": "Gladys", "Gender": "F", "PPNo": "A12345112", "AadharNo": "1235623412", "DOB": "1991-12-10T12:32:10",
-        "candidateCategories":[{"catId": 10}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+        "KnownAs": "Gladys", "Gender": "F", "PassportNo": "A12345112", "AadharNo": "1235623412", "DateOfBirth": "1991-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 10}, {"CategoryId": 2}, {"CategoryId": 5}, {"CategoryId": 4}]
     },
     {   "ApplicationNo": 1008, "ApplicationDated": "2020-01-02",  "FirstName": "Fletcher","FamilyName": "Flossy", 
-        "KnownAs": "Fletcher", "Gender": "M", "PPNo": "A12134634", "AadharNo": "134564533", "DOB": "1985-12-10T12:32:10",
-        "candidateCategories":[{"catId": 3}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+        "KnownAs": "Fletcher", "Gender": "M", "PassportNo": "A12134634", "AadharNo": "134564533", "DateOfBirth": "1985-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 3}, {"CategoryId": 2}, {"CategoryId": 5}, {"CategoryId": 4}]
     },
     {   "ApplicationNo": 1009, "ApplicationDated": "2010-01-01", "FirstName": "Valentine", "FamilyName": "Gillian", 
-        "KnownAs": "Valentine", "Gender": "F", "PPNo": "A33145566", "AadharNo": "154347893",  "DOB": "1991-12-10T12:32:10",
-        "candidateCategories":[{"catId": 3}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+        "KnownAs": "Valentine", "Gender": "F", "PassportNo": "A33145566", "AadharNo": "154347893",  "DateOfBirth": "1991-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 3}, {"CategoryId": 2}, {"CategoryId": 5}, {"CategoryId": 4}]
     },
     {   "ApplicationNo": 1010, "ApplicationDated": "2015-01-02", "FirstName": "Fatima Saylors", "FamilyName": "Stanton", 
-        "KnownAs": "Fatima", "Gender": "M", "PPNo": "z44446213", "AadharNo": "144490131", "DOB": "1980-12-10T12:32:10",
-        "candidateCategories":[{"catId": 3}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+        "KnownAs": "Fatima", "Gender": "M", "PassportNo": "z44446213", "AadharNo": "144490131", "DateOfBirth": "1980-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 3}, {"CategoryId": 2}, {"CategoryId": 5}, {"CategoryId": 4}]
     },
     {   "ApplicationNo": 1011, "ApplicationDated": "2020-01-01",  "FirstName": "John", "FamilyName": "Lobo",  
-        "KnownAs": "John", "Gender": "M", "PPNo": "M13544112", "AadharNo": "9455623412", "DOB": "1991-12-10T12:32:10",
-        "candidateCategories":[{"catId": 9}, {"catId": 11}, {"catId": 12}, {"catId": 14}]
+        "KnownAs": "John", "Gender": "M", "PassportNo": "M13544112", "AadharNo": "9455623412", "DateOfBirth": "1991-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 9}, {"CategoryId": 11}, {"CategoryId": 12}, {"CategoryId": 14}]
     },
     {   "ApplicationNo": 1012, "ApplicationDated": "2020-01-02",  "FirstName": "Karl","FamilyName": "Rossy", 
-        "KnownAs": "Karl", "Gender": "M", "PPNo": "A1016134", "AadharNo": "1164533", "DOB": "1985-12-10T12:32:10",
-        "candidateCategories":[{"catId": 7}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+        "KnownAs": "Karl", "Gender": "M", "PassportNo": "A1016134", "AadharNo": "1164533", "DateOfBirth": "1985-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 7}, {"CategoryId": 2}, {"CategoryId": 5}, {"CategoryId": 4}]
     },
     {   "ApplicationNo": 1013, "ApplicationDated": "2010-01-01", "FirstName": "Mohammed Aftab", "FamilyName": "Saiyyad", 
-        "KnownAs": "Aftab", "Gender": "M", "PPNo": "A1234166", "AadharNo": "2334347893",  "DOB": "1991-12-10T12:32:10",
-        "candidateCategories":[{"catId": 1}, {"catId": 6}, {"catId": 5}, {"catId": 7}]
+        "KnownAs": "Aftab", "Gender": "M", "PassportNo": "A1234166", "AadharNo": "2334347893",  "DateOfBirth": "1991-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 1}, {"CategoryId": 6}, {"CategoryId": 5}, {"CategoryId": 7}]
     },
     {   "ApplicationNo": 1014, "ApplicationDated": "2015-01-02", "FirstName": "Syed Aziz", "FamilyName": "Khadaklat", 
-        "KnownAs": "Abdul Aziz", "Gender": "M", "PPNo": "A1331123", "AadharNo": "137890131", "DOB": "1980-12-10T12:32:10",
-        "candidateCategories":[{"catId": 1}, {"catId": 2}, {"catId": 5}, {"catId": 4}]
+        "KnownAs": "Abdul Aziz", "Gender": "M", "PassportNo": "A1331123", "AadharNo": "137890131", "DateOfBirth": "1980-12-10T12:32:10",
+        "City": "Mumbai", "Country": "India", 
+        "candidateCategories":[{"CategoryId": 1}, {"CategoryId": 2}, {"CategoryId": 5}, {"CategoryId": 4}]
     }
 
 ]

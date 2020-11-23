@@ -17,7 +17,7 @@ namespace API.Helpers
         public string Resolve(CVRef source, CVRefHdrDto destination, string destMember, ResolutionContext context)
         {
             var qry = (from i in _context.EnquiryItems join e in _context.Enquiries 
-                on i.EnquiryId equals e.Id select e.Customer.CityName).SingleOrDefault();
+                on i.EnquiryId equals e.Id select e.Customer.City).SingleOrDefault();
             if (qry==null) return "customer city not found";
             return qry;
         }

@@ -2,7 +2,6 @@ export interface ICandidate {
   id: number;
   applicationNo: number;
   applicationDated: string;
-  // addedOn: string;
   gender: string;
   firstName: string;
   secondName: string;

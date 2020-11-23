@@ -69,7 +69,7 @@ namespace API.Controllers
 
         [HttpPost("evalbySup")]
         public async Task<ActionResult<CVEvaluationDto>> CVEvaluationBySup(int cvEvalId, 
-            enumItemReviewStatus status)
+            string status)
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(HttpContext.User);
             if(user == null) return Unauthorized(new ApiResponse(400, "Unauthorized access"));
@@ -84,7 +84,7 @@ namespace API.Controllers
 
 
         [HttpPut("evalbyHRM")]
-        public async Task<ActionResult<CVEvaluationDto>> CVEvaluationByHRM(int cvEvalId, enumItemReviewStatus status)
+        public async Task<ActionResult<CVEvaluationDto>> CVEvaluationByHRM(int cvEvalId, string status)
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(HttpContext.User);
             var userId = await _context.Employees.Where(x => x.Email == user.Email).Select(x => x.Id).FirstOrDefaultAsync();

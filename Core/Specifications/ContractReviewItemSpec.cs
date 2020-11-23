@@ -12,22 +12,17 @@ namespace Core.Specifications
                     x.ServiceChargesInINR.ToLower().Contains(cParam.Search)) &&
                 (!cParam.EnquiryId.HasValue || x.EnquiryId == cParam.EnquiryId) &&
                 (!cParam.EnquiryItemId.HasValue || x.EnquiryItemId == cParam.EnquiryItemId) &&
-                (!cParam.TechnicallyFeasible.HasValue || x.TechnicallyFeasible == cParam.TechnicallyFeasible) &&
-                (!cParam.CommerciallyFeasible.HasValue || x.CommerciallyFeasible == cParam.CommerciallyFeasible) &&
-                (!cParam.LogisticallyFeasible.HasValue || x.LogisticallyFeasible == cParam.LogisticallyFeasible) &&
-                (!cParam.VisaAvailable.HasValue || x.VisaAvailable == cParam.VisaAvailable) &&
-                (!cParam.DocumentationWillBeAvailable.HasValue || 
-                    x.DocumentationWillBeAvailable == cParam.DocumentationWillBeAvailable) &&
-                (!cParam.HistoricalStatusAvailable.HasValue || 
-                    x.HistoricalStatusAvailable == cParam.HistoricalStatusAvailable) &&
-                (!cParam.SalaryOfferedFeasible.HasValue || 
-                    x.SalaryOfferedFeasible == cParam.SalaryOfferedFeasible) &&
-                (!cParam.HistoricalStatusAvailable.HasValue || 
-                    x.HistoricalStatusAvailable == cParam.HistoricalStatusAvailable) &&
-                (!cParam.Status.HasValue || x.Status == cParam.Status) &&
-                (!cParam.ReviewedOn.HasValue || DateTime.Compare(
-                    x.ReviewedOn.Date, (DateTime)cParam.ReviewedOn) == 0) &&
-                (!cParam.ReviewedBy.HasValue || x.ReviewedBy == cParam.ReviewedBy) 
+                (x.TechnicallyFeasible == cParam.TechnicallyFeasible) &&
+                (x.CommerciallyFeasible == cParam.CommerciallyFeasible) &&
+                (x.LogisticallyFeasible == cParam.LogisticallyFeasible) &&
+                (x.VisaAvailable == cParam.VisaAvailable) &&
+                (x.DocumentationWillBeAvailable == cParam.DocumentationWillBeAvailable) &&
+                (x.HistoricalStatusAvailable == cParam.HistoricalStatusAvailable) &&
+                (x.SalaryOfferedFeasible == cParam.SalaryOfferedFeasible) &&
+                (x.HistoricalStatusAvailable == cParam.HistoricalStatusAvailable) &&
+                (x.Status == cParam.Status) &&
+                (DateTime.Compare(x.ReviewedOn.Date, (DateTime)cParam.ReviewedOn) == 0) &&
+                (x.ReviewedBy == cParam.ReviewedBy) 
             ))
         {
             AddOrderBy(x => x.ReviewedOn);

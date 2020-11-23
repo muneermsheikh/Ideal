@@ -22,11 +22,11 @@ namespace Core.Specifications
         public int? HRExecutiveId { get; set; }
         public DateTime? SubmittedByHRExecOn { get; set; }
         public int? HRSupervisorId { get; set; }
-        public enumItemReviewStatus? HRSupReviewResult { get; set; }
+        public string HRSupReviewResult { get; set; }
         public DateTime? ReviewedByHRSupOn { get; set; }
         public int? HRManagerId { get; set; }
         public DateTime? ReviewedByHRMOn { get; set; }
-        public enumItemReviewStatus? HRMReviewResult { get; set; }
+        public string HRMReviewResult { get; set; }
         
         public string Sort { get; set; }
 

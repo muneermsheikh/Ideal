@@ -24,6 +24,7 @@ namespace Core.Interfaces
          Task<IReadOnlyList<Employee>> GetEmployeeListBySpecAsync(EmployeeParam empParam);
          Task<Employee> GetEmployeeByIdAsync(int employeeId);
          Task<Employee> GetEmpDetails(int employeeId);
+         Task<IReadOnlyList<Employee>> GetEmployeeListFlat();
          string GetEmployeeName(int employeeId);
     }
 }

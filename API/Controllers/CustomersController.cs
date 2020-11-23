@@ -30,8 +30,7 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Pagination<IReadOnlyList<CustomerDto>>>> GetCustomers(
-            [FromBody]CustomerSpecParams custParams)
+        public async Task<ActionResult<Pagination<IReadOnlyList<Customer>>>> GetCustomers([FromQuery] CustomerSpecParams custParams)
         {
             var spec = new CustomerSpecs(custParams);
             var countSpec = new CustomerWithFiltersForCountSpec(custParams);
@@ -40,31 +39,48 @@ namespace API.Controllers
             var custs = await _custRepo.ListWithSpecAsync(spec);
             if (custs==null) return BadRequest(new ApiResponse(404));
 
-            var data = _mapper.Map<IReadOnlyList<Customer>, IReadOnlyList<CustomerDto>>(custs);
-            return Ok(new Pagination<CustomerDto>(custParams.PageIndex,
-                custParams.PageSize, totalItems, data));
+            // var data = _mapper.Map<IReadOnlyList<Customer>, IReadOnlyList<CustomerDto>>(custs);
+            return Ok(new Pagination<Customer>(custParams.PageIndex,
+                custParams.PageSize, totalItems, custs));
         }
 
+        [HttpGet("customersflat/{customerType}")]
+        public async Task<ActionResult<IReadOnlyList<Customer>>> GetCustomerFlat(string customerType)
+        {
+            var flatCust = await _custService.GetCustomerListFlat(customerType);
+            if (flatCust == null || flatCust.Count ==0) return NotFound(new ApiResponse(404, "No customers found"));
+            
+            return Ok(flatCust);
+        }
+
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [HttpGet("getcustomer/{id}")]
+        public async Task<ActionResult<Customer>> GetCustomer (int id)
+        {   
+            var cust = await _custService.CustomerByIdAsync(id);  
+            if (cust==null) return NotFound();
+            
+            return Ok(cust);
+        }
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CustomerDto>> AddCustomer(Customer customer)
+        public async Task<ActionResult<Customer>> AddCustomer(Customer customer)
         {
-            var cust = await _custRepo.AddAsync(customer);
-            if (cust == null) return BadRequest(new ApiResponse(400));
-            var custToReturn = _mapper.Map<Customer, CustomerDto>(cust);
-            return custToReturn;
+            var c = await _custService.AddCustomerAsync(customer);
+            if (c == null) return BadRequest(new ApiResponse(400));
+            return Ok(c);
+
         }
 
         [HttpPut]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CustomerDto>> Updatecustomer(Customer customer)
+        public async Task<ActionResult<Customer>> UpdateCustomer(Customer customer)
         {
-            var cust = await _custRepo.UpdateAsync(customer);
+            var cust = await _custService.UpdateCustomer(customer);
             if (cust==null) return BadRequest(new ApiResponse(400));
 
-            var custToReturn = _mapper.Map<Customer, CustomerDto>(cust);
-            return custToReturn;
+            return Ok(cust);
         }
 
         [HttpDelete]
@@ -78,10 +94,19 @@ namespace API.Controllers
 
 //officials
 
-        [HttpGet("officials/{customerId}")]
-        public async Task<ActionResult<IReadOnlyList<CustomerOfficialDto>>> GetCustomerOfficials (int customerId)
+        [HttpGet("officials")]
+        public async Task<ActionResult<IReadOnlyList<CustomerOfficialDto>>> GetCustomerOfficialsAll ()
         {
-            var off = await _custService.GetCustomerOfficialList(customerId);
+            var off = await _custService.GetAllOfficialList();
+            if (off==null || off.Count ==0) return NotFound(new ApiResponse(404, "No officials on record for selected entity"));
+            var offReturn = _mapper.Map<IReadOnlyList<CustomerOfficial>, IReadOnlyList<CustomerOfficialDto>>(off);
+            return Ok(offReturn);
+        }
+
+        [HttpGet("officials/{id}")]
+        public async Task<ActionResult<IReadOnlyList<CustomerOfficialDto>>> GetCustomerOfficials (int id)
+        {
+            var off = await _custService.GetCustomerOfficialList(id);
             if (off==null || off.Count ==0) return NotFound(new ApiResponse(404, "No officials on record for selected entity"));
             var offReturn = _mapper.Map<IReadOnlyList<CustomerOfficial>, IReadOnlyList<CustomerOfficialDto>>(off);
             return Ok(offReturn);
@@ -95,6 +120,8 @@ namespace API.Controllers
             if(offs==null || offs.Count==0) return BadRequest(new ApiResponse(404, "Failed to isnert the officials"));
             return Ok(_mapper.Map<IReadOnlyList<CustomerOfficial>, IReadOnlyList<CustomerOfficialDto>>(offs));
         }
+
+
     // agents
         [HttpGet("recruitmentAgencies")]
         public async Task<ActionResult<IReadOnlyList<CustomerAgencyNamesDto>>> GetRecruitmentAgencies()
@@ -108,7 +135,7 @@ namespace API.Controllers
                 dtoList.Add(new CustomerAgencyNamesDto{
                     Id=item.Id,
                     CustomerName=item.CustomerName,
-                    CityName=item.CityName
+                    CityName=item.City
                 });
             }
 

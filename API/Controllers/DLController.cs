@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Errors;
@@ -44,8 +45,32 @@ namespace API.Controllers
         }
 
 //DL
+        // this method is called by Agency Officials, here basket is not relevant
+        [HttpPost]
+        public async Task<ActionResult<Enquiry>> AddDL(Enquiry enq)
+        {
+            var enqAdded = await _enqService.AddEnquiryAsync(enq);
+            if (enqAdded == null) return BadRequest(new ApiResponse(400));
+            return Ok(enqAdded);
+        }
+        
+        [HttpPut]
+        public async Task<ActionResult<Enquiry>> UpdateDL (Enquiry enq)
+        {
+            var enqUpdated = await _enqService.UpdateDLAsync(enq);
+            if (enqUpdated == null) return BadRequest(new ApiResponse(400));
+            return Ok(enqUpdated);
+        }
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteDL(int id)
+        {
+            var deleted = await _enqService.DeleteEnquiryAsync(id);
+            if (deleted == 0) return BadRequest(new ApiResponse(400));
+            return Ok(deleted);
+        }
+        
         [HttpGet("dlindex")]
-        public async Task<ActionResult<Pagination<EnquiryToReturnDto>>> DLIndex(
+        public async Task<ActionResult<Pagination<Enquiry>>> DLIndex(
             [FromQuery] EnquiryParams eParams)
         {
             var totalItems = await _unitOfWork.Repository<Enquiry>().CountWithSpecAsync(
@@ -55,15 +80,15 @@ namespace API.Controllers
                 new EnquirySpecs(eParams));
             if (enqs == null) return NotFound(new ApiResponse(400, "your instructions did not find any matching records"));
 
-            var data = _mapper
-                .Map<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryToReturnDto>>(enqs);
+            //var data = _mapper
+            //    .Map<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryToReturnDto>>(enqs);
 
-            return Ok(new Pagination<EnquiryToReturnDto>
-                (eParams.PageIndex, eParams.PageSize, totalItems, data));
+            return Ok(new Pagination<Enquiry>
+                (eParams.PageIndex, eParams.PageSize, totalItems, enqs));
         }
 
         [HttpGet("demandLetter")]
-        public async Task<ActionResult<EnquiryToReturnDto>> GetDL(int enquiryId)
+        public async Task<ActionResult<Enquiry>> GetDL(int enquiryId)
         {
             var enq = await _enqService.GetEnquiryByIdAsync(enquiryId);
             if (enq == null) return NotFound(new ApiResponse(400, "There is no record with that Id"));
@@ -77,12 +102,12 @@ namespace API.Controllers
                 //_mapper.Map<Remuneration, RemunerationDto>(item.Remuneration);
             }
 
-            var retDto = _mapper.Map<Enquiry, EnquiryToReturnDto>(enq);
-            return retDto;
+            // var retDto = _mapper.Map<Enquiry, EnquiryToReturnDto>(enq);
+            return enq;
         }
 
         [HttpGet("demandLetterWithSpec")]
-        public async Task<ActionResult<IReadOnlyList<EnquiryToReturnDto>>> GetDLs([FromBody] EnquiryParams enqParam)
+        public async Task<ActionResult<IReadOnlyList<Enquiry>>> GetDLs([FromBody] EnquiryParams enqParam)
         {
             var enqs = await _unitOfWork.Repository<Enquiry>().GetEntityListWithSpec(new EnquirySpecs(enqParam));
             if (enqs == null || enqs.Count==0) return NotFound(new ApiResponse(400, "your parameters did not return any record"));
@@ -97,8 +122,76 @@ namespace API.Controllers
                     //_mapper.Map<Remuneration, RemunerationDto>(item.Remuneration);
                 }
             }
-            var retDto = _mapper.Map<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryToReturnDto>>(enqs);
-            return Ok(retDto);
+            // var retDto = _mapper.Map<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryToReturnDto>>(enqs);
+            return Ok(enqs);
+        }
+
+        [HttpGet("listWithStatus")]
+        public async Task<ActionResult<Pagination<List<EnquiryWithAllStatusDto>>>> DLIndexWithStatus ([FromQuery] EnquiryParams eParams)
+        {
+         /*   var enqs = await _dLService.GetEnquiryList500WithAllStatus();
+            var enqDto = _mapper.Map<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryWithAllStatusDto>>(enqs);
+            // var enqDto = MapEnquiryToEnquiryListWithStatus(enqs.ToList());
+            return enqDto;
+        */
+            var totalItems = await _unitOfWork.Repository<Enquiry>().CountWithSpecAsync(
+                new EnquirySpecsCount(eParams) );
+            if(totalItems==0) return NotFound(new ApiResponse(404, "No records returned"));
+            var enqs = await _unitOfWork.Repository<Enquiry>().ListTop500WithSpecAsync(
+                new EnquirySpecs(eParams));
+            if (enqs == null || enqs.Count == 0) return NotFound(new ApiResponse(400, "your instructions did not find any matching records"));
+            // var enqDto = MapEnquiryToEnquiryListWithStatus(enqs.ToList());
+            var enqDto = _mapper.Map<List<Enquiry>, List<EnquiryWithAllStatusDto>>(enqs.ToList());
+            return Ok(enqDto);
+
+        }
+
+        private List<EnquiryWithAllStatusDto> MapEnquiryToEnquiryListWithStatus(List<Enquiry> enquiries)
+        {
+            
+            if (enquiries == null || enquiries.Count == 0)
+            {
+                return null;
+            }
+
+            List<EnquiryWithAllStatusDto> enqList = new List<EnquiryWithAllStatusDto>();
+            
+            foreach(var enq in enquiries)
+            {
+                int qntySum = 0;
+                bool NotAssigned=false;
+                
+                foreach(var item in enq.EnquiryItems)
+                {
+                    qntySum += item.Quantity;
+                    if (item.TasksAssigned != null)
+                    {
+                        foreach(var tsk in item.TasksAssigned)
+                        {
+                            if (NotAssigned) {break;}
+                            if (!(tsk.TaskType == "HRExecutive" && (
+                                "taskstartedtaskcompletedtaskcanceledtaskclosed".Contains(tsk.TaskStatus.ToLower())))) 
+                            {
+                                NotAssigned = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            
+                string TaskAssigned = NotAssigned==false ? "Not Assigned" : "Assigned";
+        
+                var newDto = new EnquiryWithAllStatusDto
+                (
+                    enq.Id, enq.CustomerId, "not defined", "new city", "saudi arabia", enq.EnquiryNo,
+                    enq.EnquiryDate, enq.EnquiryRef ?? "not defined", enq.BasketId ?? "undefined", 
+                    enq.EnquiryItems.Count, qntySum, DateTime.Today, "proj manager", TaskAssigned, enq.ReviewStatus ?? "not defined",
+                    enq.EnquiryStatus ?? "not defined"
+                );
+                enqList.Add(newDto);
+            }
+
+            return enqList;
         }
 
         [HttpDelete]
@@ -111,28 +204,30 @@ namespace API.Controllers
 
 //enquiry item
         [HttpGet("enquiryItem")]
-        public async Task<ActionResult<EnquiryItemToReturnDto>> GetDLItem(int enquiryItemId)
+        public async Task<ActionResult<EnquiryItem>> GetDLItem(int enquiryItemId)
         {
-            return Ok( _mapper.Map<EnquiryItem, EnquiryItemToReturnDto>(
-                await _unitOfWork.Repository<EnquiryItem>().GetEntityWithSpec(
-                new EnquiryItemsSpecs(enquiryItemId))));
+            
+            var items = await _unitOfWork.Repository<EnquiryItem>().GetEntityWithSpec(
+                new EnquiryItemsSpecs(enquiryItemId));
+            
+            return Ok(items);
         }
 
         [HttpGet("enquiryItemEdit")]
-        public async Task<ActionResult<EnquiryItemToEditDto>> GetDLItemToEdit(int enquiryItemId)
+        public async Task<ActionResult<EnquiryItem>> GetDLItemToEdit(int enquiryItemId)
         {
-            return Ok( _mapper.Map<EnquiryItem, EnquiryItemToEditDto>(
-                await _unitOfWork.Repository<EnquiryItem>().GetEntityWithSpec(
-                new EnquiryItemsSpecs(enquiryItemId))));
+            
+            return Ok(await _unitOfWork.Repository<EnquiryItem>().GetEntityWithSpec(
+                new EnquiryItemsSpecs(enquiryItemId)));
         }
 
         [HttpPut("enquiryItem")]
-        public async Task<ActionResult<EnquiryItemToEditDto>> UpdateDLItem(EnquiryItemToEditDto enquiryItem)
+        public async Task<ActionResult<EnquiryItem>> UpdateDLItem(EnquiryItem enquiryItem)
         {
-            var item = _mapper.Map<EnquiryItemToEditDto, EnquiryItem>(enquiryItem);
-            var editedItem = await _dLService.UpdateDLItemAsync(item);
+            // var item = _mapper.Map<EnquiryItemToEditDto, EnquiryItem>(enquiryItem);
+            var editedItem = await _dLService.UpdateDLItemAsync(enquiryItem);
             if (editedItem == null) return BadRequest(new ApiResponse(400));
-            return _mapper.Map<EnquiryItem, EnquiryItemToEditDto>(editedItem);
+            return Ok(editedItem);
         }
 
         [HttpDelete("enquiryItem")]
@@ -144,22 +239,22 @@ namespace API.Controllers
         }
 
         [HttpPost("enquiryItems")]
-        public async Task<ActionResult<IReadOnlyList<EnquiryItemToReturnDto>>> InsertDLItems(List<EnquiryItem> enquiryItems)
+        public async Task<ActionResult<IReadOnlyList<EnquiryItem>>> InsertDLItems(List<EnquiryItem> enquiryItems)
         {
             var enqItem = await _unitOfWork.Repository<EnquiryItem>().AddListAsync(enquiryItems);
             if (enqItem == null) return BadRequest(new ApiResponse(400));
-            return Ok(_mapper.Map<IReadOnlyList<EnquiryItem>, IReadOnlyList<EnquiryItemToReturnDto>>(enqItem));
+            return Ok(enqItem);
         }
          
 
 // Job Description
-        [HttpGet("jobdesc/{enquiryItemId}")]
+        [HttpGet("jd/{enquiryItemId}")]
         public async Task<ActionResult<JobDesc>> GetJobDescription(int enquiryItemId)
         {
             return await _enqService.GetJobDescriptionBySpecAsync(enquiryItemId);
         }
 
-        [HttpPut("jobdesc")]
+        [HttpPut("jd")]
         public async Task<ActionResult<JobDesc>> UpdateJobDescription(JobDesc jobDesc)
         {
             return await _enqService.UpdateJDAsync(jobDesc);
@@ -180,23 +275,22 @@ namespace API.Controllers
 
 //contract review item
         [HttpPost("generatereviewsofdl")]
-        public async Task<ActionResult<IReadOnlyList<ReviewItemDto>>> GenerateReviewsOfADL(int enquiryId)
+        public async Task<ActionResult<IReadOnlyList<ContractReviewItem>>> GenerateReviewsOfADL(int enquiryId)
         {
             var rvws = await _dLService.GenerateReviewItemsOfAnEnquiryAsync(enquiryId);
             if (rvws==null || rvws.Count==0) return BadRequest(new ApiResponse(404));
-            return Ok(_mapper.Map<IReadOnlyList<ContractReviewItem>, IReadOnlyList<ReviewItemDto>>(rvws));
+            return Ok(rvws);
         }
 
         [HttpGet("reviewEnquiryItems/{enquiryId}")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IReadOnlyList<ReviewItemDto>>> GetReviewItemsOfEnquiry(int enquiryId)
+        public async Task<ActionResult<IReadOnlyList<ContractReviewItem>>> GetReviewItemsOfEnquiry(int enquiryId)
         {
             var rvws = await _dLService.GetOrAddReviewItemsOfEnquiryAsync(enquiryId);
             if (rvws == null) return BadRequest(new ApiResponse(400));
             if (rvws.Count == 0) return NotFound(new ApiResponse(404));
             //return Ok(rvws);
-            var dto = _mapper.Map<IReadOnlyList<ContractReviewItem>, IReadOnlyList<ReviewItemDto>>(rvws);
-            return Ok(dto);
+            return Ok(rvws);
         }   
 
         [HttpGet("reviewItem/{enquiryItemId}")]
@@ -210,57 +304,35 @@ namespace API.Controllers
 
         [HttpPost("reviewItemList")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ReviewItemDto>> AddReviewItemAsync ([FromBody] ContractReviewItem reviewItem)
+        public async Task<ActionResult<ContractReviewItem>> AddReviewItemAsync ([FromBody] ContractReviewItem reviewItem)
         {
             var added =  await _unitOfWork.Repository<ContractReviewItem>().AddAsync(reviewItem);
             if (added == null) return BadRequest(new ApiResponse(404, "Bad request, or the review item does not exist"));
-            return Ok( _mapper.Map<ContractReviewItem, ReviewItemDto>(added));
+            return Ok(added);
         }
 
         [HttpPut("reviewItemList")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IReadOnlyList<ReviewItemDto>>> UpdateReviewItems(
+        public async Task<ActionResult<IReadOnlyList<ContractReviewItem>>> UpdateReviewItems(
             [FromBody] List<ContractReviewItem> reviewItems)
         {
             var rvwItems =  await _dLService.UpdateReviewItemListAsync(reviewItems);
 
             if (rvwItems == 0 ) return BadRequest(new ApiResponse(404, "Bad request, or the review item does not exist"));
-            return Ok();
+            return Ok(reviewItems);
         }
 
         [HttpPost("reviewitems")]
-        public async Task<ActionResult<IReadOnlyList<ReviewItemDto>>> InsertReviewItems(IReadOnlyList<ContractReviewItem> reviewItems)
+        public async Task<ActionResult<IReadOnlyList<ContractReviewItem>>> InsertReviewItems(IReadOnlyList<ContractReviewItem> reviewItems)
         {
             var rvwItems = await _unitOfWork.Repository<ContractReviewItem>().AddListAsync(reviewItems);
             if (rvwItems == null || rvwItems.Count==0) return BadRequest(new ApiResponse(400));
-            return Ok( _mapper.Map<IReadOnlyList<ContractReviewItem>, 
-                IReadOnlyList<ReviewItemDto>>(rvwItems));
+            return Ok(rvwItems);
         }
 
 
 // forward requirement to HR Department
 
-        [HttpPost("enqforwardtoHR")]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<DLForwardedToHRDto>> SendEnquiryToHR(EnquiryToForwardToHRDto enqToFwd)
-        {
-            var dlFwd = await _dlForwardService.DLForwardToHRAsync(
-                enqToFwd.dtForwarded, enqToFwd.enquiryIds, enqToFwd.EmployeeId);
-
-            if (dlFwd == null) return BadRequest(new ApiResponse(400));
-            
-            return _mapper.Map<DLForwarded, DLForwardedToHRDto>(dlFwd);
-            /*
-            dlFwd.AssignedTo = dlFwd.AssignedTo;
-           // dlFwd.AssignedToName="new name";
-            dlFwd.AssignedOn=dlFwd.AssignedOn;
-            var dlForwarded = new DLForwardedToHRDto();
-            dlForwarded.Enquiries = _mapper.Map<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryInBriefDto>>(dlFwd.Enquiries);
-            dlForwarded.AssignedOn = enqToFwd.dtForwarded;
-            dlForwarded.AssignedToName = "";
-            return Ok(dlForwarded);
-            */
-        }
 
 //forward to associates
         [HttpPost("enqForwardToAssociates")]
@@ -309,7 +381,7 @@ namespace API.Controllers
             var enqFwd = await _enqFwdRepo.GetEntityListWithSpec(new EnquiryForwardedSpecs(enquiryId));
             if (enqFwd == null) return NotFound(new ApiResponse(404));
 
-            return Ok( _mapper.Map<IReadOnlyList<EnquiryForwarded>, IReadOnlyList<EnquiryForwardedDto>>(enqFwd));
+            return Ok(_mapper.Map<IReadOnlyList<EnquiryForwarded>, IReadOnlyList<EnquiryForwardedDto>>(enqFwd));
         }
 
 

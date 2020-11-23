@@ -10,7 +10,7 @@ namespace Core.Entities.Admin
         {
         }
 
-        public CustomerOfficial(int customerId, string name, string designation, string gender, string phone, string mobile, string mobile2, string email, string personalEmail, bool isValid, DateTime addedOn)
+        public CustomerOfficial(int customerId, string name, string designation, string gender, string phone, string mobile, string mobile2, string email, string personalEmail, string isValid, DateTime addedOn)
         {
             this.CustomerId = customerId;
             this.Name = name;
@@ -19,7 +19,7 @@ namespace Core.Entities.Admin
             this.Phone = phone;
             this.Mobile = mobile;
             this.Mobile2 = mobile2;
-            this.email = email;
+            this.Email = email;
             this.PersonalEmail = personalEmail;
             this.IsValid = isValid;
             this.AddedOn = addedOn;
@@ -34,11 +34,14 @@ namespace Core.Entities.Admin
         public string Mobile2 { get; set; }
         [EmailAddress]
         [Required]
-        public string email { get; set; }
+        public string Email { get; set; }
+        [EmailAddress]
         public string PersonalEmail { get; set; }
-        public bool IsValid { get; set; } = true;
-        public enumCustomerOfficialScope scope {get; set; }=enumCustomerOfficialScope.HR;
+        public string PersonalMobile {get; set;}
+        public string IsValid { get; set; } = "t";
+        public string Scope {get; set; } = "HR";
         public DateTime AddedOn { get; set; } = DateTime.Now;
+        public virtual Customer Customer {get; set;}
 
     }
 }

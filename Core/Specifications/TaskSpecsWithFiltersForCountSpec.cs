@@ -14,21 +14,21 @@ namespace Core.Specifications
                     x.Owner.FullName.ToLower().Contains(tParams.Search)) &&
                 (!tParams.OwnerId.HasValue || x.OwnerId == tParams.OwnerId) &&
                 (!tParams.AssignedToId.HasValue || x.AssignedToId == tParams.AssignedToId) &&
-                (!tParams.TaskType.HasValue || x.TaskType == tParams.TaskType) &&
-                (!tParams.TaskStatus.HasValue || x.TaskStatus == tParams.TaskStatus)) &&
+                (x.TaskType.ToLower() == tParams.TaskType.ToLower()) &&
+                (x.TaskStatus.ToLower() == tParams.TaskStatus.ToLower())) &&
                 ((!tParams.DateRangeFrom.HasValue && !tParams.DateRangeUpto.HasValue) ||
                     x.TaskDate >= tParams.DateRangeFrom && x.TaskDate <= tParams.DateRangeUpto)
             )
         {
         }
 
-        public TaskSpecsWithFiltersForCountSpec(int ownerId, enumTaskStatus taskStatus) 
-            :  base( x => x.OwnerId == ownerId && x.TaskStatus == taskStatus)
+        public TaskSpecsWithFiltersForCountSpec(int ownerId, string taskStatus) 
+            :  base( x => x.OwnerId == ownerId && x.TaskStatus.ToLower() == taskStatus.ToLower())
         {
         }
 
-        public TaskSpecsWithFiltersForCountSpec(enumTaskStatus taskStatus, int assignedToId) 
-            :  base( x => x.AssignedToId == assignedToId && x.TaskStatus == taskStatus)
+        public TaskSpecsWithFiltersForCountSpec(string taskStatus, int assignedToId) 
+            :  base( x => x.AssignedToId == assignedToId && x.TaskStatus.ToLower() == taskStatus.ToLower())
         {
         }
     }

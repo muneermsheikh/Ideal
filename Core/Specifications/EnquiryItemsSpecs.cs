@@ -14,8 +14,8 @@ namespace Core.Specifications
         {
         }
 
-        public EnquiryItemsSpecs(int enquiryId, enumItemReviewStatus reviewStatus) 
-            : base(x => x.EnquiryId == enquiryId &&  x.Status == reviewStatus)
+        public EnquiryItemsSpecs(int enquiryId, string reviewStatus) 
+            : base(x => x.EnquiryId == enquiryId &&  x.ReviewStatus == reviewStatus)
         {
             AddOrderBy(x => x.SrNo);
         }
@@ -31,9 +31,9 @@ namespace Core.Specifications
             AddOrderBy(x => x.SrNo);
         }
 
-        public EnquiryItemsSpecs(int enquiryItemId, enumItemReviewStatus itemStatus, 
+        public EnquiryItemsSpecs(int enquiryItemId, string itemStatus, 
             bool HRSupAssigned) 
-            : base(x => (x.Id == enquiryItemId && x.Status == itemStatus) &&
+            : base(x => (x.Id == enquiryItemId && x.ReviewStatus == itemStatus) &&
                 (x.AssessingSupId.HasValue) )
         {
         }
@@ -51,9 +51,9 @@ namespace Core.Specifications
         }
 
         public EnquiryItemsSpecs(IReadOnlyList<IdInt> enquiryItemIds, int enquiryId, 
-            enumItemReviewStatus reviewStatus, bool includeAll)
+            string reviewStatus, bool includeAll)
             : base (x => enquiryItemIds.Select(x=>x.Id).Contains(x.Id) &&
-                x.EnquiryId == enquiryId && x.Status == reviewStatus)
+                x.EnquiryId == enquiryId && x.ReviewStatus == reviewStatus)
         {
             if (includeAll)
             {

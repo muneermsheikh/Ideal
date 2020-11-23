@@ -8,7 +8,7 @@ namespace Core.Interfaces
     public interface ICategoryService
     {
         string GetCategoryNameWithRefFromEnquiryItemId(int enquiryItemId);
-        string getCategoryNameFromCategoryId(int categoryId);
+        string GetCategoryNameFromCategoryId(int categoryId);
         
         Task<bool> CategoryExists(string nm, int indId, int skId);
 

@@ -34,15 +34,17 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Enquiry>().GetByIdAsync(enquiryId);
         }
 
-        public async Task<IReadOnlyList<Enquiry>> GetDLIndexLast500Async()
+        public async Task<IReadOnlyList<Enquiry>> GetEnquiryList500WithAllStatus()
         {
-            //return await _unitOfWork.Repository<Enquiry>().ListAllAsync();
-            return await _context.Enquiries
+              //return await _unitOfWork.Repository<Enquiry>().ListAllAsync();
+            var enqs = await _context.Enquiries
                 .Include(x=>x.EnquiryItems)
-                .OrderBy(x=>x.EnquiryNo)
+                .OrderByDescending(x=>x.EnquiryNo)
                 .Take(500)
             .ToListAsync();
+            return enqs;
         }
+
 
         public async Task<Enquiry> UpdateDLAsync(Enquiry enquiry)
         {
@@ -63,7 +65,7 @@ namespace Infrastructure.Services
         }
 
         public async Task<IReadOnlyList<EnquiryItem>> GetDLItemsAsync(int enquiryId,
-            enumItemReviewStatus itemStatus)
+            string itemStatus)
         {
             //var spec = new EnquiryItemsSpecs(enquiryId, itemStatus);
             //return await _unitOfWork.Repository<EnquiryItem>().ListWithSpecAsync(spec);
@@ -168,19 +170,19 @@ namespace Infrastructure.Services
             {
                 var eItem = await _context.EnquiryItems.Where(x => x.Id == item.EnquiryItemId)
                     .FirstOrDefaultAsync();
-                eItem.Status = item.Status;
+                eItem.ReviewStatus = item.Status;
                 items.Add(eItem);
-                switch(eItem.Status)
+                switch(eItem.ReviewStatus)
                 {
-                    case enumItemReviewStatus.Accepted:
+                    case "Accepted":
                         bSelected=true;
                         break;
-                    case enumItemReviewStatus.Rejected_CustomerLowStanding:
-                    case enumItemReviewStatus.Rejected_RequirementSuspect:
-                    case enumItemReviewStatus.Rejected_SalaryOfferedNotFeasible:
-                    case enumItemReviewStatus.Rejected_TechNotFeasible:
-                    case enumItemReviewStatus.Rejected_VisasNotAvailable:
-                    case enumItemReviewStatus.RequirementConcluded:
+                    case "Rejected_CustomerLowStanding":
+                    case "Rejected_RequirementSuspect":
+                    case "Rejected_SalaryOfferedNotFeasible":
+                    case "Rejected_TechNotFeasible":
+                    case "Rejected_VisasNotAvailable":
+                    case "RequirementConcluded":
                         bRejected=true;
                         break;
                     default:
@@ -192,9 +194,9 @@ namespace Infrastructure.Services
                 enq.ReviewedOn=DateTime.Now;
 
                 if(bSelected && !bRejected) 
-                {enq.EnquiryReviewStatusId = enumEnquiryReviewStatus.Accepted_WithExceptions; }
-                else if(bSelected) {enq.EnquiryReviewStatusId = enumEnquiryReviewStatus.Accepted;} 
-                else if (bRejected) {enq.EnquiryReviewStatusId = enumEnquiryReviewStatus.Declined; }
+                {enq.ReviewStatus = "Accepted_WithExceptions"; }
+                else if(bSelected) {enq.ReviewStatus = "Accepted";} 
+                else if (bRejected) {enq.ReviewStatus = "Declined"; }
                 
                 await _unitOfWork.Repository<Enquiry>().UpdateAsync(enq);
             }
@@ -342,6 +344,6 @@ namespace Infrastructure.Services
                 new ContractReviewItemSpec("dummy", enquiryId));
         }
 
-        
+
     }
 }

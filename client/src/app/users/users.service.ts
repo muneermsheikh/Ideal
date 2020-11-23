@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CandidateParams } from '../shared/models/CandidateParams';
 import { ISource } from '../shared/models/candidateSource';
-import { IClient } from '../shared/models/client';
+import { IClient, IClientOfficial } from '../shared/models/client';
 import { ICandidate } from '../shared/models/ICand';
 import { ICategoryWithProf } from '../shared/models/ICategoryWithProf';
 import { IPaginationCandidate, PaginationCandidate } from '../shared/models/paginationCand';
@@ -21,6 +21,7 @@ export class UsersService {
   candidates: ICandidate[] = [];
   paginationCandidate = new PaginationCandidate();
   candParams = new CandidateParams();
+  private candidateSource = new BehaviorSubject<ICandidate>(null);
 
 
   constructor(private http: HttpClient) { }
@@ -37,21 +38,20 @@ export class UsersService {
     );
   }
 
-
-  /* delete returns integer - correct flg
-
-  deleteCandidate(values: ICandidate) {
-    return this.http.delete(this.baseUrl + 'HR/candidate', values).pipe(
-      map((cand: number) => {
-        if (cand !== 0) {
-          console.log('candidate deleted'); }
+  deleteCandidate(id: number): any {
+    return this.http.delete(this.baseUrl + 'HR/candidate?id=' + id).pipe(
+      map((response: number) => {
+        if (response !== 0) {
+          console.log('candidate deleted');
+          this.candidateSource.next(null);
+        }
         }, error => {
           console.log(error);
         }
       )
     );
   }
-*/
+
 
   updateCandidate(values: ICandidate): any {
     console.log(values);
@@ -79,6 +79,14 @@ export class UsersService {
 
   getProfessions(): any {
     return this.http.get<IProfession[]>(this.baseUrl + 'Category/categories');
+  }
+
+  getCustomersData(): any {
+    return this.http.get<IClient[]>(this.baseUrl + 'customers');
+  }
+
+  getCustomerOfficialsData(): any {
+    return this.http.get<IClientOfficial[]>(this.baseUrl + 'customers/officials');
   }
 
   getCandCatsWithProf(): any {
@@ -138,9 +146,7 @@ export class UsersService {
       .pipe(
         map(response => {
           this.candidates = [...this.candidates, ...response.body.data];
-          console.log(this.candidates);
           this.paginationCandidate = response.body;
-          // console.log('getCandidates returned ' + response.body.count);
           return this.paginationCandidate;
         }, error => {
           console.log(error);
@@ -170,6 +176,7 @@ export class UsersService {
     return this.http.get(this.baseUrl + 'hr/aadharnoexists?aadharno=' + aadharno);
   }
 
+// enquiries
 
 
 }

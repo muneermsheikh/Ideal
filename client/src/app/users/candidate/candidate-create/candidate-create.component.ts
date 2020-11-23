@@ -49,8 +49,7 @@ export class CandidateCreateComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private accService: AccountService,
-              private usrService: UsersService,
-              private cvService: UsersService,
+              private service: UsersService,
               private activatedRoute: ActivatedRoute,
               private route: Router)
   {
@@ -138,7 +137,7 @@ export class CandidateCreateComponent implements OnInit {
     }
 
     getCandidate(id: number): any {
-      this.candidate = this.cvService.getCandidate(id).subscribe(
+      this.candidate = this.service.getCandidate(id).subscribe(
         (candidate: ICandidate) => {
           this.editCandidate(candidate);
           this.candidate = candidate;
@@ -218,13 +217,13 @@ export class CandidateCreateComponent implements OnInit {
       const candidateVal = this.mapFormValuesToCandidateObject();
       if (candidateVal.id === null || candidateVal.id === 0)    // INSERT mode
       {
-        this.cvService.addCandidate(candidateVal).subscribe(() => {
+        this.service.addCandidate(candidateVal).subscribe(() => {
           this.route.navigate(['candidates']);
         }, error => {
           console.log(error);
         });
       } else {                          // EDIT mode
-        this.cvService.updateCandidate(candidateVal).subscribe(() => {
+        this.service.updateCandidate(candidateVal).subscribe(() => {
           this.route.navigate(['candidates']);
       }, error => {
         console.log(error);
@@ -260,7 +259,7 @@ export class CandidateCreateComponent implements OnInit {
     }
 
     getCandidateSources(): void {
-      this.cvService.getCandidateSources().subscribe(
+      this.service.getCandidateSources().subscribe(
         (sources: ISource[]) => {
           this.candidateSources = sources;
         },
@@ -269,7 +268,7 @@ export class CandidateCreateComponent implements OnInit {
     }
 
     getRecruitmentAgents(): void {
-      this.cvService.getRecruitmentAgencies().subscribe(
+      this.service.getRecruitmentAgencies().subscribe(
         (agents: IClient[]) => {
           this.recruitmentAgents = agents;
         },
@@ -280,7 +279,7 @@ export class CandidateCreateComponent implements OnInit {
     }
 
     getCategories(): void {
-      this.cvService.getProfessions().subscribe(
+      this.service.getProfessions().subscribe(
         (profs: IProfession[]) => {
           this.candidateProfessions = profs;
         },
@@ -337,7 +336,7 @@ export class CandidateCreateComponent implements OnInit {
             {
               return of(null);
             }
-            return this.usrService.checkPPNoExists(control.value).pipe(
+            return this.service.checkPPNoExists(control.value).pipe(
               map(res => {
                 return res ? {ppNoExists: true} : null;
               })
@@ -355,7 +354,7 @@ export class CandidateCreateComponent implements OnInit {
             {
               return of(null);
             }
-            return this.usrService.checkAadharNoExists(control.value).pipe(
+            return this.service.checkAadharNoExists(control.value).pipe(
               map(res => {
                 return res ? {aadharNoExists: true} : null;
               })

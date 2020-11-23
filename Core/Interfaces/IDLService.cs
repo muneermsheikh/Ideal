@@ -11,14 +11,14 @@ namespace Core.Interfaces
     {
 
         Task<Enquiry> GetDLByIdAsync (int enquiryId);
-        Task<IReadOnlyList<Enquiry>> GetDLIndexLast500Async();
+        Task<IReadOnlyList<Enquiry>> GetEnquiryList500WithAllStatus();
         Task<Enquiry> UpdateDLAsync(Enquiry enquiry);
     
     //get customer details        
         Task<Customer> GetDLCustomer(int enquiryId);
 
     //dl iTEM
-        Task<IReadOnlyList<EnquiryItem>> GetDLItemsAsync(int enquiryId, enumItemReviewStatus itemStatus);
+        Task<IReadOnlyList<EnquiryItem>> GetDLItemsAsync(int enquiryId, string itemStatus);
         Task<EnquiryItem> GetDLItemAsync(int enquiryItemId);
         Task<EnquiryItem> UpdateDLItemAsync(EnquiryItem enquiryItem);
         Task<bool> DeleteDLItemAsync(EnquiryItem enquiryItem);
