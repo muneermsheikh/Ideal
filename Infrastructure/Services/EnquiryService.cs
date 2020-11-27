@@ -26,6 +26,7 @@ namespace Infrastructure.Services
         private const int Default_ProjManagerId = 2;
         private const string Default_Ecnr ="ecr";
         private const string Default_AssessmentReqd = "f";
+        private const string Default_EvaluationReqd = "f";
         private const string Default_EvalReqd = "f";
         private const int Default_ContractPeriod = 24;
         private const string SalCurrency = "";
@@ -106,7 +107,7 @@ namespace Infrastructure.Services
 
             // create Enquiry
             // *** replace second hrExecutiveId with logisticsExecutiveId
-            var enquiry = new Enquiry(customerId, enquiryNo.ToString(), intDefaultProjectManagerId, 
+            var enquiry = new Enquiry(customerId, enquiryNo, intDefaultProjectManagerId, 
                 enqRef, basketId, officialId, officialId,  enquiryItems);
 
             var enqAdded = await enqRepo.AddAsync(enquiry);            
@@ -168,20 +169,16 @@ namespace Infrastructure.Services
 
         // customer officials    
             var offs = await _customerService.GetCustomerOfficialList(enq.CustomerId);
-            if (enq.AccountExecutiveId == 0) {
-                if (offs != null || offs.Count !=0) {
+            if (offs != null || offs.Count > 0) {
+                if (enq.AccountExecutiveId == null) {
                     var accountsExecId = offs.Where(x => x.Scope.ToLower() == "accounts").Select(x => x.Id).FirstOrDefault();
                     enq.AccountExecutiveId = accountsExecId == 0 ? offs[0].Id : accountsExecId;
                 }
-            }
-            if (enq.HRExecutiveId == 0) {
-                if (offs != null || offs.Count !=0) {
+                if (enq.HRExecutiveId == null) {
                     var hrexecId = offs.Where(x => x.Scope.ToLower() == "hr").Select(x => x.Id).FirstOrDefault();
                     enq.HRExecutiveId = hrexecId == 0 ? offs[0].Id : hrexecId;
                 }
-            }
-            if (enq.LogisticsExecutiveId == 0) {
-                if (offs!=null || offs.Count != 0) {
+                if (enq.LogisticsExecutiveId == null) {
                     var logisticsId = offs.Where(x => x.Scope.ToLower() == "logistics").Select(x => x.Id).FirstOrDefault();
                     enq.LogisticsExecutiveId = logisticsId == 0 ? offs[0].Id : logisticsId;
                 }
@@ -199,19 +196,22 @@ namespace Infrastructure.Services
                 if (item.MaxCVsToSend == 0) item.MaxCVsToSend = item.Quantity * 3;
                 if (String.IsNullOrEmpty(item.Ecnr)) item.Ecnr = Default_Ecnr;
                 if (String.IsNullOrEmpty(item.AssessmentReqd)) item.AssessmentReqd = Default_AssessmentReqd;
-                if (String.IsNullOrEmpty(item.EvaluationReqd)) item.EvaluationReqd = Default_AssessmentReqd;
+                if (String.IsNullOrEmpty(item.EvaluationReqd)) item.EvaluationReqd = Default_EvaluationReqd;
                 if (String.IsNullOrEmpty(item.ReviewStatus)) item.ReviewStatus = "NotReviewed";
                 if (String.IsNullOrEmpty(item.EnquiryStatus)) item.EnquiryStatus = "NotStarted";
 
-                if (String.IsNullOrEmpty(item.JobDesc.JobDescription)) item.JobDesc.JobDescription = "Not defined";
-                if (String.IsNullOrEmpty(item.JobDesc.JobProfileUrl)) item.JobDesc.JobProfileUrl = "Not defined";
-                
-                if (item.Remuneration.ContractPeriodInMonths == 0) item.Remuneration.ContractPeriodInMonths = Default_ContractPeriod;
-                if (String.IsNullOrEmpty(item.Remuneration.SalaryCurrency)) 
-                {
-                    if (SalCurrency == "") {
-                        var curr = await _customerService.CustomerCountryCurrency(enq.CustomerId);
-                        item.Remuneration.SalaryCurrency = curr;
+                if (item.JobDesc != null) {
+                    if (String.IsNullOrEmpty(item.JobDesc.JobDescription)) item.JobDesc.JobDescription = "Not defined";
+                    if (String.IsNullOrEmpty(item.JobDesc.JobProfileUrl)) item.JobDesc.JobProfileUrl = "Not defined";
+                }
+                if (item.Remuneration != null) {
+                    if (item.Remuneration.ContractPeriodInMonths == 0) item.Remuneration.ContractPeriodInMonths = Default_ContractPeriod;
+                    if (String.IsNullOrEmpty(item.Remuneration.SalaryCurrency)) 
+                    {
+                        if (SalCurrency == "") {
+                            var curr = await _customerService.CustomerCountryCurrency(enq.CustomerId);
+                            item.Remuneration.SalaryCurrency = curr;
+                        }
                     }
                 }
             }
@@ -219,7 +219,7 @@ namespace Infrastructure.Services
             var enqRepo = _unitOfWork.Repository<Enquiry>();
             var nextEnqNo = await enqRepo.GetNextEnquiryNo();
 
-            enq.EnquiryNo = (nextEnqNo + 1).ToString();
+            enq.EnquiryNo = nextEnqNo + 1;
 
             var enqAdded = await enqRepo.AddAsync(enq);            
 
@@ -268,7 +268,84 @@ namespace Infrastructure.Services
 
         public async Task<Enquiry> UpdateDLAsync(Enquiry enq)
         {
+            //return await _unitOfWork.Repository<Enquiry>().UpdateAsync(enq);
+        // A - identify enquiry Items to delete from DB - this 
+        // B    delete these items from DB
+        // C - identify enquiry items that are present in DB as well as the model - these records are for updates
+        // D - identify items that are present in the model, but not in DB - these are new items, to be inserted.
+
+        // A - identify records in DB that are missing in the model
+            var enqItemsInDB = await _context.EnquiryItems.Where(x => x.EnquiryId == enq.Id).ToListAsync();
+            var enqItemIdsInModel = enq.EnquiryItems.Select(x => x.Id);
+
+            // create a list to store items to delete from DB
+            var enqItemsToDelete = new List<EnquiryItem>();
+            
+            if (enqItemIdsInModel == null) {    // find enquiryItemIds to delete from DB
+                enqItemsToDelete = await _context.EnquiryItems.Where(x => x.EnquiryId == enq.Id)
+                    .ToListAsync();
+            } else {                            // find enquiryItems from DB that are missing in the model, these are to be deleted from DB
+                enqItemsToDelete = await _context.EnquiryItems
+                    .Where(x => x.EnquiryId == enq.Id && !enqItemIdsInModel.Contains(x.Id)).ToListAsync();
+            }
+        // B - DELETE identified recoords from DB
+            if (enqItemsToDelete != null)
+            {
+                var deleted = await _unitOfWork.Repository<EnquiryItem>().DeleteListAsync(enqItemsToDelete);
+            }
+
+        //C - identify items that are present both in DB and model - for updates
+            var enqItemIdsToUpdate = await _context.EnquiryItems.Where(x => enqItemIdsInModel.Contains(x.Id))
+                .Select(x => x.Id).ToListAsync();
+
+            var enqItemsFromModelToUpdate = enq.EnquiryItems.Where(x => enqItemIdsToUpdate.Contains(x.Id)).ToList();
+        // updateAsync
+            await _unitOfWork.Repository<EnquiryItem>().UpdateListAsync(enqItemsFromModelToUpdate);
+            
+            // filter our records to be updated, else these records will be again INSERTED along with Enquiry entity when it is updted
+            // create another entity excluding records that hv been updated as above - note the ! operator to exclude
+            var enqItemModelFiltered = enq.EnquiryItems.Where(x => !enqItemIdsToUpdate.Contains(x.Id)).ToList();
+            // filter out the records to be updated, else these records will be again INSERTED along with the customerEntity when it is updated
+            
+            // ascertain the new entity contains the parent key of Enquiry Id
+            foreach (var item in enqItemModelFiltered)
+            {
+                if (item.EnquiryId == 0 || item.EnquiryId == '0')
+                {
+                    item.EnquiryId = enq.Id;
+                }
+            }
+
+        // D - attach enqItemModelFiltered to Enquiry model
+            await _unitOfWork.Repository<EnquiryItem>().AddListAsync(enqItemModelFiltered);
+        // E - all items having been deleted, updated or inserted, set the EnquiryItems to null, else those will be inserted again
+        //    enq.EnquiryItems = null;  this has to wait till JD and remuneration items are updated
+
+    // JobDesc and Remuneration are one-to-one relationships, so there is no delete or insert, just updates.
+            var jdList = new List<JobDesc>();
+            var remunList = new List<Remuneration>();
+            foreach (var item in enq.EnquiryItems)
+            {
+                var jd = item.JobDesc;
+                if (jd != null)
+                {
+                    jdList.Add(jd);
+                }
+
+                var remun = item.Remuneration;
+                if (remun != null)
+                {
+                    remunList.Add(remun);
+                }
+            } 
+            if (jdList != null || jdList.Count > 0) {await _unitOfWork.Repository<JobDesc>().UpdateListAsync(jdList);}
+            if (remunList != null || remunList.Count > 0) {await _unitOfWork.Repository<Remuneration>().UpdateListAsync(remunList);}
+
+            enq.EnquiryItems = null;
+
+        // finally update the parent entity Enquiry
             return await _unitOfWork.Repository<Enquiry>().UpdateAsync(enq);
+
         }
 
         public async Task<int> GetEnquiryItemsCountNotReviewed(int enquiryId)

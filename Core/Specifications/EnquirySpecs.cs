@@ -18,9 +18,9 @@ namespace Core.Specifications
                 (!eParam.Id.HasValue || x.Id == eParam.Id) &&
                 (!eParam.EnquiryDate.HasValue || DateTime.Compare(
                     x.EnquiryDate.Date, eParam.EnquiryDate.Value.Date)==0) &&
-                (!string.IsNullOrEmpty(eParam.EnquiryNo) || x.EnquiryNo == eParam.EnquiryNo) &&
-                (!string.IsNullOrEmpty(eParam.EnquiryStatus) || x.EnquiryStatus == eParam.EnquiryStatus) &&
-                (!string.IsNullOrEmpty(eParam.ReviewStatus) || x.ReviewStatus == eParam.ReviewStatus))
+                (!eParam.EnquiryNo.HasValue ||  x.EnquiryNo.Equals(eParam.EnquiryNo)) &&
+                (string.IsNullOrEmpty(eParam.EnquiryStatus) || x.EnquiryStatus == eParam.EnquiryStatus) &&
+                (string.IsNullOrEmpty(eParam.ReviewStatus) || x.ReviewStatus == eParam.ReviewStatus))
             )
         {
             AddInclude(o => o.Customer);

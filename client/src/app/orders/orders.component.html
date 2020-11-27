@@ -15,18 +15,61 @@
     </div>
 </div>
 
+<div class="header form-inline">
+    <div class="colShortTitle">Enquiry No</div>
+    <div class="colShortTitle">Enquiry Date</div>
+    <div class="colAverageTitle">Customer</div>
+    <div class="colShortTitle">City</div>
+    <div class="colShortTitle">Country</div>
+    <div class="colShortTitle">Complete By</div>
+    <div class="colShortTitle">Review status</div>
+    <div class="colShortTitle">Status</div>
+    <div class="colShortTitle">Assigned</div>
+    <div class="colShortTitle">Actions</div>
+</div>
 
-<div class="col-12, px-5; line-height: 8px;" *ngFor="let item of enquiries" style="margin-top: 5px; margin-left: 10px; padding: 0px; font-size: small;">
+<div class="colWhole" *ngFor="let item of enquiries" >
     <div class="row" >      
-        <div class="col-1" routerLink="/enquiryEdit">{{item.enquiryNo}} </div>  
-        <div class="col-2">{{item.enquiryDate | date}}</div>
-        <div class="col-1">{{item.customerId}}</div>
-        <div class="col-1">{{item.reviewedOn | date}}</div>
-        <div class="col-1">{{item.enquiryStatus}}</div>
-        <div class="col-1" style="cursor: pointer">
+        <div class="colShort" routerLink="/enquiryEdit">{{item.enquiryNo}} </div>  
+        <div class="colShort">{{item.enquiryDate | date}}</div>
+        <div class="colAverage">{{item.customerName}}</div>
+        <div class="colShort">{{item.cityName}}</div>
+        <div class="colShort">{{item.countryName}}</div>
+        <div class="colShort">{{item.completeBy | date}}</div>
+        <div class="colShort">{{item.reviewStatus}}</div>
+        <div class="colShort">{{item.enquiryStatus}}</div>
+        <div class="colShort">{{item.assigned}}</div>
+        <div class="colShort" style="cursor: pointer">
             <button class="btn btn-sm btn-outline-secondary fa fa-pencil" (click)="editButtonClick(item.id)" ></button>  
             <button class="btn btn-sm btn-outline-secondary fa fa-trash" routerLink="/enquiry/{{item.id}}"></button>  
         </div>
+<!--
+        <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  This is the expansion title
+                </mat-panel-title>
+                <mat-panel-description>
+                  This is a summary of the content
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>This is the primary content of the panel.</p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState = true"
+                                 (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Self aware panel
+                </mat-panel-title>
+                <mat-panel-description>
+                  Currently I am {{panelOpenState ? 'open' : 'closed'}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>I'm visible because I am open</p>
+            </mat-expansion-panel>
+          </mat-accordion>
+-->          
     </div>
 </div>
 

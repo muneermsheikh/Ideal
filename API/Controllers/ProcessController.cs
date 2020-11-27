@@ -109,7 +109,7 @@ namespace API.Controllers
             // use navigation properties - Enquiry -> EnquiryItems -> CVRef -> Process
             
             var Lst = new DLHistoryDto();
-            Lst.EnquiryNo = enq.EnquiryNo;
+            Lst.EnquiryNo = enq.EnquiryNo.ToString();
             Lst.EnquiryDated = enq.EnquiryDate.Date.ToString();
             var items = enq.EnquiryItems.Select(x => new {x.SrNo, x.CategoryItemId, x.Quantity, 
                 x.MaxCVsToSend, x.CVsReferred})

@@ -12,6 +12,7 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationService( this IServiceCollection services)
         {
+            
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAdminServices, AdminServices>();
@@ -35,6 +36,8 @@ namespace API.Extensions
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
             services.AddScoped<IEmailService, EmailService>();
+
+            // services.AddControllers().AddNewtonsoftJson();
 
             services.Configure<ApiBehaviorOptions>(options => 
             {

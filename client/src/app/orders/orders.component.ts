@@ -1,10 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClientParams } from '../shared/models/clientParams';
-import { IEnquiry } from '../shared/models/enquiry';
+import { IClientOfficial } from '../shared/models/client';
+import { IEnquiryForClient } from '../shared/models/enquiryForClient';
 import { EnquiryParams } from '../shared/models/enquiryParams';
-import { IProfession } from '../shared/models/profession';
 import { UsersService } from '../users/users.service';
 import { OrdersService } from './orders.service';
 
@@ -16,9 +15,8 @@ import { OrdersService } from './orders.service';
 export class OrdersComponent implements OnInit {
 
   @ViewChild('search', {static: false}) searchTerm: ElementRef;
-  enquiries: IEnquiry[];
-  professions: IProfession[];
-  form: FormGroup;
+  enquiries: IEnquiryForClient[];
+    // form: FormGroup;
   errors: string[];
 
   enquiryParams = new EnquiryParams();
@@ -37,7 +35,7 @@ export class OrdersComponent implements OnInit {
               private userService: UsersService) { }
 
   ngOnInit(): void {
-    this.getProfessions();
+    // this.getProfessions();
     this.getEnquiries();
   }
 
@@ -45,13 +43,14 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['/enquiryEdit', enquiryId]);
   }
 
+  /*
   getProfessions(): any {
     this.userService.getProfessions().subscribe(response =>
       { this.professions = response; }
       , error => {
         console.log(error); });
   }
-
+*/
     getEnquiries(useCache = false): void {
       this.service.getEnquiries(useCache).subscribe(response => {
       this.enquiries = response.data;

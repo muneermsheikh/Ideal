@@ -7,7 +7,7 @@ namespace API.Dtos
 
         public EnquiryWithAllStatusDto() {}
         
-        public EnquiryWithAllStatusDto(int id, int customerId, string customerName, string city, string country, string enquiryNo, 
+        public EnquiryWithAllStatusDto(int id, int customerId, string customerName, string city, string country, int enquiryNo, 
             DateTime enquiryDate, string enquiryRef, string basketId, int noOfCategories, int sumOfQuantities, 
             DateTime completeBy, string projectManager, string assignedToHRExecutives, string reviewStatus, string enquiryStatus) 
         {
@@ -34,7 +34,7 @@ namespace API.Dtos
         public string CustomerName {get; set;}
         public string City {get; set;}
         public string Country {get; set; }
-        public string EnquiryNo { get; set; }
+        public int EnquiryNo { get; set; }
         public DateTime EnquiryDate { get; set; }
         
         public string EnquiryRef { get; set; }

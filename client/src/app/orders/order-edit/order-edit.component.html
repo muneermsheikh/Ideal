@@ -1,7 +1,10 @@
+<div *ngIf="!enquiry">
+    No record for the selected enquiry Id
+</div>
 <div class="container">
     <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
         <table>
-            <tr class="panelHeader" colspan="5">{{pageTitle}}</tr>
+            <tr class="panelHeader" colspan="5">Edit Enquiry</tr>
             <tr>
                 <td class="orderItemAverage">
                     <div class="form-group">
@@ -13,7 +16,6 @@
                         </select>
                     </div>
                 </td>
-            <!--   
                 <td class="orderItemAverage">
                     <div class="form-group">
                         <select class="form-control" 
@@ -57,9 +59,9 @@
             </tr>
             <tr>
                 <td><div><app-text-input formControlName="enquiryNo"  [type]="'number'" [label]="'Enquiry No'"></app-text-input> </div></td>
-        -->     <td><div><app-text-input formControlName="enquiryRef" [label]="'Enquiry Ref'"></app-text-input> </div></td>
+                <td><div><app-text-input formControlName="enquiryRef" [label]="'Enquiry Ref'"></app-text-input> </div></td>
                 <td><div><app-text-input formControlName="enquiryDate" [label]="'Dated'"></app-text-input> </div></td>
-    <!--                <td><div><app-text-input formControlName="completeBy" [label]="'Complete by'"></app-text-input> </div></td>
+                <td><div><app-text-input formControlName="completeBy" [label]="'Complete by'"></app-text-input> </div></td>
                 <td><div><app-text-input formControlName="enquiryStatus" [label]="'Current Status'"></app-text-input> </div></td>
             </tr>
             <tr>
@@ -76,20 +78,20 @@
                 </td>
                 <td><div><app-text-input formControlName="reviewedOn" [label]="'Reviewed On'"></app-text-input> </div></td>
                 <td><div><app-text-input formControlName="reviewStatus" [label]="'Review Status'"></app-text-input> </div></td>
-    -->        <td><div><app-text-input formControlName="remarks" [label]="'Remarks'"></app-text-input> </div></td>
+                <td><div><app-text-input formControlName="remarks" [label]="'Remarks'"></app-text-input> </div></td>
             </tr>
         </table>
         
-        <table formArrayName="enquiryItems" style="margin-top: 20px; line-height: 1.5rem;">
+        <table formArrayName="enquiryItems" style="margin-top: 20px; line-height: 1.5em;">
             <tr>
-                <td>Items</td>
+                <td colspan="6">Items</td>
                 <td><button type="button" (click)="pushNewEnquiryItem()" class="fa fa-plus push-right" ></button></td>
             </tr>
             <div *ngFor="let item of enquiryItems().controls; let i=index" [formGroupName]="i">
                 <table style="padding: 0px; margin-top: 0px; margin-bottom: 0px;">
                     <tr>
-            <!--    <td class="orderItemShort"><div><app-text-input formControlName="srNo" [label]="'Sr#'"></app-text-input></div></td>
-            -->     <td class="orderItemAverage">
+                        <td class="orderItemShort"><div><app-text-input formControlName="srNo" [label]="'Sr#'"></app-text-input></div></td>
+                        <td class="orderItemDropdownCategory" colspan="2">
                             <div>
                                 <select class="form-control" 
                                     formControlName="categoryItemId" placeholder="Profession">
@@ -99,7 +101,7 @@
                                 </select>
                             </div>
                         </td>
-            <!--            <td class="orderItemAverage">
+                        <td class="orderItemDropDownFirstLine">
                             <div>
                                 <select class="form-control" 
                                     formControlName="hrExecutiveId" placeholder="HR Exec">
@@ -109,7 +111,7 @@
                                 </select>
                             </div>
                         </td>
-                        <td class="orderItemAverage">
+                        <td class="orderItemDropDownFirstLine">
                             <div>
                                 <select class="form-control" 
                                     formControlName="assessingSupId" placeholder="Supervisor">
@@ -119,7 +121,7 @@
                                 </select>
                             </div>
                         </td>
-                        <td class="orderItemAverage">
+                        <td class="orderItemDropDownFirstLine">
                             <div>
                                 <select class="form-control" 
                                     formControlName="assessingHRMId" placeholder="HRM">
@@ -129,22 +131,18 @@
                                 </select>
                             </div>
                         </td>
+                        <td class="orderItemShort"><div><button (click)="removeEnquiryItem(i)" class="fa fa-trash pull-right"></button></div></td>
                         <td></td>
-                        
-    
-                </table>
-                <table>
+                    </tr>    
                     <tr>
-            -->
                         <td class="orderItemShort"><div><app-text-input formControlName="quantity" [label]="'Qnty'"></app-text-input></div></td>
                         <td class="orderItemShort"><div><app-text-input formControlName="maxCVsToSend" [label]="'Min CVs'"></app-text-input></div></td>
                         <td class="orderItemShort"><div><app-text-input formControlName="ecnr" [label]="'ECNR'"></app-text-input></div></td>
                         <td class="orderItemShort"><div><app-text-input formControlName="assessmentRequired" [label]="'Assess'"></app-text-input></div></td>
                         <td class="orderItemShort"><div><app-text-input formControlName="evaluationRequired" [label]="'CV Eval'"></app-text-input></div></td>
-            <!--         <td class="orderItemShort"><div><app-text-input formControlName="reviewStatus" [label]="'Rvw Status'"></app-text-input></div></td>
-            -->          <td class="orderItemShort"><div><app-text-input formControlName="charges" [label]="'Charges'"></app-text-input></div></td>
-                        <td  class="orderItemShort"><div><button (click)="removeEnquiryItem(i)" class="fa fa-trash pull-right"></button></div></td>
-                 </tr>
+                        <td class="orderItemShort"><div><app-text-input formControlName="reviewStatus" [label]="'Rvw Status'"></app-text-input></div></td>
+                        <td class="orderItemShort"><div><app-text-input formControlName="charges" [label]="'Charges'"></app-text-input></div></td>
+                    </tr>
                 </table>
             </div>
         </table>
@@ -155,70 +153,4 @@
     {{this.createForm.value | json}}
     {{this.createForm.valid}}
 </div>
-
-
-<!--
-        <div formArrayName="enquiryItems" style="margin-top: 20px; line-height: 1.5rem;">
-            <div class="panelHeader">Items</div>
-            <div class="col-2">
-                <button type="button" (click)="pushNewEnquiryItem()" class="fa fa-plus push-right" ></button>
-            </div>
-            <div *ngFor="let item of enquiryItems().controls; let p=index" [formGroupName]="p">
-                <hr *ngIf="p>0">
-                <div class="row">
-                    <div class="col-1"><app-text-input formControlName="srNo" [label]="'Sr#'"></app-text-input></div>
-                    <div class="col-2">
-                        <select class="form-control" 
-                            formControlName="categoryItemId" placeholder="Profession">
-                            <option *ngFor="let item of professions" [ngValue]=item.id>
-                                {{item.name}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-1"><app-text-input formControlName="quantity" [label]="'Qnty'"></app-text-input></div>
-                    <div class="col-1"><app-text-input formControlName="maxCVsToSend" [label]="'Min CVs'"></app-text-input></div>
-                    <div class="col-1"><app-text-input formControlName="ecnr" [label]="'ECNR'"></app-text-input></div>
-                    <div class="col-1"></div>
-                    <div class="col-1"><button (click)="removeEnquiryItem(p)" class="fa fa-trash pull-right"></button></div>    
-                </div>
-                <div class="row">
-                    <div class="col-1"><app-text-input formControlName="assessmentRequired" [label]="'Assess'"></app-text-input></div>
-                    <div class="col-1"><app-text-input formControlName="evaluationRequired" [label]="'CV Eval'"></app-text-input></div>
-                    <div class="col-1">
-                        <select class="form-control" 
-                            formControlName="hrExecutiveId" placeholder="HR Exec">
-                            <option *ngFor="let e of employees" [ngValue]=e.id>
-                                {{e.knownAs}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-1">
-                        <select class="form-control" 
-                            formControlName="assessingSupId" placeholder="Supervisor">
-                            <option *ngFor="let i of employees" [ngValue]=i.id>
-                                {{i.knownAs}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-1">
-                        <select class="form-control" 
-                            formControlName="assessingHRMId" placeholder="HRM">
-                            <option *ngFor="let emp of employees" [ngValue]=emp.id>
-                                {{emp.knownAs}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-1"><app-text-input formControlName="reviewStatus" [label]="'Rvw Status'"></app-text-input></div>
-                    <div class="col-1"><app-text-input formControlName="charges" [label]="'Charges'"></app-text-input></div>
-                </div>
-           </div> 
-        </div>
-        <button [disabled]="createForm.invalid" type="submit" class="btn btn-success">Submit</button>
-    </form>
-    <div style="font-size: xx-small">
-        {{this.createForm.value | json}}
-        {{this.createForm.valid}}
-    </div>
-</div>
--->
 

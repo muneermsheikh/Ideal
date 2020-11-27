@@ -13,7 +13,7 @@ namespace Core.Entities.EnquiryAggregate
         {
         }
 
-        public Enquiry(int customerId, string enquiryNo, int projectManagerId, string enqRef, string basketId, 
+        public Enquiry(int customerId, int enquiryNo, int projectManagerId, string enqRef, string basketId, 
             int hrexecutiveId, int logisticsExecutiveId, List<EnquiryItem> enqItems)
         {
             EnquiryNo = enquiryNo;
@@ -33,7 +33,7 @@ namespace Core.Entities.EnquiryAggregate
         }
     */
         public int CustomerId {get; set; }
-        public string EnquiryNo { get; set; }
+        public int EnquiryNo { get; set; }
         public string BasketId {get; set;}
         public DateTime EnquiryDate { get; set; } = DateTime.Now;
         //public virtual SiteAddress ShipToAddress { get; set; }

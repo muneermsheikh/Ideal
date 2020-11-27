@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using Core.Entities;
 using Core.Entities.Admin;
 using Core.Entities.EnquiryAggregate;
-using Core.Entities.Identity;
+
 using Core.Entities.Masters;
 using Core.Specifications;
+
 
 namespace Core.Interfaces
 {

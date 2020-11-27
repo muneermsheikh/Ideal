@@ -32,10 +32,11 @@ namespace Infrastructure.Data
 
         public async Task<int> GetNextEnquiryNo()
         {
-            bool hasRecords = await _context.Enquiries.AnyAsync();
-            if (!hasRecords) return 1050;
-            return await _context.Set<Enquiry>().MaxAsync(x => Convert.ToInt32(x.EnquiryNo));
+            var TopEnqNo = await _context.Enquiries.OrderByDescending(x => x.EnquiryNo)
+                .Select(x => x.EnquiryNo).Take(1).FirstOrDefaultAsync();
+            return TopEnqNo;
         }
+                
         public async Task<IReadOnlyList<T>> ListWithSpecAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();

@@ -8,6 +8,7 @@ import { EmpCreateComponent } from './employees/emp-create/emp-create.component'
 import { EmployeesComponent } from './employees/employees/employees.component';
 import { HomeComponent } from './home/home.component';
 import { OrderCreateComponent } from './orders/order-create/order-create.component';
+import { OrderEditComponent } from './orders/order-edit/order-edit.component';
 import { OrdersComponent } from './orders/orders.component';
 import { ProfessionAddComponent } from './profession/profession-add/profession-add.component';
 import { ProfessionDetailComponent } from './profession/profession-detail/profession-detail.component';
@@ -52,7 +53,7 @@ const routes: Routes = [
     .then(mod => mod.AccountModule), data: {breadcrumb: {skip: true}} },
   {path: 'enquiry', component: OrdersComponent, data: {breadcrumb: 'Enquiries'}},
   {path: 'enquiryCreate', component: OrderCreateComponent, data: {breadcrumb: 'Enquiry Create'}},
-  {path: 'enquiryEdit/:id', component: OrderCreateComponent, data: {breadcrumb: 'edit Enquiry'}},
+  {path: 'enquiryEdit/:id', component: OrderEditComponent, data: {breadcrumb: 'edit Enquiry'}},
   {path: '**', redirectTo: 'not-found', pathMatch: 'full'}
 ];
 

@@ -147,6 +147,8 @@ namespace Infrastructure.Services
                 .Where(x => indTypeIdsInModel.Contains(x.Id)).Select(x => x.Id).ToListAsync();
             var indTypesFromModelToUpdate = customer.CustomerIndustryTypes.Where(x => indTypeIdsToUpdate.Contains(x.Id)).ToList();
 
+            await _unitOfWork.Repository<CustomerIndustryType>().UpdateListAsync(indTypesFromModelToUpdate);
+
             // filter out the records to be updated, else these records will be again INSERTED along with the customerEntity when it is updated
             // create another entity excluding records that hv been updated as above.
             var indTypeModelFiltered = customer.CustomerIndustryTypes.Where(x => !indTypeIdsToUpdate.Contains(x.Id)).ToList();
@@ -159,7 +161,9 @@ namespace Infrastructure.Services
             }
 
             // attach indTypeModelFiltered to customer model
-            customer.CustomerIndustryTypes = indTypeModelFiltered;
+            await _unitOfWork.Repository<CustomerIndustryType>().AddListAsync(indTypeModelFiltered);
+
+            customer.CustomerIndustryTypes = null;
 
             return await _unitOfWork.Repository<Customer>().UpdateAsync(customer);
         }
@@ -209,7 +213,7 @@ namespace Infrastructure.Services
         //officials
         public async Task<IReadOnlyList<CustomerOfficial>> GetCustomerOfficialList(int CustomerId)
         {
-            return await _context.CustomerOfficials.Where(x => x.Id == CustomerId)      // include x.IsValid - it is giving error
+            return await _context.CustomerOfficials.Where(x => x.Id == CustomerId && x.IsValid.ToLower() == "t")   
                 .OrderBy(x => x.Scope).ToListAsync();
         }
         public async Task<IReadOnlyList<CustomerOfficial>> GetAllOfficialList()
@@ -250,6 +254,13 @@ namespace Infrastructure.Services
         {
             return await _context.Customers.Where(x => x.CustomerType.ToLower() == customerType && 
                 x.CustomerStatus.ToLower() == "active").ToListAsync();
+        }
+
+        public async Task<string> GetCustomerNameCityCountryFromId(int customerId)
+        {
+            var nm = await _context.Customers.Where(x => x.Id == customerId)
+                .Select(x => new {Name = x.CustomerName, City = x.City, Country = x.Country}).SingleOrDefaultAsync();
+            return nm.Name + "|" + nm.City + "|" + nm.Country;
         }
     }
 }

@@ -14,7 +14,9 @@ D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authorization.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Metadata.dll
+D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.Data.Sqlite.dll
@@ -45,6 +47,7 @@ D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdCo
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\atsOne\api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\Pipelines.Sockets.Unofficial.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\SQLitePCLRaw.batteries_v2.dll
 D:\atsOne\api\bin\Debug\netcoreapp3.1\SQLitePCLRaw.nativelibrary.dll

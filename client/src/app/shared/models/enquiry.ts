@@ -22,10 +22,10 @@ export interface IEnquiry {
 
 export interface IEnquiryItem {
     id: number;
-    srNo: number;
+    srNo: string;
     categoryItemId: number;
     categoryName: string;
-    quantity: number;
+    quantity: string;
     maxCVsToSend: number;
     ecnr: string;
     assessmentRequired: string;
@@ -44,20 +44,20 @@ export interface IEnquiryItem {
 export interface IRemuneration {
     id: number;
     enquiryItemId: number;
-    contractPeriodInMonths: number;
+    contractPeriodInMonths: string;
     salaryCurrency: string;
-    salaryMin: number;
-    salaryMax: number;
+    salaryMin: string;
+    salaryMax: string;
     salaryNegotiable: string;
     housing: string;
-    housingAllowance: number;
+    housingAllowance: string;
     food: string;
-    foodAllowance: number;
+    foodAllowance: string;
     transport: string;
     transportAllowance: number;
-    otherAllowance: number;
-    leaveAvailableAfterHowmanyMonths: number;
-    leaveEntitlementPerYear: number;
+    otherAllowance: string;
+    leaveAvailableAfterHowmanyMonths: string;
+    leaveEntitlementPerYear: string;
     updatedOn: string;
 }
 

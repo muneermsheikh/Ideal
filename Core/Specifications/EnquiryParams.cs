@@ -22,7 +22,7 @@ namespace Core.Specifications
             set => _customerName = value.ToLower(); 
         }
         public DateTime? EnquiryDate {get; set; }
-        public string EnquiryNo {get; set; }
+        public int? EnquiryNo {get; set; }
         private string _customerName;
         public string EnquiryStatus;
         public string ReviewStatus;

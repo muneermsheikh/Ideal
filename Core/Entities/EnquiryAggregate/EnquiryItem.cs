@@ -26,22 +26,49 @@ namespace Core.Entities.EnquiryAggregate
             CompleteBy = completeBy;
            }
 
-        public EnquiryItem(int enquiryId, int srNo, int categoryItemId, string categoryName, 
-            int quantity, int maxCVsToSend, string eCNR, string assessmentReqd, 
+        public EnquiryItem(int srNo,  string categoryName, 
+            int quantity, int maxCVsToSend, string ecnr, string assessmentReqd, 
             string evaluationReqd, string reviewStatus, string enquiryStatus) 
         {
-            this.EnquiryId = enquiryId;
                 this.SrNo = srNo;
-                this.CategoryItemId = categoryItemId;
                 this.CategoryName = categoryName;
                 this.Quantity = quantity;
                 this.MaxCVsToSend = maxCVsToSend;
-                this.Ecnr = eCNR;
+                this.Ecnr = ecnr;
                 this.AssessmentReqd = assessmentReqd;
                 this.EvaluationReqd = evaluationReqd;
                 this.ReviewStatus = reviewStatus;
                 this.EnquiryStatus = enquiryStatus;
         }
+
+        public EnquiryItem(int enquiryId, CategoryItemOrdered itemOrdered, int srNo, int categoryItemId, string categoryName, int quantity, int maxCVsToSend, string ecnr, string assessmentReqd, string evaluationReqd, int? hRExecutiveId, Employee assessingHRExec, int? assessingSupId, int? assessingHRMId, DateTime? completeBy, string reviewStatus, string enquiryStatus, string charges, Employee assessingHRM, Employee assessingSup, JobDesc jobDesc, Remuneration remuneration, List<CVRef> cVsReferred, List<ToDo> tasksAssigned)
+        {
+            EnquiryId = enquiryId;
+            ItemOrdered = itemOrdered;
+            SrNo = srNo;
+            CategoryItemId = categoryItemId;
+            CategoryName = categoryName;
+            Quantity = quantity;
+            MaxCVsToSend = maxCVsToSend;
+            Ecnr = ecnr;
+            AssessmentReqd = assessmentReqd;
+            EvaluationReqd = evaluationReqd;
+            HRExecutiveId = hRExecutiveId;
+            AssessingHRExec = assessingHRExec;
+            AssessingSupId = assessingSupId;
+            AssessingHRMId = assessingHRMId;
+            CompleteBy = completeBy;
+            ReviewStatus = reviewStatus;
+            EnquiryStatus = enquiryStatus;
+            Charges = charges;
+            AssessingHRM = assessingHRM;
+            AssessingSup = assessingSup;
+            JobDesc = jobDesc;
+            Remuneration = remuneration;
+            CVsReferred = cVsReferred;
+            TasksAssigned = tasksAssigned;
+        }
+
         public int EnquiryId { get; set; }
         public virtual CategoryItemOrdered ItemOrdered {get; set; }
         public int SrNo {get; set; }

@@ -17,6 +17,8 @@ namespace Core.Interfaces
         Task<int> GetCustomerIdFromEmail(CustomerSpecParams custParams);
         Task<string> CustomerCountryCurrency(int customerId);
         Task<IReadOnlyList<Customer>> GetCustomerListFlat(string customerType);
+        Task<string> GetCustomerNameCityCountryFromId(int customerId);
+        
         
 //officials
         Task<IReadOnlyList<CustomerOfficial>> GetCustomerOfficialList(int CustomerId);

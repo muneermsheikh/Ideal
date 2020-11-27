@@ -84,7 +84,7 @@ namespace Infrastructure.Services
                 var underreview=item.referred - item.selected - item.rejected;
                 var balcvstosend = ((item.maxcvs / item.quantity) * (item.quantity - item.selected)) - underreview;
                 if (balcvstosend < 0) balcvstosend = 0;
-                Lst.Add(new RequirementPendingDto(item.enquirynumber, item.enquirydated, item.customername, 
+                Lst.Add(new RequirementPendingDto(item.enquirynumber.ToString(), item.enquirydated, item.customername, 
                     string.Concat(item.srno, "-", item.categoryname), item.quantity, item.referred, item.selected, item.rejected, 
                     underreview, item.deployed, balcvstosend, item.completeby, ""));
             }
@@ -137,7 +137,7 @@ namespace Infrastructure.Services
                 var underreview = item.referred - item.selected - item.rejected;
                 var balcvstosend = ((item.maxcvs / item.quantity) * (item.quantity - item.selected)) - underreview;
                 if (balcvstosend < 0) balcvstosend = 0;
-                Lst.Add(new RequirementPendingDto(item.enquirynumber, item.enquirydated, item.customername, 
+                Lst.Add(new RequirementPendingDto(item.enquirynumber.ToString(), item.enquirydated, item.customername, 
                     string.Concat(item.srno, "-", item.categoryname), item.quantity, item.referred, item.selected, item.rejected, 
                     underreview, item.deployed, balcvstosend, item.completeby, ""));
             }

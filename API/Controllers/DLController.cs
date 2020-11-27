@@ -10,8 +10,10 @@ using Core.Entities.Admin;
 using Core.Entities.EnquiryAggregate;
 using Core.Interfaces;
 using Core.Specifications;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // This controller contains all aspects of the Enquiry object after it is contract reviewed and
 // approved - i.e. it becomes an Order (called Demand Letter in overseas recruitment terms).
@@ -22,29 +24,64 @@ namespace API.Controllers
     {
         //private readonly IGenericRepository<EnquiryForwarded> _enqFwdRepo;
         private readonly IEnquiryService _enqService;
+        private readonly ATSContext _context;
         private readonly IDLForwardService _dlForwardService;
         private readonly IMapper _mapper;
         //private readonly IGenericRepository<Enquiry> _enqRepo;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDLService _dLService;
+        private readonly ICustomerService _custService;
+        private readonly int constDefaultProjManagerId;
+        private readonly int constDefaultContractPeriodInMonths;
+        private readonly int constDefaultLeaveAvailableAfterMonths;
+        private readonly int constDefaultLeaveEntitlementPerYear;
 
         public DLController(IEnquiryService enqService,
             //IGenericRepository<EnquiryForwarded> enqFwdRepo,
             //IGenericRepository<Enquiry> enqRepo, 
             IUnitOfWork unitOfWork,
             IDLService dLService,
-            IDLForwardService dlForwardService, IMapper mapper)
+            IDLForwardService dlForwardService, 
+            ICustomerService custService,
+            ATSContext context,
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
             _dLService = dLService;
             //_enqRepo = enqRepo;
             _dlForwardService = dlForwardService;
             _mapper = mapper;
             _enqService = enqService;
+            _custService = custService;
             //_enqFwdRepo = enqFwdRepo;
+            constDefaultProjManagerId = 2;
+            constDefaultContractPeriodInMonths = 24;
+            constDefaultLeaveAvailableAfterMonths = 24;
+            constDefaultLeaveEntitlementPerYear = 21;
+
         }
 
-//DL
+// enquiry
+/*
+        [HttpPost("dlbydto")]
+        public async Task<ActionResult<Enquiry>> AddDLByDto(EnqToAddDto enqToAddDto)
+        {
+            var enqToAdd = MapDLDtoToDLAsync(enqToAddDto);
+            var enqAdded = await _enqService.AddEnquiryAsync(enqToAdd);
+            if (enqAdded == null) return BadRequest(new ApiResponse(400));
+            return Ok(enqAdded);
+        }
+ */       
+        
+        [HttpGet("getenquiry/{id}")]
+        public async Task<ActionResult<Enquiry>> GetEnquiry(int id)
+        {
+            var enq = await _enqService.GetEnquiryByIdAsync(id);
+            if (enq == null) return NotFound(new ApiResponse(404, "Invalid enquiry Id"));
+            return Ok(enq);
+        }
+
         // this method is called by Agency Officials, here basket is not relevant
         [HttpPost]
         public async Task<ActionResult<Enquiry>> AddDL(Enquiry enq)
@@ -70,7 +107,7 @@ namespace API.Controllers
         }
         
         [HttpGet("dlindex")]
-        public async Task<ActionResult<Pagination<Enquiry>>> DLIndex(
+        public async Task<ActionResult<Pagination<EnquiryForClient>>> DLIndex(
             [FromQuery] EnquiryParams eParams)
         {
             var totalItems = await _unitOfWork.Repository<Enquiry>().CountWithSpecAsync(
@@ -80,11 +117,28 @@ namespace API.Controllers
                 new EnquirySpecs(eParams));
             if (enqs == null) return NotFound(new ApiResponse(400, "your instructions did not find any matching records"));
 
-            //var data = _mapper
-            //    .Map<IReadOnlyList<Enquiry>, IReadOnlyList<EnquiryToReturnDto>>(enqs);
+            var enqForClient = new List<EnquiryForClient>();
+            foreach(var enq in enqs)
+            {
+                var nm = await _context.Customers.Where(x => x.Id == enq.CustomerId)
+                .Select(x => new {Name = x.CustomerName, City = x.City, Country = x.Country}).SingleOrDefaultAsync();
 
-            return Ok(new Pagination<Enquiry>
-                (eParams.PageIndex, eParams.PageSize, totalItems, enqs));
+                enqForClient.Add(new EnquiryForClient {
+                    Id = enq.Id,
+                    EnquiryNo = enq.EnquiryNo,
+                    EnquiryDate = enq.EnquiryDate,
+                    CustomerId = enq.CustomerId,
+                    CustomerName = nm.Name,
+                    CityName = nm.City,
+                    CountryName = nm.Country,
+                    CompleteBy = Convert.ToDateTime(enq.CompleteBy),
+                    EnquiryRef = enq.EnquiryRef,
+                    ReviewStatus = enq.ReviewStatus,
+                    Assigned = EnquiryAssignedStatus(enq.EnquiryItems)
+                });
+            }
+            return Ok(new Pagination<EnquiryForClient>
+                (eParams.PageIndex, eParams.PageSize, totalItems, enqForClient));
         }
 
         [HttpGet("demandLetter")]
@@ -384,6 +438,145 @@ namespace API.Controllers
             return Ok(_mapper.Map<IReadOnlyList<EnquiryForwarded>, IReadOnlyList<EnquiryForwardedDto>>(enqFwd));
         }
 
+    //privates
 
-    }
+        private string EnquiryAssignedStatus(List<EnquiryItem> enquiryItems)
+        {
+            bool NotAssigned = false;
+
+            foreach(var item in enquiryItems)
+            {
+                if (item.TasksAssigned != null)
+                {
+                    foreach(var tsk in item.TasksAssigned)
+                    {
+                        if (NotAssigned) {break;}
+                        if (!(tsk.TaskType == "HRExecutive" && (
+                            "taskstartedtaskcompletedtaskcanceledtaskclosed".Contains(tsk.TaskStatus.ToLower())))) 
+                        {
+                            NotAssigned = true;
+                            break;
+                        }
+                    }
+                }
+                if (NotAssigned) {break; }
+            }
+            
+            return NotAssigned==false ? "Not Assigned" : "Assigned";
+        
+        }
+            private Enquiry MapDLDtoToDLAsync (EnqToAddDto dto)
+            {
+
+                var enqItems = new List<EnquiryItem>();
+                foreach(var item in dto.EnquiryItems)
+                {
+                    enqItems.Add(new EnquiryItem{
+                        SrNo = item.SrNo,
+                        CategoryItemId = item.CategoryItemId,
+                        CategoryName = item.CategoryName,
+                        Ecnr = item.Ecnr ?? "Ecr",
+                        AssessmentReqd = item.AssessmentReqd ?? "n",
+                        EvaluationReqd = item.EvaluationReqd ?? "n",
+                        Quantity = item.Quantity,
+                        MaxCVsToSend = item.MaxCVsToSend,
+                        HRExecutiveId = item.HRExecutiveId,
+                        AssessingSupId = item.AssessingSupId,
+                        AssessingHRMId = item.AssessingHRMId,
+                        CompleteBy = item.CompleteBy,
+                        ReviewStatus = item.ReviewStatus ?? "NotReviewed",
+                        EnquiryStatus = item.EnquiryStatus ?? "Inactive",
+                        Charges = item.Charges ?? ""
+                    });
+
+                    if (item.JobDesc != null){
+                        var jd = new JobDesc {
+                            JobDescription = item.JobDesc.JobDescription ?? "not defined",
+                            QualificationDesired = item.JobDesc.QualificationDesired ?? "not defined",
+                            ExperienceDesiredMin = item.JobDesc.ExperienceDesiredMin,
+                            ExperienceDesiredMax = item.JobDesc.ExperienceDesiredMax,
+                            JobProfileDetails = item.JobDesc.JobProfileDetails ?? "not defined",
+                            JobProfileUrl = item.JobDesc.JobProfileUrl ?? ""
+                        };   
+                        item.JobDesc = jd;
+                    };
+
+                    if (item.Remuneration != null) {
+                        var remuneration = new Remuneration {
+                            ContractPeriodInMonths = item.Remuneration.ContractPeriodInMonths == 0 ? constDefaultContractPeriodInMonths : item.Remuneration.ContractPeriodInMonths,
+                            SalaryCurrency = item.Remuneration.SalaryCurrency,
+                            SalaryMin = item.Remuneration.SalaryMin,
+                            SalaryMax =item.Remuneration.SalaryMax,
+                            SalaryNegotiable = item.Remuneration.SalaryNegotiable ?? "f",
+                            Housing = item.Remuneration.Housing,
+                            HousingAllowance = Convert.ToInt32(item.Remuneration.HousingAllowance),
+                            Food = item.Remuneration.Food,
+                            FoodAllowance = Convert.ToInt32(item.Remuneration.Food ?? "0"),
+                            Transport = item.Remuneration.Transport,
+                            TransportAllowance = item.Remuneration.TransportAllowance,
+                            OtherAllowance =   item.Remuneration.OtherAllowance,
+                            LeaveAvailableAfterHowmanyMonths = item.Remuneration.LeaveAvailableAfterHowmanyMonths == 0 ? constDefaultLeaveAvailableAfterMonths : item.Remuneration.LeaveEntitlementPerYear,
+                            LeaveEntitlementPerYear = item.Remuneration.LeaveEntitlementPerYear == 0 ? constDefaultLeaveEntitlementPerYear : item.Remuneration.LeaveEntitlementPerYear,
+                            UpdatedOn = DateTime.Today
+                        };
+                        item.Remuneration = remuneration;
+                    }
+                }
+                var customerExecutives = new CustomerOfficialExecDto();
+                customerExecutives =  GetCustomerOfficialExecutives(dto.CustomerId);
+                Enquiry enquiry = new Enquiry {
+                    CustomerId = dto.CustomerId,
+                    EnquiryNo = Convert.ToInt32(dto.EnquiryNo),
+                    BasketId = dto.BasketId ?? "",
+                    EnquiryDate = dto.EnquiryDate, 
+                    ReadyToReview = dto.ReadyToReview ?? "f",
+                    EnquiryStatus = dto.EnquiryStatus ?? "inactive",
+                    ProjectManagerId = dto.ProjectManagerId == 0 ? constDefaultProjManagerId : dto.ProjectManagerId,
+                    AccountExecutiveId = dto.AccountExecutiveId == 0 ? customerExecutives.AccountsExecutiveId : dto.AccountExecutiveId,
+                    HRExecutiveId = dto.AccountExecutiveId == 0 ? customerExecutives.HRExecutiveId : dto.HRExecutiveId,
+                    LogisticsExecutiveId =  dto.LogisticsExecutiveId == 0 ? customerExecutives.LogisticsExecutiveId : dto.LogisticsExecutiveId,
+                    EnquiryRef = dto.EnquiryRef ?? "",
+                    CompleteBy = dto.CompleteBy,
+                    ReviewedById = dto.ReviewedById,
+                    ReviewStatus = dto.ReviewStatus ?? "NotReviewed",
+                    ReviewedOn = dto.ReviewedOn,
+                    Remarks = dto.Remarks,
+                    EnquiryItems = enqItems
+                };
+
+                return enquiry;
+            }
+
+            private DateTime? GetValidatedDate(string dateIn)
+            {
+                DateTime value;
+                if (!DateTime.TryParse(dateIn, out value))
+                {   
+                    return DateTime.Today;
+                } else {
+                    return null;
+                }
+            }
+
+            private CustomerOfficialExecDto GetCustomerOfficialExecutives(int customerId)
+            {
+                var execs = _custService.GetCustomerOfficialList(customerId).Result;
+                var dto = new CustomerOfficialExecDto ();
+                foreach(var exec in execs)
+                {
+                    if (exec.Scope.ToLower() == "accounts")
+                    {
+                        dto.AccountsExecutiveId = exec.Id;
+                    } else if (exec.Scope.ToLower() == "logistics")
+                    {
+                        dto.LogisticsExecutiveId = exec.Id;
+                    } else if (exec.Scope.ToLower() == "hr")
+                    {
+                        dto.HRExecutiveId = exec.Id;
+                    }
+                }
+
+                return dto;
+            }
+        }
 }

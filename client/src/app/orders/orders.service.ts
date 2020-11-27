@@ -41,6 +41,7 @@ export class OrdersService {
               private profService: ProfessionService) { }
 
   addEnquiry(values: any): any {
+    // console.log('in service - ' + values);
     return this.http.post(this.baseUrl + 'DL', values).pipe(
       map((enq: IEnquiry) => {
         if (enq) {
@@ -66,12 +67,13 @@ export class OrdersService {
   }
 
     getEnquiry(id: number): any {
-
+      /*
       const enq = this.enquiries.find(p => p.id === id);
 
       if (enq) {
       return of(enq);
     }
+    */
       return this.http.get<IEnquiry>(this.baseUrl + 'DL/getenquiry/' + id);
     }
 
@@ -146,11 +148,12 @@ export class OrdersService {
     }
 
     getCustomerOfficials(id: number): any {
-      console.log('in order.service.ts.getCustomerOfficials, id =' + id );
       const off = this.allOfficials.find(x => x.customerId === id);
       if (off) {
+        console.log(' got the customer officials from all officials');
         return of(off);
       }
+      console.log('failed to get officials from all officials, getting from API');
       return this.http.get(this.baseUrl + 'Customers/officials/' + id);
     }
 
@@ -163,9 +166,9 @@ export class OrdersService {
       return this.params;
     }
 
-  setEnquiryParams(params: EnquiryParams): void {
-    this.params = params;
-  }
+    setEnquiryParams(params: EnquiryParams): void {
+      this.params = params;
+    }
 
 
 }
