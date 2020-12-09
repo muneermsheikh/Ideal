@@ -269,13 +269,26 @@ namespace Infrastructure.Services
         public async Task<Enquiry> UpdateDLAsync(Enquiry enq)
         {
             //return await _unitOfWork.Repository<Enquiry>().UpdateAsync(enq);
+
+        // following steps A, B, C, D, E in segregating entities for updates and inserts is creating
+        // singleton and scoped clashes of entity tracking. a short cut is to delete existing navigation properties from the database
+        // and do the updates afresh, which inserts all the records of the navigation properties.
+        // if the deleted navigation properties have any relations, then it will create problems in data integrity
+        // flg is a temporary resolution, to be updated by changing the DBContext scope to Scoped from current Singleton
         // A - identify enquiry Items to delete from DB - this 
         // B    delete these items from DB
         // C - identify enquiry items that are present in DB as well as the model - these records are for updates
         // D - identify items that are present in the model, but not in DB - these are new items, to be inserted.
 
+        // temporary resolution of already tracking error of DB Context
+
+        // start from last level of navigation properties
+
+        // 
+
         // A - identify records in DB that are missing in the model
-            var enqItemsInDB = await _context.EnquiryItems.Where(x => x.EnquiryId == enq.Id).ToListAsync();
+
+            var enqItemsInDB = await _context.EnquiryItems.Where(x => x.EnquiryId == enq.Id).AsNoTracking().ToListAsync();
             var enqItemIdsInModel = enq.EnquiryItems.Select(x => x.Id);
 
             // create a list to store items to delete from DB
@@ -283,40 +296,64 @@ namespace Infrastructure.Services
             
             if (enqItemIdsInModel == null) {    // find enquiryItemIds to delete from DB
                 enqItemsToDelete = await _context.EnquiryItems.Where(x => x.EnquiryId == enq.Id)
-                    .ToListAsync();
+                    .AsNoTracking().ToListAsync();
             } else {                            // find enquiryItems from DB that are missing in the model, these are to be deleted from DB
-                enqItemsToDelete = await _context.EnquiryItems
-                    .Where(x => x.EnquiryId == enq.Id && !enqItemIdsInModel.Contains(x.Id)).ToListAsync();
+                enqItemsToDelete = await _context.EnquiryItems.Where(x => x.EnquiryId == enq.Id && !enqItemIdsInModel
+                    .Contains(x.Id)).AsNoTracking().ToListAsync();
             }
         // B - DELETE identified recoords from DB
-            if (enqItemsToDelete != null)
+            if (enqItemsToDelete != null || enqItemsToDelete.Count > 0)
             {
                 var deleted = await _unitOfWork.Repository<EnquiryItem>().DeleteListAsync(enqItemsToDelete);
             }
 
+        
         //C - identify items that are present both in DB and model - for updates
             var enqItemIdsToUpdate = await _context.EnquiryItems.Where(x => enqItemIdsInModel.Contains(x.Id))
                 .Select(x => x.Id).ToListAsync();
-
             var enqItemsFromModelToUpdate = enq.EnquiryItems.Where(x => enqItemIdsToUpdate.Contains(x.Id)).ToList();
         // updateAsync
-            await _unitOfWork.Repository<EnquiryItem>().UpdateListAsync(enqItemsFromModelToUpdate);
+            // await _unitOfWork.Repository<EnquiryItem>().UpdateListAsync(enqItemsFromModelToUpdate);
             
             // filter our records to be updated, else these records will be again INSERTED along with Enquiry entity when it is updted
             // create another entity excluding records that hv been updated as above - note the ! operator to exclude
             var enqItemModelFiltered = enq.EnquiryItems.Where(x => !enqItemIdsToUpdate.Contains(x.Id)).ToList();
             // filter out the records to be updated, else these records will be again INSERTED along with the customerEntity when it is updated
+            var enqItemsToUpdate = enq.EnquiryItems.Where(x => enqItemIdsToUpdate.Contains(x.Id)).ToList();
+            await _unitOfWork.Repository<EnquiryItem>().UpdateListAsync(enqItemsToUpdate);
             
             // ascertain the new entity contains the parent key of Enquiry Id
-            foreach (var item in enqItemModelFiltered)
+    /*
+            string s;
+            foreach (var item in enqItemsToUpdate)
             {
+                s = "UPDATE EnquiryItems SET SrNo = " + item.SrNo;
+                if (item.AssessingHRMId != null) { s = s + ", AssessingHRMId = " + item.AssessingHRMId; }
+                if (item.AssessingSupId != null) { s = s + ", AssessingSupId = " + item.AssessingSupId;  }
+                if (item.AssessmentReqd != "") { s = s + ", AssessmentReqd = " + item.AssessmentReqd.ToString(); }
+                s += ", CategoryItemId = " + item.CategoryItemId + ", CategoryName = '" + 
+                    _catService.GetCategoryNameFromCategoryId(item.CategoryItemId) + "', Charges = " + item.Charges.ToString() +
+                   // ", CompleteBy = " + item.CompleteBy ==  null ? null : "#" + item.CompleteBy + "#" +
+                    ", Ecnr = " + item.Ecnr.ToString() + ", EnquiryId = " + item.EnquiryId;
+                if (item.EnquiryStatus != null) { s += ", EnquiryStatus = " + item.EnquiryStatus.ToString(); }
+                if (item.EvaluationReqd != null) { s += ", EvaluationReqd = " + item.EvaluationReqd.ToString(); }
+                if (item.HRExecutiveId != 0) { s += ", HRExecutiveId = " + item.HRExecutiveId; }
+                if (item.ReviewStatus != null) { s += ", ReviewStatus = " + item.ReviewStatus.ToString(); }
+                s += ", MaxCVsToSend = " + item.MaxCVsToSend + 
+                    ", Quantity = " + item.Quantity + " Where Id = " + item.Id;
+                var rowsUpdated = _context.Database.ExecuteSqlCommand(s);
+            }
+  
+            {
+                
                 if (item.EnquiryId == 0 || item.EnquiryId == '0')
                 {
                     item.EnquiryId = enq.Id;
                 }
             }
-
+*/
         // D - attach enqItemModelFiltered to Enquiry model
+
             await _unitOfWork.Repository<EnquiryItem>().AddListAsync(enqItemModelFiltered);
         // E - all items having been deleted, updated or inserted, set the EnquiryItems to null, else those will be inserted again
         //    enq.EnquiryItems = null;  this has to wait till JD and remuneration items are updated
@@ -341,10 +378,11 @@ namespace Infrastructure.Services
             if (jdList != null || jdList.Count > 0) {await _unitOfWork.Repository<JobDesc>().UpdateListAsync(jdList);}
             if (remunList != null || remunList.Count > 0) {await _unitOfWork.Repository<Remuneration>().UpdateListAsync(remunList);}
 
-            enq.EnquiryItems = null;
+            // enq.EnquiryItems = null;
 
         // finally update the parent entity Enquiry
             return await _unitOfWork.Repository<Enquiry>().UpdateAsync(enq);
+
 
         }
 

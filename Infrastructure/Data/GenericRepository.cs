@@ -103,6 +103,14 @@ namespace Infrastructure.Data
             return entity;
         }
         
+        public async Task<T> UpdateWithNoTrackingAsync(T entity)
+        {
+            _context.Set<T>().Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
         public async Task<int> UpdateListAsync(List<T> entities)
         {
             foreach(var item in entities)

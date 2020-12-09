@@ -1,6 +1,9 @@
 export interface IEnquiryToAdd {
     id: number;
     customerId: number;
+    hrExecutiveId: number;
+    logisticsExecutiveId: number;
+    accountExecutiveId: number;
     enquiryRef: string;
     enquiryDate: string;
     remarks: string;

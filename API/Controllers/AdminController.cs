@@ -74,6 +74,13 @@ namespace API.Controllers
             return Ok(_mapper.Map<IReadOnlyList<CVForward>, IReadOnlyList<CVForwardDto>>(cvfwd));
         }
 
+        [HttpGet("reviewStatus")]
+        public async Task<IReadOnlyList<ReviewStatus>> GetReviewStatus()
+        {
+            var st = await _context.ReviewStatuses.OrderBy(x => x.Status).ToListAsync();
+            return st;
+        }
+        
         [HttpGet("pendingrequirementofItems")]
         public ActionResult<IReadOnlyList<RequirementPendingDto>> GetPendingRequirementsOfEnquiryItems([FromBody] int[] enquiryitems)
         {

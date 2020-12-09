@@ -1,0 +1,55 @@
+
+<div class="d-flex align-items-center justify-content-center" style="margin-left: 10px;">
+    <app-paging-header
+        [totalCount]="totalCount"
+        [pageSize]="this.enquiryParams.pageSize"
+        [pageNumber]="this.enquiryParams.pageNumber">
+    </app-paging-header>
+    
+    <div class="form-inline" *ngIf="emails" >
+        <input (keyup.enter)="onSearch()" class="form-control" 
+            #search placeholder="Search" type="text" >
+        <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
+        <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
+        <button routerLink="/emailCreate" class="btn btn-outline-success ml-2">New email</button>
+    </div>
+</div>
+
+<div class="header form-inline">
+    <div class="colShortTitle">Date</div>
+    <div class="colShortTitle">Sender Email</div>
+    <div class="colAverageTitle">Sent To</div>
+    <div class="colAverageTitle">CC</div>
+    <div class="colAverageTitle">BCC</div>
+    <div class="colShortTitle">Subject</div>
+    <div class="colShortTitle">Message Type</div>
+    <div class="colShortTitle">Actions</div>
+</div>
+
+<div class="colWhole" *ngFor="let item of emails" >
+    <div class="row" >      
+        <div class="colShort">{{item.dateSent | date}}</div>
+        <div class="colShort" routerLink="/enquiryEdit">{{item.senderEmailAddress}} </div>  
+        <div *ngFor="let lt of item.toEmailList" class="colShort">{{lt}}</div>
+        <div *ngFor="let lt of item.ccEmailList" class="colAverage">{{lt}}</div>
+        <div *ngFor="let lt of item.bccEmailList" class="colShort">{{lt}}</div>
+        <div class="colShort">{{item.subject}}</div>
+        <div class="colShort">{{item.messageType}}</div>
+        <div class="colShort" style="cursor: pointer">
+            <button class="btn btn-sm btn-outline-secondary fa fa-pencil" (click)="editButtonClick(item.id)" ></button>  
+            <button class="btn btn-sm btn-outline-secondary fa fa-trash" routerLink="/email/{{item.id}}"></button>  
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center my-3" *ngIf="this.totalCount > 0">
+    <app-pager
+        [pageSize]="enquiryParams.pageSize"
+        [pageNumber]="enquiryParams.pageNumber"
+        [totalCount]="totalCount"
+        (pageChanged)="onPageChanged($event)"
+        >
+    </app-pager>
+</div>
+
+

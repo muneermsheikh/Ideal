@@ -92,7 +92,8 @@ namespace Infrastructure.Services
         public async Task<Customer> CustomerByIdAsync(int customerId)
         {
             // var spec = new CustomerSpecs(customerId);
-            return await _unitOfWork.Repository<Customer>().GetByIdAsync(customerId);
+            //return await _unitOfWork.Repository<Customer>().GetByIdAsync(customerId);
+            return await _context.Customers.Where(x => x.Id == customerId).Include(x => x.CustomerOfficials).FirstOrDefaultAsync();
         }
 
         public async Task<IReadOnlyList<Customer>> CustomerListAsync(CustomerSpecParams sParams)
@@ -239,6 +240,18 @@ namespace Infrastructure.Services
             var r = new clsString();
             r.Name = custname;
             return r;
+        }
+
+        public async Task<Customer> GetCustomerFromEnquiryId(int EnquiryId)
+        {
+            var qry =   from enq in _context.Enquiries 
+                        join customer in _context.Customers
+                            on enq.CustomerId equals customer.Id
+                        where enq.Id == EnquiryId
+                        select customer;
+            var result = qry.Include(x => x.CustomerOfficials);
+
+            return await result.SingleOrDefaultAsync();
         }
 
         // recruitment agencies

@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ProfessionService } from '../profession/profession.service';
 import { IClient, IClientOfficial } from '../shared/models/client';
+import { IEmail } from '../shared/models/email';
 import { IEnquiry } from '../shared/models/enquiry';
 import { EnquiryParams } from '../shared/models/enquiryParams';
 import { IPaginationEnquiry, PaginationEnquiry } from '../shared/models/paginationEnquiry';
@@ -74,7 +75,7 @@ export class OrdersService {
       return of(enq);
     }
     */
-      return this.http.get<IEnquiry>(this.baseUrl + 'DL/getenquiry/' + id);
+    return this.http.get<IEnquiry>(this.baseUrl + 'dl/getenquiry/' + id);
     }
 
     getEnquiries(useCache: boolean): any {
@@ -170,5 +171,8 @@ export class OrdersService {
       this.params = params;
     }
 
+    sendAcknowledgementMail(mail: IEmail): any {
+      return this.http.post<IEmail>(this.baseUrl + 'Email', mail);
+    }
 
 }

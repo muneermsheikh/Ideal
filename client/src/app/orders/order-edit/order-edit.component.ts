@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeesService } from 'src/app/employees/employees.service';
 import { IClient, IClientOfficial } from 'src/app/shared/models/client';
 import { IEmployee } from 'src/app/shared/models/employee';
-import { IEnquiry, IEnquiryItem } from 'src/app/shared/models/enquiry';
+import { IEnquiry, IEnquiryItem, IJobDesc, IRemuneration } from 'src/app/shared/models/enquiry';
 import { IProfession } from 'src/app/shared/models/profession';
 import { UsersService } from 'src/app/users/users.service';
 import { OrdersService } from '../orders.service';
@@ -24,6 +24,8 @@ export class OrderEditComponent implements OnInit {
   officials: IClientOfficial[];
   customers: IClient[];
   clientIdSelected: number;
+  // jobDesc: IJobDesc[];
+  // remuneration: IRemuneration[];
 
   formErrors = {
   };
@@ -38,9 +40,18 @@ export class OrderEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('calling getClients');
+    this.getClients();
+    this.getProfessions();
+    this.getEmployees();
+    this.getOfficials();
+
     this.createForm = this.fb.group({
       id: [0],
       customerId: [null, Validators.required],
+      accountExecutiveId:  [null],
+      hrExecutiveId:  [null],
+      logisticsExecutiveId:  [null],
       enquiryRef: [null],
       enquiryNo: [null],
       enquiryDate: [null, Validators.required],
@@ -52,29 +63,18 @@ export class OrderEditComponent implements OnInit {
       reviewedOn:  [null],
       enquiryStatus:  [null],
       projectManagerId:  [null, Validators.required],
-      accountExecutiveId:  [null],
-      hrExecutiveId:  [null],
-      logisticsExecutiveId:  [null],
       remarks:  [null],
       enquiryItems: this.fb.array([
           this.newEnquiryItem()
         ]),
       });
 
-    this.getProfessions();
-    this.getEmployees();
-    this.getOfficials();
-
-    this.getClients();
-
     const enquiryId = +this.activatedRoute.snapshot.paramMap.get('id');
 
     if (enquiryId) {
         this.pageTitle = 'edit Enquiry';
         this.getEnquiry(enquiryId);
-        console.log('after get enquiry in order-edit.component.ts, enquiry items have ');
-        console.log(this.enquiry.enquiryItems.length);
-     }
+    }
   }
 
   newEnquiryItem(): FormGroup{
@@ -94,8 +94,53 @@ export class OrderEditComponent implements OnInit {
       completeBy:  [null],
       reviewStatus:  [null],
       enquiryStatus:  [null],
-      charges: ''
+      charges: '',
+      jd: this.fb.array([
+        this.newJd()
+      ]),
+      remuneration: this.fb.array([
+        this.newRemuneration()
+      ])
     });
+  }
+
+  newJd(): FormGroup {
+    return this.fb.group(
+      {
+        id: null,
+        enquiryItemId: null,
+        jobDescription: null,
+        qualificationDesired: null,
+        experienceDesiredMin: null,
+        experienceDesiredMax: null,
+        jobProfileDetails: null,
+        jobProfileUrl: null
+      }
+    );
+  }
+
+  newRemuneration(): FormGroup {
+    return this.fb.group(
+      {
+        id: null,
+        enquiryItemId: null,
+        contractPeriodInMonths: null,
+        salaryCurrency: null,
+        salaryMin: null,
+        salaryMax: null,
+        salaryNegotiable: null,
+        housing: null,
+        housingAllowance:  null,
+        food: null,
+        foodAllowance: null,
+        transport: null,
+        transportAllowance: null,
+        otherAllowance:  null,
+        leaveAvailableAfterHowmanyMonths:  null,
+        leaveEntitlementPerYear: null,
+        updatedOn: null
+      }
+    );
   }
 
   getEnquiry(id: number): any {
@@ -111,10 +156,16 @@ export class OrderEditComponent implements OnInit {
   }
 
   editEnquiry(enquiry: IEnquiry): any {
-    this.createForm.patchValue(
+      // repopulate customer official dropdowns
+      this.getClientOfficials(enquiry.customerId);
+      console.log(this.officials);
+      this.createForm.patchValue(
       {
         id: enquiry.id,
         customerId: enquiry.customerId,
+        accountExecutiveId:  enquiry.accountExecutiveId,
+        hrExecutiveId:  enquiry.hrExecutiveId,
+        logisticsExecutiveId:  enquiry.logisticsExecutiveId,
         enquiryRef: enquiry.enquiryRef,
         enquiryNo: enquiry.enquiryNo,
         enquiryDate: new Date(enquiry.enquiryDate).toDateString(),
@@ -126,15 +177,11 @@ export class OrderEditComponent implements OnInit {
         reviewedOn:  enquiry.reviewedOn,
         enquiryStatus:  enquiry.enquiryStatus,
         projectManagerId:  enquiry.projectManagerId,
-        accountExecutiveId:  enquiry.accountExecutiveId,
-        hrExecutiveId:  enquiry.hrExecutiveId,
-        logisticsExecutiveId:  enquiry.logisticsExecutiveId,
         remarks:  enquiry.remarks
       });
-    console.log('in order-edit.component.ts, enquiryitems have ' );
-    console.log( enquiry.enquiryItems.length);
 
-    if (enquiry.enquiryItems !== null || enquiry.enquiryItems.length !== 0) {
+
+      if (enquiry.enquiryItems !== null || enquiry.enquiryItems.length !== 0) {
       this.createForm.setControl('enquiryItems', this.setExistingEnquiryItems(enquiry.enquiryItems));
       }
   }
@@ -145,6 +192,7 @@ export class OrderEditComponent implements OnInit {
       items.forEach( s => {
           formArray.push(this.fb.group( {
             id: s.id,
+            enquiryId: s.enquiryId,
             srNo: s.srNo,
             categoryItemId: s.categoryItemId,
             quantity:  s.quantity,
@@ -160,13 +208,68 @@ export class OrderEditComponent implements OnInit {
             enquiryStatus:  s.enquiryStatus,
             charges: s.charges
           }));
+
+          if (s.jobDesc != null) {this.createForm.setControl('jd', this.setExistingJD(s.jobDesc)); }
+          if (s.remuneration != null) {this.createForm.setControl('remuneration', this.setExistingRemuneration(s.remuneration)); }
         });
       return formArray;
+  }
+
+  setExistingJD(job: any): FormArray {
+    const jdArray = new FormArray([]);
+    job.forEach( j => {
+      jdArray.push(this.fb.group({
+        id: j.id,
+        enquiryItemId: j.enquiryItemId,
+        jobDescription: j.jobDescription,
+        qualificationDesired: j.qualificationDesired,
+        experienceDesiredMin: j.experienceDesiredMin,
+        experienceDesiredMax: j.experienceDesiredMax,
+        jobProfileDetails: j.jobProfileDetails,
+        jobProfileUrl: j.jobProfileUrl
+      }));
+    });
+    return jdArray;
+  }
+
+  setExistingRemuneration(remun: any): FormArray {
+    const rArray = new FormArray([]);
+    remun.forEach( r => {
+      rArray.push(this.fb.group({
+        id: r.id,
+        enquiryItemId: r.enquiryItemId,
+        contractPeriodInMonths: r.contractPeriodInMonths,
+        salaryCurrency: r.salaryCurrency,
+        salaryMin: r.salaryMin,
+        salaryMax: r.salaryMax,
+        salaryNegotiable: r.salaryNegotiable,
+        housing: r.housing,
+        housingAllowance: r.housingAllowance,
+        food: r.food,
+        foodAllowance: r.foodAllowance,
+        transport: r.transport,
+        transportAllowance: r.transportAllowance,
+        otherAllowance:  r.otherAllowance,
+        leaveAvailableAfterHowmanyMonths: r.leaveAvailableAfterHowmanyMonths,
+        leaveEntitlementPerYear: r.leaveEntitlementPerYear,
+        updatedOn: r.updatedOn
+      }));
+    });
+    return rArray;
   }
 
   enquiryItems(): FormArray {
     return this.createForm.get('enquiryItems') as FormArray;
   }
+
+  jd(): FormArray {
+    return this.createForm.get('jd') as FormArray;
+  }
+
+  remuneration(): FormArray {
+    return this.createForm.get('remuneration') as FormArray;
+  }
+
 
   pushNewEnquiryItem(): void {
     this.enquiryItems().push(this.newEnquiryItem());
@@ -241,8 +344,6 @@ export class OrderEditComponent implements OnInit {
   getOfficials(): any {
     this.service.getAllOfficials().subscribe( response => {
       this.allOfficials = response;
-      console.log('getAllOfficials in order-create-component.ts getOfficials');
-      console.log('order-edit component - all officials total records' + this.allOfficials.length);
     }, error => {
       console.log(error);
     });
@@ -277,10 +378,13 @@ export class OrderEditComponent implements OnInit {
   }
 
   onCustomerChanged(id: number): any {
+    console.log('in oncustomer changed, with id: ');
+    console.log(id);
     if (this.clientIdSelected !== id)
     {
       this.getClientOfficials(id);
       this.clientIdSelected = id;
+      console.log('in onCustomerChanged');
     }
   }
 }

@@ -1,9 +1,14 @@
+import { BuiltinVar } from '@angular/compiler';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IClientOfficial } from '../shared/models/client';
+import { isNullOrUndefined } from 'util';
+import { EmailService } from '../email/email.service';
+import { IEmail } from '../shared/models/email';
 import { IEnquiryForClient } from '../shared/models/enquiryForClient';
 import { EnquiryParams } from '../shared/models/enquiryParams';
+import { ClientsService } from '../users/clients/clients.service';
 import { UsersService } from '../users/users.service';
 import { OrdersService } from './orders.service';
 
@@ -16,6 +21,7 @@ export class OrdersComponent implements OnInit {
 
   @ViewChild('search', {static: false}) searchTerm: ElementRef;
   enquiries: IEnquiryForClient[];
+  emailModel: IEmail;
     // form: FormGroup;
   errors: string[];
 
@@ -30,9 +36,9 @@ export class OrdersComponent implements OnInit {
   ];
 
   constructor(private service: OrdersService,
-              private fb: FormBuilder,
               private router: Router,
-              private userService: UsersService) { }
+              private mailService: EmailService,
+              private custService: ClientsService) { }
 
   ngOnInit(): void {
     // this.getProfessions();
@@ -43,15 +49,7 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['/enquiryEdit', enquiryId]);
   }
 
-  /*
-  getProfessions(): any {
-    this.userService.getProfessions().subscribe(response =>
-      { this.professions = response; }
-      , error => {
-        console.log(error); });
-  }
-*/
-    getEnquiries(useCache = false): void {
+  getEnquiries(useCache = false): void {
       this.service.getEnquiries(useCache).subscribe(response => {
       this.enquiries = response.data;
       this.totalCount = response.count;
@@ -61,23 +59,7 @@ export class OrdersComponent implements OnInit {
       console.log(error);
     });
   }
-/*
-  createForm(): void {
-    this.form = this.fb.group({
-      applicationNo: [null],
-      applicationDated: [null],
-      gender: [''],
-      fullName: [''],
-      // addedOn: [''],
-      name: [null],
-      categoryName: [null],
-      passportNo: [null],
-      aadharNo: [null],
-      mobileNo: [null],
-      email: [null]
-    });
-  }
-*/
+
   onPageChanged(event: any): void {
     const params = this.service.getEnquiryParams();
     if (params.pageNumber !== event) {
@@ -86,18 +68,6 @@ export class OrdersComponent implements OnInit {
       this.getEnquiries(true);
     }
   }
-
-/*
-  onPageChanged(event: any): void {
-    const params = this.cvService.getCandParams();
-    this.candParams.pageNumber = event;
-    if (params.pageNumber !== event) {
-      params.pageNumber = event;
-      this.cvService.setCandParams(params);
-      this.getCandidates();
-    }
-  }
-*/
 
   onSearch(): void{
     console.log(this.searchTerm.nativeElement.value);
@@ -123,5 +93,13 @@ export class OrdersComponent implements OnInit {
     this.service.setEnquiryParams(params);
     this.getEnquiries();
   }
+
+  generateAcknowledgementMail(id: number): any {
+
+    const enquiry = this.service.getEnquiry(id);
+
+  }
+
+
 
 }

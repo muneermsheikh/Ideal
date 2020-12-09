@@ -70,11 +70,6 @@ namespace Infrastructure.Services
             return cat;
         }
 
-        public string getCategoryNameFromCategoryId(int categoryId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<Category> CategoryByIdAsync(int Id)
         {
             return await _unitOfWork.Repository<Category>().GetByIdAsync(Id);

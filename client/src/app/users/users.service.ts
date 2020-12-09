@@ -66,7 +66,6 @@ export class UsersService {
     );
   }
 
-
   getCandidate(id: number): any {
     const candidate = this.candidates.find(p => p.id === id);
     console.log('users service');

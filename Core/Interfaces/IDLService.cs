@@ -33,17 +33,16 @@ namespace Core.Interfaces
         Task<IReadOnlyList<JobDesc>> GetJobDescOfEnquiryIdAsync(int enquiryId);
 
     //contract review item
-        Task<IReadOnlyList<ContractReviewItem>> GenerateReviewItemsOfAnEnquiryAsync(int EnquiryId);
+        
+        Task<ContractReview> GetContractReviewAsync (int enquiryId);
         Task<ContractReviewItem> GetOrAddReviewItemAsync(int EnquiryItemId);
         Task<IReadOnlyList<ContractReviewItem>> UpdateReviewItemsAsync(
             IReadOnlyList<ContractReviewItem> contractReviewItems);
-        
-        Task<int> UpdateReviewItemListAsync(List<ContractReviewItem> reviewItems);
+        Task<ContractReview> UpdateReviewAsync(ContractReview review);
+        Task<int> UpdateReviewStatusInEnqItemsEnqCReviewAsync(List<ContractReviewItem> reviewItems);
         Task<int> DeleteContractReviewItem(ContractReviewItem contractReviewItem);
+
         
-        Task<IReadOnlyList<ContractReviewItem>> GetOrAddReviewItemsOfEnquiryAsync(int enquiryId);
-
-
     //Remuneration
         Task<Remuneration> GetRemunerationAsync (int enquiryItemId);
         Task<Remuneration> UpdateRemunerationAsync (Remuneration remuneration);

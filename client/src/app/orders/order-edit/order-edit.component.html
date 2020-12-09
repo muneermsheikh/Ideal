@@ -10,7 +10,7 @@
                     <div class="form-group">
                         <select class="form-control" 
                             formControlName="customerId" placeholder="Client" >
-                            <option *ngFor="let cust of customers" [(ngValue)]="+cust.id" (click)="onCustomerChanged('cust.id')">
+                            <option *ngFor="let cust of customers" [(ngValue)]="+cust.id" (change)="onCustomerChanged('cust.id')">
                                 {{cust.customerName}}
                             </option>
                         </select>
@@ -131,8 +131,13 @@
                                 </select>
                             </div>
                         </td>
-                        <td class="orderItemShort"><div><button (click)="removeEnquiryItem(i)" class="fa fa-trash pull-right"></button></div></td>
-                        <td></td>
+                        <td class="orderItemShort">
+                            <div>
+                                <a href="#i" class="btn btn-info" data-toggle="collapse">JD</a>
+                                <!-- <a href="#remun"+i class="btn btn-info" data-toggle="collapse">Remu</a> -->
+                                <button (click)="removeEnquiryItem(i)" class="fa fa-trash pull-right"></button>
+                            </div>
+                        <td>
                     </tr>    
                     <tr>
                         <td class="orderItemShort"><div><app-text-input formControlName="quantity" [label]="'Qnty'"></app-text-input></div></td>
@@ -144,6 +149,13 @@
                         <td class="orderItemShort"><div><app-text-input formControlName="charges" [label]="'Charges'"></app-text-input></div></td>
                     </tr>
                 </table>
+                <div class="collapse" *ngIf="!jd" id="i"> 
+                    <div *ngFor="let job of jd().controls; let j=index" [formGroupName]="j">
+                        <div class="orderItemShort"><app-text-input formControlName="jobDescription" [label]="'jobDescription'"></app-text-input></div>
+                        <div class="orderItemShort"><app-text-input formControlName="qualificationDesired" [label]="'Qualification'"></app-text-input></div>
+                        <div class="orderItemShort"><app-text-input formControlName="experienceDesiredMin" [label]="'Exp Min'"></app-text-input></div>
+                    </div>
+                </div>
             </div>
         </table>
         <button [disabled]="createForm.invalid" type="submit" class="btn btn-success">Submit</button>

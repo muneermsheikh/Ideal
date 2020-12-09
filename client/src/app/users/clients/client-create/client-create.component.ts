@@ -98,7 +98,6 @@ export class ClientCreateComponent implements OnInit {
   getClient(id: number): any {
     this.client = this.service.getClient(id).subscribe(
       (client: IClient) => {
-        console.log('back in client.create.component.ts from API, client.Id = ' + client.id + client.city + client.country );
         this.editClient(client);
         this.client = client;
       },
@@ -107,7 +106,6 @@ export class ClientCreateComponent implements OnInit {
   }
 
   editClient(client: IClient): any {
-    console.log('in patchvalue: ' + client);
     this.form.patchValue(
       {
         id: client.id,

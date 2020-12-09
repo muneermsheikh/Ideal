@@ -245,14 +245,15 @@ namespace Infrastructure.Services
 
             var requirementTable = GetEnquiryItemTable(enqItems);
 
+            string assignedToEmailId = ""; // = new List<string>();
             foreach (var off in custOfficials)
             {
-                var assignedToEmailId = new List<string>();
                 var assignedToId = off.Id;
                 var assignedToNameAndDesignation =
                     off.Gender == "M" ? "Mr." : "Ms." + off.Name + ", " +
                     Environment.NewLine + off.Designation;
-                assignedToEmailId.Add(off.Email);
+                
+                assignedToEmailId += ';' + off.Email;
                 var assignedToMobile = off.Mobile;
 
                 var sTaskDescription = "To:" + Environment.NewLine + assignedToNameAndDesignation +
@@ -272,8 +273,8 @@ namespace Infrastructure.Services
                     requirementTable;
 
                 ListMessages.Add(sTaskDescription);
-                var emailCC = new List<string>();
-                var emailBCC = new List<string>();
+                string emailCC = "";    //new List<string>();
+                string emailBCC = "";   //new List<string>();
                 var email = new EmailModel(assignedToNameAndDesignation, assignedToEmailId,
                     emailCC, emailBCC, "Invitation for your friends to take part for overseas employment opportunity" +
                     " in " + CustomerCity, sTaskDescription);

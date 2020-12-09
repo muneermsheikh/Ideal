@@ -66,10 +66,14 @@ export class ClientsService {
     const client = this.clients.find(p => p.id === id);
 
     if (client) {
-      // console.log('clients.service.ts - found client in list of clients - id =' + client.city);
+      console.log('clients.service.ts - found client in list of clients - id =' + client.city);
       return of(client);
     }
-    // console.log('getting from api - id =' + id);
+    // console.log('getting customer from api - id =' + id);
+    return this.http.get<IClient>(this.baseUrl + 'Customers/getcustomer/' + id);
+  }
+
+  getCustomer(id: number): any {
     return this.http.get<IClient>(this.baseUrl + 'Customers/getcustomer/' + id);
   }
 

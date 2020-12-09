@@ -1,0 +1,57 @@
+<div *ngIf="!reviews">
+    no reviews on record
+</div>
+
+<div class="d-flex align-items-center justify-content-center" style="margin-left: 10px;">
+    <app-paging-header
+        [totalCount]="totalCount"
+        [pageSize]="this.params.pageSize"
+        [pageNumber]="this.params.pageNumber">
+    </app-paging-header>
+    
+    <div class="form-inline" *ngIf="reviews" >
+        <input (keyup.enter)="onSearch()" class="form-control" 
+            #search placeholder="Search" type="text" >
+        <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
+        <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
+    </div>
+</div>
+<div class="form-inline">
+    <div class="colShort">Enquiry No</div>  
+    <div class="colAverage">Customer</div>
+    <div class="colShort">Total<br>Categories</div>
+    <div class="colShort">Enquiry Date</div>  
+    <div class="colShort">Reviewed On</div>
+    <div class="colShort">Status</div>
+    <div class="colShort"></div>
+</div>
+
+<div *ngIf="reviews">
+    <div class="col-12, px-5; line-height: 8px;" *ngFor="let item of reviews" 
+    style="margin-top: 5px; margin-left: 15px; padding: 0px; font-size: small;">
+    <div class="row">
+        <div class="colShort" routerLink="/reviewEdit/{{item.id}}">{{item.enquiryNo}} </div>  
+        <div class="colAverage">{{item.customerName}} </div>
+        <div class="colShort">{{item.contractReviewItems.length}}</div>
+        <div class="colShort">{{item.enquiryDate | date}} </div>  
+        <div class="colShort">{{item.reviewedOn | date}}</div>
+        <div class="colShort">{{item.reviewStatus}}</div>
+        <div class="colShort" style="cursor: pointer">
+            <button class="btn btn-sm btn-outline-secondary fa fa-pencil" (click)="editButtonClick(item.id)" ></button>  
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div class="d-flex justify-content-center my-3" *ngIf="this.totalCount > 0">
+    <app-pager
+        [pageSize]="params.pageSize"
+        [pageNumber]="params.pageNumber"
+        [totalCount]="totalCount"
+        (pageChanged)="onPageChanged($event)"
+        >
+    </app-pager>
+</div>
+
+

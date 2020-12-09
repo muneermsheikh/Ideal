@@ -9,6 +9,7 @@ namespace Core.Interfaces
     {
         Task<Customer> AddCustomerAsync(Customer customer);
         Task<clsString> GetCustomerFromEnquiryItemId(int EnquiryItemId);
+        Task<Customer> GetCustomerFromEnquiryId(int EnquiryId);
         Task<IReadOnlyList<Customer>> CustomerListAsync (CustomerSpecParams custParams);
 
         Task<Customer> CustomerByIdAsync(int customerId);

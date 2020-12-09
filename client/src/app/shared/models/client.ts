@@ -28,6 +28,7 @@ export interface IClientOfficial {
         name: string;
         designation: string;
         gender: string;
+        scope: string;
         phone: string;
         mobile: string;
         mobile2: string;

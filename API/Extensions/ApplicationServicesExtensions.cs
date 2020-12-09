@@ -24,7 +24,7 @@ namespace API.Extensions
             services.AddScoped<ICVEvaluationService, CVEvaluationService>();
             services.AddScoped<IAssessmentService, AssessmentService>();
             services.AddScoped<ICVRefService, CVRefService>();
-            services.AddScoped<IDLService, DLService>();
+            services.AddScoped<IDLService, DLServices>();
             services.AddScoped<IDLForwardService, DLForwardService>();
             services.AddScoped<IEmployeeService, EmployeeServices>();
             services.AddScoped<IInternalHRService, InternalHRService>();

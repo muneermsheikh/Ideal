@@ -12,15 +12,14 @@ namespace Core.Specifications
                     x.ServiceChargesInINR.ToLower().Contains(cParam.Search)) &&
                 (!cParam.EnquiryId.HasValue || x.EnquiryId == cParam.EnquiryId) &&
                 (!cParam.EnquiryItemId.HasValue || x.EnquiryItemId == cParam.EnquiryItemId) &&
-                (x.TechnicallyFeasible == cParam.TechnicallyFeasible) &&
-                (x.CommerciallyFeasible == cParam.CommerciallyFeasible) &&
-                (x.LogisticallyFeasible == cParam.LogisticallyFeasible) &&
-                (x.VisaAvailable == cParam.VisaAvailable) &&
-                (x.DocumentationWillBeAvailable == cParam.DocumentationWillBeAvailable) &&
-                (x.HistoricalStatusAvailable == cParam.HistoricalStatusAvailable) &&
-                (x.SalaryOfferedFeasible == cParam.SalaryOfferedFeasible) &&
-                (x.HistoricalStatusAvailable == cParam.HistoricalStatusAvailable) &&
-                (x.Status == cParam.Status) &&
+                (!cParam.TechnicallyFeasible.HasValue || x.TechnicallyFeasible == cParam.TechnicallyFeasible) &&
+                (!cParam.CommerciallyFeasible.HasValue || x.CommerciallyFeasible == cParam.CommerciallyFeasible) &&
+                (!cParam.LogisticallyFeasible.HasValue || x.LogisticallyFeasible == cParam.LogisticallyFeasible) &&
+                (!cParam.VisaAvailable.HasValue || x.VisaAvailable == cParam.VisaAvailable) &&
+                (!cParam.DocumentationWillBeAvailable.HasValue || x.DocumentationWillBeAvailable == cParam.DocumentationWillBeAvailable) &&
+                (!cParam.HistoricalStatusAvailable.HasValue || x.HistoricalStatusAvailable == cParam.HistoricalStatusAvailable) &&
+                (!cParam.SalaryOfferedFeasible.HasValue || x.SalaryOfferedFeasible == cParam.SalaryOfferedFeasible) &&
+                (string.IsNullOrEmpty(cParam.Status) || x.Status.ToLower() == cParam.Status.ToLower()) &&
                 (DateTime.Compare(x.ReviewedOn.Date, (DateTime)cParam.ReviewedOn) == 0) &&
                 (x.ReviewedBy == cParam.ReviewedBy) 
             ))

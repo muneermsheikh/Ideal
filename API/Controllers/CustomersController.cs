@@ -45,13 +45,19 @@ namespace API.Controllers
         }
 
         [HttpGet("customersflat/{customerType}")]
-        public async Task<ActionResult<IReadOnlyList<Customer>>> GetCustomerFlat(string customerType)
+        public async Task<ActionResult<IReadOnlyList<CustomerToReturnInBriefDto>>> GetCustomerFlat(string customerType)
         {
             var flatCust = await _custService.GetCustomerListFlat(customerType);
             if (flatCust == null || flatCust.Count ==0) return NotFound(new ApiResponse(404, "No customers found"));
             
-            return Ok(flatCust);
+            var lstToReturn = new List<CustomerToReturnInBriefDto>();
+            foreach (var c in flatCust)
+            {
+                lstToReturn.Add(new CustomerToReturnInBriefDto(c.Id, c.CustomerName, c.KnownAs, c.City));
+            }
+            return Ok(lstToReturn);
         }
+        
 
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [HttpGet("getcustomer/{id}")]
@@ -59,6 +65,17 @@ namespace API.Controllers
         {   
             var cust = await _custService.CustomerByIdAsync(id);  
             if (cust==null) return NotFound();
+            
+            return Ok(cust);
+        }
+
+
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [HttpGet("custfromenquiryid/{id}")]
+        public async Task<ActionResult<Customer>> GetCustomerFromEnquiryId (int id)
+        {   
+            var cust = await _custService.GetCustomerFromEnquiryId(id);
+            if (cust == null) return NotFound(new ApiResponse(404, "No customer found"));
             
             return Ok(cust);
         }

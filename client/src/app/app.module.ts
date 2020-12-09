@@ -17,6 +17,8 @@ import { UsersModule } from './users/users.module';
 import { EmployeesComponent } from './employees/employees/employees.component';
 import { EmpCreateComponent } from './employees/emp-create/emp-create.component';
 import { OrdersModule } from './orders/orders.module';
+import { EmailModule } from './email/email.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 
 @NgModule({
@@ -38,7 +40,11 @@ import { OrdersModule } from './orders/orders.module';
     ReactiveFormsModule,
     FormsModule,
     UsersModule,
-    OrdersModule
+    OrdersModule,
+    EmailModule,
+    ReviewsModule
+    // , MatSliderModule
+
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

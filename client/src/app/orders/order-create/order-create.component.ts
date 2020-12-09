@@ -56,6 +56,9 @@ export class OrderCreateComponent implements OnInit {
       this.createForm = this.fb.group({
         id: [0],
         customerId: [null, Validators.required],
+        hrExecutiveId: null,
+        logisticsExecutiveId: null,
+        accountExecutiveId: null,
         enquiryRef: [null],
         enquiryDate: [this.todayDate, Validators.required],
         remarks:  [null],
@@ -80,6 +83,9 @@ export class OrderCreateComponent implements OnInit {
       return this.fb.group({
       id: [0],
       customerId: [null, Validators.required],
+      hrExecutiveId: null,
+      logisticsExecutiveId: null,
+      accountExecutiveId: null,
       enquiryRef: [null],
       enquiryNo: [0],
       enquiryDate: [this.todayDate, Validators.required],
@@ -109,6 +115,9 @@ export class OrderCreateComponent implements OnInit {
       this.enquiry = {
         id: 0,
         customerId: null,
+        hrExecutiveId: null,
+        logisticsExecutiveId: null,
+        accountExecutiveId: null,
         enquiryRef: '',
         enquiryDate: '',
         remarks:  null,
@@ -134,6 +143,9 @@ export class OrderCreateComponent implements OnInit {
     mapFormValuesToEnquiryObject(): IEnquiryToAdd{
       this.enquiry.id = this.createForm.value.id ;
       this.enquiry.customerId = this.createForm.value.customerId ?? 0;
+      this.enquiry.hrExecutiveId = this.createForm.value.hrExecutiveId ?? 0;
+      this.enquiry.logisticsExecutiveId = this.createForm.value.logisticsExecutiveId ?? 0;
+      this.enquiry.accountExecutiveId = this.createForm.value.accountExecutiveId ?? 0;
       this.enquiry.enquiryDate = this.createForm.value.enquiryDate;
       this.enquiry.enquiryRef = this.createForm.value.enquiryRef;
       this.enquiry.remarks = this.createForm.value.remarks;

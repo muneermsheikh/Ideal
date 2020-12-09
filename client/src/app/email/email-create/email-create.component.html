@@ -1,0 +1,39 @@
+<div>{{pageTitle}}</div>
+<div class="container">
+    <form *ngIf="email" class="form-inline" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+        <div class="display-none">
+            <app-text-input formControlName="id" [label]="'id'"></app-text-input>
+        </div>
+        <div class="col-6">
+            <app-text-input formControlName="dateSent" [label]="'Dated'"></app-text-input>
+        </div>
+        <div class="col-6">
+            <app-text-input formControlName="senderEmailAddress" [label]="'Sender Email'"></app-text-input>
+        </div>
+        <div class="col-6">
+            <app-text-input formControlName="toEmailList" [label]="'To'"></app-text-input>
+        </div>
+        <div class="col-6">
+            <app-text-input formControlName="ccEmailList" [label]="'CC'"></app-text-input>
+        </div>
+        <div class="col-6">
+            <app-text-input formControlName="bccEmailList" [label]="'BCC'"></app-text-input>
+        </div>
+        <div class="col-6">
+            <app-text-input formControlName="subject" [label]="'Subject'"></app-text-input>
+        </div>
+        <br>
+        <div class="col-12">
+            <textarea class="md-textarea form-control" matInput placeholder="Message" formControlName="messageBody" cdkTextareaAutosize
+            cdkAutosizeMinRows="10"></textarea>
+        </div>
+
+        <button [disabled]="createForm.invalid" type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+<div style="font-size: xx-small">
+    {{this.createForm.value | json}}
+    {{this.createForm.valid}}
+</div>
+
+

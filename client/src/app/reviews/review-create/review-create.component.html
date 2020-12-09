@@ -1,0 +1,84 @@
+
+<div class="container">
+    <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+        <table class="table table-bordered" width="100%">
+            <tr class="panelHeader" colspan="5">{{pageTitle}}</tr>
+            <tr>
+                <td class="orderItemShort"><app-text-input formControlName="enquiryNo" [label]="'Enquiry No'"></app-text-input> </td>
+                <td class="orderItemShort"> <app-text-input formControlName="enquiryDate" [label]="'Dated'"></app-text-input> </td>   
+                <td class="orderItemAverage"> <app-text-input formControlName="customerName" [label]="'Customer'"></app-text-input> </td>
+                <td class="orderItemShort"> <app-text-input formControlName="reviewedBy" [label]="'ReviewedBy'"></app-text-input> </td>        
+                <td class="orderItemShort"> <app-text-input formControlName="reviewedOn" [label]="'Reviewed On'"></app-text-input> </td>
+                <td class="orderItemShort"> <app-text-input formControlName="reviewStatus" [label]="'Review Status'"></app-text-input></td>
+            </tr>
+        </table>
+        
+        <table class="table table-bordered form-inline" formArrayName="contractReviewItems" 
+            style="width: 100%; margin-top: 0px; margin-bottom: 0px; padding: 0px;">
+            <tr>
+                <th class="long">Category</th>
+                <th class="short">Qnty</th>
+                <th class="average">Tech<br>Feasible</th>
+                <th class="average">Commr<br>Feasible</th>
+                <th class="average">Logis<br>Feasible</th>
+                <th class="average">Visa<br>Avilable</th>
+                <th class="average">Docment<br>Available</th>
+                <th class="average">Hist Data<br>Available</th>
+                <th class="average">Salary<br>Feasible</th>
+                <th class="short">SC</th>
+                <th class="average">Fee From<br>Client</th>
+                <th class="average">Review Status</th>
+                <th class="short">Action</th>
+            </tr>
+            <div *ngFor="let item of contractReviewItems().controls; let p=index" [formGroupName]="p">
+                <hr *ngIf="p>0">
+                <tr style="padding-top: 0px; padding-bottom: 0px;">
+                    <td><input class="long" type="text" formControlName="categoryName" ></td>
+                    <td><input class="short" type="text" formControlName="quantity" ></td>
+                    <td>
+                        <input class="short" type="checkbox" value=false formControlName="technicallyFeasible">
+                    </td>
+                    <td>
+                        <input class="short" type="checkbox" value=false formControlName="commerciallyFeasible">
+                    </td>
+                    <td>
+                        <input class="short" type="checkbox" value=false formControlName="logisticallyFeasible"> 
+                    </td>
+                    <td>
+                        <input class="short" type="checkbox" value=false formControlName="visaAvailable">
+                    </td>
+                    <td>
+                        <input class="short" type="checkbox" value=false formControlName="documentationWillBeAvailable">
+                    </td>
+                    <td>
+                        <input class="short" type="checkbox" value=false formControlName="historicalStatusAvailable">
+                    </td>
+                    <td>
+                        <input class="short" type="checkbox" value=false formControlName="salaryOfferedFeasible">
+                    </td>
+                    <td><input class="short"  type="text" formControlName="serviceChargesInINR"></td>
+                    <td>
+                        <input class="short" type="text" formControlName="feeFromClientCurrency">
+                        <input class="short" type="text" formControlName="feeFromClient">
+                    </td>
+                    <td>
+                        <select class="form-control" 
+                            formControlName="status" placeholder="status" >
+                            <option *ngFor="let st of reviewStatus" [(ngValue)]="st.status" >
+                                {{st}}
+                            </option>
+                        </select>
+                    </td>
+                    <td><button class="short" >edit</button></td>
+                </tr>
+            </div>
+        </table>
+
+        <button [disabled]="createForm.invalid" type="submit" class="btn btn-success">Submit</button>
+    </form>
+    <div style="font-size: xx-small">
+        {{this.createForm.value | json}}
+        {{this.createForm.valid}}
+    </div>
+</div>
+  

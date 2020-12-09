@@ -25,6 +25,7 @@ namespace Core.Interfaces
         Task<Enquiry> GetEnquiryByEnquiryItemIdAsync(int enquiryItemId);
         Task<EnquiryItem> GetEnquiryItemByIdAsync(int enquiryItemId);
         Task<int> GetEnquiryItemsCountNotReviewed(int enquiryId);
+        
 
         // Task<IReadOnlyList<Enquiry>> DLIndexTop500 ();
 

@@ -4,6 +4,8 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
 import { TestErrorComponent } from './core/test-error/test-error.component';
+import { EmailCreateComponent } from './email/email-create/email-create.component';
+import { EmailComponent } from './email/email.component';
 import { EmpCreateComponent } from './employees/emp-create/emp-create.component';
 import { EmployeesComponent } from './employees/employees/employees.component';
 import { HomeComponent } from './home/home.component';
@@ -13,9 +15,10 @@ import { OrdersComponent } from './orders/orders.component';
 import { ProfessionAddComponent } from './profession/profession-add/profession-add.component';
 import { ProfessionDetailComponent } from './profession/profession-detail/profession-detail.component';
 import { ProfessionComponent } from './profession/profession.component';
+import { ReviewCreateComponent } from './reviews/review-create/review-create.component';
+import { ReviewsComponent } from './reviews/reviews.component';
 import { CandidateCreateComponent } from './users/candidate/candidate-create/candidate-create.component';
 import { CandidateComponent } from './users/candidate/candidate.component';
-
 
 
 /*
@@ -54,6 +57,11 @@ const routes: Routes = [
   {path: 'enquiry', component: OrdersComponent, data: {breadcrumb: 'Enquiries'}},
   {path: 'enquiryCreate', component: OrderCreateComponent, data: {breadcrumb: 'Enquiry Create'}},
   {path: 'enquiryEdit/:id', component: OrderEditComponent, data: {breadcrumb: 'edit Enquiry'}},
+  {path: 'email', component: EmailComponent, data: {breadcrumb: 'email'}},
+  {path: 'review', component: ReviewsComponent, data: {breadcrumb: 'contract Reviews'}},
+  {path: 'reviewCreate', component: ReviewCreateComponent, data: {breadcrumb: 'review create'}},
+  {path: 'reviewEdit/:id', component: ReviewCreateComponent, data: {breadcrumb: 'edit Reviews'}},
+  {path: 'emailCreate/:id', component: EmailCreateComponent, data: {breadcrumb: 'email edit'}},
   {path: '**', redirectTo: 'not-found', pathMatch: 'full'}
 ];
 

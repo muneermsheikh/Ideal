@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
@@ -98,7 +99,7 @@ namespace API.Controllers
             if (enqUpdated == null) return BadRequest(new ApiResponse(400));
             return Ok(enqUpdated);
         }
-        [HttpDelete]
+        [HttpDelete("deletedl/{id}")]
         public async Task<ActionResult<int>> DeleteDL(int id)
         {
             var deleted = await _enqService.DeleteEnquiryAsync(id);
@@ -160,6 +161,11 @@ namespace API.Controllers
             return enq;
         }
 
+        [HttpGet("dlcustomer/{id}")]
+        public async Task<ActionResult<Customer>> GetDLCustomer(int id)
+        {
+            return await _dLService.GetDLCustomer(id);
+        }
         [HttpGet("demandLetterWithSpec")]
         public async Task<ActionResult<IReadOnlyList<Enquiry>>> GetDLs([FromBody] EnquiryParams enqParam)
         {
@@ -202,7 +208,6 @@ namespace API.Controllers
 
         private List<EnquiryWithAllStatusDto> MapEnquiryToEnquiryListWithStatus(List<Enquiry> enquiries)
         {
-            
             if (enquiries == null || enquiries.Count == 0)
             {
                 return null;
@@ -248,15 +253,7 @@ namespace API.Controllers
             return enqList;
         }
 
-        [HttpDelete]
-        public async Task<ActionResult<bool>> DeleteDL(Enquiry enquiry)
-        {
-            var deleted = await _unitOfWork.Repository<Enquiry>().DeleteAsync(enquiry);
-            if (deleted == 1) return Ok();
-            return BadRequest(new ApiResponse(400));
-        }
-
-//enquiry item
+    //enquiry item
         [HttpGet("enquiryItem")]
         public async Task<ActionResult<EnquiryItem>> GetDLItem(int enquiryItemId)
         {
@@ -283,7 +280,7 @@ namespace API.Controllers
             if (editedItem == null) return BadRequest(new ApiResponse(400));
             return Ok(editedItem);
         }
-
+/*
         [HttpDelete("enquiryItem")]
         public async Task<ActionResult<bool>> DeleteDLItem(EnquiryItem enquiryItem)
         {
@@ -291,7 +288,7 @@ namespace API.Controllers
             if (deleted == 1) return Ok();
             return BadRequest(new ApiResponse(400));
         }
-
+*/
         [HttpPost("enquiryItems")]
         public async Task<ActionResult<IReadOnlyList<EnquiryItem>>> InsertDLItems(List<EnquiryItem> enquiryItems)
         {
@@ -328,21 +325,32 @@ namespace API.Controllers
         }
 
 //contract review item
-        [HttpPost("generatereviewsofdl")]
-        public async Task<ActionResult<IReadOnlyList<ContractReviewItem>>> GenerateReviewsOfADL(int enquiryId)
+
+        [HttpGet("reviewIndex")]
+        public async Task<ActionResult<Pagination<ContractReview>>> ReviewIndex(
+            [FromQuery] ContractReviewParam eParams)
         {
-            var rvws = await _dLService.GenerateReviewItemsOfAnEnquiryAsync(enquiryId);
-            if (rvws==null || rvws.Count==0) return BadRequest(new ApiResponse(404));
-            return Ok(rvws);
+            var totalItems = await _unitOfWork.Repository<ContractReview>()
+                .CountWithSpecAsync(new ContractReviewSpecCount(eParams));
+
+            if(totalItems==0) return NotFound(new ApiResponse(400, "No records returned"));
+
+            var rvws = await _unitOfWork.Repository<ContractReview>().ListTop500WithSpecAsync(
+                new ContractReviewSpec(eParams));
+            
+            if (rvws == null) return NotFound(new ApiResponse(400, "your instructions did not find any matching records"));
+
+            return Ok(new Pagination<ContractReview>
+                (eParams.PageIndex, eParams.PageSize, totalItems, rvws));
         }
 
-        [HttpGet("reviewEnquiryItems/{enquiryId}")]
+    
+        [HttpGet("reviewEnquiry/{enquiryId}")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IReadOnlyList<ContractReviewItem>>> GetReviewItemsOfEnquiry(int enquiryId)
+        public async Task<ActionResult<ContractReview>> GetReviewItemsOfEnquiry(int enquiryId)
         {
-            var rvws = await _dLService.GetOrAddReviewItemsOfEnquiryAsync(enquiryId);
-            if (rvws == null) return BadRequest(new ApiResponse(400));
-            if (rvws.Count == 0) return NotFound(new ApiResponse(404));
+            var rvws = await _dLService.GetContractReviewAsync(enquiryId);
+            if (rvws == null) return NotFound(new ApiResponse(404));
             //return Ok(rvws);
             return Ok(rvws);
         }   
@@ -365,15 +373,15 @@ namespace API.Controllers
             return Ok(added);
         }
 
-        [HttpPut("reviewItemList")]
+        [HttpPut("reviews")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IReadOnlyList<ContractReviewItem>>> UpdateReviewItems(
-            [FromBody] List<ContractReviewItem> reviewItems)
+        public async Task<ActionResult<ContractReview>> UpdateReview(
+            [FromBody] ContractReview review)
         {
-            var rvwItems =  await _dLService.UpdateReviewItemListAsync(reviewItems);
+            var rvw =  await _dLService.UpdateReviewAsync(review);
 
-            if (rvwItems == 0 ) return BadRequest(new ApiResponse(404, "Bad request, or the review item does not exist"));
-            return Ok(reviewItems);
+            if (rvw == null ) return BadRequest(new ApiResponse(404, "Bad request, or the review item does not exist"));
+            return Ok(review);
         }
 
         [HttpPost("reviewitems")]

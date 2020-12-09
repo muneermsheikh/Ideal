@@ -7,16 +7,17 @@
                     <div class="form-group">
                         <select class="form-control" 
                             formControlName="customerId" placeholder="Client" >
-                            <option *ngFor="let cust of customers" [(ngValue)]="+cust.id" (click)="onCustomerChanged('cust.id')">
+                            <option *ngFor="let cust of customers" [(ngValue)]="+cust.id" 
+                                (click)="onCustomerChanged('cust.id')">
                                 {{cust.customerName}}
                             </option>
                         </select>
                     </div>
                 </td>
-            <!--   
+            <!--
                 <td class="orderItemAverage">
                     <div class="form-group">
-                        <select class="form-control" 
+                        <select class="form-control">
                             formControlName="hrExecutiveId" placeholder="HR matters">
                             <option *ngFor="let hr of officials" [(ngValue)]="+hr.id">
                                 {{hr.name}}

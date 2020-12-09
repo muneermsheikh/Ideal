@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Core.Entities.Admin;
+using Core.Entities.Emails;
 using Core.Entities.EnquiryAggregate;
 using Core.Entities.HR;
 using Core.Entities.Masters;
@@ -25,6 +26,7 @@ namespace Infrastructure.Data
         public DbSet<Category> Categories {get; set; }
         public DbSet<Candidate> Candidates {get; set; }
         public DbSet<CandidateCategory> CandidateCategories {get; set; }
+        public DbSet<ContractReview> ContractReviews {get; set; }
         public DbSet<ContractReviewItem> ContractReviewItems {get; set; }
         public DbSet<Customer> Customers {get; set; }
         public DbSet<CustomerIndustryType> CustomerIndustryTypes {get; set;}
@@ -36,6 +38,7 @@ namespace Infrastructure.Data
         //public DbSet<DomainSub> DomainSubs {get; set; }
         public DbSet<DeliveryMethod> DeliveryMethods {get; set; }
         public DbSet<DLForwardToHR> DLForwardToHR {get; set; }
+        public DbSet<EmailModel> Emails {get; set; }
         public DbSet<Employee> Employees {get; set; }
         public DbSet<EmployeeAddress> EmployeeAddresses {get; set;}
         public DbSet<Emolument> Emoluments{get; set;}
@@ -54,6 +57,8 @@ namespace Infrastructure.Data
         
         public DbSet<Remuneration> Remunerations{get; set; }
         public DbSet<Role> Roles {get; set; }
+
+        public DbSet<ReviewStatus> ReviewStatuses {get; set;}
 
         public DbSet<SelDecision> SelDecisions {get; set; }   
         public DbSet<Skill> Skills {get; set; }     

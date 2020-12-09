@@ -12,6 +12,7 @@
         <button (click)="onSearch()" class="btn btn-outline-primary">Search</button>
         <button (click)="onReset()" class="btn btn-outline-success ml-2">Reset</button>
         <button routerLink="/enquiryCreate" class="btn btn-outline-success ml-2">New Enquiry</button>
+        <button routerLink="/review" class="btn btn-outline-success ml-2">Contract Reviews</button>
     </div>
 </div>
 
@@ -28,11 +29,11 @@
     <div class="colShortTitle">Actions</div>
 </div>
 
-<div class="colWhole" *ngFor="let item of enquiries" >
+<div class="colWhole form-inline" *ngFor="let item of enquiries" >
     <div class="row" >      
-        <div class="colShort" routerLink="/enquiryEdit">{{item.enquiryNo}} </div>  
+        <div class="colShort" style="cursor: pointer;" routerLink="/enquiryEdit/{{item.id}}">{{item.enquiryNo}} </div>  
         <div class="colShort">{{item.enquiryDate | date}}</div>
-        <div class="colAverage">{{item.customerName}}</div>
+        <div class="colAverage" style="cursor: pointer;" routerLink="/reviewEdit/{{item.id}}">{{item.customerName}}</div>
         <div class="colShort">{{item.cityName}}</div>
         <div class="colShort">{{item.countryName}}</div>
         <div class="colShort">{{item.completeBy | date}}</div>
@@ -42,6 +43,7 @@
         <div class="colShort" style="cursor: pointer">
             <button class="btn btn-sm btn-outline-secondary fa fa-pencil" (click)="editButtonClick(item.id)" ></button>  
             <button class="btn btn-sm btn-outline-secondary fa fa-trash" routerLink="/enquiry/{{item.id}}"></button>  
+            <button class="btn btn-sm btn-outline-secondary fa fa-envelope" routerLink="/emailCreate/{{item.id}}"></button>
         </div>
 <!--
         <mat-accordion>
@@ -69,7 +71,7 @@
               <p>I'm visible because I am open</p>
             </mat-expansion-panel>
           </mat-accordion>
--->          
+-->     
     </div>
 </div>
 
