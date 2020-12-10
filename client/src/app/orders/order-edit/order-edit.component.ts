@@ -378,14 +378,17 @@ export class OrderEditComponent implements OnInit {
   }
 
   onCustomerChanged(id: number): any {
-    console.log('in oncustomer changed, with id: ');
-    console.log(id);
     if (this.clientIdSelected !== id)
     {
       this.getClientOfficials(id);
       this.clientIdSelected = id;
       console.log('in onCustomerChanged');
     }
+  }
+
+  suggestHRExec(): any {
+    // suggest HR Executives based upon past statistics for the relevant category
+    
   }
 }
 

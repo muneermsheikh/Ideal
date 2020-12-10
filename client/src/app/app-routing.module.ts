@@ -57,10 +57,10 @@ const routes: Routes = [
   {path: 'enquiry', component: OrdersComponent, data: {breadcrumb: 'Enquiries'}},
   {path: 'enquiryCreate', component: OrderCreateComponent, data: {breadcrumb: 'Enquiry Create'}},
   {path: 'enquiryEdit/:id', component: OrderEditComponent, data: {breadcrumb: 'edit Enquiry'}},
-  {path: 'email', component: EmailComponent, data: {breadcrumb: 'email'}},
   {path: 'review', component: ReviewsComponent, data: {breadcrumb: 'contract Reviews'}},
   {path: 'reviewCreate', component: ReviewCreateComponent, data: {breadcrumb: 'review create'}},
   {path: 'reviewEdit/:id', component: ReviewCreateComponent, data: {breadcrumb: 'edit Reviews'}},
+  {path: 'email', component: EmailComponent, data: {breadcrumb: 'email'}},
   {path: 'emailCreate/:id', component: EmailCreateComponent, data: {breadcrumb: 'email edit'}},
   {path: '**', redirectTo: 'not-found', pathMatch: 'full'}
 ];

@@ -73,8 +73,8 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<bool>> SendEmail(EmailModel email)
         {
-            var emailVerified = _mapper.Map<EmailModel, EmailDto>(email);
-            if (emailVerified == null) return BadRequest(new ApiResponse(400, "Bad email structure"));
+            // var emailVerified = _mapper.Map<EmailModel, EmailDto>(email);
+            // if (emailVerified == null) return BadRequest(new ApiResponse(400, "Bad email structure"));
 
             return await _mailService.SendEmail(email);
         }

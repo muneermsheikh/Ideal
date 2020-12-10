@@ -4,7 +4,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmailValidator, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+
 import { IClient, IClientOfficial } from 'src/app/shared/models/client';
 import { Email, IEmail } from 'src/app/shared/models/email';
 import { IEnquiry } from 'src/app/shared/models/enquiry';
@@ -79,8 +79,22 @@ export class EmailCreateComponent implements OnInit {createForm: FormGroup;
             this.customer = response;
             this.officials = response.customerOfficials;
             this.email = this.populateNewAckn(this.email, response, enq);
-            console.log('returned frompopulateNewAckn');
-            console.log(this.email);
+            
+            this.createForm.patchValue(
+              {
+                id: 0,
+                senderEmailAddress: 'munir.sheikh@live.com',
+                refNo: enq.enquiryNo.toString(),
+                senderName: 'munir sheikh',
+                toEmailList: response.email,
+                ccEmailList: '',
+                bccEmailList: '',
+                dateSent: new Date().toDateString(),
+                subject:  'acknowledgement of your enquiry for manpower',
+                messageType: 'DL Acknowledgement',
+                messageBody: this.getMessageBody(response, enq)
+             });
+
           });
         });
     } else {
@@ -91,13 +105,11 @@ export class EmailCreateComponent implements OnInit {createForm: FormGroup;
     }
 
     this.editEmail(this.email);
-    console.log('returned from patch value');
+    
   }
 
     populateNewAckn(mail: IEmail, cust: IClient, enquiry: IEnquiry): IEmail{
       const msgBody = this.getMessageBody(cust, enquiry);
-      console.log('msgBody');
-      console.log(msgBody);
       mail.id = 0,
       mail.subject = 'Acknowledgement of equiry',
       mail.toEmailList = cust.email,
@@ -129,6 +141,9 @@ export class EmailCreateComponent implements OnInit {createForm: FormGroup;
 
       if (officials[0].email) {msg += '<br>email: ' + officials[0].email; }
 
+      msg += 'Thank you very much for your enqjuiry No. ' + enq.enquiryNo + ' of ' +
+        enq.enquiryDate + ' for following positions: ';
+/*
       msg += title + salute + '<br><br>Thank you for your enquiry dated ' + enq.enquiryDate +
         'for following items.  The enquiry has been assigned a reference number ' + enq.enquiryNo +
         ' by our system.: <br><br>Enquiry Items<br>';
@@ -152,7 +167,7 @@ export class EmailCreateComponent implements OnInit {createForm: FormGroup;
 
       msg += '</tr></table><br><br>This is a system generated message and we will revert with our execution plan ' +
         'by our next message.<br><br>Best regards<br><br>';
-      console.log(msg);
+*/
       return msg;
     }
 
@@ -187,7 +202,6 @@ export class EmailCreateComponent implements OnInit {createForm: FormGroup;
     }
 
     editEmail(mail: IEmail): any {
-      console.log('patching value');
       this.createForm.patchValue(
         {
           id: mail.id,
@@ -202,6 +216,8 @@ export class EmailCreateComponent implements OnInit {createForm: FormGroup;
           messageType: mail.messageType,
           messageBody: mail.messageBody
        });
+
+       console.log(this.createForm.value);
 
     }
 

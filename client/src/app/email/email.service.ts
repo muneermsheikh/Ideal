@@ -39,7 +39,7 @@ export class EmailService {
               private enqService: OrdersService) { }
 
   addEmail(values: any): any {
-    return this.http.post(this.baseUrl + 'Email', values).pipe(
+    return this.http.post(this.baseUrl + 'Email/sendMail', values).pipe(
       map((email: IEmail) => {
         if (email) {
           console.log(email);

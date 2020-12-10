@@ -42,6 +42,14 @@ namespace API.Controllers
             _mapper = mapper;
         }
         
+    //  selData data
+        [HttpGet("selstats/{EnquiryId}")]
+        public async Task<ActionResult<SelStatsDto>> GetEnquirySelStats(int EnquiryId)
+        {
+            var refs = await _admnServices.SelStatsOfEnquiry(EnquiryId);
+            return Ok(refs);
+        }
+
         [HttpPost]
         public async Task<ActionResult<CVForward>> ReferCVs([FromBody] CVRefToAddDto cvrefdto)
         {

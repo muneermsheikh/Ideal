@@ -7,6 +7,7 @@ using System.Linq;
 using Core.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Core.Entities.Masters;
 
 namespace Infrastructure.Services
 {
@@ -143,6 +144,33 @@ namespace Infrastructure.Services
             }
             return Lst;
            
+        }
+
+        public async Task<List<SelStatsDto>> SelStatsOfEnquiry (int EnqId)
+        {
+            var qry = (from Ref in _context.CVRefs 
+                        join Item in _context.EnquiryItems on Ref.EnquiryItemId equals Item.Id
+                        join Cat in _context.Categories on Item.CategoryItemId equals Cat.Id
+                        join Emp in _context.Employees on Item.HRExecutiveId equals Emp.Id
+                        where Item.EnquiryId == EnqId && Ref.RefStatus == enumSelectionResult.Selected
+                        group Ref by new {Item.CategoryItemId, Item.SrNo, Cat.Name, Ref.HRExecutiveId, Emp.KnownAs} into st 
+                        orderby st.Key.CategoryItemId, st.Key.HRExecutiveId
+                        select new {EnquiryId = EnqId, CategoryItemId = st.Key.CategoryItemId,
+                            SrNo = st.Key.SrNo, CategoryName = st.Key.Name, 
+                            HRExecutiveId = st.Key.HRExecutiveId, HRExecName = st.Key.KnownAs, 
+                            SelectionCount = st.Count() });
+            var stats = await qry.ToListAsync();
+
+            var stToReturn = new List<SelStatsDto>();
+            if (stats != null)
+            {
+                foreach(var v in stats)
+                {
+                    stToReturn.Add(new SelStatsDto(v.EnquiryId, v.SrNo, v.CategoryName, 
+                        v.HRExecutiveId, v.HRExecName, v.SelectionCount));
+                }
+            }
+            return stToReturn;
         }
     }
 }

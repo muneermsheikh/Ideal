@@ -6,8 +6,8 @@
         <table>
             <tr class="panelHeader" colspan="5">Edit Enquiry</tr>
             <tr>
-                <td class="orderItemAverage">
-                    <div class="form-group">
+                <td>
+                    <div class="form-group orderItemAverage">
                         <select class="form-control" 
                             formControlName="customerId" placeholder="Client" >
                             <option *ngFor="let cust of customers" [(ngValue)]="+cust.id" (change)="onCustomerChanged('cust.id')">
@@ -16,8 +16,8 @@
                         </select>
                     </div>
                 </td>
-                <td class="orderItemAverage">
-                    <div class="form-group">
+                <td>
+                    <div class="form-group orderItemAverage">
                         <select class="form-control" 
                             formControlName="hrExecutiveId" placeholder="HR matters">
                             <option *ngFor="let hr of officials" [(ngValue)]="+hr.id">
@@ -26,8 +26,8 @@
                         </select>
                     </div>
                 </td>
-                <td class="orderItemAverage">
-                    <div class="form-group">
+                <td>
+                    <div class="form-group orderItemAverage">
                         <select class="form-control" 
                             formControlName="logisticsExecutiveId" placeholder="Logistics">
                             <option *ngFor="let lg of officials" [(ngValue)]="+lg.id">
@@ -36,8 +36,8 @@
                         </select>
                     </div>
                 </td>
-                <td class="orderItemAverage">
-                    <div class="form-group">
+                <td>
+                    <div class="form-group orderItemAverage">
                         <select class="form-control" 
                             formControlName="accountExecutiveId" placeholder="Accounts matters">
                             <option *ngFor="let act of officials" [(ngValue)]="+act.id">
@@ -46,8 +46,8 @@
                         </select>
                     </div>
                 </td>
-                <td  class="orderItemAverage">
-                    <div class="form-group">
+                <td>
+                    <div class="form-group orderItemAverage">
                         <select class="form-control" 
                             formControlName="projectManagerId" placeholder="Project Manager">
                             <option *ngFor="let emp of employees" [(ngValue)]="+emp.id">
@@ -85,7 +85,10 @@
         <table formArrayName="enquiryItems" style="margin-top: 20px; line-height: 1.5em;">
             <tr>
                 <td colspan="6">Items</td>
-                <td><button type="button" (click)="pushNewEnquiryItem()" class="fa fa-plus push-right" ></button></td>
+                <td>
+                    <button type="button" (click)="pushNewEnquiryItem()" class="fa fa-plus push-right" ></button>
+                    <button type="button" (click)="suggestHRExec()" class="fa fa-help push-right" ></button>
+                </td>
             </tr>
             <div *ngFor="let item of enquiryItems().controls; let i=index" [formGroupName]="i">
                 <table style="padding: 0px; margin-top: 0px; margin-bottom: 0px;">
@@ -101,8 +104,8 @@
                                 </select>
                             </div>
                         </td>
-                        <td class="orderItemDropDownFirstLine">
-                            <div>
+                        <td>
+                            <div  class="orderItemDropDownFirstLine">
                                 <select class="form-control" 
                                     formControlName="hrExecutiveId" placeholder="HR Exec">
                                     <option *ngFor="let e of employees" [(ngValue)]="+e.id">
@@ -111,8 +114,8 @@
                                 </select>
                             </div>
                         </td>
-                        <td class="orderItemDropDownFirstLine">
-                            <div>
+                        <td>
+                            <div  class="orderItemDropDownFirstLine">
                                 <select class="form-control" 
                                     formControlName="assessingSupId" placeholder="Supervisor">
                                     <option *ngFor="let i of employees" [(ngValue)]="+i.id">
@@ -121,8 +124,8 @@
                                 </select>
                             </div>
                         </td>
-                        <td class="orderItemDropDownFirstLine">
-                            <div>
+                        <td>
+                            <div class="orderItemDropDownFirstLine">
                                 <select class="form-control" 
                                     formControlName="assessingHRMId" placeholder="HRM">
                                     <option *ngFor="let emp of employees" [(ngValue)]="+emp.id">

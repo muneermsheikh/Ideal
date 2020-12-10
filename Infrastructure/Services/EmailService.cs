@@ -11,36 +11,51 @@ using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
+using System.Web;
+using System.IO;
+using System.Net.Mime;
+using System.Text;
+using System;
+using Microsoft.Extensions.Configuration;
+
 namespace Infrastructure.Services
 {
     public class EmailService : IEmailService
     {
         private readonly ATSContext _context;
-        public EmailService(ATSContext context)
+        private readonly IConfiguration _config;
+        public EmailService(ATSContext context, IConfiguration config)
         {
+            _config = config;
             _context = context;
         }
 
         public async Task<bool> SendEmail(EmailModel email)
         {
 
+
             var message = new MailMessage();
             message.From = new MailAddress(email.SenderEmailAddress);
 
-            foreach (var item in email.ToEmailList)
-            {
-                message.To.Add(new MailAddress(item.ToString()));
-            }
+            message.To.Add(new MailAddress(email.ToEmailList));
+            if (string.IsNullOrEmpty(email.ccEmailList)) message.CC.Add(new MailAddress(email.ccEmailList));
+            if (string.IsNullOrEmpty(email.bccEmailList)) message.Bcc.Add(new MailAddress(email.bccEmailList));
+            /*
+                        foreach (var item in email.ToEmailList)
+                        {
+                            message.To.Add(new MailAddress(item.ToString()));
+                        }
 
-            foreach (var item in email.ccEmailList)
-            {
-                message.CC.Add(new MailAddress(item.ToString()));
-            }
+                        foreach (var item in email.ccEmailList)
+                        {
+                            message.CC.Add(new MailAddress(item.ToString()));
+                        }
 
-            foreach (var item in email.bccEmailList)
-            {
-                message.Bcc.Add(new MailAddress(item.ToString()));
-            }
+                        foreach (var item in email.bccEmailList)
+                        {
+                            message.Bcc.Add(new MailAddress(item.ToString()));
+                        }
+            */
             message.Subject = email.Subject;
 
             message.IsBodyHtml = true;
@@ -69,7 +84,7 @@ namespace Infrastructure.Services
         public async Task<EmailModel> GetEmail(int emailId)
         {
             var mail = await _context.Emails.Where(x => x.Id == emailId).SingleOrDefaultAsync();
-            if (mail == null) {return null; }
+            if (mail == null) { return null; }
             return mail;
         }
 
@@ -77,9 +92,9 @@ namespace Infrastructure.Services
         {
             var mail = await _context.Emails.Where(x => x.RefNo == enquiryId.ToString() && x.MessageType == "dlacknowledgement")
                 .SingleOrDefaultAsync();
-            
+
             return mail;
-            
+
         }
 
         private string ComposeCVForwardingMessageBody(CVForwardMessages message)
@@ -134,4 +149,6 @@ namespace Infrastructure.Services
             throw new System.NotImplementedException();
         }
     }
+
+
 }

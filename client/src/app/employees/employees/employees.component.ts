@@ -37,7 +37,6 @@ export class EmployeesComponent implements OnInit {
   }
 
   editButtonClick(employeeId: number): void {
-    console.log('entered editButtonClick');
     this.router.navigate(['/empEdit', employeeId]);
   }
 
