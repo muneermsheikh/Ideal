@@ -12,9 +12,12 @@ import { OrderTotalsComponent } from './components/order-totals/order-totals.com
 import { RouterModule } from '@angular/router';
 import { ProfessionModule } from '../profession/profession.module';
 import { ProfessionComponent } from '../profession/profession.component';
+import { RightClickMenuComponent } from './components/right-click-menu/right-click-menu.component';
+
 
 @NgModule({
-  declarations: [PagingHeaderComponent, PagerComponent, OrderTotalsComponent, TextInputComponent, BasketSummaryComponent],
+  declarations: [PagingHeaderComponent, PagerComponent, OrderTotalsComponent, 
+    TextInputComponent, RightClickMenuComponent, BasketSummaryComponent],
   imports: [
     CommonModule,
     PaginationModule.forRoot(),
@@ -34,6 +37,7 @@ import { ProfessionComponent } from '../profession/profession.component';
     FormsModule,
     BsDropdownModule,
     TextInputComponent,
+    RightClickMenuComponent,
     BasketSummaryComponent
   ]
 })

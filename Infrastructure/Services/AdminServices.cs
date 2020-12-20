@@ -148,17 +148,18 @@ namespace Infrastructure.Services
 
         public async Task<List<SelStatsDto>> SelStatsOfEnquiry (int EnqId)
         {
-            var qry = (from Ref in _context.CVRefs 
-                        join Item in _context.EnquiryItems on Ref.EnquiryItemId equals Item.Id
-                        join Cat in _context.Categories on Item.CategoryItemId equals Cat.Id
-                        join Emp in _context.Employees on Item.HRExecutiveId equals Emp.Id
-                        where Item.EnquiryId == EnqId && Ref.RefStatus == enumSelectionResult.Selected
-                        group Ref by new {Item.CategoryItemId, Item.SrNo, Cat.Name, Ref.HRExecutiveId, Emp.KnownAs} into st 
-                        orderby st.Key.CategoryItemId, st.Key.HRExecutiveId
-                        select new {EnquiryId = EnqId, CategoryItemId = st.Key.CategoryItemId,
-                            SrNo = st.Key.SrNo, CategoryName = st.Key.Name, 
-                            HRExecutiveId = st.Key.HRExecutiveId, HRExecName = st.Key.KnownAs, 
-                            SelectionCount = st.Count() });
+            // THIS IS WIP - need to have count of selections from CVRef
+            var qry = from i in _context.EnquiryItems where i.EnquiryId == EnqId
+                join c in _context.Categories on i.CategoryItemId equals c.Id
+                join e in _context.Employees on i.HRExecutiveId equals e.Id
+            join r in _context.CVRefs on i.Id equals r.EnquiryItemId 
+            into rf
+
+            from rff in rf.DefaultIfEmpty()
+            select new {EnquiryId = i.EnquiryId, EnquiryItemId = i.Id, 
+                HRExecutiveId = i.HRExecutiveId, SrNo = i.SrNo, categoryName = c.Name, 
+                execName = e.KnownAs, Ct= rff.Id};
+
             var stats = await qry.ToListAsync();
 
             var stToReturn = new List<SelStatsDto>();
@@ -166,8 +167,8 @@ namespace Infrastructure.Services
             {
                 foreach(var v in stats)
                 {
-                    stToReturn.Add(new SelStatsDto(v.EnquiryId, v.SrNo, v.CategoryName, 
-                        v.HRExecutiveId, v.HRExecName, v.SelectionCount));
+                    stToReturn.Add(new SelStatsDto(v.EnquiryId, v.EnquiryItemId, v.SrNo, 
+                        v.categoryName, v.HRExecutiveId ?? 0, v.execName ?? "" , 0));
                 }
             }
             return stToReturn;

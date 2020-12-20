@@ -63,8 +63,8 @@ namespace API.Controllers
 
         }
 
-// enquiry
-/*
+    // enquiry
+    /*
         [HttpPost("dlbydto")]
         public async Task<ActionResult<Enquiry>> AddDLByDto(EnqToAddDto enqToAddDto)
         {
@@ -73,7 +73,7 @@ namespace API.Controllers
             if (enqAdded == null) return BadRequest(new ApiResponse(400));
             return Ok(enqAdded);
         }
- */       
+    */       
         
         [HttpGet("getenquiry/{id}")]
         public async Task<ActionResult<Enquiry>> GetEnquiry(int id)
@@ -280,7 +280,7 @@ namespace API.Controllers
             if (editedItem == null) return BadRequest(new ApiResponse(400));
             return Ok(editedItem);
         }
-/*
+    /*
         [HttpDelete("enquiryItem")]
         public async Task<ActionResult<bool>> DeleteDLItem(EnquiryItem enquiryItem)
         {
@@ -288,7 +288,7 @@ namespace API.Controllers
             if (deleted == 1) return Ok();
             return BadRequest(new ApiResponse(400));
         }
-*/
+    */
         [HttpPost("enquiryItems")]
         public async Task<ActionResult<IReadOnlyList<EnquiryItem>>> InsertDLItems(List<EnquiryItem> enquiryItems)
         {
@@ -298,7 +298,7 @@ namespace API.Controllers
         }
          
 
-// Job Description
+    // Job Description
         [HttpGet("jd/{enquiryItemId}")]
         public async Task<ActionResult<JobDesc>> GetJobDescription(int enquiryItemId)
         {
@@ -311,11 +311,23 @@ namespace API.Controllers
             return await _enqService.UpdateJDAsync(jobDesc);
         }
 
-//remuneration
+    //remuneration
         [HttpGet("remuneration/{enquiryItemId}")]
         public async Task<ActionResult<Remuneration>> GetRemuneration(int enquiryItemId)
         {
             return await _enqService.GetRemunerationBySpecEnquiryItemIdAsync(enquiryItemId);
+        }
+
+        [HttpGet("remunerations/{enquiryId}")]
+        public async Task<ActionResult<EnqRemunDto>> GetRemunerations(int enquiryId)
+        {
+            var r = await _enqService.GetRemunerationsEnquiryAsync (enquiryId);
+
+            var enq = await _context.Enquiries.Where(x => x.Id == enquiryId).SingleOrDefaultAsync();
+            string customername = await _custService.GetCustomerNameCityCountryFromId(enq.CustomerId);
+            var dto = new EnqRemunDto( enq.Id, enq.EnquiryNo, enq.EnquiryDate, 
+                customername, r.ToList());
+            return dto;
         }
 
         [HttpPut("remuneration")]
@@ -324,7 +336,14 @@ namespace API.Controllers
             return await _enqService.UpdateRemunerationAsync(remuneration);
         }
 
-//contract review item
+        [HttpPut("remunerations")]
+        public async Task<int> UpdateRemuneration(EnqRemunDto remunerationDto)
+        {
+            return await _enqService.UpdateRemunerationsAsync(remunerationDto.Remunerations);
+  
+        }
+        
+    //contract review item
 
         [HttpGet("reviewIndex")]
         public async Task<ActionResult<Pagination<ContractReview>>> ReviewIndex(
@@ -393,10 +412,10 @@ namespace API.Controllers
         }
 
 
-// forward requirement to HR Department
+    // forward requirement to HR Department
 
 
-//forward to associates
+    //forward to associates
         [HttpPost("enqForwardToAssociates")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IReadOnlyList<EnquiryForwarded>>> ForwardToAssociates(
@@ -473,118 +492,117 @@ namespace API.Controllers
             return NotAssigned==false ? "Not Assigned" : "Assigned";
         
         }
-            private Enquiry MapDLDtoToDLAsync (EnqToAddDto dto)
+        private Enquiry MapDLDtoToDLAsync (EnqToAddDto dto)
+        {
+            var enqItems = new List<EnquiryItem>();
+            foreach(var item in dto.EnquiryItems)
             {
+                enqItems.Add(new EnquiryItem{
+                    SrNo = item.SrNo,
+                    CategoryItemId = item.CategoryItemId,
+                    CategoryName = item.CategoryName,
+                    Ecnr = item.Ecnr ?? false,
+                    AssessmentReqd = item.AssessmentReqd ?? false,
+                    EvaluationReqd = item.EvaluationReqd ?? false,
+                    Quantity = item.Quantity,
+                    MaxCVsToSend = item.MaxCVsToSend,
+                    HRExecutiveId = item.HRExecutiveId,
+                    AssessingSupId = item.AssessingSupId,
+                    AssessingHRMId = item.AssessingHRMId,
+                    CompleteBy = item.CompleteBy,
+                    ReviewStatus = item.ReviewStatus ?? "NotReviewed",
+                    EnquiryStatus = item.EnquiryStatus ?? "Inactive",
+                    Charges = item.Charges ?? ""
+                });
 
-                var enqItems = new List<EnquiryItem>();
-                foreach(var item in dto.EnquiryItems)
-                {
-                    enqItems.Add(new EnquiryItem{
-                        SrNo = item.SrNo,
-                        CategoryItemId = item.CategoryItemId,
-                        CategoryName = item.CategoryName,
-                        Ecnr = item.Ecnr ?? "Ecr",
-                        AssessmentReqd = item.AssessmentReqd ?? "n",
-                        EvaluationReqd = item.EvaluationReqd ?? "n",
-                        Quantity = item.Quantity,
-                        MaxCVsToSend = item.MaxCVsToSend,
-                        HRExecutiveId = item.HRExecutiveId,
-                        AssessingSupId = item.AssessingSupId,
-                        AssessingHRMId = item.AssessingHRMId,
-                        CompleteBy = item.CompleteBy,
-                        ReviewStatus = item.ReviewStatus ?? "NotReviewed",
-                        EnquiryStatus = item.EnquiryStatus ?? "Inactive",
-                        Charges = item.Charges ?? ""
-                    });
-
-                    if (item.JobDesc != null){
-                        var jd = new JobDesc {
-                            JobDescription = item.JobDesc.JobDescription ?? "not defined",
-                            QualificationDesired = item.JobDesc.QualificationDesired ?? "not defined",
-                            ExperienceDesiredMin = item.JobDesc.ExperienceDesiredMin,
-                            ExperienceDesiredMax = item.JobDesc.ExperienceDesiredMax,
-                            JobProfileDetails = item.JobDesc.JobProfileDetails ?? "not defined",
-                            JobProfileUrl = item.JobDesc.JobProfileUrl ?? ""
-                        };   
-                        item.JobDesc = jd;
-                    };
-
-                    if (item.Remuneration != null) {
-                        var remuneration = new Remuneration {
-                            ContractPeriodInMonths = item.Remuneration.ContractPeriodInMonths == 0 ? constDefaultContractPeriodInMonths : item.Remuneration.ContractPeriodInMonths,
-                            SalaryCurrency = item.Remuneration.SalaryCurrency,
-                            SalaryMin = item.Remuneration.SalaryMin,
-                            SalaryMax =item.Remuneration.SalaryMax,
-                            SalaryNegotiable = item.Remuneration.SalaryNegotiable ?? "f",
-                            Housing = item.Remuneration.Housing,
-                            HousingAllowance = Convert.ToInt32(item.Remuneration.HousingAllowance),
-                            Food = item.Remuneration.Food,
-                            FoodAllowance = Convert.ToInt32(item.Remuneration.Food ?? "0"),
-                            Transport = item.Remuneration.Transport,
-                            TransportAllowance = item.Remuneration.TransportAllowance,
-                            OtherAllowance =   item.Remuneration.OtherAllowance,
-                            LeaveAvailableAfterHowmanyMonths = item.Remuneration.LeaveAvailableAfterHowmanyMonths == 0 ? constDefaultLeaveAvailableAfterMonths : item.Remuneration.LeaveEntitlementPerYear,
-                            LeaveEntitlementPerYear = item.Remuneration.LeaveEntitlementPerYear == 0 ? constDefaultLeaveEntitlementPerYear : item.Remuneration.LeaveEntitlementPerYear,
-                            UpdatedOn = DateTime.Today
-                        };
-                        item.Remuneration = remuneration;
-                    }
-                }
-                var customerExecutives = new CustomerOfficialExecDto();
-                customerExecutives =  GetCustomerOfficialExecutives(dto.CustomerId);
-                Enquiry enquiry = new Enquiry {
-                    CustomerId = dto.CustomerId,
-                    EnquiryNo = Convert.ToInt32(dto.EnquiryNo),
-                    BasketId = dto.BasketId ?? "",
-                    EnquiryDate = dto.EnquiryDate, 
-                    ReadyToReview = dto.ReadyToReview ?? "f",
-                    EnquiryStatus = dto.EnquiryStatus ?? "inactive",
-                    ProjectManagerId = dto.ProjectManagerId == 0 ? constDefaultProjManagerId : dto.ProjectManagerId,
-                    AccountExecutiveId = dto.AccountExecutiveId == 0 ? customerExecutives.AccountsExecutiveId : dto.AccountExecutiveId,
-                    HRExecutiveId = dto.AccountExecutiveId == 0 ? customerExecutives.HRExecutiveId : dto.HRExecutiveId,
-                    LogisticsExecutiveId =  dto.LogisticsExecutiveId == 0 ? customerExecutives.LogisticsExecutiveId : dto.LogisticsExecutiveId,
-                    EnquiryRef = dto.EnquiryRef ?? "",
-                    CompleteBy = dto.CompleteBy,
-                    ReviewedById = dto.ReviewedById,
-                    ReviewStatus = dto.ReviewStatus ?? "NotReviewed",
-                    ReviewedOn = dto.ReviewedOn,
-                    Remarks = dto.Remarks,
-                    EnquiryItems = enqItems
+                if (item.JobDesc != null){
+                    var jd = new JobDesc {
+                        JobDescription = item.JobDesc.JobDescription ?? "not defined",
+                        QualificationDesired = item.JobDesc.QualificationDesired ?? "not defined",
+                        ExperienceDesiredMin = item.JobDesc.ExperienceDesiredMin,
+                        ExperienceDesiredMax = item.JobDesc.ExperienceDesiredMax,
+                        JobProfileDetails = item.JobDesc.JobProfileDetails ?? "not defined",
+                        JobProfileUrl = item.JobDesc.JobProfileUrl ?? ""
+                    };   
+                    item.JobDesc = jd;
                 };
 
-                return enquiry;
-            }
-
-            private DateTime? GetValidatedDate(string dateIn)
-            {
-                DateTime value;
-                if (!DateTime.TryParse(dateIn, out value))
-                {   
-                    return DateTime.Today;
-                } else {
-                    return null;
+                if (item.Remuneration != null) {
+                    var remuneration = new Remuneration {
+                        ContractPeriodInMonths = item.Remuneration.ContractPeriodInMonths == 0 ? constDefaultContractPeriodInMonths : item.Remuneration.ContractPeriodInMonths,
+                        SalaryCurrency = item.Remuneration.SalaryCurrency,
+                        SalaryMin = item.Remuneration.SalaryMin,
+                        SalaryMax =item.Remuneration.SalaryMax,
+                        SalaryNegotiable = item.Remuneration.SalaryNegotiable,
+                        Housing = item.Remuneration.Housing,
+                        HousingAllowance = Convert.ToInt32(item.Remuneration.HousingAllowance),
+                        Food = item.Remuneration.Food,
+                        FoodAllowance = Convert.ToInt32(item.Remuneration.Food),
+                        Transport = item.Remuneration.Transport,
+                        TransportAllowance = item.Remuneration.TransportAllowance,
+                        OtherAllowance =   item.Remuneration.OtherAllowance,
+                        LeaveAvailableAfterHowmanyMonths = item.Remuneration.LeaveAvailableAfterHowmanyMonths == 0 ? constDefaultLeaveAvailableAfterMonths : item.Remuneration.LeaveEntitlementPerYear,
+                        LeaveEntitlementPerYear = item.Remuneration.LeaveEntitlementPerYear == 0 ? constDefaultLeaveEntitlementPerYear : item.Remuneration.LeaveEntitlementPerYear,
+                        UpdatedOn = DateTime.Today
+                    };
+                    item.Remuneration = remuneration;
                 }
             }
+            var customerExecutives = new CustomerOfficialExecDto();
+            customerExecutives =  GetCustomerOfficialExecutives(dto.CustomerId);
+            Enquiry enquiry = new Enquiry {
+                CustomerId = dto.CustomerId,
+                EnquiryNo = Convert.ToInt32(dto.EnquiryNo),
+                BasketId = dto.BasketId ?? "",
+                EnquiryDate = dto.EnquiryDate, 
+                ReadyToReview = dto.ReadyToReview ?? "f",
+                EnquiryStatus = dto.EnquiryStatus ?? "inactive",
+                ProjectManagerId = dto.ProjectManagerId == 0 ? constDefaultProjManagerId : dto.ProjectManagerId,
+                AccountExecutiveId = dto.AccountExecutiveId == 0 ? customerExecutives.AccountsExecutiveId : dto.AccountExecutiveId,
+                HRExecutiveId = dto.AccountExecutiveId == 0 ? customerExecutives.HRExecutiveId : dto.HRExecutiveId,
+                LogisticsExecutiveId =  dto.LogisticsExecutiveId == 0 ? customerExecutives.LogisticsExecutiveId : dto.LogisticsExecutiveId,
+                EnquiryRef = dto.EnquiryRef ?? "",
+                CompleteBy = dto.CompleteBy,
+                ReviewedById = dto.ReviewedById,
+                ReviewStatus = dto.ReviewStatus ?? "NotReviewed",
+                ReviewedOn = dto.ReviewedOn,
+                Remarks = dto.Remarks,
+                EnquiryItems = enqItems
+            };
 
-            private CustomerOfficialExecDto GetCustomerOfficialExecutives(int customerId)
-            {
-                var execs = _custService.GetCustomerOfficialList(customerId).Result;
-                var dto = new CustomerOfficialExecDto ();
-                foreach(var exec in execs)
-                {
-                    if (exec.Scope.ToLower() == "accounts")
-                    {
-                        dto.AccountsExecutiveId = exec.Id;
-                    } else if (exec.Scope.ToLower() == "logistics")
-                    {
-                        dto.LogisticsExecutiveId = exec.Id;
-                    } else if (exec.Scope.ToLower() == "hr")
-                    {
-                        dto.HRExecutiveId = exec.Id;
-                    }
-                }
+            return enquiry;
+        }
 
-                return dto;
+        private DateTime? GetValidatedDate(string dateIn)
+        {
+            DateTime value;
+            if (!DateTime.TryParse(dateIn, out value))
+            {   
+                return DateTime.Today;
+            } else {
+                return null;
             }
         }
+
+        private CustomerOfficialExecDto GetCustomerOfficialExecutives(int customerId)
+        {
+            var execs = _custService.GetCustomerOfficialList(customerId).Result;
+            var dto = new CustomerOfficialExecDto ();
+            foreach(var exec in execs)
+            {
+                if (exec.Scope.ToLower() == "accounts")
+                {
+                    dto.AccountsExecutiveId = exec.Id;
+                } else if (exec.Scope.ToLower() == "logistics")
+                {
+                    dto.LogisticsExecutiveId = exec.Id;
+                } else if (exec.Scope.ToLower() == "hr")
+                {
+                    dto.HRExecutiveId = exec.Id;
+                }
+            }
+
+            return dto;
+        }
+    }
 }

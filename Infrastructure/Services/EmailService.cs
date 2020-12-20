@@ -24,8 +24,16 @@ namespace Infrastructure.Services
     {
         private readonly ATSContext _context;
         private readonly IConfiguration _config;
-        public EmailService(ATSContext context, IConfiguration config)
+        private readonly ICategoryService _catService;
+        private readonly ICustomerService _custService;
+        private readonly IEmployeeService _empService;
+        public EmailService(ATSContext context, IConfiguration config, 
+            ICategoryService catService, ICustomerService custService,
+            IEmployeeService empService)
         {
+            _custService = custService;
+            _empService = empService;
+            _catService = catService;
             _config = config;
             _context = context;
         }
@@ -148,6 +156,123 @@ namespace Infrastructure.Services
         {
             throw new System.NotImplementedException();
         }
+
+        
+        public async Task<int> ComposeHRTaskAssignmentMessageBody(List<int> enquiryItemIds, 
+            int enquiryNo, DateTime enquiryDate, int customerId, int projManagerId)
+        {
+            var emails = new List<EmailModel>();
+            string htmlBody = "";
+            var enquiryItems = await _context.EnquiryItems.Where(x => enquiryItemIds.Contains(x.Id))
+                .Include(x => x.Remuneration)
+                .Include(x => x.JobDesc)
+                .Include(x => x.TasksAssigned)
+                .OrderBy(x => x.HRExecutiveId)
+                .ToListAsync();
+            
+            if (enquiryItems == null) return 0; 
+            var SalaryCurrency = await _custService.CustomerCountryCurrency(customerId);
+            var projManager = await _empService.GetEmployeeByIdAsync(projManagerId);
+            string ProjectManagerTitle = projManager.Gender == "M" ? "Mr. " : "Ms. ";
+            string ProjectManagerName=projManager.FullName;
+            string ProjectManagerDesignation=projManager.Designation;
+            string ProjectManagerEmail=projManager.Email;
+            string ProjectManagerMobile=projManager.Mobile;
+
+            string ExecTitle = "";
+            string ExecName="";
+            string ExecDesignation="";
+            string ExecEmail="";
+            string ExecMobile="";
+            string ccEmail="";
+            string bccEmail="";
+
+            int EmailsSentCount = 0;
+            int HRExecId = Convert.ToInt32(enquiryItems[0].HRExecutiveId);
+            string TableHeader = "<br><br>Following task is assigned to you:<br><br><b>Requirements assigned:</b><br>" +
+                "<table><th>Reference</th><th>Category</th><th>Quantity</th>CVs required</th>" + 
+                "<th>ECNR</th><th>Assess<br>Reqd</th><th>Salary</th>"+
+                "<th>Accomm</<th><th>Food</th><th>Transport</th><th>Other</th>"+
+                "<th>DL Date<br>Complete by</th><th>Remarks</th>";
+            string s="";
+
+            foreach(var item in enquiryItems)
+            {
+                if (item.HRExecutiveId != HRExecId)
+                {
+                    if (HRExecId != 0) {
+                        htmlBody += "</tr></table><br>" +
+                            "<li>if job description is not available at the given url link, check with your " + 
+                            "Supervisor</li>" +
+                            "<li>For any query, contact with your Supervisor immediately<br><br>"+
+                            "Best regards<br><br>" + ProjectManagerName + "<br>" + ProjectManagerDesignation +
+                            "<br>Phone" + projManager.Mobile + "<br>end of message";
+
+                        if (await SendEmail (new EmailModel(ProjectManagerEmail, ExecEmail, ccEmail, bccEmail, 
+                            "Task Assignment for DL Number " + enquiryNo,htmlBody))) ++EmailsSentCount;
+                    }
+
+                    HRExecId = Convert.ToInt32(item.HRExecutiveId);
+                    var hrExec = await _empService.GetEmployeeByIdAsync(HRExecId);
+                    ExecTitle = hrExec.Gender == "M" ? "Mr. " : "Ms. ";
+                    ExecName=hrExec.FullName;
+                    ExecDesignation=hrExec.Designation ?? "";
+                    ExecEmail=hrExec.Email;
+                    ExecMobile=hrExec.Mobile;
+                    htmlBody = DateTime.Today + "<br><br>" + ExecTitle + ExecName + "<br>" + 
+                        ExecDesignation + TableHeader;
+                }
+                htmlBody += "<tr><td>"+enquiryNo + "-" + item.SrNo + "</td>" +
+                    "<td>" + _catService.GetCategoryNameFromCategoryId(item.CategoryItemId) + "</td>" +
+                    "<td>" + item.Quantity + "</td><td>" + item.MaxCVsToSend + "</td>";
+                if ((bool)item.Ecnr) { htmlBody += "<td>Yes</td>"; } else {htmlBody += "<td>No</td>"; } 
+                if ((bool)item.AssessmentReqd) { htmlBody += "<td>Yes</td>"; } else {htmlBody += "<td>No</td>"; } 
+                if (item.Remuneration != null)
+                {
+                    htmlBody += "<td>" + SalaryCurrency + item.Remuneration.SalaryMin;
+                    s = item.Remuneration.SalaryMax > 0 ? " to " + item.Remuneration.SalaryMax : "";
+                    htmlBody += "</td><td>" + s;
+                    s = item.Remuneration.HousingAllowance > 0 ? item.Remuneration.HousingAllowance.ToString() : item.Remuneration.Housing ? "Free" : "Not Provided";
+                    htmlBody += "</td><td>" + s;
+                    s = item.Remuneration.FoodAllowance > 0 ? item.Remuneration.FoodAllowance.ToString() : item.Remuneration.Food ? "Free" : "Not Provided";
+                    htmlBody += "</td><td>" + s;
+                    s = item.Remuneration.TransportAllowance > 0 ? item.Remuneration.TransportAllowance.ToString() : item.Remuneration.Transport ? "Free" : "Not Provided";;
+                    htmlBody += "</td><td>" + s + "</td><td>" + item.Remuneration.OtherAllowance.ToString() +"</td>";
+                } else {
+                    htmlBody +="<td></td><td></td><td></td><td></td><td></td>";
+                }
+                
+                s="";
+                if (item.TasksAssigned !=null) {
+                    foreach(var t in item.TasksAssigned)
+                    {
+                        if (t.TaskType.ToLower() == "hr" && t.TaskStatus.ToLower() != "completed")
+                        {
+                            s = t.TaskDate + "<br>" + t.CompleteBy.Date;
+                        }
+                        else if (s != "") 
+                        {
+                            break;
+                        }
+                    } 
+                }
+                htmlBody += "<td>" + s +"<td>";
+
+                if (item.JobDesc !=null) {htmlBody += item.JobDesc.JobProfileUrl ?? ""; }
+                htmlBody +="</td>";
+            }
+            htmlBody += "</tr></table><br>" +
+                "<li>if job description is not available at the given url link, check with your Supervisor</li>" +
+                "<li>For any query, contact with your Supervisor immediately<br><br>"+
+                "Best regards<br><br>" + ProjectManagerName + "<br>" + ProjectManagerDesignation +
+                "<br>Phone" + ProjectManagerMobile + "<br>end of message";
+            var b = SendEmail(new EmailModel(ProjectManagerEmail, ExecEmail, ccEmail, bccEmail, 
+                      "Task Assignment for DL Number " + enquiryNo,htmlBody));
+            if (Convert.ToBoolean(b))  ++EmailsSentCount;
+            return EmailsSentCount;
+        }
+
+        
     }
 
 

@@ -1,171 +1,145 @@
 <div *ngIf="!enquiry">
     No record for the selected enquiry Id
 </div>
+
 <div class="container">
     <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
-        <table>
-            <tr class="panelHeader" colspan="5">Edit Enquiry</tr>
-            <tr>
-                <td>
-                    <div class="form-group orderItemAverage">
-                        <select class="form-control" 
-                            formControlName="customerId" placeholder="Client" >
-                            <option *ngFor="let cust of customers" [(ngValue)]="+cust.id" (change)="onCustomerChanged('cust.id')">
-                                {{cust.customerName}}
-                            </option>
-                        </select>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group orderItemAverage">
-                        <select class="form-control" 
-                            formControlName="hrExecutiveId" placeholder="HR matters">
-                            <option *ngFor="let hr of officials" [(ngValue)]="+hr.id">
-                                {{hr.name}}
-                            </option>
-                        </select>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group orderItemAverage">
-                        <select class="form-control" 
-                            formControlName="logisticsExecutiveId" placeholder="Logistics">
-                            <option *ngFor="let lg of officials" [(ngValue)]="+lg.id">
-                                {{lg.name}}
-                            </option>
-                        </select>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group orderItemAverage">
-                        <select class="form-control" 
-                            formControlName="accountExecutiveId" placeholder="Accounts matters">
-                            <option *ngFor="let act of officials" [(ngValue)]="+act.id">
-                                {{act.name}}
-                            </option>
-                        </select>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group orderItemAverage">
-                        <select class="form-control" 
-                            formControlName="projectManagerId" placeholder="Project Manager">
-                            <option *ngFor="let emp of employees" [(ngValue)]="+emp.id">
-                                {{emp.knownAs}}
-                            </option>
-                        </select>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><div><app-text-input formControlName="enquiryNo"  [type]="'number'" [label]="'Enquiry No'"></app-text-input> </div></td>
-                <td><div><app-text-input formControlName="enquiryRef" [label]="'Enquiry Ref'"></app-text-input> </div></td>
-                <td><div><app-text-input formControlName="enquiryDate" [label]="'Dated'"></app-text-input> </div></td>
-                <td><div><app-text-input formControlName="completeBy" [label]="'Complete by'"></app-text-input> </div></td>
-                <td><div><app-text-input formControlName="enquiryStatus" [label]="'Current Status'"></app-text-input> </div></td>
-            </tr>
-            <tr>
-                <td><div><app-text-input formControlName="readyToReview" [label]="'Ready to Review'"></app-text-input> </div></td>
-                <td>
-                    <div class="form-group"> 
-                        <select class="form-control" 
-                            formControlName="reviewedById" placeholder="Reviewed by">
-                            <option *ngFor="let v of employees" [ngValue]=v.id>
-                                {{v.fullName}}
-                            </option>
-                        </select>
-                    </div>
-                </td>
-                <td><div><app-text-input formControlName="reviewedOn" [label]="'Reviewed On'"></app-text-input> </div></td>
-                <td><div><app-text-input formControlName="reviewStatus" [label]="'Review Status'"></app-text-input> </div></td>
-                <td><div><app-text-input formControlName="remarks" [label]="'Remarks'"></app-text-input> </div></td>
-            </tr>
-        </table>
-        
-        <table formArrayName="enquiryItems" style="margin-top: 20px; line-height: 1.5em;">
-            <tr>
-                <td colspan="6">Items</td>
-                <td>
-                    <button type="button" (click)="pushNewEnquiryItem()" class="fa fa-plus push-right" ></button>
-                    <button type="button" (click)="suggestHRExec()" class="fa fa-help push-right" ></button>
-                </td>
-            </tr>
+        <div class="row">
+            <div class="form-group col-1 a">
+                <app-text-input formControlName="enquiryNo" [label]="'Enquiry No'"></app-text-input>
+            </div>
+            <div class="form-group col-2 a">
+                <app-text-input formControlName="enquiryDate" [label]="'Dated'"></app-text-input>
+            </div>
+            <div class="form-group col-2 a">
+                <select class="form-control" formControlName="customerId" placeholder="Client" >
+                    <option *ngFor="let cust of customers" [(ngValue)]="+cust.id" (change)="onCustomerChanged('cust.id')">
+                        {{cust.customerName}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group col-2 a">
+                <select class="form-control" formControlName="hrExecutiveId" placeholder="HR matters">
+                    <option *ngFor="let hr of officials" [(ngValue)]="+hr.id">
+                        {{hr.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group col-2 a">
+                <app-text-input formControlName="enquiryRef" [label]="'Enquiry Ref'"></app-text-input>
+            </div>
+            <div class="form-group col-2 a">
+                <select class="form-control" formControlName="reviewedById" placeholder="Reviewed by">
+                    <option *ngFor="let v of employees" [(ngValue)]="v.id" >
+                        {{v.knownAs}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="col-4 a"><b>Enquiry Items</b></div>
+        <div class="col-8 a">
+            <button type="button" (click)="pushNewEnquiryItem()" class="fa fa-plus" style="text-align: center;" ></button>
+            <button type="button" (click)="suggestHRExec()" class="fa fa-question push-right" ></button>
+        </div>
+
+        <div formArrayName="enquiryItems" style="margin-top: 0px; line-height: 1.2em; width: 1500px;">
             <div *ngFor="let item of enquiryItems().controls; let i=index" [formGroupName]="i">
-                <table style="padding: 0px; margin-top: 0px; margin-bottom: 0px;">
-                    <tr>
-                        <td class="orderItemShort"><div><app-text-input formControlName="srNo" [label]="'Sr#'"></app-text-input></div></td>
-                        <td class="orderItemDropdownCategory" colspan="2">
-                            <div>
-                                <select class="form-control" 
-                                    formControlName="categoryItemId" placeholder="Profession">
-                                    <option *ngFor="let item of professions" [(ngValue)]="+item.id">
-                                        {{item.name}}
-                                    </option>
-                                </select>
+                <div class="row">
+                    <div class="form-group col-1 a">Sr.No.
+                        <app-text-input formControlName="srNo" [label]="'SrNo'"></app-text-input>
+                    </div>
+                    <div class="form-group col-2 a">Category
+                        <select class="form-control" formControlName="categoryItemId" placeholder="Profession">
+                            <option *ngFor="let item of professions" [(ngValue)]="+item.id">
+                                {{item.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-1 a">ECNR
+                        <input type="checkbox" placeholder="ECNR" formControlName="ecnr">
+                    </div>
+                    <div class="form-group col-1 a">Qnty
+                        <app-text-input formControlName="quantity" [label]="'qnty'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">Min CVs
+                        <app-text-input formControlName="maxCVsToSend" [label]="'Min CVs'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">HR Exec
+                        <select class="form-control" formControlName="hrExecutiveId" placeholder="HR Exec">
+                            <option *ngFor="let e of employees" [(ngValue)]="+e.id">
+                                {{e.knownAs}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-1 a">HR Sup
+                        <select class="form-control" formControlName="assessingSupId" placeholder="HR Sup">
+                            <option *ngFor="let e of employees" [(ngValue)]="+e.id">
+                                {{e.knownAs}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-1 a">HR Mgr
+                        <select class="form-control" formControlName="assessingHRMId" placeholder="HR Mgr">
+                            <option *ngFor="let e of employees" [(ngValue)]="+e.id">
+                                {{e.knownAs}}
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-2">
+                        <button (click)="onClickRemuneration()" class="fa fa-inr pull-left"></button>
+                        <button (click)="onClickJD()" class="fa fa-info"></button>
+                        <button (click)="removeEnquiryItem(i)" class="fa fa-trash"></button>
+                    </div>
+                </div>  <!--row-->
+                <!--
+                <br>
+                <div *ngIf="remuneration">
+                    <div formArrayName="remuneration">
+
+                        <div *ngFor="let r of remuneration().controls; let j=index" [formGroupName]="j">
+                            <div class="form-group col-3 a">currency
+                                <app-text-input formControlName="salaryCurrency" [label]="'Currency'"></app-text-input>
                             </div>
-                        </td>
-                        <td>
-                            <div  class="orderItemDropDownFirstLine">
-                                <select class="form-control" 
-                                    formControlName="hrExecutiveId" placeholder="HR Exec">
-                                    <option *ngFor="let e of employees" [(ngValue)]="+e.id">
-                                        {{e.knownAs}}
-                                    </option>
-                                </select>
+                            <div class="form-group col-3 a">Min Salary
+                                <app-text-input type="number" formControlName="salaryMin" [label]="'Min Salary'"></app-text-input>
                             </div>
-                        </td>
-                        <td>
-                            <div  class="orderItemDropDownFirstLine">
-                                <select class="form-control" 
-                                    formControlName="assessingSupId" placeholder="Supervisor">
-                                    <option *ngFor="let i of employees" [(ngValue)]="+i.id">
-                                        {{i.knownAs}}
-                                    </option>
-                                </select>
+                            <div class="form-group col-3 a">Max Salary
+                                <app-text-input type="number" formControlName="salaryMax" [label]="'Max Salary'"></app-text-input>
                             </div>
-                        </td>
-                        <td>
-                            <div class="orderItemDropDownFirstLine">
-                                <select class="form-control" 
-                                    formControlName="assessingHRMId" placeholder="HRM">
-                                    <option *ngFor="let emp of employees" [(ngValue)]="+emp.id">
-                                        {{emp.knownAs}}
-                                    </option>
-                                </select>
-                            </div>
-                        </td>
-                        <td class="orderItemShort">
-                            <div>
-                                <a href="#i" class="btn btn-info" data-toggle="collapse">JD</a>
-                                <!-- <a href="#remun"+i class="btn btn-info" data-toggle="collapse">Remu</a> -->
-                                <button (click)="removeEnquiryItem(i)" class="fa fa-trash pull-right"></button>
-                            </div>
-                        <td>
-                    </tr>    
-                    <tr>
-                        <td class="orderItemShort"><div><app-text-input formControlName="quantity" [label]="'Qnty'"></app-text-input></div></td>
-                        <td class="orderItemShort"><div><app-text-input formControlName="maxCVsToSend" [label]="'Min CVs'"></app-text-input></div></td>
-                        <td class="orderItemShort"><div><app-text-input formControlName="ecnr" [label]="'ECNR'"></app-text-input></div></td>
-                        <td class="orderItemShort"><div><app-text-input formControlName="assessmentRequired" [label]="'Assess'"></app-text-input></div></td>
-                        <td class="orderItemShort"><div><app-text-input formControlName="evaluationRequired" [label]="'CV Eval'"></app-text-input></div></td>
-                        <td class="orderItemShort"><div><app-text-input formControlName="reviewStatus" [label]="'Rvw Status'"></app-text-input></div></td>
-                        <td class="orderItemShort"><div><app-text-input formControlName="charges" [label]="'Charges'"></app-text-input></div></td>
-                    </tr>
-                </table>
-                <div class="collapse" *ngIf="!jd" id="i"> 
-                    <div *ngFor="let job of jd().controls; let j=index" [formGroupName]="j">
-                        <div class="orderItemShort"><app-text-input formControlName="jobDescription" [label]="'jobDescription'"></app-text-input></div>
-                        <div class="orderItemShort"><app-text-input formControlName="qualificationDesired" [label]="'Qualification'"></app-text-input></div>
-                        <div class="orderItemShort"><app-text-input formControlName="experienceDesiredMin" [label]="'Exp Min'"></app-text-input></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </table>
+                <br>
+                <div *ngIf="jd">
+                    <div formArrayName="jd">
+                        <div *ngFor="let j of jd().controls; let k=index" [formGroupName]="k">
+                            <div class="form-group col-10">job description
+                                <app-text-input formControlName="salaryCurrency" [label]="'Currency'"></app-text-input>
+                            </div>
+                            <div class="form-group col-10">Qualification
+                                <app-text-input formControlName="qualificationDesired" [label]="'Qualification'"></app-text-input>
+                            </div>
+                            <div class="form-group col-5 a">Exp Min
+                                <app-text-input type="number" formControlName="experienceDesiredMin" [label]="'Exp Min'"></app-text-input>
+                            </div>
+                            <div class="form-group col-5 a">Exp Max
+                                <app-text-input type="number" formControlName="experienceDesiredMax" [label]="'Exp Max'"></app-text-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            -->
+            </div>      <!--ngFor-->
+        </div>  <!--array name-->
         <button [disabled]="createForm.invalid" type="submit" class="btn btn-success">Submit</button>
-    </form>
-</div>
+    </form>      <!--form-->
+</div>      <!--container-->
+
+<!--
 <div style="font-size: xx-small">
     {{this.createForm.value | json}}
     {{this.createForm.valid}}
 </div>
-
+-->

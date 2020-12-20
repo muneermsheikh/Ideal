@@ -29,7 +29,7 @@
     <div class="colShortTitle">Actions</div>
 </div>
 
-<div class="colWhole form-inline" *ngFor="let item of enquiries" >
+<div class="colWhole form-inline" *ngFor="let item of enquiries" style="width: 100%;" >
     <div class="row" >      
         <div class="colShort" style="cursor: pointer;" routerLink="/enquiryEdit/{{item.id}}">{{item.enquiryNo}} </div>  
         <div class="colShort">{{item.enquiryDate | date}}</div>
@@ -40,9 +40,10 @@
         <div class="colShort">{{item.reviewStatus}}</div>
         <div class="colShort">{{item.enquiryStatus}}</div>
         <div class="colShort">{{item.assigned}}</div>
-        <div class="colShort" style="cursor: pointer">
+        <div class="colAverage" style="cursor: pointer">
             <button class="btn btn-sm btn-outline-secondary fa fa-pencil" (click)="editButtonClick(item.id)" ></button>  
             <button class="btn btn-sm btn-outline-secondary fa fa-trash" routerLink="/enquiry/{{item.id}}"></button>  
+            <button class="btn btn-sm btn-outline-secondary fa fa-inr" routerLink="/remuneration/{{item.id}}"></button>  
             <button class="btn btn-sm btn-outline-secondary fa fa-envelope" routerLink="/emailCreate/{{item.id}}"></button>
         </div>
 <!--

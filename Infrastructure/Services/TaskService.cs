@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities.Admin;
 using Core.Enumerations;
 using Core.Interfaces;
 using Core.Specifications;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services
 {
@@ -11,11 +15,13 @@ namespace Infrastructure.Services
     {
         private readonly IGenericRepository<ToDo> _taskRepo;
         private readonly IGenericRepository<TaskItem> _taskItemRepo;
+        private readonly ATSContext _context;
         public TaskService(IGenericRepository<ToDo> taskRepo, 
-            IGenericRepository<TaskItem> taskItemRepo)
+            IGenericRepository<TaskItem> taskItemRepo, ATSContext context)
         {
             _taskItemRepo = taskItemRepo;
             _taskRepo = taskRepo;
+            _context = context;
         }
 
         public async Task<TaskItem> AppendTaskItemAsync(int taskId, TaskItem taskItem)
@@ -117,6 +123,15 @@ namespace Infrastructure.Services
             return await _taskRepo.GetEntityListWithSpec(new TaskSpecs(taskStatus, assignedToId));
         }
 
+        public async Task<ToDo> UpdateTaskStatus(int TaskId, string taskStatus, DateTime statusDate, string remarks)
+        {
+            var t = await _context.ToDos.Where(x => x.Id == TaskId).SingleOrDefaultAsync();
+            t.TaskStatus = taskStatus;
+            t.TaskDate = statusDate;
+            t.TaskDescription = remarks;
 
+            var tsk = await _taskRepo.UpdateAsync(t);
+            return tsk;
+        }
     }
 }

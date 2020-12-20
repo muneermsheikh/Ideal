@@ -50,16 +50,16 @@ namespace API.Controllers
                 var jobDescInBrief = "";
                 var sAttach = "";
                 var salaryCurrency = "";
-                string salaryNegotiable="f";
+                bool salaryNegotiable=false;
                 int salaryRangeFrom = random.Next(800, 2000);
                 int salaryRangeUpto = random.Next(1000, 2500);
                 int intAddDays = random.Next(2, 10);
 
-                string provFood;
+                bool provFood;
                 int foodAllowance=0;
-                string provHousing;
+                bool provHousing;
                 int housingAllowance=0;
-                string provTransport;
+                bool provTransport;
                 int transportAllowance=0;
                 int otherAllowance=0;
                 int leavePerYear=15;
@@ -68,18 +68,18 @@ namespace API.Controllers
                 switch (random.Next(0, 2))
                 {
                     case 0:
-                        provFood = "NotProvided";
-                        provHousing = "ProvidedFree";
-                        provTransport = "NotProvided";
+                        provFood = false;
+                        provHousing = false;
+                        provTransport = true;
                         break;
                     default:
-                        provFood = "NotProvided";
-                        provHousing = "ProvidedFree";
-                        provTransport = "NotProvided";
+                        provFood = false;
+                        provHousing = true;
+                        provTransport = false;
                         break;
                 }
 
-                var item = new BasketItem( catId, categoryName, "f", qnty, expDesiredInYrsMin,
+                var item = new BasketItem( catId, categoryName, false, qnty, expDesiredInYrsMin,
                     expDesiredInYrsMax, jobDescInBrief, sAttach, salaryCurrency, salaryNegotiable, 
                     salaryRangeFrom, salaryRangeUpto, 24, leaveAfterMonths, leavePerYear, provFood, 
                     foodAllowance, provHousing, housingAllowance, provTransport, 

@@ -8,7 +8,6 @@ using Core.Entities.EnquiryAggregate;
 using Core.Entities.Masters;
 using Core.Specifications;
 
-
 namespace Core.Interfaces
 {
     public interface IEnquiryService
@@ -40,6 +39,8 @@ namespace Core.Interfaces
         //flg also creates new record if one does not exist
         Task<Remuneration> GetRemunerationBySpecEnquiryItemIdAsync (int enquiryItemId);
         Task<Remuneration> UpdateRemunerationAsync(Remuneration remuneration);
+        Task<IReadOnlyList<Remuneration>> GetRemunerationsEnquiryAsync(int enquiryId);
+        Task<int> UpdateRemunerationsAsync(List<Remuneration> remunerations);
     //contract review
         
         Task<bool> UpdateEnquiryReadyToReview(Enquiry enquiry);

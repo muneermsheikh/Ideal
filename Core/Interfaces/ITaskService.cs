@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities.Admin;
@@ -27,8 +28,9 @@ namespace Core.Interfaces
         Task<ToDo> UpdateTaskAsync(ToDo toDo);
         Task<bool> DeleteTaskAsync(ToDo toDo);
         Task<bool> DeleteTaskByIdAsync(int taskId);
+        Task<ToDo> UpdateTaskStatus(int TaskId, string taskStatus, DateTime statusDate, string remarks);
 
-// TaskItem        
+// TaskItem   
         Task<TaskItem> AppendTaskItemAsync(int taskId, TaskItem taskItem);
         Task<TaskItem> UpdateTaskItemAsync(TaskItem taskItem);
         Task<bool> DeleteTaskItemAsync(TaskItem taskItem);

@@ -44,6 +44,7 @@ export interface IEnquiryItem {
 
 export interface IRemuneration {
     id: number;
+    enquiryId: number;
     enquiryItemId: number;
     contractPeriodInMonths: number;
     salaryCurrency: string;
@@ -71,4 +72,32 @@ export interface IJobDesc {
     experienceDesiredMax: number;
     jobProfileDetails: string;
     jobProfileUrl: string;
+}
+
+export interface IRemunDto {
+    enquiryId: number;
+    enquiryNo: number;
+    enquiryDate: string;
+    customerName: string;
+    remunerations: IRemunerationDto[];
+}
+
+export interface IRemunerationDto {
+    enquiryId: number;
+    enquiryItemId: number;
+    categoryName: string;
+    contractPeriodInMonths: number;
+    salaryCurrency: string;
+    salaryMin: number;
+    salaryMax: number;
+    salaryNegotiable: string;
+    housing: string;
+    housingAllowance: number;
+    food: string;
+    foodAllowance: number;
+    transport: string;
+    transportAllowance: number;
+    otherAllowance: number;
+    leaveAvailableAfterHowmanyMonths: number;
+    leaveEntitlementPerYear: number;
 }

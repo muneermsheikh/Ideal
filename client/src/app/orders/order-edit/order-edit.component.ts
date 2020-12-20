@@ -6,6 +6,7 @@ import { IClient, IClientOfficial } from 'src/app/shared/models/client';
 import { IEmployee } from 'src/app/shared/models/employee';
 import { IEnquiry, IEnquiryItem, IJobDesc, IRemuneration } from 'src/app/shared/models/enquiry';
 import { IProfession } from 'src/app/shared/models/profession';
+import { ISelStatsDto } from 'src/app/shared/models/selStatsDto';
 import { UsersService } from 'src/app/users/users.service';
 import { OrdersService } from '../orders.service';
 
@@ -15,6 +16,11 @@ import { OrdersService } from '../orders.service';
   styleUrls: ['./order-edit.component.scss']
 })
 export class OrderEditComponent implements OnInit {
+  public isHidden: boolean = true;
+  xPosTabMenu: number;
+  yPosTabMenu: number;
+
+  // private user: IUser;
   createForm: FormGroup;
   enquiry: IEnquiry;
   pageTitle: string;
@@ -24,8 +30,10 @@ export class OrderEditComponent implements OnInit {
   officials: IClientOfficial[];
   customers: IClient[];
   clientIdSelected: number;
-  // jobDesc: IJobDesc[];
-  // remuneration: IRemuneration[];
+  selStats: ISelStatsDto[];
+  
+  showRemuneration: boolean;
+  showJD: boolean;
 
   formErrors = {
   };
@@ -40,11 +48,12 @@ export class OrderEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('calling getClients');
     this.getClients();
     this.getProfessions();
     this.getEmployees();
     this.getOfficials();
+    this.showRemuneration=true;
+    this.showJD=true;
 
     this.createForm = this.fb.group({
       id: [0],
@@ -74,6 +83,7 @@ export class OrderEditComponent implements OnInit {
     if (enquiryId) {
         this.pageTitle = 'edit Enquiry';
         this.getEnquiry(enquiryId);
+        this.getSelStats(enquiryId);
     }
   }
 
@@ -148,8 +158,8 @@ export class OrderEditComponent implements OnInit {
       (enq: IEnquiry) => {
         this.editEnquiry(enq);
         this.enquiry = enq;
-        console.log('in order-edit.compnent.ts getEquiry, enquiry.EnquiryItems have ');
-        console.log(this.enquiry.enquiryItems.length);
+        console.log(enq);
+        this.getClientOfficials(enq.customerId);
       },
       (error: any) => console.log(error)
     );
@@ -158,7 +168,6 @@ export class OrderEditComponent implements OnInit {
   editEnquiry(enquiry: IEnquiry): any {
       // repopulate customer official dropdowns
       this.getClientOfficials(enquiry.customerId);
-      console.log(this.officials);
       this.createForm.patchValue(
       {
         id: enquiry.id,
@@ -209,8 +218,10 @@ export class OrderEditComponent implements OnInit {
             charges: s.charges
           }));
 
-          if (s.jobDesc != null) {this.createForm.setControl('jd', this.setExistingJD(s.jobDesc)); }
-          if (s.remuneration != null) {this.createForm.setControl('remuneration', this.setExistingRemuneration(s.remuneration)); }
+          console.log(s.jobDesc);
+          console.log(s.remuneration);
+          if (s.jobDesc !== null) {this.createForm.setControl('jd', this.setExistingJD(s.jobDesc)); }
+          if (s.remuneration !== null) {this.createForm.setControl('remuneration', this.setExistingRemuneration(s.remuneration)); }
         });
       return formArray;
   }
@@ -390,5 +401,47 @@ export class OrderEditComponent implements OnInit {
     // suggest HR Executives based upon past statistics for the relevant category
     
   }
+
+  getSelStats(enquiryId: number)
+  {
+    this.service.getSelStats(enquiryId).subscribe(response => {
+      this.selStats = response;
+    }, error => {
+      console.log(error);
+    }); 
+  }
+
+  
+
+  // RIGHT CLICK MENU
+  rightClick(event, itemId: number) {
+    event.stopPropagation();
+    /*
+    this.xPosTabMenu = event.clientX;
+    this.yPosTabMenu = event.clientY;
+    this.isHidden = false;
+  */
+    
+    return false;
+  }
+
+  closeRightClickMenu() {
+    this.isHidden = true;
+  }
+
+  assignHRTasks(){
+    
+  }
+
+  onClickRemuneration(isChecked: boolean)
+  {
+    this.showRemuneration = !this.showRemuneration;
+  }
+
+  onClickJD(isChecked: boolean)
+  {
+    this.showJD = !this.showJD;
+  }
+
 }
 

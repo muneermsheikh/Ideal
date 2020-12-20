@@ -183,12 +183,7 @@ namespace Infrastructure.Services
             return remun;
         }
 
-        public async Task<IReadOnlyList<Remuneration>> GetRemunerationOfEnquiry(int enquiryId)
-        {
-            var spec = new RemunerationSpecs("", enquiryId);
-            return await _unitOfWork.Repository<Remuneration>().GetEntityListWithSpec(spec);
-        }
-
+        
         public async Task<Enquiry> UpdateDLAsync(Enquiry enquiry)
         {
             return await _unitOfWork.Repository<Enquiry>().UpdateAsync(enquiry);
@@ -342,6 +337,8 @@ namespace Infrastructure.Services
             await UpdateReviewStatusInEnqItemsEnqCReviewAsync(rvwItemsToReturn);
             return rvwItemsToReturn;
         }
+
+
 
         private async Task<List<EnquiryItem>> GetEnquiryItemsMissingFromReviewItem(int enquiryId)
         {

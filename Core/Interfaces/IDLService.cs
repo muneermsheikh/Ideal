@@ -47,6 +47,6 @@ namespace Core.Interfaces
         Task<Remuneration> GetRemunerationAsync (int enquiryItemId);
         Task<Remuneration> UpdateRemunerationAsync (Remuneration remuneration);
         Task<int> DeleteRemunerationAsync (Remuneration remuneration);
-        Task<IReadOnlyList<Remuneration>> GetRemunerationOfEnquiry (int enquiryId);
+        
     }
 }

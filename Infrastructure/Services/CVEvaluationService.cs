@@ -355,7 +355,7 @@ namespace Infrastructure.Services
             }
 
             //check if assessment mandatory, if so, is the CV assessed
-            if (enqItem.AssessmentReqd.ToLower()=="f")
+            if (enqItem.AssessmentReqd==false)
             {
                 // is CV assessed
                 var resultList = new List<enumAssessmentResult>();

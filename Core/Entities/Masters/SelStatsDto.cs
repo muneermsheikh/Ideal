@@ -2,21 +2,23 @@ namespace Core.Entities.Masters
 {
     public class SelStatsDto
     {
-        public SelStatsDto(int enquiryId, int srNo, string categoryName, int hRExecutiveId, string hRExecName, int selectionCount)
+        public SelStatsDto(int enquiryId, int enquiryItemId, int srNo, string categoryName, int hRExecutiveId, string hRExecName, int selectionCount)
         {
             EnquiryId = enquiryId;
+            EnquiryItemId = enquiryItemId;
             SrNo = srNo;
             CategoryName = categoryName;
-            HRExecutiveId = hRExecutiveId;
-            HRExecName = hRExecName;
+            HrExecutiveId = hRExecutiveId;
+            HrExecName = hRExecName;
             SelectionCount = selectionCount;
         }
 
         public int EnquiryId {get; set; }
+        public int EnquiryItemId {get; set; }
         public int SrNo {get; set; }
         public string CategoryName {get; set; }
-        public int HRExecutiveId {get; set; }
-        public string HRExecName {get; set;}
+        public int HrExecutiveId {get; set; }
+        public string HrExecName {get; set;}
         public int SelectionCount {get; set;}
     }
-}
+} 

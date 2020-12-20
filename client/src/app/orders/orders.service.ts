@@ -6,10 +6,11 @@ import { environment } from 'src/environments/environment';
 import { ProfessionService } from '../profession/profession.service';
 import { IClient, IClientOfficial } from '../shared/models/client';
 import { IEmail } from '../shared/models/email';
-import { IEnquiry } from '../shared/models/enquiry';
+import { IEnquiry, IRemunDto } from '../shared/models/enquiry';
 import { EnquiryParams } from '../shared/models/enquiryParams';
 import { IPaginationEnquiry, PaginationEnquiry } from '../shared/models/paginationEnquiry';
 import { IProfession } from '../shared/models/profession';
+import { ISelStatsDto } from '../shared/models/selStatsDto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,9 @@ export class OrdersService {
   allOfficials: IClientOfficial[] = [];  // all officials of all customers
   officials: IClientOfficial[];   // officials of a customer
   clients: IClient[];
+
+  selStats: ISelStatsDto[];
+  
   pagination = new PaginationEnquiry();
 
   params = new EnquiryParams();
@@ -55,17 +59,29 @@ export class OrdersService {
   }
 
 
-  updateEnquiry(values: IEnquiry): any {
-    return this.http.put(this.baseUrl + 'DL', values).pipe(
-      map((enq: IEnquiry) => {
-        if (enq) {
-          console.log('Enquiry No ' + enq.enquiryNo + ' updated'); }
-        }, error => {
-          console.log(error);
-        }
-      )
-    );
-  }
+    updateEnquiry(values: IEnquiry): any {
+      return this.http.put(this.baseUrl + 'DL', values).pipe(
+        map((enq: IEnquiry) => {
+          if (enq) {
+            console.log('Enquiry No ' + enq.enquiryNo + ' updated'); }
+          }, error => {
+            console.log(error);
+          }
+        )
+      );
+    }
+
+    updateRemunerations(values: IRemunDto): any {
+      return this.http.put(this.baseUrl + 'DL/remunerations', values).pipe(
+        map((remun: IRemunDto) => {
+          if (remun) {
+            console.log('Remunerations updated'); }
+          }, error => {
+            console.log(error);
+          }
+        )
+      );
+    }
 
     getEnquiry(id: number): any {
       /*
@@ -175,4 +191,50 @@ export class OrdersService {
       return this.http.post<IEmail>(this.baseUrl + 'Email', mail);
     }
 
+  //selStats
+    getSelStats(enqId: number): any {
+      return this.http.get<ISelStatsDto[]>(this.baseUrl + 'admin/selstats/' + enqId)
+      .pipe(
+        map(response => {
+          this.selStats = response;
+          return response;
+        })
+      );
+    }
+
+    getSelStat(enquiryItemId: number): any {
+      if (this.selStats === null || this.selStats === undefined)
+      {
+        this.http.get<ISelStatsDto[]>(this.baseUrl + 'admin/selstatsitem' + enquiryItemId)
+          .pipe(map(response => {
+            this.selStats = response;
+          }));
+      }
+
+      const stat = this.selStats.find(x => x.enquiryItemId === enquiryItemId);
+      if (stat) {
+        return of(stat);
+      }
+    }
+
+    
+    getRemunerations(enqId: number): any {
+      return this.http.get(this.baseUrl + 'DL/remunerations/' + enqId);
+    }
+
+  // tasks
+  /*
+    assignHRTasks(values: IEnquiry): any {
+      return this.http.put(this.baseUrl + 'tasks/createGroupTask', values).pipe(
+        map((enq: IEnquiry) => {
+          if (enq) {
+            console.log('Enquiry No ' + enq.enquiryNo + ' updated'); }
+          }, error => {
+            console.log(error);
+          }
+        )
+      );
+    }
+  */
+ 
 }

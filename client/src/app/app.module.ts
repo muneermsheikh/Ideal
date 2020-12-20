@@ -19,6 +19,7 @@ import { EmpCreateComponent } from './employees/emp-create/emp-create.component'
 import { OrdersModule } from './orders/orders.module';
 import { EmailModule } from './email/email.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { RightClickMenuComponent } from './shared/components/right-click-menu/right-click-menu.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     AppComponent,
     EmployeesComponent,
     EmpCreateComponent
+    // , RightClickMenuComponent
   ],
   imports: [
     BrowserModule,

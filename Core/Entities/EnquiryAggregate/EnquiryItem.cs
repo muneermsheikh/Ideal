@@ -14,7 +14,7 @@ namespace Core.Entities.EnquiryAggregate
         {
         }
 
-        public EnquiryItem(CategoryItemOrdered itemOrdered, int srNo, int quantity, string eCNR, DateTime completeBy)
+        public EnquiryItem(CategoryItemOrdered itemOrdered, int srNo, int quantity, bool eCNR, DateTime completeBy)
         {
             //EnquiryId = enquiryId;
             SrNo = srNo;
@@ -27,8 +27,8 @@ namespace Core.Entities.EnquiryAggregate
            }
 
         public EnquiryItem(int srNo,  string categoryName, 
-            int quantity, int maxCVsToSend, string ecnr, string assessmentReqd, 
-            string evaluationReqd, string reviewStatus, string enquiryStatus) 
+            int quantity, int maxCVsToSend, bool ecnr, bool assessmentReqd, 
+            bool evaluationReqd, string reviewStatus, string enquiryStatus) 
         {
                 this.SrNo = srNo;
                 this.CategoryName = categoryName;
@@ -41,7 +41,12 @@ namespace Core.Entities.EnquiryAggregate
                 this.EnquiryStatus = enquiryStatus;
         }
 
-        public EnquiryItem(int enquiryId, CategoryItemOrdered itemOrdered, int srNo, int categoryItemId, string categoryName, int quantity, int maxCVsToSend, string ecnr, string assessmentReqd, string evaluationReqd, int? hRExecutiveId, Employee assessingHRExec, int? assessingSupId, int? assessingHRMId, DateTime? completeBy, string reviewStatus, string enquiryStatus, string charges, Employee assessingHRM, Employee assessingSup, JobDesc jobDesc, Remuneration remuneration, List<CVRef> cVsReferred, List<ToDo> tasksAssigned)
+        public EnquiryItem(int enquiryId, CategoryItemOrdered itemOrdered, int srNo, 
+            int categoryItemId, string categoryName, int quantity, int maxCVsToSend, bool? ecnr, 
+            bool? assessmentReqd, bool? evaluationReqd, int? hRExecutiveId, Employee assessingHRExec, 
+            int? assessingSupId, int? assessingHRMId, DateTime? completeBy, string reviewStatus, 
+            string enquiryStatus, string charges, Employee assessingHRM, Employee assessingSup, 
+            JobDesc jobDesc, Remuneration remuneration, List<CVRef> cVsReferred, List<ToDo> tasksAssigned)
         {
             EnquiryId = enquiryId;
             ItemOrdered = itemOrdered;
@@ -76,9 +81,9 @@ namespace Core.Entities.EnquiryAggregate
         public string CategoryName { get; set; }
         public int Quantity { get; set; }
         public int MaxCVsToSend {get; set;}
-        public string Ecnr { get; set; } = "f";
-        public string AssessmentReqd {get; set; }="f";
-        public string EvaluationReqd {get; set; }="f";
+        public bool? Ecnr { get; set; } = false;
+        public bool? AssessmentReqd {get; set; }=false;
+        public bool? EvaluationReqd {get; set; }=false;
         
         public int? HRExecutiveId {get; set; }
         public virtual Employee AssessingHRExec {get; set; }
@@ -88,6 +93,7 @@ namespace Core.Entities.EnquiryAggregate
         public string ReviewStatus { get; set; } = "NotReviewed";
         public string EnquiryStatus {get; set;}
         public string Charges {get; set;} 
+        public bool HRExecTaskAssigned {get; set;}
 
         public virtual Employee AssessingHRM {get; set; }
         public virtual Employee AssessingSup {get; set; }

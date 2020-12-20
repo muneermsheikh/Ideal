@@ -9,12 +9,12 @@ namespace Core.Entities.EnquiryAggregate
         {
         }
 
-        public BasketItem(int categoryId, string categorytName, string eCNR, int quantity, 
+        public BasketItem(int categoryId, string categorytName, bool eCNR, int quantity, 
             int expDesiredInYrsMin, int expDesiredInYrsMax, string jobDescInBrief, 
-            string jobDescAttachment, string salaryCurrency, string salaryNegotiable, 
+            string jobDescAttachment, string salaryCurrency, bool salaryNegotiable, 
             int salaryRangeMin, int salaryRangeMax, int contractPeriodInMonths, 
-            int leaveAfterMonths, int leavePerYear, string food, int foodAllowance,
-            string housing, int housingAllowance, string transport, 
+            int leaveAfterMonths, int leavePerYear, bool food, int foodAllowance,
+            bool housing, int housingAllowance, bool transport, 
             int transportAllowance, int otherAllowance, DateTime completeBy)
         {
             // Id = id;
@@ -45,7 +45,7 @@ namespace Core.Entities.EnquiryAggregate
         public int Id { get; set; }
         public int CategoryId { get; set; }
         public string CategorytName { get; set; }
-        public string Ecnr { get; set; }
+        public bool Ecnr { get; set; }
         public int Quantity { get; set; }
         public int ExpDesiredInYrsMin { get; set; }
         public int ExpDesiredInYrsMax { get; set; }
@@ -53,15 +53,15 @@ namespace Core.Entities.EnquiryAggregate
         public string JobDescAttachment { get; set; }
         public string SalaryCurrency {get; set; }
 
-        public string SalaryNegotiable {get; set; }
+        public bool SalaryNegotiable {get; set; }
         public int SalaryRangeMin { get; set; }
         public int SalaryRangeMax { get; set; }
         public int ContractPeriodInMonths { get; set; }
-        public string Food { get; set; }
+        public bool Food { get; set; }
         public int FoodAllowance {get; set; }
-        public string Housing { get; set; }
+        public bool Housing { get; set; }
         public int HousingAllowance {get; set; }
-        public string Transport { get; set; }
+        public bool Transport { get; set; }
         public int TransportAllowance {get; set; }
         public int OtherAllowance {get; set; }
         public DateTime CompleteBy { get; set; }

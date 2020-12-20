@@ -1,0 +1,94 @@
+<div *ngIf="!enqRemunerations">
+    No remuneation records exist for the selected enquiry Id
+</div>
+
+<div class="container" *ngIf="enqRemunerations" style="margin-top: 0px; padding: 0px; margin-left: 5px;">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="form-group col-1 a">
+                <app-text-input formControlName="enquiryNo" [label]="'Enquiry No'"></app-text-input>
+            </div>
+            <div class="form-group col-2 a">
+                <app-text-input formControlName="enquiryDate" [label]="'Dated'"></app-text-input>
+            </div>
+            <div class="form-group col-2 a">
+                <app-text-input formControlName="customerName" [label]="'Customer'"></app-text-input>
+            </div>
+        </div>
+        <div class="col-4"><b>Remuneration Items</b></div>
+        
+        <div formArrayName="remunerationItems" style="margin-top: 0px; line-height: 1.2em; width: 1500px;">
+            <div *ngFor="let item of remunerationItems().controls; let i=index" [formGroupName]="i">
+                <div class="row">
+                    <div class="form-group col-2 a">
+                        <app-text-input formControlName="categoryName" [label]="'Category'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="contractPeriodInMonths" [label]="'Contract Period'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="leaveEntitlementPerYear" [label]="'Yearly Lv'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="leaveAvailableAfterHowmanyMonths" [label]="'Lv after'"></app-text-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-1 a">
+                        <label for="food">Food</label>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="food" type="checkbox" [label]="'free'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="foodAllowance" type="number" [label]="'Allowance'"></app-text-input>
+                    </div>
+                    <div class="col-1 a"></div>
+                    <div class="form-group col-1 a">
+                        <label for="food">housing</label>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="housing" type="checkbox" [label]="'free'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="housingAllowance" type="number" [label]="'Allowance'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="enquiryId" [label]="'enq Id'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="enquiryItemId" [label]="'enq Item Id'"></app-text-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-1 a">
+                        <label for="food">transport</label>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="transport" type="checkbox" [label]="'free'"></app-text-input>
+                    </div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="transportAllowance" type="number" [label]="'Allowance'"></app-text-input>
+                    </div>
+                    <div class="col-1 a"></div>
+                    <div class="form-group col-1 a">
+                        <label for="food">other</label>
+                    </div>
+                    <div class="form-group col-1 a"></div>
+                    <div class="form-group col-1 a">
+                        <app-text-input formControlName="otherAllowance" type="number" [label]="'Allowance'"></app-text-input>
+                    </div>
+                </div>
+                <br>
+            </div>      <!--ngFor-->
+        </div>  <!--array name-->
+        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Submit</button>
+    </form>      <!--form-->
+</div>      <!--container-->
+
+
+<div style="font-size: xx-small">
+    {{this.form.value | json}}
+    {{this.form.valid}}
+</div>
+

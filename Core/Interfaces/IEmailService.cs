@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -15,5 +16,7 @@ namespace Core.Interfaces
         Task<EmailModel> GetEmail(int emailId);
         Task<EmailModel> GetEmailOfAcknowledgement (int enquiryId);
         Task<IReadOnlyList<EmailModel>> GetEmails();
+        Task<int> ComposeHRTaskAssignmentMessageBody(List<int> enquiryItemIds, 
+            int enquiryNo, DateTime enquiryDate, int customerId, int projManagerId);
     }
 }

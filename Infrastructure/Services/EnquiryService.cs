@@ -23,18 +23,22 @@ namespace Infrastructure.Services
         private readonly ICustomerService _customerService;
         private readonly IDLService _dlService;
         private readonly ICategoryService _catService;
+        private readonly ITaskService _taskService;
+        private readonly IEmailService _emailService;
+        private readonly IEmployeeService _empService;
         private const int Default_ProjManagerId = 2;
-        private const string Default_Ecnr ="ecr";
-        private const string Default_AssessmentReqd = "f";
-        private const string Default_EvaluationReqd = "f";
-        private const string Default_EvalReqd = "f";
+        private const bool Default_Ecnr = false;
+        private const bool Default_AssessmentReqd = false;
+        private const bool Default_EvaluationReqd = false;
+        private const bool Default_EvalReqd = false;
         private const int Default_ContractPeriod = 24;
         private const string SalCurrency = "";
 
         public EnquiryService( IUnitOfWork unitOfWork,
                 IBasketRepository basketRepo, ATSContext context,
                 ICustomerService customerService, IDLService dlService,
-                ICategoryService catService)
+                ICategoryService catService, ITaskService taskService, 
+                IEmailService emailService, IEmployeeService empService)
         {
             _dlService = dlService;
             _catService = catService;
@@ -42,6 +46,9 @@ namespace Infrastructure.Services
             _context = context;
             _unitOfWork = unitOfWork;
             _basketRepo = basketRepo;
+            _taskService = taskService;
+            _emailService = emailService;
+            _empService = empService;
         }
 
     // Foreign Keys for Enq
@@ -194,9 +201,9 @@ namespace Infrastructure.Services
                 item.SrNo=++srNo;
                 item.CategoryName = _catService.GetCategoryNameFromCategoryId(item.CategoryItemId);
                 if (item.MaxCVsToSend == 0) item.MaxCVsToSend = item.Quantity * 3;
-                if (String.IsNullOrEmpty(item.Ecnr)) item.Ecnr = Default_Ecnr;
-                if (String.IsNullOrEmpty(item.AssessmentReqd)) item.AssessmentReqd = Default_AssessmentReqd;
-                if (String.IsNullOrEmpty(item.EvaluationReqd)) item.EvaluationReqd = Default_EvaluationReqd;
+                if (item.Ecnr==null) item.Ecnr = Default_Ecnr;
+                if (item.AssessmentReqd==null) item.AssessmentReqd = Default_AssessmentReqd;
+                if (item.EvaluationReqd==null) item.EvaluationReqd = Default_EvaluationReqd;
                 if (String.IsNullOrEmpty(item.ReviewStatus)) item.ReviewStatus = "NotReviewed";
                 if (String.IsNullOrEmpty(item.EnquiryStatus)) item.EnquiryStatus = "NotStarted";
 
@@ -250,10 +257,65 @@ namespace Infrastructure.Services
 
         public async Task<Enquiry> GetEnquiryByIdAsync(int enquiryId)
         {
+            
             var enq = await _context.Enquiries.Where(x=>x.Id==enquiryId)
-                .Include(x=>x.EnquiryItems).SingleOrDefaultAsync();
+                .Include(x => x.EnquiryItems).ThenInclude(x => x.Remuneration)
+                .Include(x => x.EnquiryItems).ThenInclude(x => x.JobDesc)
+                .SingleOrDefaultAsync();
+            
+            /*
+            var enq = await _context.Enquiries.Where(x => x.Id == enquiryId)
+                .ToListAsync()
+                .Select( en => new {
+                    Items = en.EnquiryItems.OrderBy(x => x.SrNo).ToListAsync(),
+                    rem = en.Remuneration,
+                    jd = en.JobDesc
+                }
+                ).ToListAsync();
+            
+            /*
+            foreach(var item in enq.EnquiryItems)
+            {
+                if (item.Remuneration == null || item.Remuneration.Id == null)
+                {
+                    var rem = await _unitOfWork.Repository<Remuneration>().AddAsync(
+                        new Remuneration(item.Id, item.EnquiryId));
+                }
+                if (item.JobDesc == null || item.JobDesc.Id == null)
+                {
+                    var jd = await _unitOfWork.Repository<JobDesc>().AddAsync(
+                        new JobDesc(item.Id, item.EnquiryId));
+                }
+            }
+            */
+
+            /*
+            var eq = await _context.Enquiries.Where(x => x.Id == enquiryId)
+                .Select(x => new {
+                    en = x,
+                    it = x.EnquiryItems.OrderBy(s => s.SrNo)
+                })
+                .SingleOrDefaultAsync();
+            var enq = eq.Select(g => g.en).FirstOrDefault();
+                /*
+                    var groups = await db.Parents
+                    .Where(p => p.Id == id)
+                    .Select(p => new
+                        {
+                            P = p,
+                            C = p.Children.OrderBy(c => c.SortIndex)
+                        })
+                    .ToArrayAsync();
+
+                    // Query/db interaction is over, now grab what we wanted from what was fetched
+
+                    var model = groups
+                    .Select(g => g.P)
+                    .FirstOrDefault()
+                    */
             return enq;
         }
+
         public async Task<IReadOnlyList<Enquiry>> GetEntityListWithSpec(EnquiryParams enqParam)
         {
             return await _unitOfWork.Repository<Enquiry>().GetEntityListWithSpec(new EnquirySpecs(enqParam));
@@ -268,26 +330,8 @@ namespace Infrastructure.Services
 
         public async Task<Enquiry> UpdateDLAsync(Enquiry enq)
         {
-            //return await _unitOfWork.Repository<Enquiry>().UpdateAsync(enq);
-
-        // following steps A, B, C, D, E in segregating entities for updates and inserts is creating
-        // singleton and scoped clashes of entity tracking. a short cut is to delete existing navigation properties from the database
-        // and do the updates afresh, which inserts all the records of the navigation properties.
-        // if the deleted navigation properties have any relations, then it will create problems in data integrity
-        // flg is a temporary resolution, to be updated by changing the DBContext scope to Scoped from current Singleton
-        // A - identify enquiry Items to delete from DB - this 
-        // B    delete these items from DB
-        // C - identify enquiry items that are present in DB as well as the model - these records are for updates
-        // D - identify items that are present in the model, but not in DB - these are new items, to be inserted.
-
-        // temporary resolution of already tracking error of DB Context
-
-        // start from last level of navigation properties
-
-        // 
 
         // A - identify records in DB that are missing in the model
-
             var enqItemsInDB = await _context.EnquiryItems.Where(x => x.EnquiryId == enq.Id).AsNoTracking().ToListAsync();
             var enqItemIdsInModel = enq.EnquiryItems.Select(x => x.Id);
 
@@ -297,7 +341,8 @@ namespace Infrastructure.Services
             if (enqItemIdsInModel == null) {    // find enquiryItemIds to delete from DB
                 enqItemsToDelete = await _context.EnquiryItems.Where(x => x.EnquiryId == enq.Id)
                     .AsNoTracking().ToListAsync();
-            } else {                            // find enquiryItems from DB that are missing in the model, these are to be deleted from DB
+            } else 
+            {                            // find enquiryItems from DB that are missing in the model, these are to be deleted from DB
                 enqItemsToDelete = await _context.EnquiryItems.Where(x => x.EnquiryId == enq.Id && !enqItemIdsInModel
                     .Contains(x.Id)).AsNoTracking().ToListAsync();
             }
@@ -306,59 +351,41 @@ namespace Infrastructure.Services
             {
                 var deleted = await _unitOfWork.Repository<EnquiryItem>().DeleteListAsync(enqItemsToDelete);
             }
-
         
         //C - identify items that are present both in DB and model - for updates
             var enqItemIdsToUpdate = await _context.EnquiryItems.Where(x => enqItemIdsInModel.Contains(x.Id))
                 .Select(x => x.Id).ToListAsync();
             var enqItemsFromModelToUpdate = enq.EnquiryItems.Where(x => enqItemIdsToUpdate.Contains(x.Id)).ToList();
-        // updateAsync
-            // await _unitOfWork.Repository<EnquiryItem>().UpdateListAsync(enqItemsFromModelToUpdate);
             
             // filter our records to be updated, else these records will be again INSERTED along with Enquiry entity when it is updted
             // create another entity excluding records that hv been updated as above - note the ! operator to exclude
             var enqItemModelFiltered = enq.EnquiryItems.Where(x => !enqItemIdsToUpdate.Contains(x.Id)).ToList();
             // filter out the records to be updated, else these records will be again INSERTED along with the customerEntity when it is updated
             var enqItemsToUpdate = enq.EnquiryItems.Where(x => enqItemIdsToUpdate.Contains(x.Id)).ToList();
-            await _unitOfWork.Repository<EnquiryItem>().UpdateListAsync(enqItemsToUpdate);
             
+            // Begin writing to DB, do the SaveAsync in the end to allow transactions    
+            //await _unitOfWork.Repository<EnquiryItem>().UpdateListAsync(enqItemsToUpdate);
+            foreach(var item in enqItemsToUpdate)
+            {
+                //_context.Set<T>().Attach(item);
+                _context.EnquiryItems.Attach(item);
+                _context.Entry(item).State = EntityState.Modified;
+            }
+
             // ascertain the new entity contains the parent key of Enquiry Id
-    /*
-            string s;
-            foreach (var item in enqItemsToUpdate)
-            {
-                s = "UPDATE EnquiryItems SET SrNo = " + item.SrNo;
-                if (item.AssessingHRMId != null) { s = s + ", AssessingHRMId = " + item.AssessingHRMId; }
-                if (item.AssessingSupId != null) { s = s + ", AssessingSupId = " + item.AssessingSupId;  }
-                if (item.AssessmentReqd != "") { s = s + ", AssessmentReqd = " + item.AssessmentReqd.ToString(); }
-                s += ", CategoryItemId = " + item.CategoryItemId + ", CategoryName = '" + 
-                    _catService.GetCategoryNameFromCategoryId(item.CategoryItemId) + "', Charges = " + item.Charges.ToString() +
-                   // ", CompleteBy = " + item.CompleteBy ==  null ? null : "#" + item.CompleteBy + "#" +
-                    ", Ecnr = " + item.Ecnr.ToString() + ", EnquiryId = " + item.EnquiryId;
-                if (item.EnquiryStatus != null) { s += ", EnquiryStatus = " + item.EnquiryStatus.ToString(); }
-                if (item.EvaluationReqd != null) { s += ", EvaluationReqd = " + item.EvaluationReqd.ToString(); }
-                if (item.HRExecutiveId != 0) { s += ", HRExecutiveId = " + item.HRExecutiveId; }
-                if (item.ReviewStatus != null) { s += ", ReviewStatus = " + item.ReviewStatus.ToString(); }
-                s += ", MaxCVsToSend = " + item.MaxCVsToSend + 
-                    ", Quantity = " + item.Quantity + " Where Id = " + item.Id;
-                var rowsUpdated = _context.Database.ExecuteSqlCommand(s);
-            }
-  
-            {
-                
-                if (item.EnquiryId == 0 || item.EnquiryId == '0')
-                {
-                    item.EnquiryId = enq.Id;
-                }
-            }
-*/
         // D - attach enqItemModelFiltered to Enquiry model
 
-            await _unitOfWork.Repository<EnquiryItem>().AddListAsync(enqItemModelFiltered);
+            // await _unitOfWork.Repository<EnquiryItem>().AddListAsync(enqItemModelFiltered);
+            foreach(var item in enqItemModelFiltered)
+            {
+                //_context.Set<T>().Attach(item);
+                _context.EnquiryItems.Attach(item);
+                _context.Entry(item).State = EntityState.Modified;
+            }
         // E - all items having been deleted, updated or inserted, set the EnquiryItems to null, else those will be inserted again
         //    enq.EnquiryItems = null;  this has to wait till JD and remuneration items are updated
 
-    // JobDesc and Remuneration are one-to-one relationships, so there is no delete or insert, just updates.
+        // JobDesc and Remuneration are one-to-one relationships, so there is no delete or insert, just updates.
             var jdList = new List<JobDesc>();
             var remunList = new List<Remuneration>();
             foreach (var item in enq.EnquiryItems)
@@ -375,17 +402,87 @@ namespace Infrastructure.Services
                     remunList.Add(remun);
                 }
             } 
-            if (jdList != null || jdList.Count > 0) {await _unitOfWork.Repository<JobDesc>().UpdateListAsync(jdList);}
-            if (remunList != null || remunList.Count > 0) {await _unitOfWork.Repository<Remuneration>().UpdateListAsync(remunList);}
 
+            if (jdList != null || jdList.Count > 0) 
+            {
+                 foreach(var item in jdList)
+                {
+                    _context.JobDescriptions.Attach(item);
+                    _context.Entry(item).State = EntityState.Modified;
+                }
+            }
+
+            if (remunList != null || remunList.Count > 0) 
+            {
+                 foreach(var item in remunList)
+                {
+                    _context.Remunerations.Attach(item);
+                    _context.Entry(item).State = EntityState.Modified;
+                }
+            }
+
+        // F - Create HR Assignment Tasks
+        
+            var ItemsForTasks = new List<int>();
+            foreach(var item in enq.EnquiryItems)
+            {
+                if (item.HRExecutiveId != 0)
+                {
+                    var t = await GetTask("HRAssignment", "active", item.Id);
+                    if (t == null)  //create new task
+                    {
+                        ItemsForTasks.Add(item.Id);
+                        var tsk = new ToDo(enq.ProjectManagerId, (int)item.HRExecutiveId, DateTime.Now, 
+                            DateTime.Now.AddDays(7),  "Submit compliant CVs for category ref: " +
+                            enq.EnquiryNo + "-" + item.SrNo + "-" + 
+                            _catService.GetCategoryNameFromCategoryId(item.CategoryItemId), 
+                            "HRExecAssignment", item.EnquiryId, item.Id);
+                    } else if (t.TaskItems == null) {
+                        ItemsForTasks.Add(item.Id);
+                        if (t.AssignedToId != item.HRExecutiveId)      //HR Exec changed, 
+                            // cancel existing task and create new task
+                        {
+                            await _taskService.UpdateTaskStatus(t.Id, "task reassigned to " +
+                                _empService.GetEmployeeName((int)item.HRExecutiveId), DateTime.Now, 
+                                t.TaskDescription + ", canceled");
+                            t.AssignedToId = (int)item.HRExecutiveId;
+                            t.TaskDate = DateTime.Now;
+                            t.OwnerId = enq.ProjectManagerId;
+                            await _taskService.UpdateTaskStatus(t.Id, "canceled", DateTime.Now, 
+                                "task assigned to " + _empService.GetEmployeeName((int)item.HRExecutiveId));
+                        }
+                    }
+                }
+            }
             // enq.EnquiryItems = null;
+            // finally update the parent entity Enquiry
+            //return await _unitOfWork.Repository<Enquiry>().UpdateAsync(enq);
+            _context.Enquiries.Attach(enq);
+            _context.Entry(enq).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
-        // finally update the parent entity Enquiry
-            return await _unitOfWork.Repository<Enquiry>().UpdateAsync(enq);
+            // send email to HR Executives
+            if (ItemsForTasks.Count > 0) {
+                var mailssent = await _emailService.ComposeHRTaskAssignmentMessageBody(ItemsForTasks, 
+                    enq.EnquiryNo, enq.EnquiryDate, enq.CustomerId, enq.ProjectManagerId);
+            }
 
+            return enq;            
 
         }
 
+        private async Task<ToDo> GetTask (string taskType, 
+            string taskStatus, int enquiryItemId)
+        {
+            var qry = await _context.ToDos
+                .Where(x => x.TaskType.ToLower() == taskType.ToLower() &&
+                    x.TaskStatus.ToLower() != "completed" &&
+                    x.EnquiryItemId == enquiryItemId).Include(x => x.TaskItems)
+                .SingleOrDefaultAsync();
+            return qry;
+        }
+
+ 
         public async Task<int> GetEnquiryItemsCountNotReviewed(int enquiryId)
         {
             var spec = new EnquiryItemsSpecs(enquiryId, (int)enumItemReviewStatus.NotReviewed);
@@ -437,8 +534,6 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Employee>().GetByIdAsync(employeeId);
         }
 
-
-
 // job desc
         public async Task<JobDesc> GetJobDescriptionBySpecAsync(int enquiryItemId)
         {
@@ -469,7 +564,7 @@ namespace Infrastructure.Services
 
             if (remun == null)
             {
-                var enqItem = await _unitOfWork.Repository<EnquiryItem>().GetByIdAsync(enquiryItemId);
+               var enqItem = await _unitOfWork.Repository<EnquiryItem>().GetByIdAsync(enquiryItemId);
                 if (enqItem == null) return null;
                 int enquiryId = enqItem.EnquiryId;
                 var remn = new Remuneration(enquiryItemId, enquiryId);
@@ -478,9 +573,43 @@ namespace Infrastructure.Services
             return remun;
         }
 
+        public async Task<IReadOnlyList<Remuneration>> GetRemunerationsEnquiryAsync(int enquiryId)
+        {
+            var missingIds = await GetMissingRemunerationFromEnquiryId(enquiryId);
+            if (missingIds != null)
+            {
+                var remList = new List<Remuneration>();
+                foreach(var item in missingIds)
+                {
+                    if (item != 0 ) remList.Add(new Remuneration(item, enquiryId));
+                }
+                if (remList.Count > 0) {
+                    var remAdded = await _unitOfWork.Repository<Remuneration>().AddListAsync(remList);
+                }
+            }
+
+            var rems =  await _context.Remunerations.Where(x => x.EnquiryId == enquiryId).OrderBy(x => x.EnquiryItemId)
+                .ToListAsync();
+            // update categoryName
+            foreach(var item in rems)
+            {
+                var stName = _catService.GetCategoryNameWithRefFromEnquiryItemId(item.EnquiryItemId);
+                item.CategoryName = stName;
+            }
+
+            return rems;
+        }
+
+
         public async Task<Remuneration> UpdateRemunerationAsync(Remuneration remuneration)
         {
             return await _unitOfWork.Repository<Remuneration>().UpdateAsync(remuneration);
+        }
+
+        public async Task<int> UpdateRemunerationsAsync(List<Remuneration> remuns)
+        {
+            
+            return await _unitOfWork.Repository<Remuneration>().UpdateListAsync(remuns);
         }
 
     //PRIVATE METHODS
@@ -522,6 +651,7 @@ namespace Infrastructure.Services
 
         public async Task<CategoryRefFromEnquiryItemId> GetDetailsFromEnquiryItemId(int enquiryItemId)
         {   
+           
            var rs = await
              (from o in _context.Enquiries join e in _context.EnquiryItems
                 on o.Id equals e.EnquiryId join c in _context.Categories 
@@ -536,5 +666,37 @@ namespace Infrastructure.Services
                 rs.orderNo + "-" + rs.srNo + "-" + rs.catName, rs.orderNo + "/" + rs.orderDt);
             return cat;
         }
+
+        private async Task<List<int>> GetMissingRemunerationFromEnquiryId(int enquiryId)
+        {
+             /*
+             var lst = await _context.EnquiryItems.Where(
+                c => c.EnquiryId == enquiryId && 
+                !_context.Remunerations
+                .Select(b => b.EnquiryItemId).Contains(c.Id))
+                .ToListAsync()
+                
+            if (lst == null || lst.Count == 0)
+            {
+                return null;
+            } else {
+                return lst;
+            }
+
+        var ans = from h in header
+          join d1 in detail1 on h.id equals d1.id into hd1j
+          from hd1 in hd1j.DefaultIfEmpty()
+          from d2 in detail2 where h.id == d2.id && (hd1?.date == null || hd1.date == d2?.date)
+          select new { h.id, h.label, date = hd1?.date ?? d2?.date, value1 = hd1?.value, value2 = d2?.value };
+        */
+            var ans = await (from ei in _context.EnquiryItems where ei.EnquiryId == enquiryId 
+                join rm in _context.Remunerations on ei.Id equals rm.EnquiryItemId into eirmj 
+                from eirm in eirmj.DefaultIfEmpty() 
+                select eirm.EnquiryItemId)
+                .ToListAsync();
+            
+            return ans;
+        }
+
     }
 }
